@@ -10,8 +10,6 @@ editor_options:
 
 Summary
 
-This is the last copy of this doc that has the original models in it - everything from here on out is in Git and I'll be paring it down (before building more chaos I'm sure).
-
 This doc is for exploring a preliminary model that captures the dynamics of seals switching between behavioral states.
 These states are normal seals (N) which behave and eat like an average Puget Sound seal and largely exist outside the Locks system, but still provide a source population; specialist seals (S) who are actively targeting salmon at the Locks, and inactive specialists (I) who have been specialists in the past or been exposed to that behavior, but are not actively exercising it for various reasons.
 We also capture the movement of salmon through the system as either salmon moving through Puget Sound (Ops) and salmon that have reached the Locks (Ol) and are there for some residence time (per species - starting with adult Chinooks for now).
@@ -26,131 +24,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 
-source("~/Box Sync/Thesis/ABM Exploring/Model v1 day, SIN, Ops Ol/functions.R")
+source("~/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/functions.R")
 source("~/Box Sync/Thesis/ABM Exploring/Model v1 day, SIN, Ops Ol/Sockeye arrival function creation.R")
 
 ```
 
-## Define Parameters
-
-```{r eval=F, warning = F}
-# for leaving and switch function
-leave_threshold <- 50 # this we can estimate from diet data I bet - how much does a salmon specialist eat?
-leave_steepness <- 0.05 # this is probably very steep - almost a yes or no there is/isn't enough salmon
-
-switch_threshold <- 100
-switch_steepness <- 0.1
-max.seals <- 10
-
-# removals
-Hunt <- 0
-
-# discovery
-d <- 0.000005
-
-# salmon migration
-salmonrunsize <- 50000
-
-# predation
-dailyconsumption <- 5
-
-# for model
-nruns <- 365
-daysofyear <- 1:365
-```
-
-## Starting State Values
-
-S - specialist seals actively foraging for salmon I - inactive specialists with a predisposition to switch to foraging on salmon N - normal average Puget Sound seals
-
-Ops - salmon migrating through Puget Sound at any given day Ol - salmon that reach the Locks on any given day, and salmon that are still recycling at the Locks Osafe - salmon that have made it through the Locks and survived.
-I'm guessing this is the most interesting response variable, in addition to the insight on effect of removals S.switch and S.leave are only saved iteratively to see what they're doing
-
-```{r eval=F}
-# starting values for S, I, N, Ops, Ol
-S <- rep(NA, nruns)
-I <- rep(NA, nruns)
-N <- rep(NA, nruns)
-
-Ops <- rep(NA, nruns)
-Ol <- rep(NA, nruns)
-Osafe <- rep(NA, nruns)
-
-S.switch <- rep(NA, nruns)
-S.leave <- rep(NA, nruns)
-
-S[1] <- 1
-I[1] <- 150
-N[1] <- 10000
-
-Ops[1] <- 10000
-Ol[1] <- 0
-Osafe[1] <- 0
-
-S.switch[1] <- 0
-S.leave[1] <- 0
-
-```
-
-## Model Runs
-
-### Version 1
-
-Start with the salmon bc they're simple: PS salmon stars at the starting value and then counts down as salmon arrive at the Locks and then switch into the Ol group.
-Locks salmon count up as PS salmon arrive and turn into Ol.
-Ol declines as salmon are eaten (predation) or pass through the Locks permanently and are safe (Osafe).
-Safe salmon have migrated past the Locks permanently, are no longer recycling, and are out of reach of seals
-
-Seals are a shit show: start with normie seals - start at starting value and count down as seals discover the Locks randomly and therefore become either S or I depending on quality of conditions.
-Need to think about how discovery can only happen when there are salmon at the Locks then, which is not true right now.
-Seals switch into being specialists from random discovery from normies or from switching from inactive to active.
-This calculation happens before the leaving calculation bc the feedback was being super zigzagged so I wanted to be able to have seals leave immediately in the same time step.
-Probably not the best, need to re-work.
-Inactive seals become inactive by leaving the specialist group.
-They leave the inactive group by switching or by being hunted.
-
-```{r eval=F}
-
-for (t in 2:nruns) {
-  salmon.arrive <- salmon.run(dayofyear = t, totalrunsize = Ops[1])
-  Ops[t] <- Ops[t-1] - salmon.arrive
-  
-  predation <- min(Ol[t-1], predation.rate(seals = S[t-1], consumption = dailyconsumption))
-  Ol[t] <- Ol[t-1] - 0.03*Ol[t-1] - predation + salmon.arrive
-  Osafe[t] <- Osafe[t-1] + 0.03*Ol[t-1]
-
-  
-  discovery <- discovery.rate(N[t-1], Ol[t-1], d)
-  N[t] <- N[t-1] - discovery
-  
-  S.switch[t] <- I[t-1] * switch.rate(salmon = Ol[t-1], seals = S[t-1], threshold = switch_threshold, steepness = switch_steepness)
-  S[t] <- S.switch[t] + discovery
-  
-  S.leave[t] <- S[t-1] * leaving.rate(salmon = Ol[t-1], seals = S[t], threshold = leave_threshold, steepness = leave_steepness)
-  S[t] <- S[t] - S.leave[t]
-  I[t] <- I[t-1] + S.leave[t] - S.switch[t]
-}
-
-print(S)
-
-par(mfrow = c(1,2))
-plot(daysofyear, N, type = "l", col = "black", main = "normal")
-plot(daysofyear, S, col = "salmon3", main = "specialists", type = "l")
-plot(daysofyear, I, col = "orchid3", main = "inactive", type = "l")
-plot(daysofyear, S.switch, col = "salmon3", main = "switch", type = "l")
-plot(daysofyear, S.leave, col = "salmon3", main = "leave", type = "l")
-plot(daysofyear, Ol, col = "turquoise3", main = "Locks salmon", type = "l")
-plot(daysofyear, Ops, col = "dodgerblue", main = "PS salmon", type = "l")
-plot(daysofyear, Osafe, col = "dodgerblue", main = "Safe salmon", type = "l")
-
-
-```
-
-I think the discovery term needs to be an ABM or at least informed by an ABM exercise - I have no mechanisms to rely on for building that term and it's making me uncomfy.
-It seems pretty sensitive to the shape of the function that represents when enough salmon are present for seals to follow them - the steepness is very relevant so need a way to estimate that - maybe diet data?
-Or estimate from observational data?
-Need to do a lot more thinking and testing with this switching and leaving stuff.
-Salmon seem fine and should be able to back up with data soon
 
 ### Version 2
 
