@@ -1,0 +1,308 @@
+---
+title: "Model building SIN, Ops Ol, day step"
+author: "Liz Allyn"
+date: "`r Sys.Date()`"
+output: word_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+Summary
+
+This doc is for exploring a preliminary model that captures the dynamics of seals switching between behavioral states.
+These states are normal seals (N) which behave and eat like an average Puget Sound seal and largely exist outside the Locks system, but still provide a source population; specialist seals (S) who are actively targeting salmon at the Locks, and inactive specialists (I) who have been specialists in the past or been exposed to that behavior, but are not actively exercising it for various reasons.
+We also capture the movement of salmon through the system as either salmon moving through Puget Sound (Ops) and salmon that have reached the Locks (Ol) and are there for some residence time (per species - starting with adult Chinooks for now).
+The time step for this model is 1 day.
+Lots of this is made up but I'll add data source info as I add real data later on.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load packages and functions
+
+```{r}
+
+source("~/Box Sync/Thesis/ABM Exploring/Model v1 day, SIN, Ops Ol/functions.R")
+source("~/Box Sync/Thesis/ABM Exploring/Model v1 day, SIN, Ops Ol/Sockeye arrival function creation.R")
+
+```
+
+## Define Parameters
+
+```{r eval=F, warning = F}
+# for leaving and switch function
+leave_threshold <- 50 # this we can estimate from diet data I bet - how much does a salmon specialist eat?
+leave_steepness <- 0.05 # this is probably very steep - almost a yes or no there is/isn't enough salmon
+
+switch_threshold <- 100
+switch_steepness <- 0.1
+max.seals <- 10
+
+# removals
+Hunt <- 0
+
+# discovery
+d <- 0.000005
+
+# salmon migration
+salmonrunsize <- 50000
+
+# predation
+dailyconsumption <- 5
+
+# for model
+nruns <- 365
+daysofyear <- 1:365
+```
+
+## Starting State Values
+
+S - specialist seals actively foraging for salmon I - inactive specialists with a predisposition to switch to foraging on salmon N - normal average Puget Sound seals
+
+Ops - salmon migrating through Puget Sound at any given day Ol - salmon that reach the Locks on any given day, and salmon that are still recycling at the Locks Osafe - salmon that have made it through the Locks and survived.
+I'm guessing this is the most interesting response variable, in addition to the insight on effect of removals S.switch and S.leave are only saved iteratively to see what they're doing
+
+```{r eval=F}
+# starting values for S, I, N, Ops, Ol
+S <- rep(NA, nruns)
+I <- rep(NA, nruns)
+N <- rep(NA, nruns)
+
+Ops <- rep(NA, nruns)
+Ol <- rep(NA, nruns)
+Osafe <- rep(NA, nruns)
+
+S.switch <- rep(NA, nruns)
+S.leave <- rep(NA, nruns)
+
+S[1] <- 1
+I[1] <- 150
+N[1] <- 10000
+
+Ops[1] <- 10000
+Ol[1] <- 0
+Osafe[1] <- 0
+
+S.switch[1] <- 0
+S.leave[1] <- 0
+
+```
+
+## Model Runs
+
+### Version 1
+
+Start with the salmon bc they're simple: PS salmon stars at the starting value and then counts down as salmon arrive at the Locks and then switch into the Ol group.
+Locks salmon count up as PS salmon arrive and turn into Ol.
+Ol declines as salmon are eaten (predation) or pass through the Locks permanently and are safe (Osafe).
+Safe salmon have migrated past the Locks permanently, are no longer recycling, and are out of reach of seals
+
+Seals are a shit show: start with normie seals - start at starting value and count down as seals discover the Locks randomly and therefore become either S or I depending on quality of conditions.
+Need to think about how discovery can only happen when there are salmon at the Locks then, which is not true right now.
+Seals switch into being specialists from random discovery from normies or from switching from inactive to active.
+This calculation happens before the leaving calculation bc the feedback was being super zigzagged so I wanted to be able to have seals leave immediately in the same time step.
+Probably not the best, need to re-work.
+Inactive seals become inactive by leaving the specialist group.
+They leave the inactive group by switching or by being hunted.
+
+```{r eval=F}
+
+for (t in 2:nruns) {
+  salmon.arrive <- salmon.run(dayofyear = t, totalrunsize = Ops[1])
+  Ops[t] <- Ops[t-1] - salmon.arrive
+  
+  predation <- min(Ol[t-1], predation.rate(seals = S[t-1], consumption = dailyconsumption))
+  Ol[t] <- Ol[t-1] - 0.03*Ol[t-1] - predation + salmon.arrive
+  Osafe[t] <- Osafe[t-1] + 0.03*Ol[t-1]
+
+  
+  discovery <- discovery.rate(N[t-1], Ol[t-1], d)
+  N[t] <- N[t-1] - discovery
+  
+  S.switch[t] <- I[t-1] * switch.rate(salmon = Ol[t-1], seals = S[t-1], threshold = switch_threshold, steepness = switch_steepness)
+  S[t] <- S.switch[t] + discovery
+  
+  S.leave[t] <- S[t-1] * leaving.rate(salmon = Ol[t-1], seals = S[t], threshold = leave_threshold, steepness = leave_steepness)
+  S[t] <- S[t] - S.leave[t]
+  I[t] <- I[t-1] + S.leave[t] - S.switch[t]
+}
+
+print(S)
+
+par(mfrow = c(1,2))
+plot(daysofyear, N, type = "l", col = "black", main = "normal")
+plot(daysofyear, S, col = "salmon3", main = "specialists", type = "l")
+plot(daysofyear, I, col = "orchid3", main = "inactive", type = "l")
+plot(daysofyear, S.switch, col = "salmon3", main = "switch", type = "l")
+plot(daysofyear, S.leave, col = "salmon3", main = "leave", type = "l")
+plot(daysofyear, Ol, col = "turquoise3", main = "Locks salmon", type = "l")
+plot(daysofyear, Ops, col = "dodgerblue", main = "PS salmon", type = "l")
+plot(daysofyear, Osafe, col = "dodgerblue", main = "Safe salmon", type = "l")
+
+
+```
+
+I think the discovery term needs to be an ABM or at least informed by an ABM exercise - I have no mechanisms to rely on for building that term and it's making me uncomfy.
+It seems pretty sensitive to the shape of the function that represents when enough salmon are present for seals to follow them - the steepness is very relevant so need a way to estimate that - maybe diet data?
+Or estimate from observational data?
+Need to do a lot more thinking and testing with this switching and leaving stuff.
+Salmon seem fine and should be able to back up with data soon
+
+### Version 2
+
+With Ballard Locks sockeye arrival data as the salmon.arrive term: see Sockeye arrival function creation.R Data from Muckleshoot on April 10, 2023
+
+From Eric Warner: "There are actually two expansion terms combined into one. One extrapolates from the ten minute count to a full hour, and the other estimates the number of fish moving into the fish ladder during the rest of the day and night (it equates to counting for 13 hours and extrapolating to 16 hours -- for June and July anyway). As far as we can tell based on the old electronic counters and some other evidence, this is generally true for sockeye, but underestimates Chinook passage through the ladder. I'm not sure about coho. The combined estimates from the fish ladder and Locks are our best estimate of fish entering freshwater from Puget Sound. Yes there are a lot of other issues with these counts, but this is as good as it gets. If there are confounding issues that make an appreciable difference and we're off, at least we're off the same way every year."
+
+I grabbed the estimated total Sockeye adult count for 2012-2022
+
+Comments about model so far:
+
+Thresholds and steepness for leave and switch are totally informed by gut feeling and plotting the range of potential outcomes.
+This piece feels like it needs a totally different approach.
+
+Removal terms are a flat hunt rate on each group.
+These will probably end up being slightly more complex, with some kind of quota or availability piece.
+Won't be tackling yet.
+
+Discovery term is the rate of seals from the normie population that discover the salmon buffet at the locks.
+Once they do this they can't become naive again, so those seals end up in the inactive or specialist groups for the rest.
+
+daily consumption is an estimate of salmon/seal consumed per day with no actual data behind it.
+Need to dig this out and adjust accordingly.
+Should be plenty of diet data to work with here, including observation data from the locks itself.
+
+ladder is the movement rate of salmon from the vulnerable below the locks/in the ladder position to safety above the locks.
+Estimated currently as a 5-day window until safety, I think it's actually shorter for Sockeye (\~2-3 days?) and longer for Chinook (1-1.5 months - 42 days? need to check if this is avg or max) according to Eric and Ava - find data on this and adjust as possible.
+
+nruns is just the days in a year.
+
+```{r}
+# for leaving and switch function
+leave_threshold <- 50 # this we can estimate from diet data I bet - how much does a salmon specialist eat?
+leave_steepness <- 0.1 # this is probably very steep - almost a yes or no there is/isn't enough salmon
+
+switch_threshold <- 500
+switch_steepness <- 0.05
+
+# removals
+Hunt.N <- 0
+Hunt.I <- 0
+Hunt.S <- 0
+
+# discovery
+d <- 0.00000001
+
+# predation
+dailyconsumption <- 5
+
+# movement rate above the locks
+ladder <- 0.3
+
+# for model
+nruns <- 365
+daysofyear <- 1:365
+```
+
+Starting values, mostly random or NA or 0.
+150 seals at I bc that's the approximate size of the Elliot Bay marina haulout.
+10000 normal seals because that's about the total inland waters estimate I think?
+Not super influential term.
+Ops is 10000 for no good reason.
+
+```{r}
+# starting values for S, I, N, Ops, Ol
+S <- rep(NA, nruns)
+I <- rep(NA, nruns)
+N <- rep(NA, nruns)
+
+Ops <- rep(NA, nruns)
+Ol <- rep(NA, nruns)
+Osafe <- rep(NA, nruns)
+salmon.arrive <- rep(NA, nruns)
+
+S.switch <- rep(NA, nruns)
+S.leave <- rep(NA, nruns)
+S.arrive <- rep(NA, nruns)
+
+discovery <- rep(NA, nruns)
+
+removals.N <- rep(NA, nruns)
+removals.I <- rep(NA, nruns)
+removals.S <- rep(NA, nruns)
+
+S[1] <- 1
+I[1] <- 150
+N[1] <- 10000
+
+Ops[1] <- 10000
+Ol[1] <- 0
+Osafe[1] <- 0
+salmon.arrive[1] <- 0
+
+S.switch[1] <- 0
+S.leave[1] <- 0
+S.arrive[1] <- 0
+
+discovery[1] <- NA
+
+removals.N[1] <- 0
+removals.I[1] <- 0
+removals.S[1] <- 0
+```
+
+Ops starts at an arbitrary 10000 salmon in Puget Sound.
+This could be a better model of arrival timings if we want but I don't think it's relevant to the rest of the model since it's not actually used anywhere else?
+Rethink what role this term plays.
+
+Ol is just a function that mimics the count data of Sockeye from 2022.
+Should update with a proper model fit informed by more years of data.
+
+Osafe is the salmon that make it above the locks and are no longer available to seals, just based on the constant movement rate (ladder).
+ladder = 0.3 means it takes about 3 days for a salmon to go from arriving to safe.
+
+```{r warning=F}
+for (t in 2:nruns) {
+  salmon.arrive[t] <- predict.fish(day = t, params = fish.fit.optim$par)
+  Ops[t] <- Ops[t-1] - salmon.arrive[t]
+  
+  #predation <- min(Ol[t-1], predation.rate(seals = S[t-1], consumption = dailyconsumption))
+  predation <- 0
+  salmon.leave <- ladder * Ol[t-1]
+  Ol[t] <-  salmon.arrive[t] - predation
+  Osafe[t] <- Osafe[t-1] + salmon.leave
+
+  discovery[t] <- discovery.rate(seals = N[t-1], salmon = Ol[t-1], d = d)
+  removals.N[t] <- Hunt.N*N[t-1]
+  N[t] <- N[t-1] - discovery[t] - removals.N[t]
+  
+  S.switch[t] <- I[t-1] * 
+    switch.rate(salmon = Ol[t-1], 
+                threshold = switch_threshold, 
+                steepness = switch_steepness)
+  S.arrive[t] <- S.switch[t] + discovery[t]
+  S.leave[t] <- S.arrive[t] * 
+    leaving.rate(salmon = Ol[t-1], 
+                 seals = S.arrive[t], 
+                 threshold = leave_threshold, 
+                 steepness = leave_steepness)
+  S[t] <- S.arrive[t] - S.leave[t]
+  I[t] <- I[t-1] + S.leave[t] #- S.switch[t]
+}
+
+par(mfrow = c(1,2))
+plot(daysofyear, N, type = "l", col = "black", main = "normal")
+plot(daysofyear, S, col = "salmon3", main = "specialists", type = "l")
+# Some weird on/off thing going on at the beginning of the specialists graphs right now, too jagged, like it's turning on and off too abruptly?
+
+plot(daysofyear, I, col = "orchid3", main = "inactive", type = "l")
+plot(daysofyear, S.switch, col = "salmon3", main = "switch", type = "l")
+plot(daysofyear, S.leave, col = "salmon3", main = "leave", type = "l")
+plot(daysofyear, discovery, col = "salmon3", main = "discovery", type = "l")
+plot(daysofyear, Ol, col = "turquoise3", main = "Locks salmon", type = "l")
+plot(daysofyear, salmon.arrive, col = "turquoise3", main = "Arriving salmon", type = "l")
+plot(daysofyear, Ops, col = "dodgerblue", main = "PS salmon", type = "l")
+plot(daysofyear, Osafe, col = "dodgerblue", main = "Safe salmon", type = "l")
+```
