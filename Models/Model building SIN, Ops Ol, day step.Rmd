@@ -24,8 +24,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 
-source("~/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/functions.R")
-source("~/Box Sync/Thesis/ABM Exploring/Model v1 day, SIN, Ops Ol/Sockeye arrival function creation.R")
+source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/functions.R")
+source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
 
 ```
 
