@@ -10,6 +10,8 @@ editor_options:
 
 Summary
 
+This is the last copy of this doc that has the original models in it - everything from here on out is in Git and I'll be paring it down (before building more chaos I'm sure).
+
 This doc is for exploring a preliminary model that captures the dynamics of seals switching between behavioral states.
 These states are normal seals (N) which behave and eat like an average Puget Sound seal and largely exist outside the Locks system, but still provide a source population; specialist seals (S) who are actively targeting salmon at the Locks, and inactive specialists (I) who have been specialists in the past or been exposed to that behavior, but are not actively exercising it for various reasons.
 We also capture the movement of salmon through the system as either salmon moving through Puget Sound (Ops) and salmon that have reached the Locks (Ol) and are there for some residence time (per species - starting with adult Chinooks for now).
