@@ -14,7 +14,7 @@ This doc is for exploring a preliminary model that captures the dynamics of seal
 These states are normal seals (N) which behave and eat like an average Puget Sound seal and largely exist outside the Locks system, but still provide a source population; specialist seals (S) who are actively targeting salmon at the Locks, and inactive specialists (I) who have been specialists in the past or been exposed to that behavior, but are not actively exercising it for various reasons.
 We also capture the movement of salmon through the system as either salmon moving through Puget Sound (Ops) and salmon that have reached the Locks (Ol) and are there for some residence time (per species - starting with adult Chinooks for now).
 The time step for this model is 1 day.
-Lots of this is made up but I'll add data source info as I add real data later on.
+Lots of the parameters are guesstimates and totally made up but I'll add data source info as I add real data later on.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -28,43 +28,48 @@ source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/
 source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
 
 ```
+### The To Do List 
+Updated: June 22, 2023
 
+- Find relevant diet data, summarize, decide what the appropriate consumption rates should be.
+
+- 
 
 ### Version 2
 
-With Ballard Locks sockeye arrival data as the salmon.arrive term: see Sockeye arrival function creation.R Data from Muckleshoot on April 10, 2023
+With Ballard Locks sockeye arrival data as the salmon.arrive term: see "Sockeye arrival function creation.R" Data from Muckleshoot on April 10, 2023
 
 From Eric Warner: "There are actually two expansion terms combined into one. One extrapolates from the ten minute count to a full hour, and the other estimates the number of fish moving into the fish ladder during the rest of the day and night (it equates to counting for 13 hours and extrapolating to 16 hours -- for June and July anyway). As far as we can tell based on the old electronic counters and some other evidence, this is generally true for sockeye, but underestimates Chinook passage through the ladder. I'm not sure about coho. The combined estimates from the fish ladder and Locks are our best estimate of fish entering freshwater from Puget Sound. Yes there are a lot of other issues with these counts, but this is as good as it gets. If there are confounding issues that make an appreciable difference and we're off, at least we're off the same way every year."
 
-I grabbed the estimated total Sockeye adult count for 2012-2022
+I grabbed the estimated total Sockeye adult count for 2012-2022 to create the sockeye arrival function curve. so far I haven't incorporated other salmon runs - just a single peak.
 
 Comments about model so far:
 
 Thresholds and steepness for leave and switch are totally informed by gut feeling and plotting the range of potential outcomes.
-This piece feels like it needs a totally different approach.
+This piece feels like it needs a totally different approach, and I don't like how it's not based in any kind of real mechanism.
 
 Removal terms are a flat hunt rate on each group.
-These will probably end up being slightly more complex, with some kind of quota or availability piece.
-Won't be tackling yet.
+Won't be tackling yet, set to zero mostly.
 
-Discovery term is the rate of seals from the normie population that discover the salmon buffet at the locks.
-Once they do this they can't become naive again, so those seals end up in the inactive or specialist groups for the rest.
+Discovery term is the rate of seals from the N population that discover the salmon buffet at the locks and become S.
+Once they do this they can't become naive again, so those seals end up in the inactive or specialist groups forever. 
+Should this decay and allow seals to return to N or does it make sense this way?
 
 daily consumption is an estimate of salmon/seal consumed per day with no actual data behind it.
 Need to dig this out and adjust accordingly.
-Should be plenty of diet data to work with here, including observation data from the locks itself.
+Should be plenty of diet data to work with here, including observation data from the locks itself. Just need to pull it all together and decide what a best guess for each site looks like for each behavioral group, because we definitely don't have that fine grain diet data available.
 
-ladder is the movement rate of salmon from the vulnerable below the locks/in the ladder position to safety above the locks.
+Ladder is the movement rate of salmon from the vulnerable below the locks/in the ladder position to safety above the locks.
 Estimated currently as a 5-day window until safety, I think it's actually shorter for Sockeye (\~2-3 days?) and longer for Chinook (1-1.5 months - 42 days? need to check if this is avg or max) according to Eric and Ava - find data on this and adjust as possible.
 
-nruns is just the days in a year.
+nruns is just the days in a year, which is how long the loop runs right now.
 
 ```{r}
 # for leaving and switch function
-leave_threshold <- 50 # this we can estimate from diet data I bet - how much does a salmon specialist eat?
+leave_threshold <- 50 # this we can estimate from diet data I bet - how much does a salmon specialist eat? If anything less than that is available, then they would leave the S group?
 leave_steepness <- 0.1 # this is probably very steep - almost a yes or no there is/isn't enough salmon
 
-switch_threshold <- 500
+switch_threshold <- 500 # again I bet we can find a good starting point from diet data
 switch_steepness <- 0.05
 
 # removals
@@ -73,23 +78,23 @@ Hunt.I <- 0
 Hunt.S <- 0
 
 # discovery
-d <- 0.00000001
+d <- 0.00000001 # total BS right now, need a better approach that isn't a total guess
 
 # predation
-dailyconsumption <- 5
+dailyconsumption <- 5 # also BS right now
 
-# movement rate above the locks
+# movement rate above the locks (basically 1/residence time)
 ladder <- 0.3
 
-# for model
+# for loop
 nruns <- 365
 daysofyear <- 1:365
 ```
 
 Starting values, mostly random or NA or 0.
-150 seals at I bc that's the approximate size of the Elliot Bay marina haulout.
-10000 normal seals because that's about the total inland waters estimate I think?
-Not super influential term.
+150 seals at I bc that's the approximate size of the Elliot Bay marina haulout at max
+13500 normal seals because that's about the total inland waters estimate from 1999
+
 Ops is 10000 for no good reason.
 
 ```{r}
@@ -137,15 +142,14 @@ Ops starts at an arbitrary 10000 salmon in Puget Sound.
 This could be a better model of arrival timings if we want but I don't think it's relevant to the rest of the model since it's not actually used anywhere else?
 Rethink what role this term plays.
 
-Ol is just a function that mimics the count data of Sockeye from 2022.
-Should update with a proper model fit informed by more years of data.
+Ol is just a function that is fed the day of the year and returns the density of Sockeye expected at the locks on that day from fitting a normal curve to the average count data of Sockeye from 2012-2022.
 
 Osafe is the salmon that make it above the locks and are no longer available to seals, just based on the constant movement rate (ladder).
-ladder = 0.3 means it takes about 3 days for a salmon to go from arriving to safe.
+ladder = 0.3 means it takes about 3 days for a salmon to go from arriving to safe. This lines up with what Eric and Ava said for Sockeye, but very different for Chinook and not known for coho.
 
 ```{r warning=F}
 for (t in 2:nruns) {
-  salmon.arrive[t] <- predict.fish(day = t, params = fish.fit.optim$par)
+  salmon.arrive[t] <- predict.fish(day = t, params = fish.fit.optim$par, start.day = 163)
   Ops[t] <- Ops[t-1] - salmon.arrive[t]
   
   #predation <- min(Ol[t-1], predation.rate(seals = S[t-1], consumption = dailyconsumption))
