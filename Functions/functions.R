@@ -24,7 +24,7 @@ leaving.rate <- function(salmon, seals, threshold, steepness) {
 }
 
 # plot(0:250, 1/(1 + exp(-0.2 * (50 - 0:250))))
-leaving.rate(1, 1, 50, 0.2)
+leaving.rate(1000, 10, 50, 0.2)
 
 # Switch function
 # how seals determine that they will switch from I to S

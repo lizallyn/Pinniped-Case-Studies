@@ -162,27 +162,24 @@ for (t in 2:nruns) {
   removals.N[t] <- Hunt.N*N[t-1]
   N[t] <- N[t-1] - discovery[t] - removals.N[t]
   
-  S.switch[t] <-
+  S.switch[t] <- I[t-1] *
     switch.rate(salmon = Ol[t-1], 
                 threshold = switch_threshold, 
                 steepness = switch_steepness)
-  S.arrive[t] <- S.switch[t] + discovery[t]
-  S.leave[t] <- S.arrive[t] * 
+  S.leave[t] <- S[t-1] * 
     leaving.rate(salmon = Ol[t-1], 
-                 seals = S.arrive[t], 
+                 seals = S[t-1], 
                  threshold = leave_threshold, 
                  steepness = leave_steepness)
-  S[t] <- S.arrive[t] - S.leave[t]
+  S[t] <- S[t-1] + S.switch[t] + discovery[t] - S.leave[t]
   I[t] <- I[t-1] + S.leave[t] - S.switch[t]
 }
 
 par(mfrow = c(1,2))
 plot(daysofyear, N, type = "l", col = "black", main = "normal")
 plot(daysofyear, S, col = "salmon3", main = "specialists", type = "l")
-# Some weird on/off thing going on at the beginning of the specialists graphs right now, too jagged, like it's turning on and off too abruptly?
-
 plot(daysofyear, I, col = "orchid3", main = "inactive", type = "l")
-plot(daysofyear, S.switch, col = "salmon3", main = "switch", type = "l")
+plot(daysofyear, S.arrive, col = "salmon3", main = "arrive", type = "l")
 plot(daysofyear, S.leave, col = "salmon3", main = "leave", type = "l")
 plot(daysofyear, discovery, col = "salmon3", main = "discovery", type = "l")
 plot(daysofyear, Ol, col = "turquoise3", main = "Locks salmon", type = "l")
