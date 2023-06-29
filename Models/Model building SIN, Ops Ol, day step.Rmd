@@ -107,8 +107,6 @@ removals.S[1] <- 0
 
 Ops starts at an arbitrary 1 million salmon in Puget Sound.
 
-ladder = 0.3 means it takes about 3 days for a salmon to go from arriving to safe. This lines up with what Eric and Ava said for Sockeye, but very different for Chinook and not known for coho.
-
 ```{r warning=F}
 for (t in 2:nruns) {
   salmon.arrive[t] <- predict.fish(day = t, params = fish.fit.optim$par, start.day = 163)
