@@ -28,41 +28,8 @@ source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/
 source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
 
 ```
-### The To Do List 
-Updated: June 22, 2023
-
-- Find relevant diet data, summarize, decide what the appropriate consumption rates should be.
-
-- 
 
 ### Version 2
-
-With Ballard Locks sockeye arrival data as the salmon.arrive term: see "Sockeye arrival function creation.R" Data from Muckleshoot on April 10, 2023
-
-From Eric Warner: "There are actually two expansion terms combined into one. One extrapolates from the ten minute count to a full hour, and the other estimates the number of fish moving into the fish ladder during the rest of the day and night (it equates to counting for 13 hours and extrapolating to 16 hours -- for June and July anyway). As far as we can tell based on the old electronic counters and some other evidence, this is generally true for sockeye, but underestimates Chinook passage through the ladder. I'm not sure about coho. The combined estimates from the fish ladder and Locks are our best estimate of fish entering freshwater from Puget Sound. Yes there are a lot of other issues with these counts, but this is as good as it gets. If there are confounding issues that make an appreciable difference and we're off, at least we're off the same way every year."
-
-I grabbed the estimated total Sockeye adult count for 2012-2022 to create the sockeye arrival function curve. so far I haven't incorporated other salmon runs - just a single peak.
-
-Comments about model so far:
-
-Thresholds and steepness for leave and switch are totally informed by gut feeling and plotting the range of potential outcomes.
-This piece feels like it needs a totally different approach, and I don't like how it's not based in any kind of real mechanism.
-
-Removal terms are a flat hunt rate on each group.
-Won't be tackling yet, set to zero mostly.
-
-Discovery term is the rate of seals from the N population that discover the salmon buffet at the locks and become S.
-Once they do this they can't become naive again, so those seals end up in the inactive or specialist groups forever. 
-Should this decay and allow seals to return to N or does it make sense this way?
-
-daily consumption is an estimate of salmon/seal consumed per day with no actual data behind it.
-Need to dig this out and adjust accordingly.
-Should be plenty of diet data to work with here, including observation data from the locks itself. Just need to pull it all together and decide what a best guess for each site looks like for each behavioral group, because we definitely don't have that fine grain diet data available.
-
-Ladder is the movement rate of salmon from the vulnerable below the locks/in the ladder position to safety above the locks.
-Estimated currently as a 5-day window until safety, I think it's actually shorter for Sockeye (\~2-3 days?) and longer for Chinook (1-1.5 months - 42 days? need to check if this is avg or max) according to Eric and Ava - find data on this and adjust as possible.
-
-nruns is just the days in a year, which is how long the loop runs right now.
 
 ```{r}
 # for leaving and switch function
@@ -120,7 +87,7 @@ removals.S <- rep(NA, nruns)
 
 S[1] <- 0
 I[1] <- 150
-N[1] <- 10000
+N[1] <- 13500
 
 Ops[1] <- 1000000
 Ol[1] <- 0
@@ -139,12 +106,7 @@ removals.S[1] <- 0
 ```
 
 Ops starts at an arbitrary 1 million salmon in Puget Sound.
-This could be a better model of arrival timings if we want but I don't think it's relevant to the rest of the model since it's not actually used anywhere else?
-Rethink what role this term plays.
 
-Ol is just a function that is fed the day of the year and returns the density of Sockeye expected at the locks on that day from fitting a normal curve to the average count data of Sockeye from 2012-2022.
-
-Osafe is the salmon that make it above the locks and are no longer available to seals, just based on the constant movement rate (ladder).
 ladder = 0.3 means it takes about 3 days for a salmon to go from arriving to safe. This lines up with what Eric and Ava said for Sockeye, but very different for Chinook and not known for coho.
 
 ```{r warning=F}
