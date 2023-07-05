@@ -4,9 +4,12 @@
 # This used to be in "Model building SIN, Ops Ol, day step.Rmd" and was migrated to a .R on July 5, 2023.
 
 ## Packages, Functions, etc.
-
+# these only work on the MacBook!
 source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/functions.R")
 source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
+
+# work desktop
+
 
 ## Parameters
 
@@ -29,7 +32,7 @@ d <- 0.00000001 # total BS right now, need a better approach that isn't a total 
 dailyconsumption <- 5 # also BS right now
 
 # movement rate above the locks (basically 1/residence time)
-ladder <- 0.3
+ladder <- 0.4
 
 # for loop
 nruns <- 365
