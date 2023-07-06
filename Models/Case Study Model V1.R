@@ -9,7 +9,8 @@ source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/
 source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
 
 # work desktop
-
+source("/Users/Elizabeth Allyn/Documents/GitHub/Pinniped Case Studies/Functions/functions.R")
+source("/Users/Elizabeth Allyn/Documents/GitHub/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
 
 ## Parameters
 
