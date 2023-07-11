@@ -4,14 +4,13 @@
 
 #### Version 2 with 2012-2022 data
 
-# install.packages("devtools")
+# install.packages("dplyr")
 library(dplyr)
 library(ggplot2)
 library(PNWColors)
 
 ## read in data
-sockeye <- read.csv("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Data/Ballard Daily Counts 2012-2022.csv")
-check <- read.csv("https://github.com/lizallyn/Pinniped-Case-Studies/blob/main/Data/Ballard%20Daily%20Counts%202012-2022.csv")
+sockeye <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Data/Ballard%20Daily%20Counts%202012-2022.csv")
 
 DayofStudy <- rep(163:275, 11)
 sockeye <- data.frame(cbind(sockeye, DayofStudy))
