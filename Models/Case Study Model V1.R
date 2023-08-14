@@ -72,7 +72,6 @@ salmon.arrive[1] <- 0
 
 S.switch[1] <- 0
 S.leave[1] <- 0
-S.arrive[1] <- 0
 
 discovery[1] <- NA
 
@@ -112,13 +111,12 @@ for (t in 2:nruns) {
 ## Look at it
 
 par(mfrow = c(1,2))
-plot(daysofyear, N, type = "l", col = "black", main = "normal")
-plot(daysofyear, S, col = "salmon3", main = "specialists", type = "l")
-plot(daysofyear, I, col = "orchid3", main = "inactive", type = "l")
-plot(daysofyear, S.arrive, col = "salmon3", main = "arrive", type = "l")
-plot(daysofyear, S.leave, col = "salmon3", main = "leave", type = "l")
-plot(daysofyear, discovery, col = "salmon3", main = "discovery", type = "l")
-plot(daysofyear, Ol, col = "turquoise3", main = "Locks salmon", type = "l")
-plot(daysofyear, Ops, col = "dodgerblue", main = "PS salmon", type = "l")
-plot(daysofyear, salmon.arrive, col = "turquoise3", main = "Arriving salmon", type = "l")
-plot(daysofyear, Osafe, col = "dodgerblue", main = "Safe salmon", type = "l")
+plot(daysofyear, N, type = "l", col = "dodgerblue", main = "normal")
+plot(daysofyear, S, col = "dodgerblue", main = "specialists", type = "l")
+plot(daysofyear, I, col = "dodgerblue", main = "inactive", type = "l")
+plot(daysofyear, S.leave, col = "turquoise3", main = "leave", type = "l")
+plot(daysofyear, discovery, col = "turquoise3", main = "discovery", type = "l")
+plot(daysofyear, Ol, col = "salmon3", main = "Locks salmon", type = "l")
+plot(daysofyear, Ops, col = "salmon3", main = "PS salmon", type = "l")
+plot(daysofyear, salmon.arrive, col = "salmon3", main = "Arriving salmon", type = "l")
+plot(daysofyear, Osafe, col = "salmon3", main = "Safe salmon", type = "l")
