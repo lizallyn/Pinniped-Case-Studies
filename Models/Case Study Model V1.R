@@ -41,7 +41,10 @@ daysofyear <- 1:365
 
 ## Starting Values
 
-# starting values for S, I, N, Ops, Ol
+# starting values
+
+day <- 1
+
 S <- rep(NA, nruns)
 I <- rep(NA, nruns)
 N <- rep(NA, nruns)
@@ -82,6 +85,8 @@ removals.S[1] <- 0
 ## The 1 Year Loop
 
 for (t in 2:nruns) {
+  day[t] <- day[t-1] + 1
+  
   salmon.arrive[t] <- predict.fish(day = t, params = fish.fit.optim$par, start.day = 163)
   Ops[t] <- Ops[t-1] - salmon.arrive[t]
   
@@ -111,12 +116,12 @@ for (t in 2:nruns) {
 ## Look at it
 
 par(mfrow = c(1,2))
-plot(daysofyear, N, type = "l", col = "dodgerblue", main = "normal")
-plot(daysofyear, S, col = "dodgerblue", main = "specialists", type = "l")
-plot(daysofyear, I, col = "dodgerblue", main = "inactive", type = "l")
-plot(daysofyear, S.leave, col = "turquoise3", main = "leave", type = "l")
-plot(daysofyear, discovery, col = "turquoise3", main = "discovery", type = "l")
-plot(daysofyear, Ol, col = "salmon3", main = "Locks salmon", type = "l")
-plot(daysofyear, Ops, col = "salmon3", main = "PS salmon", type = "l")
-plot(daysofyear, salmon.arrive, col = "salmon3", main = "Arriving salmon", type = "l")
-plot(daysofyear, Osafe, col = "salmon3", main = "Safe salmon", type = "l")
+plot(day, N, type = "l", col = "dodgerblue", main = "normal")
+plot(day, S, col = "dodgerblue", main = "specialists", type = "l")
+plot(day, I, col = "dodgerblue", main = "inactive", type = "l")
+plot(day, S.leave, col = "turquoise3", main = "leave", type = "l")
+plot(day, discovery, col = "turquoise3", main = "discovery", type = "l")
+plot(day, Ol, col = "salmon3", main = "Locks salmon", type = "l")
+plot(day, Ops, col = "salmon3", main = "PS salmon", type = "l")
+plot(day, salmon.arrive, col = "salmon3", main = "Arriving salmon", type = "l")
+plot(day, Osafe, col = "salmon3", main = "Safe salmon", type = "l")
