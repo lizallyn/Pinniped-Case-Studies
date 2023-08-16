@@ -59,3 +59,13 @@ discovery.rate(9000, 100, 0.000005)
 predation.rate <- function(seals, consumption) {
   return(seals * consumption)
 }
+
+## messing around with salmon mortality as Baranov catch
+
+M_p <- 0.1 # predation rate
+M_h <- 0.1 # harvest rate
+E <- 0.3 # escape to safety rate - decay upstream
+
+Baranov.C <- function(M_p, M_h, E, N) {M_p * N / (M_p + M_h + E) * (1-exp(-M_p - M_h - E))}
+Baranov.C(0.1, 0.1, 0.3, 1000)
+# returns mortality
