@@ -10,7 +10,7 @@ library(ggplot2)
 library(PNWColors)
 
 ## read in data
-sockeye <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Data/Ballard%20Daily%20Counts%202012-2022.csv")
+sockeye <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Data/Ballard%20Daily%20Counts%202012-2022.csv?token=GHSAT0AAAAAACGGT3YBCX4AI2ZZYILWLBM6ZJIGWTA")
 
 DayofStudy <- rep(163:275, 11)
 sockeye <- data.frame(cbind(sockeye, DayofStudy))
