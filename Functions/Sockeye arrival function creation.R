@@ -70,11 +70,13 @@ for(i in days) {
   y.hat[i] <- predict.fish(params = fish.fit.optim$par, day = i, start.day = 163)
 }
 test <- data.frame(cbind(1:365, y.hat))
+normal <- (1/fish.fit.optim$par[3]*sqrt(2*pi)) * exp(-0.5*((days-(fish.fit.optim$par[2] + 163))/fish.fit.optim$par[3])^2)
 
 plot2 <- 
   ggplot() +
   geom_point(aes(x = 163:275, y = Avg.Daily$avg.daily), col = "orchid3") +
-  geom_line(aes(x = test$V1, y = test$y.hat), col = "dodgerblue")
+  geom_line(aes(x = test$V1, y = test$y.hat), col = "dodgerblue") + 
+  geom_line(aes(x = days, y = normal), col = "turquoise3")
 plot2 
 
 # needs a higher peak to really fit right?? JK optim was just being stubborn, looks good now
