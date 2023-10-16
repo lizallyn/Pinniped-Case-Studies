@@ -114,6 +114,8 @@ for (t in 2:nruns) {
 }
 
 ## Look at it
+par(mfrow = c(1,1))
+plot(day, Ol, col = "salmon3", main = "Locks salmon", type = "l", lwd = 3)
 
 par(mfrow = c(1,2))
 plot(day, N, type = "l", col = "dodgerblue", main = "normal")
