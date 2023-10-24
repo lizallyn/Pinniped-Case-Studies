@@ -84,8 +84,122 @@ else:
 
 # while loops
 x = 1
-while x <= 5:
+while x <= 1000: # the 1_000 is easier to look at?
   print(x)
   x = x + 1
 # end
+while x <= 10: # the 1_000 is easier to look at?
+  print(x * '*') # multiplies the asterisks by the value of x, so prints an asterisk pyramid
+  x = x + 1
+# end
+
+# lists
+names = ["Liz", "John", "Bob", "Sam"]
+print(names)
+print(names[0]) # indexing starts at 0
+print(names[-2])
+names[1] = "Jon"
+print(names[0:2])
+
+numbers = [1, 2, 3, 4, 5]
+numbers_copy = numbers
+numbers.append(6)
+print(numbers)
+print("the copy is" + str(numbers_copy))
+# both lists point to the same underlying numbers
+# so edits to one are edits to both!!
+
+x = [1]
+x + x
+x * 3
+# can build lists with those operators
+
+numbers[::2] # specifies a "stride" of 2, so slices every second item
+
+x = (1,) # creates a tuple of length 1, needs trailing comma
+type(x)
+len(x)
+x = 1,2 # also a tuple
+x = 1, # also a tuple
+print(f"{type(x) = }; {len(x) = }; {x = }") # interpolated string literals (???)
+
+x = (1,2,3)
+a,b,c = x #"unpacking"
+print(a)
+
+xx = (("a", 1),
+      ("b", 2))
+for x1, x2 in xx:
+  print("x1 = ", x1)
+  print("x2 = ", x2)
+# end
+
+x = (1,2,3)
+a, *the_rest = x # assigns leftovers to the_rest
+a
+the_rest
+
+# dictionaries
+# sort of like environments where you can refer to objects by name
+d = {"key1": 1,
+     "key2": 2}
+d["key3"] = 3
+d[1] # cannot index by number, unordered container
+
+# sets
+s = {1,2,3} # create with curlies?
+type(s)
+s.add(6) # adds to the set?
+s
+
+# iteration
+l = [1,2,3]
+it = iter(l)
+it
+next(it)
+
+d = {"key1": 1,
+     "key2": 2}
+for key in d:
+ print(key)
+
+for value in d.values():
+  print(value)
+
+for key, value in d.items():
+  print(key, ":", value)
+
+# comprehensions (similar to lapply kinda)
+x = [1,2,3]
+l = [element + 100 for element in x]
+l
+
+# functions
+def my_function(name = "World"):
+  print("Hello", name) # requires explicit return function unlike R
+my_function("Liz")
+
+def my_func(*args, **kwargs):
+  print("args = ", args)
+  print("kwargs = ", kwargs)
+# functions can take variable numbers of arguments
+my_func(1,2,3,a=4, b=5, c=6)
+unnamed = (1,2,3,4,5) # unnamed arguments
+named = {"a":1, "b": 2, "c": 3} # named arguments
+my_func(*unnamed, **named)
+
+## classes are typically CamelCase and functions are snake_case ##
+
+# classes
+class MyClass:
+  pass # pass means do nothing
+
+MyClass
+type(MyClass)
+
+instance = MyClass()
+instance
+type(instance)
+dir(MyClass) # has a bunch of biult-in attributes
+
 
