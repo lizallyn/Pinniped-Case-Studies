@@ -213,3 +213,12 @@ instance = MyClass()
 print(instance)
 instance2 = MyClass()
 print(instance2)
+
+class MyClass: # create a class with a function in it (a "method")
+  def a_method(self):
+    print("MyClass.a_method() was called with", self)
+
+instance = MyClass() # create an instance
+instance.a_method() # run the function in that instance
+MyClass.a_method(self=instance) # identical to above
+
