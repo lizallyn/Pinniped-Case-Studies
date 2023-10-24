@@ -202,4 +202,14 @@ instance
 type(instance)
 dir(MyClass) # has a bunch of biult-in attributes
 
+class MyClass: #objects created in this block will exist for all instances
+  print("MyClass's definition body is being evaluated")
+  def __init__(self):
+    print(self, "is initializing")
 
+print("MyClass is finished being created")
+
+instance = MyClass()
+print(instance)
+instance2 = MyClass()
+print(instance2)
