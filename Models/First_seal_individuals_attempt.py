@@ -1,9 +1,11 @@
 # Started during meeting with Andrew Oct 20, 2023
 
+import numpy as np
+
 ###############################################
 #### Set Parameters
 ###############################################
-max_time_steps = 2
+max_time_steps = 5
 num_seals = 20
 seal_initial_prob_gauntlet = 0.1
 seal_num_neighbours_2_copy = 2
@@ -40,4 +42,5 @@ for t in range(max_time_steps):
             #print(seal_forage_loc[seals_2_copy])
             if(np.random.rand() < (seal_prob_2_copy*social_information) ):
                 seal_forage_loc[seal] = 1
-    #print(seal_forage_loc)
+    print(seal_forage_loc)
+
