@@ -25,7 +25,8 @@ print(seal_forage_loc)
 
 #loop over time (foraging days)
 for t in range(max_time_steps):
-    #decide (indepentantly) where each seal goes that day
+  
+    #decide (independantly) where each seal goes that day
     for seal in range(num_seals):
         if(np.random.rand()<seal_prob_gauntlet[seal]):
             seal_forage_loc[seal] = 1
@@ -43,4 +44,5 @@ for t in range(max_time_steps):
             if(np.random.rand() < (seal_prob_2_copy*social_information) ):
                 seal_forage_loc[seal] = 1
     print(seal_forage_loc)
+    print(sum(seal_forage_loc))
 
