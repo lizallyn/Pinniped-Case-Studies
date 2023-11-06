@@ -30,19 +30,13 @@ plt.show()
 yr_day_sockeye.plot(kind = "line")
 plt.show()
 from scipy.stats import norm
-y_hat = []
+y_hat = np.repeat((-1), len(df_sockeye))
 def fit_to_fish(params, data):
-  for t in range(len(data)-1):
+  for t in range(len(data)):
     y_hat[t] = norm.pdf(x = t, loc = params[1], scale = params[2]) * params[0]
   print(y_hat)
 
-
 # test function
-params = []
 params_1 = [73500, 23.6, 14]
 fit_to_fish(params = params_1, data = df_sockeye)
-type(len(df_sockeye)-1)
 
-import statspy
-statspy.basics.dnorm(200, m = params_1[1], sd = params_1[2])
-norm.pdf(x = 200, loc = params_1[1], scale = params_1[2]) * params_1[0]
