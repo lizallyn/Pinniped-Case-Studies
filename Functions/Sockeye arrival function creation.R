@@ -16,19 +16,19 @@ sockeye <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-St
 
 DayofStudy <- rep(163:275, 11)
 sockeye <- data.frame(cbind(sockeye, DayofStudy))
-sockeye$Daily.Count <- as.numeric(sockeye$Daily.Count)
+sockeye$DailyCount <- as.numeric(sockeye$DailyCount)
 sockeye$Y_DoS <- paste(sockeye$Year, sockeye$DayofStudy)
 
 Avg.Daily <- sockeye %>%
   group_by(DayofStudy) %>%
-  summarise(avg.daily = round(digits = 0, x = mean(Daily.Count)))
+  summarise(avgdaily = round(digits = 0, x = mean(DailyCount)))
 
 # plot the daily Sockeye counts for each year, avg in black
 plot1 <- 
   ggplot(sockeye) +
-  geom_point(aes(x = DayofStudy, y = Daily.Count), 
+  geom_point(aes(x = DayofStudy, y = DailyCount), 
              col = pnw_palette(name = "Sailboat", n = nrow(sockeye), type = "continuous")) +
-  geom_point(data = Avg.Daily, aes(x = DayofStudy, y = avg.daily), col = "black")
+  geom_point(data = Avg.Daily, aes(x = DayofStudy, y = avgdaily), col = "black")
 plot1 
 
 # create a function to fit a curve to the data
@@ -44,13 +44,14 @@ fit.to.fish <- function(params, data) {
   nll <- -sum(dpois(x=data, lambda=y.hat, log=TRUE))
   return(nll)
 }
-params <- c(73500, 23.6, 14)
-fit.to.fish(params = params, data = Avg.Daily$avg.daily)
+params <- c(73500, 23.62, 13.985)
+fit.to.fish(params = params, data = Avg.Daily$avgdaily)
 
 fish.fit.optim <- optim(par = params,
                         fn = fit.to.fish,
-                        data = Avg.Daily$avg.daily,
+                        data = Avg.Daily$avgdaily,
                         method = "BFGS")
+fish.fit.optim$par
 
 # create function to predict the number of fish given the day of the year
 # start.day is the date offset in the data (data starts on June 12 = 163)
@@ -74,9 +75,9 @@ normal <- (1/fish.fit.optim$par[3]*sqrt(2*pi)) * exp(-0.5*((days-(fish.fit.optim
 
 plot2 <- 
   ggplot() +
-  geom_point(aes(x = 163:275, y = Avg.Daily$avg.daily), col = "orchid3") +
-  geom_line(aes(x = test$V1, y = test$y.hat), col = "dodgerblue") + 
+  geom_point(aes(x = 163:275, y = Avg.Daily$avgdaily), col = "orchid3") +
+  geom_line(aes(x = test$V1, y = test$y.hat), col = "dodgerblue", lwd = 1) + 
   geom_line(aes(x = days, y = normal), col = "turquoise3")
 plot2 
 
-# needs a higher peak to really fit right?? JK optim was just being stubborn, looks good now
+# Optim is super stubborn with this, make sure it's right before moving on
