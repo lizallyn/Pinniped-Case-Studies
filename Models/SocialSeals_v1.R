@@ -1,9 +1,9 @@
 ### I give up, let's do it in R for the rest of the day
 
-# packages and data
+# Load Packages and Data
 
 
-# functions
+# Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 
 # Set Parameters
@@ -18,7 +18,7 @@ prob_seal_forage_success <- 0.3
 max_salmon <- max(sockeye$DailyCount)
 escape_rate <- 0.3
 
-# Variable setup
+# Set Up Variables
 salmon_escape <- rep(NA, days)
 salmon_escape[1] <- 0
 gauntlet_salmon <- rep(NA, days)
@@ -61,6 +61,8 @@ for(t in 2:(days-1)) {
   }
   
   # round of eating - success T/F
+  # currently allows more salmon to be eaten than exist
+  # need a detection/searching term
   for(seal in 1:num_seals) {
     # prob success per visit to gauntlet (Freeman et al 2022)
     prob_seal_forage_success <- rnorm(n = 1, mean = .20, sd = .07)
@@ -77,6 +79,9 @@ for(t in 2:(days-1)) {
     }
   }
   
+  # feeding as random provisioning
+  
+  
   # success impacts prob gauntlet on next time step
   for(seal in 1:num_seals) {
     if(seal_forage_loc[seal,t] == 1) {
@@ -84,7 +89,12 @@ for(t in 2:(days-1)) {
         salmon_consumed_TF[seal,t-1]) * seal_prob_gauntlet[seal,t]
     }
   }
-    
-
 }
 
+## check it out:
+# number of seals at the gauntlet per day
+plot(1:days, colSums(seal_forage_loc)) # looks like no response to salmon
+# salmon at the gauntlet per day
+plot(1:days, gauntlet_salmon) # looks right
+# successful foraging seals per day at the gauntlet
+plot(1:days, colSums(salmon_consumed_TF))
