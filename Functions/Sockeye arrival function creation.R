@@ -19,6 +19,8 @@ sockeye <- data.frame(cbind(sockeye, DayofStudy))
 sockeye$DailyCount <- as.numeric(sockeye$DailyCount)
 sockeye$Y_DoS <- paste(sockeye$Year, sockeye$DayofStudy)
 
+max(sockeye$DailyCount)
+
 Avg.Daily <- sockeye %>%
   group_by(DayofStudy) %>%
   summarise(avgdaily = round(digits = 0, x = mean(DailyCount)))
