@@ -14,8 +14,8 @@ seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
 prob_seal_forage_success <- 0.3
-max_salmon <- max(sockeye$DailyCount)
 
+max_salmon <- max(sockeye$DailyCount)
 escape_rate <- 0.3
 
 # Variable setup
@@ -23,7 +23,8 @@ salmon_escape <- rep(NA, days)
 salmon_escape[1] <- 0
 gauntlet_salmon <- rep(NA, days)
 gauntlet_salmon[1] <- 0
-salmon_consumed <- rep(NA, num_seals)
+
+salmon_consumed_TF <- array(dim = c(num_seals, days), data = rep(NA, num_seals * days))
 seal_prob_gauntlet <- array(dim = c(num_seals, days), 
                             data = rep(seal_initial_prob_gauntlet, 
                                        num_seals * days))
@@ -32,7 +33,7 @@ seal_forage_loc <- array(dim = c(num_seals, days),
                                     num_seals * days))
 
 # Run time loop
-for(t in 2:days) {
+for(t in 2:days-1) {
   
   # salmon at the gauntlet on that day=arrive-leave
   salmon_arrive <- round(predict.fish(day = t, params = fish.fit.optim$par, start.day = 163), digits = 0)
@@ -50,21 +51,33 @@ for(t in 2:days) {
   for(seal in 1:num_seals) {
     # if the seal wasn't going to the gauntlet
     if(seal_forage_loc[seal,t] == 0) {
-      seals_2_copy <- seal_forage_loc[sample(1:num_seals, seal_num_neighbours_2_copy, replace = F)]
-      social_information <- mean(seals_2_copy)
+      loc_of_seals_2_copy <- seal_forage_loc[sample(1:num_seals, seal_num_neighbours_2_copy, replace = F),t]
+      social_information <- mean(loc_of_seals_2_copy)
       if(rnorm(1) < seal_prob_2_copy * social_information) {
-        seal_forage_loc[seal] <- 1
+        seal_forage_loc[seal,t] <- 1
       }
     }
   }
   
-  # round of eating
+  # round of eating - success T/F
   for(seal in 1:num_seals) {
-    prob_seal_encounter_salmon <- gauntlet_salmon[t]/max_salmon
-    prob_seal_forage_success <- rnorm(n = 1, mean = 20, sd = 7) #Freeman et al 2022
-    salmon_consumed[seal] <- seal_forage_loc[seal] * prob_seal_encounter_salmon *
-      gauntlet_salmon[t] * prob_seal_forage_success
+    # prob success per visit to gauntlet (Freeman et al 2022)
+    prob_seal_forage_success <- rnorm(n = 1, mean = .20, sd = .07)
+    # did the seal forage successfully?
+    if(prob_seal_forage_success > rnorm(1)) {
+      salmon_consumed_TF[seal,t] <- seal_forage_loc[seal,t]
+    } else {
+      salmon_consumed_TF[seal,t] <- 0
+    }
   }
+  
+  # success impacts prob gauntlet on next time step
+  for(seal in 1:num_seals) {
+    if(seal_forage_loc[seal,t] == 1) {
+      seal_forage_loc[seal,t+1] <- salmon_consumed_TF[seal,t] + 
+        salmon_consumed_TF[seal,t-1] * seal_prob_gauntlet[seal,t]
+    }
+  }
+    
 
 }
-print(salmon_consumed)
