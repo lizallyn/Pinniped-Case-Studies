@@ -3,6 +3,9 @@
 # packages and data
 
 
+# functions
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
+
 # Set Parameters
 days <- 1
 num_seals <- 20
@@ -10,8 +13,10 @@ seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
+prob_seal_forage_success <- 0.3
 
 # Variable setup
+salmon_arrive <- rep(NA, days)
 seal_prob_gauntlet <- array(dim = c(num_seals, days), 
                             data = rep(seal_initial_prob_gauntlet, 
                                        num_seals * days))
@@ -21,6 +26,8 @@ seal_forage_loc <- array(dim = c(num_seals, days),
 
 # Run time loop
 for(t in 1:days) {
+  
+  salmon_arrive[t] <- predict.fish(day = t, params = fish.fit.optim$par, start.day = 163)
   
   # decide where each seal goes that day
   for(seal in 1:num_seals) {
@@ -40,5 +47,13 @@ for(t in 1:days) {
       }
     }
   }
+  
+  # round of eating
+  prob_seal_encounter_salmon <- salmon_arrive[t]/
+  # not sure what this should be dependent on yet, probably density and competition
+  for(seal in 1:num_seals) {
+    salmon_consumed[seal] <- seal_forage_loc[seal] * prob_seal_encounter_salmon * prob_seal_forage_success[seal]
+  }
+
 }
 print(seal_forage_loc)
