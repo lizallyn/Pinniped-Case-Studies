@@ -7,7 +7,7 @@
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 
 # Set Parameters
-days <- 365
+days <- 250
 num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
@@ -25,8 +25,6 @@ salmon_escape[1] <- 0
 gauntlet_salmon <- rep(NA, days)
 gauntlet_salmon[1] <- 0
 
-salmon_consumption_TF <- array(dim = c(num_seals, days), 
-                             data = rep(NA, num_seals * days))
 salmon_consumed <- array(dim = c(num_seals, days), 
                             data = rep(0, num_seals * days))
 seal_prob_gauntlet <- array(dim = c(num_seals, days), 
@@ -83,26 +81,26 @@ for(t in 2:(days-1)) {
   # }
   
   # feeding as random provisioning
-  seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
-  if(gauntlet_salmon[t] > 0) {
-    while(length(seals_at_gauntlet > 0)) {
-      for(fish in 1:gauntlet_salmon[t]) {
-        which_seal_foraging <- sample(seals_at_gauntlet, 1, replace = T)
-        salmon_consumed[which_seal_foraging,t] <- 
-          salmon_consumed[which_seal_foraging,t] + 1
-        if(salmon_consumed[which_seal_foraging,t] == satiation_threshold) {
-          seals_at_gauntlet <- seals_at_gauntlet[-which_seal_foraging]
-        }
-      }
-    }
-  }
+  # seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
+  # if(gauntlet_salmon[t] > 0) {
+  #   while(length(seals_at_gauntlet > 0)) {
+  #     for(fish in 1:gauntlet_salmon[t]) {
+  #       which_seal_foraging <- sample(seals_at_gauntlet, 1, replace = T)
+  #       salmon_consumed[which_seal_foraging,t] <- 
+  #         salmon_consumed[which_seal_foraging,t] + 1
+  #       if(salmon_consumed[which_seal_foraging,t] == satiation_threshold) {
+  #         seals_at_gauntlet <- seals_at_gauntlet[-which_seal_foraging]
+  #       }
+  #     }
+  #   }
+  # }
   
-  # vectorize feeding as random provisioning
+  # speed up feeding as random provisioning
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
-  while(length(seals_at_gauntlet > 0)) {
-    salmon_consumed[sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F),t] <- 
-      salmon_consumed[sample(seals_at_gauntlet, runif(1, 1, length(seals_at_gauntlet)), replace = F),t] + 1
-    gauntlet_salmon[t] <- gauntlet_salmon[t] - sum(salmon_consumed[,t]) # need to make sure this doesn't go negative as the next thing to tackle
+  while(length(seals_at_gauntlet) > 0 && gauntlet_salmon[t] > length(seals_at_gauntlet)) {
+    seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
+    salmon_consumed[seals_that_eat,1] <- salmon_consumed[seals_that_eat,t] + 1
+    gauntlet_salmon[t] <- gauntlet_salmon[t] - sum(salmon_consumed[,t])
     seals_at_gauntlet <- seals_at_gauntlet[-which(salmon_consumed[,t] == satiation_threshold)]
   }
   
@@ -116,8 +114,6 @@ for(t in 2:(days-1)) {
   }
 }
 
-# vectorize feeding as random provisioning
-salmon_consumed[,1]
 
 ## check it out:
 # number of seals at the gauntlet per day
@@ -125,4 +121,4 @@ plot(1:days, colSums(seal_forage_loc)) # looks like no response to salmon
 # salmon at the gauntlet per day
 plot(1:days, gauntlet_salmon) # looks right
 # successful foraging seals per day at the gauntlet
-plot(1:days, colSums(salmon_consumed_TF))
+plot(1:days, colSums(salmon_consumed))
