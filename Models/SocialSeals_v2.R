@@ -7,9 +7,9 @@
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 
 # Set Parameters
-days <- 150
+days <- 365
 num_seals <- 20
-seal_initial_prob_gauntlet <- 0.2
+seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
@@ -40,7 +40,7 @@ for(t in 2:(days-1)) {
   # salmon at the gauntlet on that day=arrive-leave
   salmon_arrive <- round(predict.fish(day = t, params = fish.fit.optim$par, start.day = 163), digits = 0)
   gauntlet_salmon[t] <- round(gauntlet_salmon[t-1] + salmon_arrive - salmon_escape[t-1], digits = 0)
-  salmon_escape[t] <- gauntlet_salmon[t] * escape_rate
+  
   
   # decide where each seal goes that day
   for(seal in 1:num_seals) {
@@ -65,25 +65,32 @@ for(t in 2:(days-1)) {
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   salmon_available_to_eat <- gauntlet_salmon[t]
   
-  while(length(seals_at_gauntlet) > 0) {
-    if(salmon_available_to_eat < length(seals_at_gauntlet)) {
-      break
-    } else {
-      seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
-      salmon_consumed[seals_that_eat,t] <- salmon_consumed[seals_that_eat,t] + 1
-      satiated_seals <- seals_that_eat[which(salmon_consumed[seals_that_eat,t] >= satiation_threshold)]
-      seals_at_gauntlet <- seals_at_gauntlet[!(seals_at_gauntlet %in% satiated_seals)]
-      salmon_available_to_eat <- salmon_available_to_eat - length(seals_that_eat) 
+  if(length(seals_at_gauntlet) < 1) {
+    salmon_consumed[,t] <- 0
+  } else {
+    while(length(seals_at_gauntlet) > 0) {
+      if(salmon_available_to_eat < length(seals_at_gauntlet)) {
+        break
+      } else {
+        seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
+        salmon_consumed[seals_that_eat,t] <- salmon_consumed[seals_that_eat,t] + 1
+        salmon_available_to_eat <- salmon_available_to_eat - length(seals_that_eat)
+        # remove satiated seals
+        satiated_seals <- seals_that_eat[which(salmon_consumed[seals_that_eat,t] >= satiation_threshold)]
+        seals_at_gauntlet <- seals_at_gauntlet[which(!seals_at_gauntlet %in% satiated_seals)]
+      }
     }
   }
   
+  
+  # consumption impacts salmon survival
   gauntlet_salmon[t] <- gauntlet_salmon[t] - sum(salmon_consumed[,t])
+  salmon_escape[t] <- gauntlet_salmon[t] * escape_rate
   
   
   # success impacts prob gauntlet on next time step
-  for(seal in 1:num_seals) {
-    seal_prob_gauntlet[seal, t+1] <- max((1/satiation_threshold) * 
-      salmon_consumed[seal,t], seal_initial_prob_gauntlet)
+  for(seal in seals_at_gauntlet) {
+    seal_prob_gauntlet[seal, t+1] <- (salmon_consumed[seal, t] + salmon_consumed[seal,t-1])/10
   }
 }
 
@@ -94,3 +101,4 @@ plot(1:days, colSums(seal_forage_loc)) # looks like no response to salmon
 plot(1:days, gauntlet_salmon) # looks almost right, some negative
 # successful foraging seals per day at the gauntlet
 plot(1:days, colSums(salmon_consumed))
+
