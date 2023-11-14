@@ -61,7 +61,7 @@ for(t in 2:(days-1)) {
     }
   }
   
-  # speed up feeding as random provisioning
+  # feeding as random provisioning
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   salmon_available_to_eat <- gauntlet_salmon[t]
   
@@ -88,9 +88,10 @@ for(t in 2:(days-1)) {
   salmon_escape[t] <- gauntlet_salmon[t] * escape_rate
   
   
-  # success impacts prob gauntlet on next time step
+  # seal foraging success impacts prob gauntlet on next time step
   for(seal in seals_at_gauntlet) {
-    seal_prob_gauntlet[seal, t+1] <- (salmon_consumed[seal, t] + salmon_consumed[seal,t-1])/10
+    if()
+    seal_prob_gauntlet[seal, t+1] <- (salmon_consumed[seal, t]/5) + (salmon_consumed[seal,t-1]/10)
   }
 }
 
