@@ -37,7 +37,7 @@ seal_forage_loc <- array(dim = c(num_seals, days),
 # Run time loop
 for(t in 2:(days-1)) {
   
-  # salmon at the gauntlet on that day=arrive-leave
+  # salmon at the gauntlet on that day = arrive-leave
   salmon_arrive <- round(predict.fish(day = t, params = fish.fit.optim$par, start.day = 163), digits = 0)
   gauntlet_salmon[t] <- round(gauntlet_salmon[t-1] + salmon_arrive - salmon_escape[t-1], digits = 0)
   
