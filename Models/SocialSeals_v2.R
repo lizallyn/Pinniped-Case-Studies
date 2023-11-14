@@ -7,7 +7,7 @@
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 
 # Set Parameters
-days <- 140
+days <- 365
 num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
@@ -62,29 +62,41 @@ for(t in 2:(days-1)) {
   }
   
   # feeding as random provisioning
-  seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
-  salmon_available_to_eat <- gauntlet_salmon[t]
+  # seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
+  # salmon_available_to_eat <- gauntlet_salmon[t]
+  # 
+  # if(length(seals_at_gauntlet) < 1) {
+  #   salmon_consumed[,t] <- 0
+  # } else {
+  #   while(salmon_available_to_eat > length(seals_at_gauntlet)) {
+  #     if(length(seals_at_gauntlet) > 0) {
+  #       seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
+  #       salmon_consumed[seals_that_eat,t] <- salmon_consumed[seals_that_eat,t] + 1
+  #       salmon_available_to_eat <- salmon_available_to_eat - length(seals_that_eat)
+  #       # remove satiated seals - this is not working right now
+  #       satiated_seals <- seals_that_eat[which(salmon_consumed[seals_that_eat,t] >= satiation_threshold)]
+  #       seals_at_gauntlet <- seals_at_gauntlet[which(!seals_at_gauntlet %in% satiated_seals)]
+  #     } else {
+  #       break
+  #     }
+  #   }
+  # }
   
-  if(length(seals_at_gauntlet) < 1) {
+  # reconstructing feeding bc it's NOT working >:(((
+  seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
+  gauntlet_salmon[t] <- gauntlet_salmon[t]
+  if(length(seals_at_gauntlet) < 1 | gauntlet_salmon[t] < 1) {
     salmon_consumed[,t] <- 0
   } else {
-    while(salmon_available_to_eat > length(seals_at_gauntlet)) {
-      if(length(seals_at_gauntlet) > 0) {
-        seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
-        salmon_consumed[seals_that_eat,t] <- salmon_consumed[seals_that_eat,t] + 1
-        salmon_available_to_eat <- salmon_available_to_eat - length(seals_that_eat)
-        # remove satiated seals - this is not working right now
-        satiated_seals <- seals_that_eat[which(salmon_consumed[seals_that_eat,t] >= satiation_threshold)]
-        seals_at_gauntlet <- seals_at_gauntlet[which(!seals_at_gauntlet %in% satiated_seals)]
+    for(fish in 1:gauntlet_salmon[t]) {
+      seal_eating <- gdata::resample(seals_at_gauntlet, 1)
+      if(salmon_consumed[seal_eating, t] == satiation_threshold) {
+        next
       } else {
-        break
+        salmon_consumed[seal_eating, t] <- salmon_consumed[seal_eating, t] + 1
       }
     }
   }
-  
-  # reconstructing feeding bc it's NOT working >:(((
-  
-  
   
   # consumption impacts salmon survival
   gauntlet_salmon[t] <- gauntlet_salmon[t] - sum(salmon_consumed[,t])
@@ -108,4 +120,8 @@ plot(1:days, colSums(seal_forage_loc)) # looks like no response to salmon
 plot(1:days, gauntlet_salmon) # looks almost right, some negative
 # successful foraging seals per day at the gauntlet
 plot(1:days, colSums(salmon_consumed))
+
+
+# Testing Space
+
 
