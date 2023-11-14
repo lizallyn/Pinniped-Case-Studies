@@ -8,7 +8,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 
 # Set Parameters
 days <- 365
-num_seals <- 20
+num_seals <- 200
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
@@ -62,27 +62,6 @@ for(t in 2:(days-1)) {
   }
   
   # feeding as random provisioning
-  # seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
-  # salmon_available_to_eat <- gauntlet_salmon[t]
-  # 
-  # if(length(seals_at_gauntlet) < 1) {
-  #   salmon_consumed[,t] <- 0
-  # } else {
-  #   while(salmon_available_to_eat > length(seals_at_gauntlet)) {
-  #     if(length(seals_at_gauntlet) > 0) {
-  #       seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
-  #       salmon_consumed[seals_that_eat,t] <- salmon_consumed[seals_that_eat,t] + 1
-  #       salmon_available_to_eat <- salmon_available_to_eat - length(seals_that_eat)
-  #       # remove satiated seals - this is not working right now
-  #       satiated_seals <- seals_that_eat[which(salmon_consumed[seals_that_eat,t] >= satiation_threshold)]
-  #       seals_at_gauntlet <- seals_at_gauntlet[which(!seals_at_gauntlet %in% satiated_seals)]
-  #     } else {
-  #       break
-  #     }
-  #   }
-  # }
-  
-  # reconstructing feeding bc it's NOT working >:(((
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   gauntlet_salmon[t] <- gauntlet_salmon[t]
   if(length(seals_at_gauntlet) < 1 | gauntlet_salmon[t] < 1) {
