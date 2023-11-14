@@ -7,7 +7,7 @@
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 
 # Set Parameters
-days <- 365
+days <- 140
 num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
@@ -68,19 +68,22 @@ for(t in 2:(days-1)) {
   if(length(seals_at_gauntlet) < 1) {
     salmon_consumed[,t] <- 0
   } else {
-    while(length(seals_at_gauntlet) > 0) {
-      if(salmon_available_to_eat < length(seals_at_gauntlet)) {
-        break
-      } else {
+    while(salmon_available_to_eat > length(seals_at_gauntlet)) {
+      if(length(seals_at_gauntlet) > 0) {
         seals_that_eat <- sample(seals_at_gauntlet, sample(1:length(seals_at_gauntlet), 1), replace = F)
         salmon_consumed[seals_that_eat,t] <- salmon_consumed[seals_that_eat,t] + 1
         salmon_available_to_eat <- salmon_available_to_eat - length(seals_that_eat)
-        # remove satiated seals
+        # remove satiated seals - this is not working right now
         satiated_seals <- seals_that_eat[which(salmon_consumed[seals_that_eat,t] >= satiation_threshold)]
         seals_at_gauntlet <- seals_at_gauntlet[which(!seals_at_gauntlet %in% satiated_seals)]
+      } else {
+        break
       }
     }
   }
+  
+  # reconstructing feeding bc it's NOT working >:(((
+  
   
   
   # consumption impacts salmon survival
@@ -90,8 +93,11 @@ for(t in 2:(days-1)) {
   
   # seal foraging success impacts prob gauntlet on next time step
   for(seal in seals_at_gauntlet) {
-    if()
-    seal_prob_gauntlet[seal, t+1] <- (salmon_consumed[seal, t]/5) + (salmon_consumed[seal,t-1]/10)
+    if(salmon_consumed[seal,t] >= satiation_threshold) {
+      seal_prob_gauntlet[seal, t+1] <- 1
+    } else {
+      seal_prob_gauntlet[seal, t+1] <- (salmon_consumed[seal, t]/5) + (salmon_consumed[seal,t-1]/10)
+    }
   }
 }
 
