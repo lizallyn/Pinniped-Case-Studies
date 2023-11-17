@@ -12,6 +12,10 @@ source("/Users/lizallyn/Documents/GitHub/Thesis/Pinniped Case Studies/Functions/
 source("/Users/Elizabeth Allyn/Documents/GitHub/Pinniped Case Studies/Functions/functions.R")
 source("/Users/Elizabeth Allyn/Documents/GitHub/Pinniped Case Studies/Functions/Sockeye arrival function creation.R")
 
+# straight from github
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/functions.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
+
 ## Parameters
 
 # for leaving and switch function
@@ -127,3 +131,4 @@ plot(day, Ol, col = "salmon3", main = "Locks salmon", type = "l")
 plot(day, Ops, col = "salmon3", main = "PS salmon", type = "l")
 plot(day, salmon.arrive, col = "salmon3", main = "Arriving salmon", type = "l")
 plot(day, Osafe, col = "salmon3", main = "Safe salmon", type = "l")
+
