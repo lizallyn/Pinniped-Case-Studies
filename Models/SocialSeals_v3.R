@@ -11,7 +11,7 @@ library(tidyr) #formatting for visualization
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 
 # Set Parameters
-years <- 5
+years <- 1
 days <- 365
 num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
@@ -21,6 +21,8 @@ seal_prob_2_copy <- 0.5
 satiation_threshold <- 5
 
 escape_rate <- 0.3
+
+seal_handling_time <- 0.5
 
 # Set Up Variables
 salmon_escape <- array(dim = c(days, years),
