@@ -76,7 +76,6 @@ for(y in 1:years) {
     
     # feeding as random provisioning
     # seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
-    # gauntlet_salmon[t] <- gauntlet_salmon[t, y]
     # if(length(seals_at_gauntlet) < 1 | gauntlet_salmon[t, y] < 1) {
     #   salmon_consumed[,t, y] <- 0
     # } else {
@@ -92,6 +91,7 @@ for(y in 1:years) {
     
     # consumption via equation from Andrew
     # calculate num salmon to be eaten in that time step
+    seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
     salmon_to_be_eaten <- gauntlet_salmon[t, y] * (length(seals_at_gauntlet) / 
       (1 + length(seals_at_gauntlet) + seal_handling_time * gauntlet_salmon[t, y]))
     salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
@@ -116,10 +116,11 @@ for(y in 1:years) {
 }
 
 # Testing Space
+
 # trying to explore reasonable handling time values
 # needs to be very small for 100% consumption to be possible by less than hundreds of seals
-plot(1:500, 1:500 / 
-       (1 + 1:500 + seal_handling_time * 100))
+# plot(1:500, 1:500 / 
+#        (1 + 1:500 + seal_handling_time * 100))
 
 #### Visualize ####
 # number of seals at the gauntlet per day
@@ -132,7 +133,7 @@ plot_seals_at_gauntlet <- ggplot(data = num_seals_at_gauntlet_day_year_long, aes
   geom_point(aes(y = Num_Seals, group = Year, color = Year))
 plot_seals_at_gauntlet
 
-plot(1:days, colSums(seal_forage_loc[,,5])) # looks like no response to salmon
+plot(1:days, colSums(seal_forage_loc[,,1])) # looks like almost no response to salmon
 # salmon at the gauntlet per day
 plot(1:days, gauntlet_salmon[,1]) # looks almost right, some negative
 # successful foraging seals per day at the gauntlet
