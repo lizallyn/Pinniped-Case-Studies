@@ -22,7 +22,7 @@ satiation_threshold <- 5
 
 escape_rate <- 0.3
 
-seal_handling_time <- 0.5
+seal_handling_time <- 0.01
 
 # Set Up Variables
 salmon_escape <- array(dim = c(days, years),
@@ -75,39 +75,51 @@ for(y in 1:years) {
     }
     
     # feeding as random provisioning
-    seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
-    gauntlet_salmon[t] <- gauntlet_salmon[t, y]
-    if(length(seals_at_gauntlet) < 1 | gauntlet_salmon[t, y] < 1) {
-      salmon_consumed[,t, y] <- 0
-    } else {
-      for(fish in 1:gauntlet_salmon[t, y]) {
-        seal_eating <- gdata::resample(seals_at_gauntlet, 1)
-        if(salmon_consumed[seal_eating, t, y] == satiation_threshold) {
-          next
-        } else {
-          salmon_consumed[seal_eating, t, y] <- salmon_consumed[seal_eating, t, y] + 1
-        }
-      }
-    }
-      
-      # consumption impacts salmon survival
-    gauntlet_salmon[t, y] <- gauntlet_salmon[t, y] - sum(salmon_consumed[,t, y])
-    salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
+    # seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
+    # gauntlet_salmon[t] <- gauntlet_salmon[t, y]
+    # if(length(seals_at_gauntlet) < 1 | gauntlet_salmon[t, y] < 1) {
+    #   salmon_consumed[,t, y] <- 0
+    # } else {
+    #   for(fish in 1:gauntlet_salmon[t, y]) {
+    #     seal_eating <- gdata::resample(seals_at_gauntlet, 1)
+    #     if(salmon_consumed[seal_eating, t, y] == satiation_threshold) {
+    #       next
+    #     } else {
+    #       salmon_consumed[seal_eating, t, y] <- salmon_consumed[seal_eating, t, y] + 1
+    #     }
+    #   }
+    # }
     
+    # consumption via equation from Andrew
+    # calculate num salmon to be eaten in that time step
+    salmon_to_be_eaten <- gauntlet_salmon[t, y] * (length(seals_at_gauntlet) / 
+      (1 + length(seals_at_gauntlet) + seal_handling_time * gauntlet_salmon[t, y]))
+    salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
+    for(seal in length(seals_at_gauntlet)) {
+      salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
+    }
+    
+    # consumption impacts salmon survival
+    gauntlet_salmon[t, y] <- gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y])
+    salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
     
     # seal foraging success impacts prob gauntlet on next time step
     for(seal in seals_at_gauntlet) {
       if(salmon_consumed[seal,t, y] >= satiation_threshold) {
         seal_prob_gauntlet[seal, t+1, y] <- 1
       } else {
-        seal_prob_gauntlet[seal, t+1, y] <- (salmon_consumed[seal, t, y]/5) + (salmon_consumed[seal,t-1, y]/10)
+        seal_prob_gauntlet[seal, t+1, y] <- (salmon_consumed[seal, t, y]/5) + 
+          (salmon_consumed[seal,t-1, y]/10)
       }
     }
   }
 }
 
 # Testing Space
-
+# trying to explore reasonable handling time values
+# needs to be very small for 100% consumption to be possible by less than hundreds of seals
+plot(1:500, 1:500 / 
+       (1 + 1:500 + seal_handling_time * 100))
 
 #### Visualize ####
 # number of seals at the gauntlet per day
@@ -122,7 +134,7 @@ plot_seals_at_gauntlet
 
 plot(1:days, colSums(seal_forage_loc[,,5])) # looks like no response to salmon
 # salmon at the gauntlet per day
-plot(1:days, gauntlet_salmon[,5]) # looks almost right, some negative
+plot(1:days, gauntlet_salmon[,1]) # looks almost right, some negative
 # successful foraging seals per day at the gauntlet
-plot(1:days, colSums(salmon_consumed[,,5]))
+plot(1:days, colSums(salmon_consumed[,,1]))
 
