@@ -22,7 +22,7 @@ satiation_threshold <- 5
 
 escape_rate <- 0.3
 
-seal_handling_time <- 0.01
+seal_handling_time <- 0.1
 
 # Set Up Variables
 salmon_escape <- array(dim = c(days, years),
@@ -68,7 +68,7 @@ for(y in 1:years) {
       if(seal_forage_loc[seal,t, y] == 0) {
         loc_of_seals_2_copy <- seal_forage_loc[sample(1:num_seals, seal_num_neighbours_2_copy, replace = F),t, y]
         social_information <- mean(loc_of_seals_2_copy)
-        if(runif(1, 0, 1) < seal_prob_2_copy * social_information) {
+        if(runif(1, 0, 1) < (seal_prob_2_copy * social_information)) {
           seal_forage_loc[seal,t, y] <- 1
         }
       }
@@ -105,7 +105,7 @@ for(y in 1:years) {
     
     # seal foraging success impacts prob gauntlet on next time step
     for(seal in seals_at_gauntlet) {
-      if(salmon_consumed[seal,t, y] >= satiation_threshold) {
+      if(salmon_consumed[seal, t, y] >= satiation_threshold) {
         seal_prob_gauntlet[seal, t+1, y] <- 1
       } else {
         seal_prob_gauntlet[seal, t+1, y] <- (salmon_consumed[seal, t, y]/5) + 
@@ -119,8 +119,9 @@ for(y in 1:years) {
 
 # trying to explore reasonable handling time values
 # needs to be very small for 100% consumption to be possible by less than hundreds of seals
-# plot(1:500, 1:500 / 
-#        (1 + 1:500 + seal_handling_time * 100))
+plot(1:500, 1:500 /
+       (1 + 1:500 + seal_handling_time * 1))
+
 
 #### Visualize ####
 # number of seals at the gauntlet per day
