@@ -112,15 +112,17 @@ for(y in 1:years) {
           (salmon_consumed[seal,t-1, y]/10)
       }
     }
-  }
-}
+    
+    
+  }# days loop
+}# years loop
 
 # Testing Space
 
 # trying to explore reasonable handling time values
 # needs to be very small for 100% consumption to be possible by less than hundreds of seals
-plot(1:500, 1:500 /
-       (1 + 1:500 + seal_handling_time * 1))
+# plot(1:500, 1:500 /
+#        (1 + 1:500 + seal_handling_time * 1))
 
 
 #### Visualize ####
