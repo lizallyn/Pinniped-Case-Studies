@@ -24,11 +24,6 @@ escape_rate <- 0.3
 
 seal_handling_time <- 0.1
 
-salience <- 0.15 # seems to be standard for this model?
-learning_rate <- 1 # standard bc no data I guess?
-V_g_start <- 0.1
-
-
 # Set Up Variables
 salmon_escape <- array(dim = c(days, years),
                          data = rep(0, days * years))
@@ -105,6 +100,7 @@ for(y in 1:years) {
     salmon_to_be_eaten <- gauntlet_salmon[t, y] * (length(seals_at_gauntlet) / 
       (1 + length(seals_at_gauntlet) + seal_handling_time * gauntlet_salmon[t, y]))
     salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
+    # assign the salmon to the seals at the gauntlet
     for(seal in length(seals_at_gauntlet)) {
       salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
     }
@@ -122,9 +118,7 @@ for(y in 1:years) {
           (salmon_consumed[seal,t-1, y]/10)
       }
     }
-    
-    # Trying a simple Rescorla-Wagner element
-    
+  
     
   }# days loop
 }# years loop
