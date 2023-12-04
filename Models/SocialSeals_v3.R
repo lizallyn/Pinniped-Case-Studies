@@ -26,7 +26,7 @@ seal_handling_time <- 0.1
 
 salience <- 0.15 # seems to be standard for this model?
 learning_rate <- 1 # standard bc no data I guess?
-V_g <- 0.1
+V_g_start <- 0.1
 
 
 # Set Up Variables
@@ -51,7 +51,7 @@ seal_forage_loc <- array(dim = c(num_seals, days, years),
 dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days, 
                                   Year = 1:years)
 V_g <- array(dim = c(num_seals, days, years), 
-                         data = rep(0.1, 
+                         data = rep(V_g_start, 
                                     num_seals * days * years))
 dimnames(V_g) <- list(Seal = 1:num_seals, Day = 1:days, 
                                   Year = 1:years)
@@ -124,13 +124,7 @@ for(y in 1:years) {
     }
     
     # Trying a simple Rescorla-Wagner element
-    # just geography of the gauntlet
-    for(seal in seals_at_gauntlet) {
-      if(salmon_consumed[seal, t, y] > 1) {
-        lambda <- 1
-      } else {lambda <- 0}
-      V_g[seal, t+1, y] <- V_g[seal, t, y] + salience*(lambda - V_g[seal, t, y])
-    }
+    
     
   }# days loop
 }# years loop
