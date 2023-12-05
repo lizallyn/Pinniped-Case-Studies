@@ -12,7 +12,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 
 # Set Parameters
 years <- 1
-days <- 247
+days <- 245
 num_seals <- 5
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
@@ -133,22 +133,22 @@ for(y in 1:years) {
     # consumption via equation from Andrew
     # calculate num salmon to be eaten in that time step
     seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
-    if(gauntlet_salmon[t, y] < 1) {
-      salmon_to_be_eaten <- 0
+    if(gauntlet_salmon[t, y] == 0 | length(seals_at_gauntlet) == 0){
+      salmon_consumed[,t,y] <- 0
     } else {
       salmon_to_be_eaten <- gauntlet_salmon[t, y] * 
         (length(seals_at_gauntlet) / (1 + length(seals_at_gauntlet) + 
                                         seal_handling_time * gauntlet_salmon[t, y]))
-    }
-    salmon_per_seal <- round(salmon_to_be_eaten / length(seals_at_gauntlet))
-    # assign the salmon to the seals at the gauntlet
-    for(seal in length(seals_at_gauntlet)) {
-      while(salmon_to_be_eaten > salmon_per_seal) {
-        salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
-        salmon_to_be_eaten <- salmon_to_be_eaten - salmon_consumed[seal, t, y]
+      salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
+      # assign the salmon to the seals at the gauntlet
+      for(seal in length(seals_at_gauntlet)) {
+        while(salmon_to_be_eaten > salmon_per_seal) {
+          salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
+          salmon_to_be_eaten <- salmon_to_be_eaten - salmon_consumed[seal, t, y]
+        }
       }
     }
-    
+  
     # consumption impacts salmon survival
     gauntlet_salmon[t, y] <- gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y])
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
@@ -183,6 +183,21 @@ for(y in 1:years) {
 
 # Testing Space
 
+# if(salmon_to_be_eaten == 0 && length(seals_at_gauntlet) == 0){
+#   salmon_consumed[,t,y] <- 0
+# } else {
+#   salmon_to_be_eaten <- gauntlet_salmon[t, y] * 
+#     (length(seals_at_gauntlet) / (1 + length(seals_at_gauntlet) + 
+#                                     seal_handling_time * gauntlet_salmon[t, y]))
+#   salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
+#   # assign the salmon to the seals at the gauntlet
+#   for(seal in length(seals_at_gauntlet)) {
+#     while(salmon_to_be_eaten > salmon_per_seal) {
+#       salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
+#       salmon_to_be_eaten <- salmon_to_be_eaten - salmon_consumed[seal, t, y]
+#     }
+#   }
+# }
 
 
 #### Visualize ####
