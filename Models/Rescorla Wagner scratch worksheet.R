@@ -5,7 +5,7 @@
 days <- 40
 salience <- 0.15 # seems to be standard for this model? Can think about later
 
-# variables (for now matches example in the 2007 paper)
+# variables (for now this matches the rectangle example in the 2007 paper)
 V_G <- array(dim = days) # geography of gauntlet
 V_W <- array(dim = days) # geography of open water
 V_F <- array(dim = days, data = rep(0, days)) # presence of salmon
@@ -20,7 +20,7 @@ P_open <- array(dim = days)
 # stupid little salmon presence/absence by day
 # salmon everyday - works great
 # salmon <- array(dim = days, data = rep(1, days))
-# salmon in the middle of the time series - not working great
+# two salmon pulses
 salmon <- array(dim = days, data = c(rep(0, days/4), rep(1, days/4), rep(0, days/4), rep(1, days/4)))
 
 # start values
