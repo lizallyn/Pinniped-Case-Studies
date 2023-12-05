@@ -12,20 +12,19 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 
 # Set Parameters
 years <- 1
-days <- 365
-num_seals <- 20
+days <- 247
+num_seals <- 5
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
-satiation_threshold <- 5
+# satiation_threshold <- 5
 
 escape_rate <- 0.3
 
 seal_handling_time <- 0.1
 
-days <- 60
-salience <- 0.15
+salience <- 0.35
 
 # Set Up Variables
 salmon_escape <- array(dim = c(days, years),
@@ -134,9 +133,10 @@ for(y in 1:years) {
     # consumption via equation from Andrew
     # calculate num salmon to be eaten in that time step
     seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
+    if(gauntlet_salmon[t, y] < 1) salmon_to_be_eaten <- 0
     salmon_to_be_eaten <- gauntlet_salmon[t, y] * (length(seals_at_gauntlet) / 
                                                      (1 + length(seals_at_gauntlet) + seal_handling_time * gauntlet_salmon[t, y]))
-    salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
+    salmon_per_seal <- round(salmon_to_be_eaten / length(seals_at_gauntlet))
     # assign the salmon to the seals at the gauntlet
     for(seal in length(seals_at_gauntlet)) {
       salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
@@ -146,21 +146,11 @@ for(y in 1:years) {
     gauntlet_salmon[t, y] <- gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y])
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
     
-    # seal foraging success impacts prob gauntlet on next time step
-    # for(seal in seals_at_gauntlet) {
-    #   if(salmon_consumed[seal, t, y] >= satiation_threshold) {
-    #     seal_prob_gauntlet[seal, t+1, y] <- 1
-    #   } else {
-    #     seal_prob_gauntlet[seal, t+1, y] <- (salmon_consumed[seal, t, y]/5) + 
-    #       (salmon_consumed[seal,t-1, y]/10)
-    #   }
-    # }
-    
     # calculate delta Vs for next time step
     for(seal in 1:num_seals){
       if(salmon_consumed[seal, t, y] == 0){ #V_F not presented so no change, open water rewarded
         lambda_g <- 0
-        lambda_o <- 1
+        lambda_o <- 0.5
         V_G[seal, t+1, y] <- V_G[seal, t, y] + salience * (lambda_g - (V_G[seal, t, y] + V_B[seal, t, y])) * P_gauntlet[seal, t, y]
         V_W[seal, t+1, y] <- V_W[seal, t, y] + salience * (lambda_o - (V_W[seal, t, y] + V_B[seal, t, y])) * P_open[seal, t, y]
         V_F[seal, t+1, y] <- V_F[seal, t, y]
@@ -186,26 +176,22 @@ for(y in 1:years) {
 
 # Testing Space
 
-# trying to explore reasonable handling time values
-# needs to be very small for 100% consumption to be possible by less than hundreds of seals
-# plot(1:500, 1:500 /
-#        (1 + 1:500 + seal_handling_time * 1))
 
 
 #### Visualize ####
 # number of seals at the gauntlet per day
-num_seals_at_gauntlet_day_year <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
-colnames(num_seals_at_gauntlet_day_year) <- c("Day", 1:years)
-num_seals_at_gauntlet_day_year_long <- num_seals_at_gauntlet_day_year %>%
-  pivot_longer(!Day, names_to = "Year", values_to = "Num_Seals")
+# num_seals_at_gauntlet_day_year <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
+# colnames(num_seals_at_gauntlet_day_year) <- c("Day", 1:years)
+# num_seals_at_gauntlet_day_year_long <- num_seals_at_gauntlet_day_year %>%
+#   pivot_longer(!Day, names_to = "Year", values_to = "Num_Seals")
+# 
+# plot_seals_at_gauntlet <- ggplot(data = num_seals_at_gauntlet_day_year_long, aes(x = Day)) +
+#   geom_point(aes(y = Num_Seals, group = Year, color = Year))
+# plot_seals_at_gauntlet
 
-plot_seals_at_gauntlet <- ggplot(data = num_seals_at_gauntlet_day_year_long, aes(x = Day)) +
-  geom_point(aes(y = Num_Seals, group = Year, color = Year))
-plot_seals_at_gauntlet
-
-plot(1:days, colSums(seal_forage_loc[,,1])) # looks like almost no response to salmon
-# salmon at the gauntlet per day
-plot(1:days, gauntlet_salmon[,1]) # looks almost right, some negative
-# successful foraging seals per day at the gauntlet
-plot(1:days, colSums(salmon_consumed[,,1]))
+# If only one year, can use these
+plot(1:days, colSums(seal_forage_loc[,,1]), main = "Number of seals at the gauntlet")
+plot(1:days, colMeans(seal_prob_gauntlet[,,1]))
+plot(1:days, gauntlet_salmon[,1], main = "salmon at the gauntlet")
+plot(1:days, colSums(salmon_consumed[,,1]), main = "salmon consumed")
 
