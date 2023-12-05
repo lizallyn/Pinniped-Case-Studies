@@ -2,7 +2,7 @@
 # December 2023
 
 # parameters
-days <- 40
+days <- 60
 salience <- 0.15 # seems to be standard for this model? Can think about later
 
 # variables (for now this matches the rectangle example in the 2007 paper)
@@ -37,9 +37,9 @@ for(day in 1:(days-1)) {
   P_open[day] <- V_open[day]/(V_gauntlet[day] + V_open[day])
   
   
-  if(salmon[day] == 0){ #V_F not presented so no change, neither location rewarded
+  if(salmon[day] == 0){ #V_F not presented so no change, open water rewarded
     lambda_g <- 0
-    lambda_o <- 0
+    lambda_o <- 1
     V_G[day+1] <- V_G[day] + salience * (lambda_g - (V_G[day] + V_B[day])) * P_gauntlet[day]
     V_W[day+1] <- V_W[day] + salience * (lambda_o - (V_W[day] + V_B[day])) * P_open[day]
     V_F[day+1] <- V_F[day]
@@ -84,3 +84,4 @@ plot(1:days, V_G, main = "V_G: unique traits of gauntlet")
 plot(1:days, V_W, main = "V_W: unique traits of open water")
 plot(1:days, V_F, main = "V_F: presence of fish")
 plot(1:days, V_B, main = "V_B: common trait")
+
