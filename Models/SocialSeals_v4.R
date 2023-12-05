@@ -133,13 +133,20 @@ for(y in 1:years) {
     # consumption via equation from Andrew
     # calculate num salmon to be eaten in that time step
     seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
-    if(gauntlet_salmon[t, y] < 1) salmon_to_be_eaten <- 0
-    salmon_to_be_eaten <- gauntlet_salmon[t, y] * (length(seals_at_gauntlet) / 
-                                                     (1 + length(seals_at_gauntlet) + seal_handling_time * gauntlet_salmon[t, y]))
+    if(gauntlet_salmon[t, y] < 1) {
+      salmon_to_be_eaten <- 0
+    } else {
+      salmon_to_be_eaten <- gauntlet_salmon[t, y] * 
+        (length(seals_at_gauntlet) / (1 + length(seals_at_gauntlet) + 
+                                        seal_handling_time * gauntlet_salmon[t, y]))
+    }
     salmon_per_seal <- round(salmon_to_be_eaten / length(seals_at_gauntlet))
     # assign the salmon to the seals at the gauntlet
     for(seal in length(seals_at_gauntlet)) {
-      salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
+      while(salmon_to_be_eaten > salmon_per_seal) {
+        salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
+        salmon_to_be_eaten <- salmon_to_be_eaten - salmon_consumed[seal, t, y]
+      }
     }
     
     # consumption impacts salmon survival
