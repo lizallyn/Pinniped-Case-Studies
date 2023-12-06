@@ -12,8 +12,8 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Parameters
 
 # loop parameters
-years <- 2
-days <- 365
+years <- 1
+days <- 250
 
 # seal parameters
 num_seals <- 100
@@ -130,30 +130,14 @@ for(y in 1:years) {
       }
     }
     
-    # consumption via equation from Andrew
-    # calculate num salmon to be eaten in that time step
-    seals_at_gauntlet <- which(seal_forage_loc[,t, y] == 1)
-    if(gauntlet_salmon[t, y] == 0 | length(seals_at_gauntlet) == 0){
-      salmon_consumed[,t,y] <- 0
-    } else {
-      salmon_to_be_eaten <- gauntlet_salmon[t, y] * 
-        (length(seals_at_gauntlet) / (1 + length(seals_at_gauntlet) + 
-                                        seal_handling_time * gauntlet_salmon[t, y]))
-      salmon_per_seal <- salmon_to_be_eaten / length(seals_at_gauntlet)
-      # assign the salmon to the seals at the gauntlet
-      for(seal in length(seals_at_gauntlet)) {
-        while(salmon_to_be_eaten > salmon_per_seal) {
-          salmon_consumed[seal, t, y] <- rpois(1, salmon_per_seal)
-          salmon_to_be_eaten <- salmon_to_be_eaten - salmon_consumed[seal, t, y]
-        }
-      }
-    }
+    # consumption 
+    salmon_consumed[seals_at_gauntlet, t, y] <- eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
     salmon_arrive <- round(predict.fish(day = t+1, params = fish.fit.optim$par, start.day = 163), digits = 0)
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
-    gauntlet_salmon[t+1, y] <- gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - salmon_escape[t, y] + salmon_arrive
+    gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - salmon_escape[t, y] + salmon_arrive, digits = 0)
     
     # calculate delta Vs for next time step
     for(seal in 1:num_seals){
