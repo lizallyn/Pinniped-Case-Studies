@@ -8,12 +8,14 @@ library(tidyr) #formatting for visualization
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 
 ## Set Parameters
 
 # loop parameters
-years <- 1
-days <- 250
+years <- 2
+days <- 365
 
 # seal parameters
 num_seals <- 100

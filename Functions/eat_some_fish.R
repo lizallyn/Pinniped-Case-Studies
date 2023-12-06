@@ -13,5 +13,5 @@ eat_some_fish <- function(gauntlet_salmon, num_seals_at_gauntlet, handling_time)
   return(salmon_consumed)
 }
 
-# eat_some_fish(0, 7, 0.1)
+eat_some_fish(2, 7, 0.1)
 
