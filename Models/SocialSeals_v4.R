@@ -14,11 +14,11 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Parameters
 
 # loop parameters
-years <- 2
-days <- 365
+years <- 1
+days <- 250
 
 # seal parameters
-num_seals <- 100
+num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
@@ -119,22 +119,17 @@ for(y in 1:years) {
     }
     
     # decide where each seal goes that day
-    seal_forage_loc[, t, y] <- sapply(seal_prob_gauntlet[, t, y], decide_foraging_destination)
+    seal_forage_loc[,t,y] <- sapply(seal_prob_gauntlet[, t, y], decide_foraging_destination)
     
     # round of copying
-    for(seal in 1:num_seals) {
-      # if the seal wasn't going to the gauntlet
-      # if(seal_forage_loc[seal,t, y] == 0) {
-        loc_of_seals_2_copy <- seal_forage_loc[sample(1:num_seals, seal_num_neighbours_2_copy, replace = F),t, y]
-        social_information <- mean(loc_of_seals_2_copy)
-        if(runif(1, 0, 1) < (seal_prob_2_copy * social_information)) {
-          seal_forage_loc[seal,t, y] <- 1
-        # }
-      }
-    }
+    seals_to_be_influenced <- which(seal_forage_loc[,t,y] == 0)
+    seal_forage_loc[seals_to_be_influenced,t,y] <- 
+      replicate(length(seals_to_be_influenced), 
+                get_influenced(seal_forage_loc[,t,y], num_seals, 
+                                seal_num_neighbours_2_copy, seal_prob_2_copy))
     
     # consumption 
-    seals_at_gauntlet <- which(seal_forage_loc[, t, y] == 1)
+    seals_at_gauntlet <- which(seal_forage_loc[,t,y] == 1)
     salmon_consumed[seals_at_gauntlet, t, y] <- eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
   
     # consumption impacts salmon survival to next time step
