@@ -90,6 +90,7 @@ P_open[,1,1] <- 0.5
 
 #### Run time loop ####
 for(y in 1:years) {
+  
   for(t in 2:(days-1)) {
     
     # Calculate seal_prob_gauntlet
@@ -175,7 +176,10 @@ for(y in 1:years) {
     
     
   }# days loop
+  
 }# years loop
+
+
 
 # Testing Space
 
