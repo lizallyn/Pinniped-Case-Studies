@@ -119,7 +119,7 @@ for(y in 1:years) {
     }
     
     # decide where each seal goes that day
-    seal_forage_loc[,t,y] <- sapply(seal_prob_gauntlet[, t, y], decide_foraging_destination)
+    seal_forage_loc[,t,y] <- sapply(seal_prob_gauntlet[, t, y], decide_foraging_destination, simplify = F)
     
     # round of copying
     seals_to_be_influenced <- which(seal_forage_loc[,t,y] == 0)
