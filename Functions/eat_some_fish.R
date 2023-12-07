@@ -8,9 +8,8 @@ eat_some_fish <- function(gauntlet_salmon, num_seals_at_gauntlet, handling_time)
       (num_seals_at_gauntlet / (1 + num_seals_at_gauntlet + 
                                       handling_time * gauntlet_salmon))
     salmon_per_seal <- salmon_to_be_eaten / num_seals_at_gauntlet
-    salmon_consumed <- rpois(num_seals_at_gauntlet, salmon_per_seal)
+    salmon_consumed <- round(runif(num_seals_at_gauntlet, min = 0, max = salmon_per_seal))
   }
   return(salmon_consumed)
 }
-
 
