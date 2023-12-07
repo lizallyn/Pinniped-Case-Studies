@@ -1,0 +1,27 @@
+---
+title: "Pv Bioenergetics and Consumption"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Thinking about harbor seal consumption and bioenergetics
+
+This document comes from a conversation with Isaac Kaplan on Dec 7, 2023 about the predation piece of the models and how to best estimate consumption by harbor seals at the gauntlet in the model. He recommended using the existing equation with the handling time term and adding a cap based on bioenergetic requirements. He sent these estimates:
+Chasco paper: Table 6 lists sex specific seal energetic requirements. Table 4 lists energetic content of Chinook salmon at different life stages. 
+Howard paper: full energetic model that Chasco built on.
+
+```{r}
+seal_kJ_demand <- 14850
+age4Ot_kJ_content <- 82400
+age1Ot_kJ_content <- 12280
+smoltOt_kJ_content <- 54
+
+
+
+```
+
+Potentially consumption of adults is really low, at least for Chinook - like just one per day?
