@@ -144,9 +144,9 @@ for(y in 1:years) {
     
     # calculate delta Vs for next time step
     for(seal in 1:num_seals){
-      if(salmon_consumed[seal, t, y] == 0){ #V_F not presented so no change, open water rewarded sort of?
+      if(salmon_consumed[seal, t, y] == 0){ #V_F not presented so no change, open water rewarded
         lambda_g <- 0
-        lambda_o <- 0.5
+        lambda_o <- 1
         V_G[seal, t+1, y] <- V_G[seal, t, y] + salience * 
           (lambda_g - (V_G[seal, t, y] + V_B[seal, t, y])) * P_gauntlet[seal, t, y]
         V_W[seal, t+1, y] <- V_W[seal, t, y] + salience * 
