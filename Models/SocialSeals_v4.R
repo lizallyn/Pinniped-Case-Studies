@@ -10,15 +10,16 @@ library(tidyr) #formatting for visualization
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
 
 ## Set Parameters
 
 # loop parameters
 years <- 1
-days <- 250
+days <- 365
 
 # seal parameters
-num_seals <- 20
+num_seals <- 4
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
@@ -119,13 +120,15 @@ for(y in 1:years) {
     }
     
     # decide where each seal goes that day
-    seal_forage_loc[,t,y] <- sapply(seal_prob_gauntlet[, t, y], decide_foraging_destination, simplify = F)
+    for(seal in 1:num_seals) {
+      seal_forage_loc[seal,t,y] <- decide_foraging_destination(seal_prob_gauntlet[seal,t,y])
+    }
     
     # round of copying
     seals_to_be_influenced <- which(seal_forage_loc[,t,y] == 0)
-    seal_forage_loc[seals_to_be_influenced,t,y] <- 
-      replicate(length(seals_to_be_influenced), 
-                get_influenced(seal_forage_loc[,t,y], num_seals, 
+    seal_forage_loc[seals_to_be_influenced,t,y] <-
+      replicate(length(seals_to_be_influenced),
+                get_influenced(seal_forage_loc[,t,y], num_seals,
                                 seal_num_neighbours_2_copy, seal_prob_2_copy))
     
     # consumption 
