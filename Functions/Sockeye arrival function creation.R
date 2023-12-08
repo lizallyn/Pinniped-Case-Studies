@@ -55,7 +55,7 @@ fish.fit.optim <- optim(par = params,
 
 # create function to predict the number of fish given the day of the year
 # start.day is the date offset in the data (data starts on June 12 = 163)
-predict.fish <- function(params, day, start.day) {
+predict_fish <- function(params, day, start.day) {
   expand <- params[1]
   mean <- params[2]
   sd <- params[3]
