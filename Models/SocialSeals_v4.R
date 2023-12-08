@@ -1,4 +1,6 @@
-## adding the learning piece from Rescorla Wagner/MS
+## Current version of the gauntlets model
+# adding learning piece from MS 2007, 2013/Rescorla Wagner
+# Dec 2023
 
 #### Set Up ####
 
@@ -196,7 +198,6 @@ num_seals_at_gauntlet_day_year <- data.frame(cbind(1:days, colSums(seal_forage_l
 colnames(num_seals_at_gauntlet_day_year) <- c("Day", 1:years)
 num_seals_at_gauntlet_day_year_long <- num_seals_at_gauntlet_day_year %>%
   pivot_longer(!Day, names_to = "Year", values_to = "Num_Seals")
-
 plot_seals_at_gauntlet <- 
   ggplot(data = num_seals_at_gauntlet_day_year_long, aes(x = Day)) +
   geom_point(aes(y = Num_Seals, group = Year, color = Year)) + 
