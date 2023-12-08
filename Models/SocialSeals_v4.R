@@ -91,6 +91,8 @@ P_open[,1,1] <- 0.5
 
 #### Run time loop ####
 for(y in 1:years) {
+  
+  # grab V's from end of last year
   if(y>1) {
     V_G[,1,y] <- V_G[,365,y-1]
     V_W[,1,y] <- V_W[,365,y-1]
@@ -144,7 +146,7 @@ for(y in 1:years) {
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
-    salmon_arrive <- round(predict.fish(day = t+1, params = fish.fit.optim$par, start.day = 163), digits = 0)
+    salmon_arrive <- round(predict_fish(day = t+1, params = fish.fit.optim$par, start.day = 163), digits = 0)
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
     gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - salmon_escape[t, y] + salmon_arrive, digits = 0)
     
@@ -178,10 +180,7 @@ for(y in 1:years) {
       }
     }
     
-    
-    
   } # days loop
-  
 } # years loop
 
 
@@ -192,7 +191,7 @@ for(y in 1:years) {
 
 
 #### Visualize ####
-# number of seals at the gauntlet per day
+# number of seals at the gauntlet per day - multiple years
 num_seals_at_gauntlet_day_year <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
 colnames(num_seals_at_gauntlet_day_year) <- c("Day", 1:years)
 num_seals_at_gauntlet_day_year_long <- num_seals_at_gauntlet_day_year %>%
@@ -204,7 +203,7 @@ plot_seals_at_gauntlet <-
   labs(title = "seals at gauntlet")
 plot_seals_at_gauntlet
 
-# If only one year, can use these
+# These only show the last year
 plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gauntlet")
 plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
