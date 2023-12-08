@@ -19,7 +19,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 4
+num_seals <- 25
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
@@ -126,14 +126,15 @@ for(y in 1:years) {
     
     # round of copying
     seals_to_be_influenced <- which(seal_forage_loc[,t,y] == 0)
-    seal_forage_loc[seals_to_be_influenced,t,y] <-
-      replicate(length(seals_to_be_influenced),
-                get_influenced(seal_forage_loc[,t,y], num_seals,
-                                seal_num_neighbours_2_copy, seal_prob_2_copy))
+    for(seal in seals_to_be_influenced) {
+      seal_forage_loc[seal,t,y] <-get_influenced(seal_forage_loc[,t,y], num_seals,
+                     seal_num_neighbours_2_copy, seal_prob_2_copy)
+    }
     
     # consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,y] == 1)
-    salmon_consumed[seals_at_gauntlet, t, y] <- eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
+    salmon_consumed[seals_at_gauntlet, t, y] <- 
+      eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
