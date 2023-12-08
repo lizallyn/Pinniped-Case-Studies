@@ -15,7 +15,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Parameters
 
 # loop parameters
-years <- 1
+years <- 2
 days <- 365
 
 # seal parameters
@@ -91,8 +91,14 @@ P_open[,1,1] <- 0.5
 
 #### Run time loop ####
 for(y in 1:years) {
+  if(y>1) {
+    V_G[,1,y] <- V_G[,365,y-1]
+    V_W[,1,y] <- V_W[,365,y-1]
+    V_F[,1,y] <- V_F[,365,y-1]
+    V_B[,1,y] <- V_B[,365,y-1]
+  }
   
-  for(t in 2:(days-1)) {
+  for(t in 1:(days-1)) {
     
     # Calculate seal_prob_gauntlet
     for(seal in 1:num_seals) {
@@ -174,15 +180,13 @@ for(y in 1:years) {
     
     
     
-  }# days loop
+  } # days loop
   
-}# years loop
+} # years loop
 
 
 
 # Testing Space
-
-
 
 
 
@@ -201,8 +205,8 @@ plot_seals_at_gauntlet <-
 plot_seals_at_gauntlet
 
 # If only one year, can use these
-plot(1:days, colSums(seal_forage_loc[,,1]), main = "Number of seals at the gauntlet")
-plot(1:days, colMeans(seal_prob_gauntlet[,,1]), main = "avg. prob gauntlet")
-plot(1:days, gauntlet_salmon[,1], main = "salmon at the gauntlet")
-plot(1:days, colSums(salmon_consumed[,,1]), main = "salmon consumed")
+plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gauntlet")
+plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
+plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
+plot(1:days, colSums(salmon_consumed[,,y]), main = "salmon consumed")
 
