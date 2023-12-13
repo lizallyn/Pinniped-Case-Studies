@@ -1,5 +1,6 @@
 # Rescorla-Wagner via Miller and Shettleworth 2007, 2013
 # December 2023
+# version 2 for messing with additional cues/elements and negative rewards
 
 # parameters
 days <- 100
@@ -19,12 +20,18 @@ V_open <- array(dim = days)
 P_gauntlet <- array(dim = days)
 P_open <- array(dim = days)
 
-# stupid little salmon presence/absence by day
-# salmon everyday - works great
-# salmon <- array(dim = days, data = rep(1, days))
-# two salmon pulses
+# one salmon pulse in middle
 salmon <- array(dim = days, data = c(rep(0, days/4), rep(1, days/4), rep(1, days/4), rep(0, days/4)))
+# add hunt regimes too
+  # 1 no hunt no fish
+  # 2 no hunt yes fish
+  # 3 yes hunt yes fish
+  # 4 yes hunt no fish
 regime <- array(dim = days, data = c(rep(1, days/4), rep(2, days/4), rep(3, days/4), rep(4, days/4)))
+# rewards
+  # reward gauntlet when yes fish no hunt
+  # reward open when no fish regardless of hunt
+  # no reward in either when yes fish yes hunt
 lambda_gs <- array(dim = days, data = c(rep(0, days/4), rep(1, days/4), rep(0, days/2)))
 lambda_os <- array(dim = days, data = c(rep(1, days/4), rep(0, days/4), rep(0, days/4), rep(1, days/4)))
 
