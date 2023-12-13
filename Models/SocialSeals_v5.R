@@ -1,5 +1,5 @@
 ## Current working version of the gauntlets model
-# 
+# Maybe add a fishing mortality term
 # Dec 2023
 
 #### Set Up ####
