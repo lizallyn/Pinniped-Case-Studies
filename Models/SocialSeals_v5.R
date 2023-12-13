@@ -145,6 +145,9 @@ for(y in 1:years) {
     seals_at_gauntlet <- which(seal_forage_loc[,t,y] == 1)
     salmon_consumed[seals_at_gauntlet, t, y] <- 
       eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
+    
+    # Fishing
+    
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
