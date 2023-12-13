@@ -1,4 +1,4 @@
-## Current version of the gauntlets model
+## Version 4 of the gauntlets model
 # adding learning piece from MS 2007, 2013/Rescorla Wagner
 # Dec 2023
 
