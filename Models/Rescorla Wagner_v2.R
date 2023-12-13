@@ -4,6 +4,7 @@
 # parameters
 days <- 100
 salience <- 0.15 # seems to be standard for this model? Can think about later
+beta <- 1 # added back but unclear if we'll ever mess with it?
 
 # variables (for now this matches the rectangle example in the 2007 paper)
 V_G <- array(dim = days) # geography of gauntlet
@@ -44,8 +45,8 @@ for(day in 1:(days-1)) {
   if(regime[day] == 1){ # no fish no hunting
     lambda_g <- 0
     lambda_o <- 1
-    V_G[day+1] <- V_G[day] + salience * (lambda_g - (V_G[day] + V_H[day])) * P_gauntlet[day]
-    V_W[day+1] <- V_W[day] + salience * (lambda_o - (V_W[day])) * P_open[day]
+    V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_H[day])) * P_gauntlet[day]
+    V_W[day+1] <- V_W[day] + salience * beta * (lambda_o - (V_W[day])) * P_open[day]
     V_F[day+1] <- V_F[day]
     V_H[day+1] <- V_H[day]
     
@@ -53,25 +54,25 @@ for(day in 1:(days-1)) {
     if(regime[day] == 2) { # yes fish no hunting
       lambda_g <- 1
       lambda_o <- 0
-      V_G[day+1] <- V_G[day] + salience * (lambda_g - (V_G[day] + V_F[day])) * P_gauntlet[day]
-      V_W[day+1] <- V_W[day] + salience * (lambda_o - (V_W[day])) * P_open[day]
-      V_F[day+1] <- V_F[day] + salience * (lambda_g - (V_G[day] + V_F[day])) * P_gauntlet[day]
+      V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day])) * P_gauntlet[day]
+      V_W[day+1] <- V_W[day] + salience * beta * (lambda_o - (V_W[day])) * P_open[day]
+      V_F[day+1] <- V_F[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day])) * P_gauntlet[day]
       V_H[day+1] <- V_H[day]
     } else {
       if(regime[day] == 3) { # yes fish yes hunting
         lambda_g <- 0
         lambda_o <- 0
-        V_G[day+1] <- V_G[day] + salience * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
-        V_W[day+1] <- V_W[day] + salience * (lambda_o - (V_W[day])) * P_open[day]
-        V_F[day+1] <- V_F[day] + salience * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
-        V_H[day+1] <- V_H[day] + salience * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_W[day+1] <- V_W[day] + salience * beta * (lambda_o - (V_W[day])) * P_open[day]
+        V_F[day+1] <- V_F[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_H[day+1] <- V_H[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
       } else { # no fish yes hunting
         lambda_g <- 0
         lambda_o <- 1
-        V_G[day+1] <- V_G[day] + salience * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
-        V_W[day+1] <- V_W[day] + salience * (lambda_o - (V_W[day])) * P_open[day]
+        V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_W[day+1] <- V_W[day] + salience * beta * (lambda_o - (V_W[day])) * P_open[day]
         V_F[day+1] <- V_F[day]
-        V_H[day+1] <- V_H[day] + salience * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_H[day+1] <- V_H[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
       }
     }
   }
