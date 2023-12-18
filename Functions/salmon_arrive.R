@@ -16,13 +16,3 @@ Daily_avg$avg[is.nan(Daily_avg$avg)] <- 0
 salmon_arrive <- function(day) {
   return(Daily_avg$avg[day])
 }
-
-# salmon_arrive(300)
-
-# plot.daily.avg <- ggplot(data = Daily_avg) + 
-#   geom_line(aes(x = DayofYear, y = avg))
-# plot.daily.avg
-# 
-# plot.yearly.cts <- ggplot(data = fish) + 
-#   geom_line(aes(x = DayofYear, y = Count, color = Species, lty = Year))
-# plot.yearly.cts
