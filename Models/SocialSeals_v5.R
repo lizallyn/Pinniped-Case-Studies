@@ -1,5 +1,5 @@
 ## Current working version of the gauntlets model
-# Maybe add a fishing mortality term
+# Maybe add a fishing mortality piece
 # Dec 2023
 
 #### Set Up ####
@@ -10,7 +10,7 @@ library(tidyr) #formatting for visualization
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_2.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
 
@@ -33,6 +33,12 @@ escape_rate <- 0.3
 
 # seal learning parameters
 salience <- 0.35
+
+# fishing
+gillnetters <- 6
+fish_start <- 253
+fish_end <- 321
+catch_rate <- 0.3
 
 ## Set Up Variables
 salmon_escape <- array(dim = c(days, years),
@@ -58,20 +64,16 @@ dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days,
 
 # Variables for learning bit from MS 2007, 2013
 V_G <- array(dim = c(num_seals, days, years), 
-             data = rep(0, num_seals * days * years)) # geography of gauntlet
+             data = rep(0.1, num_seals * days * years)) # geography of gauntlet
 dimnames(V_G) <- list(Seal = 1:num_seals, Day = 1:days, 
                                   Year = 1:years)
 V_W <- array(dim = c(num_seals, days, years), 
-             data = rep(0, num_seals * days * years)) # geography of open water
+             data = rep(0.1, num_seals * days * years)) # geography of open water
 dimnames(V_W) <- list(Seal = 1:num_seals, Day = 1:days, 
                       Year = 1:years)
 V_F <- array(dim = c(num_seals, days, years), 
              data = rep(0, num_seals * days * years)) # presence of salmon
 dimnames(V_F) <- list(Seal = 1:num_seals, Day = 1:days, 
-                      Year = 1:years)
-V_B <- array(dim = c(num_seals, days, years), 
-             data = rep(0.1, num_seals * days * years)) # some element(s) in common between both
-dimnames(V_B) <- list(Seal = 1:num_seals, Day = 1:days, 
                       Year = 1:years)
 V_gauntlet <- array(dim = c(num_seals, days, years))
 dimnames(V_gauntlet) <- list(Seal = 1:num_seals, Day = 1:days, 
@@ -99,15 +101,14 @@ for(y in 1:years) {
     V_G[,1,y] <- V_G[,365,y-1]
     V_W[,1,y] <- V_W[,365,y-1]
     V_F[,1,y] <- V_F[,365,y-1]
-    V_B[,1,y] <- V_B[,365,y-1]
   }
   
   for(t in 1:(days-1)) {
     
     # Calculate seal_prob_gauntlet
     for(seal in 1:num_seals) {
-      V_gauntlet[seal, t, y] <- V_G[seal, t, y] + V_F[seal, t, y] + V_B[seal, t, y]
-      V_open[seal, t, y] <- V_W[seal, t, y] + V_B[seal, t, y]
+      V_gauntlet[seal, t, y] <- V_G[seal, t, y] + V_F[seal, t, y]
+      V_open[seal, t, y] <- V_W[seal, t, y]
       P_gauntlet[seal, t, y] <- V_gauntlet[seal, t, y]/(V_gauntlet[seal, t, y] + V_open[seal, t, y])
       P_open[seal, t, y] <- V_open[seal, t, y]/(V_gauntlet[seal, t, y] + V_open[seal, t, y])
       # correct P_Ls to 0 or 1 if out of range (MS 2013)
@@ -141,19 +142,29 @@ for(y in 1:years) {
                      seal_num_neighbours_2_copy, seal_prob_2_copy)
     }
     
-    # consumption 
+    # theoretical consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,y] == 1)
-    salmon_consumed[seals_at_gauntlet, t, y] <- 
+    salmon_to_be_eaten <- 
       eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
+    if(salmon_to_be_eaten == 0) {
+      predation_rate <- 0
+    } else {
+      predation_rate <- salmon_to_be_eaten/gauntlet_salmon[t, y]
+    }
     
-    # Fishing
-  
+    # calculate salmon inst mortality
+    predation <- salmon_to_be_eaten / (predation_rate + catch_rate) * (1 - exp(-predation_rate - catch_rate))
+    fish_catch <- gauntlet_salmon[t, y] * catch_rate / (predation_rate + catch_rate) * (1 - exp(-predation_rate - catch_rate))
+    
+    # assign actual consumption
+    salmon_consumed[seals_at_gauntlet, t, y] <- rep(round(predation/length(seals_at_gauntlet), digits = 0), length(seals_at_gauntlet))
+    
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
-    salmon_arriving <- round(salmon_arrive(day = (t+1)), digits = 0)
+    salmon_arriving <- salmon_arrive(day = (t+1))
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
     gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - 
-                                       salmon_escape[t, y] + salmon_arriving, digits = 0)
+                                       salmon_escape[t, y] + salmon_arriving - fish_catch, digits = 0)
     
     # calculate delta Vs for next time step
     for(seal in 1:num_seals){
@@ -161,33 +172,24 @@ for(y in 1:years) {
         lambda_g <- 0
         lambda_o <- 1
         V_G[seal, t+1, y] <- V_G[seal, t, y] + salience * 
-          (lambda_g - (V_G[seal, t, y] + V_B[seal, t, y])) * P_gauntlet[seal, t, y]
+          (lambda_g - (V_G[seal, t, y])) * P_gauntlet[seal, t, y]
         V_W[seal, t+1, y] <- V_W[seal, t, y] + salience * 
-          (lambda_o - (V_W[seal, t, y] + V_B[seal, t, y])) * P_open[seal, t, y]
+          (lambda_o - (V_W[seal, t, y])) * P_open[seal, t, y]
         V_F[seal, t+1, y] <- V_F[seal, t, y]
-        V_B[seal, t+1, y] <- V_B[seal, t, y] + 
-          (salience * (lambda_o - (V_B[seal, t, y] + V_W[seal, t, y])) * 
-             P_open[seal, t, y]) + 
-          (salience * (lambda_g - (V_B[seal, t, y] + V_G[seal, t, y])) * 
-             P_gauntlet[seal, t, y])
       } else { # gauntlet rewarded and V_F presented
         lambda_g <- 1
         lambda_o <- 0
         V_G[seal, t+1, y] <- V_G[seal, t, y] + salience * 
-          (lambda_g - (V_G[seal, t, y] + V_F[seal, t, y] + V_B[seal, t, y])) * P_gauntlet[seal, t, y]
+          (lambda_g - (V_G[seal, t, y] + V_F[seal, t, y])) * P_gauntlet[seal, t, y]
         V_W[seal, t+1, y] <- V_W[seal, t, y] + salience * 
-          (lambda_o - (V_W[seal, t, y] + V_B[seal, t, y])) * P_open[seal, t, y]
+          (lambda_o - (V_W[seal, t, y])) * P_open[seal, t, y]
         V_F[seal, t+1, y] <- V_F[seal, t, y] + salience * 
-          (lambda_g - (V_G[seal, t, y] + V_F[seal, t, y] + V_B[seal, t, y])) * P_gauntlet[seal, t, y]
-        V_B[seal, t+1, y] <- V_B[seal, t, y] + 
-          (salience * (lambda_o - (V_B[seal, t, y] + V_W[seal, t, y])) * P_open[seal, t, y]) + 
-          (salience * (lambda_g - (V_B[seal, t, y] + V_F[seal, t, y] + V_G[seal, t, y])) * P_gauntlet[seal, t, y])
+          (lambda_g - (V_G[seal, t, y] + V_F[seal, t, y])) * P_gauntlet[seal, t, y]
       }
     }
     
   } # days loop
 } # years loop
-
 
 
 # Testing Space
@@ -208,7 +210,7 @@ plot_seals_at_gauntlet <-
 plot_seals_at_gauntlet
 
 # These only show the last year
-par(mfrow = c(1,4))
+par(mfrow = c(2,2))
 plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gauntlet")
 plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
