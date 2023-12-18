@@ -9,7 +9,7 @@ library(ggplot2)
 library(tidyr) #formatting for visualization
 
 ## Load Function Files
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Sockeye%20arrival%20function%20creation.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
@@ -151,9 +151,10 @@ for(y in 1:years) {
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
-    salmon_arrive <- round(salmon_arrive(day = t+1), digits = 0)
+    salmon_arriving <- round(salmon_arrive(day = (t+1)), digits = 0)
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
-    gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - salmon_escape[t, y] + salmon_arrive, digits = 0)
+    gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - 
+                                       salmon_escape[t, y] + salmon_arriving, digits = 0)
     
     # calculate delta Vs for next time step
     for(seal in 1:num_seals){
