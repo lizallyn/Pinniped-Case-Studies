@@ -52,7 +52,7 @@ for(day in 1:(days-1)) {
   if(regime[day] == 1){ # no fish no hunting
     lambda_g <- 0
     lambda_o <- 1
-    V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_H[day])) * P_gauntlet[day]
+    V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day])) * P_gauntlet[day]
     V_W[day+1] <- V_W[day] + salience * beta * (lambda_o - (V_W[day])) * P_open[day]
     V_F[day+1] <- V_F[day]
     V_H[day+1] <- V_H[day]
@@ -76,10 +76,10 @@ for(day in 1:(days-1)) {
       } else { # no fish yes hunting
         lambda_g <- 0
         lambda_o <- 1
-        V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_G[day+1] <- V_G[day] + salience * beta * (lambda_g - (V_G[day] + V_H[day])) * P_gauntlet[day]
         V_W[day+1] <- V_W[day] + salience * beta * (lambda_o - (V_W[day])) * P_open[day]
         V_F[day+1] <- V_F[day]
-        V_H[day+1] <- V_H[day] + salience * beta * (lambda_g - (V_G[day] + V_F[day] + V_H[day])) * P_gauntlet[day]
+        V_H[day+1] <- V_H[day] + salience * beta * (lambda_g - (V_G[day] + V_H[day])) * P_gauntlet[day]
       }
     }
   }
