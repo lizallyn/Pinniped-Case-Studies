@@ -44,7 +44,7 @@ V_H[1] <- 0
 
 # loop
 for(day in 1:(days-1)) {
-  V_gauntlet[day] <- V_G[day] + V_F[day]
+  V_gauntlet[day] <- V_G[day] + V_F[day] + V_H[day]
   V_open[day] <- V_W[day]
   P_gauntlet[day] <- V_gauntlet[day]/(V_gauntlet[day] + V_open[day])
   P_open[day] <- V_open[day]/(V_gauntlet[day] + V_open[day])
