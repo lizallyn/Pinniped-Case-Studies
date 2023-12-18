@@ -147,7 +147,6 @@ for(y in 1:years) {
       eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
     
     # Fishing
-    +
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
@@ -209,6 +208,7 @@ plot_seals_at_gauntlet <-
 plot_seals_at_gauntlet
 
 # These only show the last year
+par(mfrow = c(1,4))
 plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gauntlet")
 plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
