@@ -147,11 +147,11 @@ for(y in 1:years) {
       eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
     
     # Fishing
-    
+    +
   
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
-    salmon_arrive <- round(predict_fish(day = t+1, params = fish.fit.optim$par, start.day = 163), digits = 0)
+    salmon_arrive <- round(salmon_arrive(day = t+1), digits = 0)
     salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
     gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - salmon_escape[t, y] + salmon_arrive, digits = 0)
     
