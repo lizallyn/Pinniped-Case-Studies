@@ -8,11 +8,20 @@ library(tidyr)
 library(dplyr)
 
 fish$Year <- as.factor(fish$Year)
-Daily_avg <- fish %>%
-  group_by(DayofYear) %>%
-  summarize(avg = mean(Count, na.rm = T))
-Daily_avg$avg[is.nan(Daily_avg$avg)] <- 0
+fish$Residence[fish$Species == "Sockeye"] <- 3
+fish$Residence[fish$Species == "Chinook"] <- 30
+fish$Residence[fish$Species == "Coho"] <- 10
+fish$Escape.Rate <- 1/fish$Residence
+
+Daily_fish <- fish %>%
+  group_by(Species,DayofYear) %>%
+  summarize(avg = mean(Count, na.rm = T),
+            avg.escape.rate = mean(Escape.Rate))
+Daily_fish$avg[is.nan(Daily_fish$avg)] <- 0
 
 salmon_arrive <- function(day) {
-  return(Daily_avg$avg[day])
+  return(Daily_fish[which(Daily_fish$DayofYear == day),])
 }
+
+sum(salmon_arrive(200)$avg)
+                       
