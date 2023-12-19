@@ -164,8 +164,8 @@ for(y in 1:years) {
     
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
-    salmon_arriving <- salmon_arrive(day = (t+1))
-    salmon_escape[t, y] <- gauntlet_salmon[t, y] * escape_rate
+    salmon_arriving <- sum(salmon_arrive(day = (t+1))$avg)
+    salmon_escape[t, y] <- gauntlet_salmon[t, y] * salmon_escape_rate(day)
     gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - 
                                        salmon_escape[t, y] + salmon_arriving - fish_catch, digits = 0)
     
