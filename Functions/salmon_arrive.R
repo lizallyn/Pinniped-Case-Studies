@@ -22,6 +22,12 @@ Daily_fish$avg[is.nan(Daily_fish$avg)] <- 0
 salmon_arrive <- function(day) {
   return(Daily_fish[which(Daily_fish$DayofYear == day),])
 }
-
-sum(salmon_arrive(200)$avg)
                        
+salmon_escape_rate <- function(day) {
+  avg.escape <- sum(salmon_arrive(day)$avg.escape.rate * 
+                      (salmon_arrive(day)$avg/sum(salmon_arrive(day)$avg)))
+  if(is.nan(avg.escape)){
+    avg.escape <- 0
+  }
+  return(avg.escape)
+}
