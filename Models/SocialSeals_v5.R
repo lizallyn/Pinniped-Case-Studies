@@ -153,11 +153,14 @@ for(y in 1:years) {
     }
     
     # calculate salmon inst mortality
-    predation <- salmon_to_be_eaten / (predation_rate + catch_rate) * (1 - exp(-predation_rate - catch_rate))
-    fish_catch <- gauntlet_salmon[t, y] * catch_rate / (predation_rate + catch_rate) * (1 - exp(-predation_rate - catch_rate))
+    predation <- salmon_to_be_eaten / (predation_rate + catch_rate) * 
+      (1 - exp(-predation_rate - catch_rate))
+    fish_catch <- gauntlet_salmon[t, y] * catch_rate / (predation_rate + catch_rate) * 
+      (1 - exp(-predation_rate - catch_rate))
     
     # assign actual consumption
-    salmon_consumed[seals_at_gauntlet, t, y] <- rep(round(predation/length(seals_at_gauntlet), digits = 0), length(seals_at_gauntlet))
+    salmon_consumed[seals_at_gauntlet, t, y] <- rep(round(predation/length(seals_at_gauntlet), 
+                                                          digits = 0), length(seals_at_gauntlet))
     
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
