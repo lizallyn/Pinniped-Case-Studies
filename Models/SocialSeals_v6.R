@@ -45,6 +45,9 @@ fish_start <- 253
 fish_end <- 321
 catch_rate <- 0.3
 
+# hunting
+exclusion <- 0.8
+
 ## Set Up Variables
 salmon_escape <- array(dim = c(days, years),
                        data = rep(0, days * years))
