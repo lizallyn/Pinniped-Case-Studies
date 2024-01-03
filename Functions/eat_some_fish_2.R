@@ -1,6 +1,6 @@
 # create eat_some_fish function
 
-eat_some_fish <- function(gauntlet_salmon, num_seals_at_gauntlet, handling_time, satiation) {
+eat_some_fish <- function(gauntlet_salmon, num_seals_at_gauntlet, handling_time) {
   if(gauntlet_salmon == 0 | num_seals_at_gauntlet == 0){
     theoretical_salmon_to_eat <- 0
   } else {
