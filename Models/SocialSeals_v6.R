@@ -20,7 +20,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 2
+num_seals <- 25
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
@@ -32,12 +32,12 @@ seal_satiation <- 5
 escape_rate <- 0.3
 
 # seal learning parameters
-alpha_fish <- 1
+alpha_fish <- 5
 alpha_hunt <- 2
 x_max <- 20
 baseline <- 0.1
-steepness <- 0.15
-threshold <- 10
+steepness <- 0.5
+threshold <- 5
 
 # fishing
 gillnetters <- 6
@@ -79,7 +79,7 @@ for(y in 1:years) {
     
     # Calculate seal_prob_gauntlet
     for(seal in 1:num_seals) {
-      seal_prob_gauntlet[seal, t, y] <- 1-(1/(1 + exp(-steepness * (threshold - x[seal, t, y]))))
+      seal_prob_gauntlet[seal, t, y] <- 1-(1/(1.1 + exp(-steepness * (threshold - x[seal, t, y]))))
     }
     
     # decide where each seal goes that day
@@ -128,7 +128,7 @@ for(y in 1:years) {
       delta <- alpha_fish * (C[seal, t, y] - baseline) - alpha_hunt * B[seal, t, y]
       x[seal,(t+1),y] <- x[seal, t, y] + delta
       if(x[seal, t+1, y]>x_max){
-        x[seal,t+1] <- x_max
+        x[seal,t+1,y] <- x_max
       }
     }
     
@@ -147,3 +147,7 @@ plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gaunt
 plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,y]), main = "salmon consumed")
+
+prob.gauntlet.plot <- ggplot() +
+  geom_point(aes(x = x[1,,1], y = seal_prob_gauntlet[1,,1]))
+prob.gauntlet.plot
