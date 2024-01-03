@@ -68,9 +68,9 @@ dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days,
                                   Year = 1:years)
 
 # Variables for x learning bit
-x <- array(dim = c(seals, days, years), data = rep(0, seals * days * years))
-C <- array(dim = c(seals, days, years), data = rep(0, seals * days * years))
-B <- array(dim = c(seals, days, years), data = rep(0, seals * days * years))
+x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+C <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+B <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 
 #### Run time loop ####
 for(y in 1:years) {
@@ -127,8 +127,8 @@ for(y in 1:years) {
       B[seal, t, y] <- 0
       delta <- alpha_fish * (C[seal, t, y] - baseline) - alpha_hunt * B[seal, t, y]
       x[seal,(t+1),y] <- x[seal, t, y] + delta
-      if(x[seal, t+1, y]>xmax){
-        x[seal,t+1] <- xmax
+      if(x[seal, t+1, y]>x_max){
+        x[seal,t+1] <- x_max
       }
     }
     
