@@ -34,7 +34,10 @@ escape_rate <- 0.3
 # seal learning parameters
 alpha_fish <- 1
 alpha_hunt <- 2
-x_max <- 10
+x_max <- 20
+baseline <- 0.1
+steepness <- 0.2
+threshold <- 10
 
 # fishing
 gillnetters <- 6
@@ -81,10 +84,7 @@ for(y in 1:years) {
     
     # Calculate seal_prob_gauntlet
     for(seal in 1:num_seals) {
-      
-      
-      # assign P_gauntlet to seal_prob_gauntlet
-      seal_prob_gauntlet[seal, t, y] <- P_gauntlet[seal, t, y]
+      seal_prob_gauntlet[seal, t, y] <- 1-(1/(1 + exp(-steepness * (threshold - x[seal, t, y]))))
     }
     
     # decide where each seal goes that day
@@ -119,7 +119,6 @@ for(y in 1:years) {
     salmon_consumed[seals_at_gauntlet, t, y] <- rep(round(predation/length(seals_at_gauntlet), 
                                                           digits = 0), length(seals_at_gauntlet))
     
-    
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
     salmon_arriving <- sum(salmon_arrive(day = (t+1))$avg)
@@ -127,11 +126,11 @@ for(y in 1:years) {
     gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - 
                                        salmon_escape[t, y] + salmon_arriving - fish_catch, digits = 0)
     
-    # calculate delta Vs for next time step
+    # calculate x for next time step
     for(seal in 1:num_seals){
       C[seal, t, y] <- salmon_consumed[seal, t, y]/seal_satiation
       B[seal, t, y] <- 0
-      delta <- alpha_fish * C[seal, t, y] - alpha_hunt * B[seal, t, y]
+      delta <- alpha_fish * (C[seal, t, y] - baseline) - alpha_hunt * B[seal, t, y]
       x[seal,(t+1),y] <- x[seal, t, y] + delta
       if(x[seal, t+1, y]>xmax){
         x[seal,t+1] <- xmax
