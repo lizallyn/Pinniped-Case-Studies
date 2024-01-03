@@ -37,7 +37,7 @@ switch.rate <- function(salmon, threshold, steepness) {
   return(1-(1/(1 + exp(-steepness * (threshold - salmon)))))
 }
 
-switch.rate(0.0000, 200, 0.1)
+switch.rate(20, 10, 0.2)
 
 # Discovery function
 # how many seals discover salmon specializing from the normal seal population and try it out? N -> S
