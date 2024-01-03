@@ -16,11 +16,11 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Parameters
 
 # loop parameters
-years <- 2
+years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 25
+num_seals <- 2
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
@@ -36,7 +36,7 @@ alpha_fish <- 1
 alpha_hunt <- 2
 x_max <- 20
 baseline <- 0.1
-steepness <- 0.2
+steepness <- 0.15
 threshold <- 10
 
 # fishing
@@ -74,11 +74,6 @@ B <- array(dim = c(seals, days, years), data = rep(0, seals * days * years))
 
 #### Run time loop ####
 for(y in 1:years) {
-  
-  # grab V's from end of last year
-  # if(y>1) {
-  # 
-  # }
   
   for(t in 1:(days-1)) {
     
@@ -140,3 +135,15 @@ for(y in 1:years) {
   } # days loop
 } # years loop
 
+# Testing Space
+
+
+
+
+
+# These only show the last year
+par(mfrow = c(2,2))
+plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gauntlet")
+plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
+plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
+plot(1:days, colSums(salmon_consumed[,,y]), main = "salmon consumed")
