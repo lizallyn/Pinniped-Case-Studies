@@ -3,7 +3,6 @@
 seals <- 5
 days <- 100
 xmax <- 10
-s <- 1
 a <- 1
 b <- 2
 
