@@ -4,9 +4,9 @@
 days <- 10
 s <- 5
 h <- 0.05
-seals <- 1:25
-pd <- 0
-salmon <- 1000
+seals <- 5
+pd <- 1
+salmon <- 1:1000
 Y <- 1
 
 
