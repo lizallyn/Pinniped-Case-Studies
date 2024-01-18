@@ -75,6 +75,7 @@ dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days,
 
 # Variables for x learning bit
 x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 C <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 B <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 
@@ -85,6 +86,7 @@ for(y in 1:years) {
     
     # Calculate seal_prob_gauntlet
     for(seal in 1:num_seals) {
+      P_x[seal, t, y] <- 
       seal_prob_gauntlet[seal, t, y] <- 1-(1/(1.1 + exp(-steepness * (threshold - x[seal, t, y]))))
     }
     
