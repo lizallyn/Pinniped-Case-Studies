@@ -30,6 +30,7 @@ seal_satiation <- 5
 
 # salmon parameters
 escape_rate <- 0.3
+species <- 3
 
 # seal learning parameters
 alpha_fish <- 5
