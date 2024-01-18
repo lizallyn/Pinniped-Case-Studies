@@ -7,15 +7,15 @@ xmax <- 10
 a <- 1
 b <- 2
 w <- 0.1
-xfmax <- 10
-xfmin <- 2
-xdmin <- -10
+ymax <- 10
+xmin <- 2
+ymin <- -10
 
 
 Pf <- array(dim = c(seals, days), data = rep(0.1, seals * days))
 Pd <- array(dim = c(seals, days), data = rep(0.1, seals * days))
-xf <- array(dim = c(seals, days), data = rep(0, seals * days))
-xd <- array(dim = c(seals, days), data = rep(0, seals * days))
+x <- array(dim = c(seals, days), data = rep(0, seals * days))
+y <- array(dim = c(seals, days), data = rep(0, seals * days))
 C <- array(dim = c(seals, days), data = rep(NA, seals * days))
 B <- array(dim = c(seals, days), data = rep(NA, seals * days))
 
@@ -27,23 +27,23 @@ for(i in 1:(days-1)){
   for(seal in 1:seals){
     C[seal, i] <- salmon[i]/satiation - w
     if(C[seal, i] > 0){
-      d_xf <- 0.25*(xfmax - xf[seal, i])
+      d_x <- 0.25*(xmax - x[seal, i])
     } else if(C[seal, i] < 0){
-      d_xf <- 0.25*(xfmin - xf[seal, i])
-    } else {d_xf <- 0}
-    xf[seal, i+1] <- xf[seal, i] + d_xf
+      d_x <- 0.25*(xmin - x[seal, i])
+    } else {d_x <- 0}
+    x[seal, i+1] <- x[seal, i] + d_x
     
     B[seal, i] <- hunting[i]
     if(B[seal, i] == 0){
-      d_xd <- 0.25*(0 - xd[seal, i])
+      d_y <- 0.25*(0 - y[seal, i])
     } else if(B[seal, i] > 0){
-      d_xd <- 0.25*(xdmin - xd[seal, i])
+      d_y <- 0.25*(ymin - y[seal, i])
     }
-    xd[seal, i+1] <- xd[seal, i] + d_xd
+    y[seal, i+1] <- y[seal, i] + d_y
   }
 }
 
 plot(1:days, colSums(C))
 plot(1:days, colSums(B))
-plot(1:days, colSums(xf))
-plot(1:days, colSums(xd))
+plot(1:days, colSums(x))
+plot(1:days, colSums(y))
