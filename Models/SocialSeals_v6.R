@@ -9,7 +9,7 @@ library(tidyr) #formatting for visualization
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_2.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_3.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
 
@@ -25,8 +25,10 @@ seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
-seal_handling_time <- 0.1
+seal_handling_time <- 0.05
 seal_satiation <- 5
+pd <- 0
+Y <- 1
 
 # salmon parameters
 escape_rate <- 0.3
@@ -101,7 +103,8 @@ for(y in 1:years) {
     # theoretical consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,y] == 1)
     salmon_to_be_eaten <- 
-      eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time)
+      eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time, 
+                    seal_satiation, pd = pd, Y = Y)
     if(salmon_to_be_eaten == 0) {
       predation_rate <- 0
     } else {
