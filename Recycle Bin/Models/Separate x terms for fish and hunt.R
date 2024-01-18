@@ -7,8 +7,8 @@ xmax <- 10
 a <- 1
 b <- 2
 w <- 0.1
-ymax <- 10
-xmin <- 2
+ymax <- 0
+xmin <- -2
 ymin <- -10
 
 
@@ -35,7 +35,7 @@ for(i in 1:(days-1)){
     
     B[seal, i] <- hunting[i]
     if(B[seal, i] == 0){
-      d_y <- 0.25*(0 - y[seal, i])
+      d_y <- 0.25*(ymax - y[seal, i])
     } else if(B[seal, i] > 0){
       d_y <- 0.25*(ymin - y[seal, i])
     }
@@ -47,3 +47,5 @@ plot(1:days, colSums(C))
 plot(1:days, colSums(B))
 plot(1:days, colSums(x))
 plot(1:days, colSums(y))
+
+
