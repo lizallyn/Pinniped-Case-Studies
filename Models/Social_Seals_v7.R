@@ -94,73 +94,73 @@ P_y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * y
 
 
 #### Run time loop ####
-for(y in 1:years) {
+for(j in 1:years) {
   
   for(t in 1:(days-1)) {
     
     # decide where each seal goes that day
     for(seal in 1:num_seals) {
-      seal_forage_loc[seal,t,y] <- decide_foraging_destination(seal_prob_gauntlet[seal,t,y])
+      seal_forage_loc[seal,t,j] <- decide_foraging_destination(seal_prob_gauntlet[seal,t,j])
     }
     
     # round of copying
-    seals_to_be_influenced <- which(seal_forage_loc[,t,y] == 0)
+    seals_to_be_influenced <- which(seal_forage_loc[,t,j] == 0)
     for(seal in seals_to_be_influenced) {
-      seal_forage_loc[seal,t,y] <-get_influenced(seal_forage_loc[,t,y], num_seals,
+      seal_forage_loc[seal,t,j] <-get_influenced(seal_forage_loc[,t,j], num_seals,
                                                  seal_num_neighbours_2_copy, seal_prob_2_copy)
     }
     
     # theoretical consumption 
-    seals_at_gauntlet <- which(seal_forage_loc[,t,y] == 1)
+    seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
     salmon_to_be_eaten <- 
-      eat_some_fish(gauntlet_salmon[t,y], length(seals_at_gauntlet), seal_handling_time, 
+      eat_some_fish(gauntlet_salmon[t,j], length(seals_at_gauntlet), seal_handling_time, 
                     seal_satiation, pd = pd, Y = Y)
     if(salmon_to_be_eaten == 0) {
       predation_rate <- 0
     } else {
-      predation_rate <- salmon_to_be_eaten/gauntlet_salmon[t, y]
+      predation_rate <- salmon_to_be_eaten/gauntlet_salmon[t, j]
     }
     
     # calculate salmon inst mortality
     predation <- salmon_to_be_eaten / (predation_rate + catch_rate) * 
       (1 - exp(-predation_rate - catch_rate))
-    fish_catch <- gauntlet_salmon[t, y] * catch_rate / (predation_rate + catch_rate) * 
+    fish_catch <- gauntlet_salmon[t, j] * catch_rate / (predation_rate + catch_rate) * 
       (1 - exp(-predation_rate - catch_rate))
     
     # assign actual consumption
-    salmon_consumed[seals_at_gauntlet, t, y] <- rep(round(predation/length(seals_at_gauntlet), 
+    salmon_consumed[seals_at_gauntlet, t, j] <- rep(round(predation/length(seals_at_gauntlet), 
                                                           digits = 0), length(seals_at_gauntlet))
     
     # consumption impacts salmon survival to next time step
     # salmon at the gauntlet on that day = arrive-leave
     salmon_arriving <- sum(salmon_arrive(day = (t+1))$avg)
-    salmon_escape[t, y] <- gauntlet_salmon[t, y] * salmon_escape_rate(day = t)
-    gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - 
-                                       salmon_escape[t, y] + salmon_arriving - fish_catch, digits = 0)
+    salmon_escape[t, j] <- gauntlet_salmon[t, j] * salmon_escape_rate(day = t)
+    gauntlet_salmon[t+1, j] <- round(gauntlet_salmon[t, j] - sum(salmon_consumed[ , t, j]) - 
+                                       salmon_escape[t, j] + salmon_arriving - fish_catch, digits = 0)
     
     # seal harvest
-    H[t, y] <- 0
+    H[t, j] <- 0
     
     # calculate x, y and prob_gauntlet for next time step
     for(seal in 1:num_seals){
-      C[seal, t, y] <- salmon_consumed[seal, t, y]/seal_satiation - w
-      if(C[seal, t, y] > 0){
-        d_x <- 0.25*(xmax - x[seal, t, y])
-      } else if(C[seal, t, y] < 0){
-        d_x <- 0.25*(xmin - x[seal, t, y])
+      C[seal, t, j] <- salmon_consumed[seal, t, j]/seal_satiation - w
+      if(C[seal, t, j] > 0){
+        d_x <- 0.25*(xmax - x[seal, t, j])
+      } else if(C[seal, t, j] < 0){
+        d_x <- 0.25*(xmin - x[seal, t, j])
       } else {d_x <- 0}
-      x[seal, t+1, y] <- x[seal, t+1, y] + d_x
-      P_x[seal, t+1, y] <- x[seal, t+1, y] * 0.1 + 0.1
+      x[seal, t+1, j] <- x[seal, t+1, j] + d_x
+      P_x[seal, t+1, j] <- x[seal, t+1, j] * 0.1 + 0.1
       
-      if(sum(H[t, y]) == 0){
-        d_y <- 0.25*(ymax - y[seal, t, y])
-      } else if(sum(H[t, y]) > 0){
-        d_y <- 0.25*(ymin - y[seal, t, y])
+      if(sum(H[t, j]) == 0){
+        d_y <- 0.25*(ymax - y[seal, t, j])
+      } else if(sum(H[t, j]) > 0){
+        d_y <- 0.25*(ymin - y[seal, t, j])
       }
-      y[seal, t+1, y] <- y[seal, t, y] + d_y
-      P_y[seal, t+1, y] <- 1-(1/(1.1 + exp(-steepness * (threshold - y[seal, t+1, y]))))
+      y[seal, t+1, j] <- y[seal, t, j] + d_y
+      P_y[seal, t+1, j] <- 1-(1/(1.1 + exp(-steepness * (threshold - y[seal, t+1, j]))))
       
-      seal_prob_gauntlet[seal, t+1, y] <- P_x[seal, t+1, y] * P_y[seal, t+1, y]
+      seal_prob_gauntlet[seal, t+1, j] <- P_x[seal, t+1, j] * P_y[seal, t+1, j]
       }
     
   } # days loop
@@ -174,10 +174,10 @@ for(y in 1:years) {
 
 # These only show the last year
 par(mfrow = c(2,2))
-plot(1:days, colSums(seal_forage_loc[,,y]), main = "Number of seals at the gauntlet")
-plot(1:days, colMeans(seal_prob_gauntlet[,,y]), main = "avg. prob gauntlet")
-plot(1:days, gauntlet_salmon[,y], main = "salmon at the gauntlet")
-plot(1:days, colSums(salmon_consumed[,,y]), main = "salmon consumed")
+plot(1:days, colSums(seal_forage_loc[,,j]), main = "Number of seals at the gauntlet")
+plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
+plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
+plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
 
 prob.gauntlet.plot <- ggplot() +
   geom_point(aes(x = x[1,,1], y = seal_prob_gauntlet[1,,1]))
