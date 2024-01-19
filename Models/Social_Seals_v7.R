@@ -23,8 +23,8 @@ days <- 365
 num_seals <- 25
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
-seal_num_neighbours_2_copy <- 2
-seal_prob_2_copy <- 0.5
+
+# seal consumption parameters
 seal_handling_time <- 0.05
 seal_satiation <- 5
 pd <- 0
@@ -38,9 +38,17 @@ species <- 3
 alpha_fish <- 5
 alpha_hunt <- 2
 x_max <- 20
-baseline <- 0.1
-steepness <- 0.5
-threshold <- 5
+w <- 0.1
+ymin <- -10
+ymax <- 0
+xmin <- -1
+xmax <- 9
+steepness <- 5
+threshold <- -3
+
+# seal social learning parameters
+seal_num_neighbours_2_copy <- 2
+seal_prob_2_copy <- 0.5
 
 # fishing
 gillnetters <- 6
@@ -72,17 +80,18 @@ seal_forage_loc <- array(dim = c(num_seals, days, years),
                                     num_seals * days * years))
 dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days, 
                                   Year = 1:years)
-seal_harvest <- array(dim = c(num_seals, days, years),
-                      data = rep(NA, num_seals * days * years))
-dimnames(seal_harvest) <- list(eal = 1:num_seals, Day = 1:days, Year = 1:years)
+H <- array(dim = c(days, years),
+                      data = rep(NA, days * years))
+dimnames(H) <- list(Day = 1:days, Year = 1:years)
 
-# Variables for x learning bit
+# Variables for x y learning bit
 x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 C <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 B <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 P_x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 P_y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+
 
 #### Run time loop ####
 for(y in 1:years) {
@@ -134,18 +143,18 @@ for(y in 1:years) {
     
     # calculate x, y and prob_gauntlet for next time step
     for(seal in 1:num_seals){
-      C[seal, t, y] <- salmon_consumed[seal, t, y]/seal_satiation
+      C[seal, t, y] <- salmon_consumed[seal, t, y]/seal_satiation - w
       if(C[seal, t, y] > 0){
         d_x <- 0.25*(xmax - x[seal, t, y])
       } else if(C[seal, t, y] < 0){
         d_x <- 0.25*(xmin - x[seal, t, y])
       } else {d_x <- 0}
       x[seal, t+1, y] <- x[seal, t+1, y] + d_x
-      P_x[seal, t+1, y] <- x[sseal, t+1, y] * 0.1 + 0.1
+      P_x[seal, t+1, y] <- x[seal, t+1, y] * 0.1 + 0.1
       
-      if(sum(H[, t, y]) == 0){
+      if(sum(H[t, y]) == 0){
         d_y <- 0.25*(ymax - y[seal, t, y])
-      } else if(sum(H[, t, y]) > 0){
+      } else if(sum(H[t, y]) > 0){
         d_y <- 0.25*(ymin - y[seal, t, y])
       }
       y[seal, t+1, y] <- y[seal, t, y] + d_y
