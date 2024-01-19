@@ -42,8 +42,8 @@ steepness <- 5
 threshold <- -3
 
 # seal social learning parameters
-seal_num_neighbours_2_copy <- 2
-seal_prob_2_copy <- 0.5
+mean <- 0.5 # of the beta dist
+beta <- 15 # spread of the beta dist
 
 # fishing parameters
 catch_rate <- 0.3
@@ -84,6 +84,9 @@ B <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * yea
 P_x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 P_y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 
+# for social learning
+P_social <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+
 
 #### Run time loop ####
 for(j in 1:years) {
@@ -100,10 +103,10 @@ for(j in 1:years) {
     }
     
     # round of copying
-    seals_to_be_influenced <- which(seal_forage_loc[,t,j] == 0)
-    for(seal in seals_to_be_influenced) {
-      seal_forage_loc[seal,t,j] <-get_influenced(seal_forage_loc[,t,j], num_seals,
-                                                 seal_num_neighbours_2_copy, seal_prob_2_copy)
+    for(seal in 1:num_seals) {
+      P_social[seal, t, j] <- collusion(forage_locs_list = seal_forage_loc[,t,j], 
+                                        prob_gauntlet_seal_i = seal_prob_gauntlet[seal, t, j], 
+                                        mean = mean, beta = beta)
     }
     
     # calculate salmon consumption 
