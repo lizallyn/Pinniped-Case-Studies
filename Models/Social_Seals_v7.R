@@ -19,7 +19,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 5
+num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
