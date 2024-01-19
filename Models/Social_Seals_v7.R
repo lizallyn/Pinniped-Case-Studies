@@ -20,7 +20,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 25
+num_seals <- 5
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
@@ -110,16 +110,15 @@ for(j in 1:years) {
                                                  seal_num_neighbours_2_copy, seal_prob_2_copy)
     }
     
-    # theoretical consumption 
+    # calculate salmon consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
     salmon_to_be_eaten <- 
-      eat_some_fish(gauntlet_salmon[t,j], length(seals_at_gauntlet), seal_handling_time, 
-                    seal_satiation, pd = pd, Y = Y)
-    if(salmon_to_be_eaten == 0) {
-      predation_rate <- 0
-    } else {
-      predation_rate <- salmon_to_be_eaten/gauntlet_salmon[t, j]
-    }
+      eat_some_fish(gauntlet_salmon = gauntlet_salmon[t,j], 
+                    num_seals_at_gauntlet = length(seals_at_gauntlet), 
+                    handling_time = seal_handling_time, 
+                    satiation = seal_satiation, pd = pd, Y = Y)
+    salmon_consumed[seals_at_gauntlet, t, j] <- rep(salmon_to_be_eaten/length(seals_at_gauntlet))
+    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] - salmon_to_be_eaten
     
     # calculate salmon inst mortality
     predation <- salmon_to_be_eaten / (predation_rate + catch_rate) * 
