@@ -180,6 +180,5 @@ plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
 
 
-
   
 prob.gauntlet.plot
