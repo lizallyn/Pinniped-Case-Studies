@@ -50,13 +50,13 @@ threshold <- -3
 seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
 
-# fishing
+# fishing parameters
 gillnetters <- 6
 fish_start <- 253
 fish_end <- 321
 catch_rate <- 0.3
 
-# hunting
+# hunting parameters
 exclusion <- 0.8
 
 ## Set Up Variables
