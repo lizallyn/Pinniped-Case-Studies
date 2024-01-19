@@ -179,6 +179,6 @@ plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
 
-
+matplot(t(seal_prob_gauntlet), type = "l")
   
 prob.gauntlet.plot
