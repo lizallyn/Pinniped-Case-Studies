@@ -72,23 +72,22 @@ seal_forage_loc <- array(dim = c(num_seals, days, years),
                                     num_seals * days * years))
 dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days, 
                                   Year = 1:years)
+seal_harvest <- array(dim = c(num_seals, days, years),
+                      data = rep(NA, num_seals * days * years))
+dimnames(seal_harvest) <- list(eal = 1:num_seals, Day = 1:days, Year = 1:years)
 
 # Variables for x learning bit
 x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 C <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 B <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+P_x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+P_y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
 
 #### Run time loop ####
 for(y in 1:years) {
   
   for(t in 1:(days-1)) {
-    
-    # Calculate seal_prob_gauntlet
-    for(seal in 1:num_seals) {
-      P_x[seal, t, y] <- 
-        seal_prob_gauntlet[seal, t, y] <- 1-(1/(1.1 + exp(-steepness * (threshold - x[seal, t, y]))))
-    }
     
     # decide where each seal goes that day
     for(seal in 1:num_seals) {
@@ -130,16 +129,30 @@ for(y in 1:years) {
     gauntlet_salmon[t+1, y] <- round(gauntlet_salmon[t, y] - sum(salmon_consumed[ , t, y]) - 
                                        salmon_escape[t, y] + salmon_arriving - fish_catch, digits = 0)
     
-    # calculate x for next time step
+    # seal harvest
+    H[t, y] <- 0
+    
+    # calculate x, y and prob_gauntlet for next time step
     for(seal in 1:num_seals){
       C[seal, t, y] <- salmon_consumed[seal, t, y]/seal_satiation
-      B[seal, t, y] <- 0
-      delta <- alpha_fish * (C[seal, t, y] - baseline) - alpha_hunt * B[seal, t, y]
-      x[seal,(t+1),y] <- x[seal, t, y] + delta
-      if(x[seal, t+1, y]>x_max){
-        x[seal,t+1,y] <- x_max
+      if(C[seal, t, y] > 0){
+        d_x <- 0.25*(xmax - x[seal, t, y])
+      } else if(C[seal, t, y] < 0){
+        d_x <- 0.25*(xmin - x[seal, t, y])
+      } else {d_x <- 0}
+      x[seal, t+1, y] <- x[seal, t+1, y] + d_x
+      P_x[seal, t+1, y] <- x[sseal, t+1, y] * 0.1 + 0.1
+      
+      if(sum(H[, t, y]) == 0){
+        d_y <- 0.25*(ymax - y[seal, t, y])
+      } else if(sum(H[, t, y]) > 0){
+        d_y <- 0.25*(ymin - y[seal, t, y])
       }
-    }
+      y[seal, t+1, y] <- y[seal, t, y] + d_y
+      P_y[seal, t+1, y] <- 1-(1/(1.1 + exp(-steepness * (threshold - y[seal, t+1, y]))))
+      
+      seal_prob_gauntlet[seal, t+1, y] <- P_x[seal, t+1, y] * P_y[seal, t+1, y]
+      }
     
   } # days loop
 } # years loop
