@@ -179,9 +179,7 @@ plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
 
-prob.gauntlet.plot <- ggplot() +
-  for(i in 1:num_seals) {
-    geom_point(aes(x = 1:days, y = seal_prob_gauntlet[i,,1]))
-  }
+
+
   
 prob.gauntlet.plot
