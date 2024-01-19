@@ -2,15 +2,17 @@
 # Jan 2024
 
 seals <- 5
-days <- 20
-xmax <- 10
+days <- 100
+
 a <- 1
 b <- 2
 w <- 0.1
+ymin <- -10
 ymax <- 0
 xmin <- -2
-ymin <- -10
-
+xmax <- 9
+steepness <- 5
+threshold <- -3
 
 Pf <- array(dim = c(seals, days), data = rep(0.1, seals * days))
 Pd <- array(dim = c(seals, days), data = rep(0.1, seals * days))
@@ -18,6 +20,8 @@ x <- array(dim = c(seals, days), data = rep(0, seals * days))
 y <- array(dim = c(seals, days), data = rep(0, seals * days))
 C <- array(dim = c(seals, days), data = rep(NA, seals * days))
 B <- array(dim = c(seals, days), data = rep(NA, seals * days))
+P_x <- array(dim = c(seals, days), data = rep(NA, seals * days))
+P_y <- array(dim = c(seals, days), data = rep(NA, seals * days))
 
 salmon <- array(dim = c(days), data = c(rep(0, days/4), seq_len(days/4), rev(seq_len(days/4)), rep(0, days/4)))
 hunting <- array(dim = c(days), data = c(rep(0, days/2), rep(1, days/2)))
@@ -32,6 +36,7 @@ for(i in 1:(days-1)){
       d_x <- 0.25*(xmin - x[seal, i])
     } else {d_x <- 0}
     x[seal, i+1] <- x[seal, i] + d_x
+    P_x[seal, i+1] <- x[seal, i+1] * 0.1 + 0.1
     
     B[seal, i] <- hunting[i]
     if(B[seal, i] == 0){
@@ -40,6 +45,8 @@ for(i in 1:(days-1)){
       d_y <- 0.25*(ymin - y[seal, i])
     }
     y[seal, i+1] <- y[seal, i] + d_y
+    
+    P_y[seal, i+1] <- 1-(1/(1.1 + exp(-steepness * (threshold - y[seal, i+1]))))
   }
 }
 
@@ -47,5 +54,7 @@ plot(1:days, colSums(C))
 plot(1:days, colSums(B))
 plot(1:days, colSums(x))
 plot(1:days, colSums(y))
+plot(1:days, colSums(P_x))
+plot(y, P_y)
 
 
