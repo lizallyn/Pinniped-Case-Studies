@@ -98,6 +98,10 @@ for(j in 1:years) {
   
   for(t in 1:(days-1)) {
     
+    # salmon arrive at the gauntlet
+    salmon_arriving <- sum(salmon_arrive(day = (t+1))$avg)
+    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] + salmon_arriving
+    
     # decide where each seal goes that day
     for(seal in 1:num_seals) {
       seal_forage_loc[seal,t,j] <- decide_foraging_destination(seal_prob_gauntlet[seal,t,j])
@@ -117,25 +121,20 @@ for(j in 1:years) {
                     num_seals_at_gauntlet = length(seals_at_gauntlet), 
                     handling_time = seal_handling_time, 
                     satiation = seal_satiation, pd = pd, Y = Y)
-    salmon_consumed[seals_at_gauntlet, t, j] <- rep(salmon_to_be_eaten/length(seals_at_gauntlet))
-    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] - salmon_to_be_eaten
+    predation_rate <- salmon_to_be_eaten/gauntlet_salmon[t, j]
     
     # calculate salmon inst mortality
-    predation <- salmon_to_be_eaten / (predation_rate + catch_rate) * 
-      (1 - exp(-predation_rate - catch_rate))
-    fish_catch <- gauntlet_salmon[t, j] * catch_rate / (predation_rate + catch_rate) * 
-      (1 - exp(-predation_rate - catch_rate))
+    inst_predation <- predation_rate / (predation_rate + catch_rate + escape_rate) *
+      (1 - exp(-predation_rate - catch_rate - escape_rate))
+    inst_catch_rate <- catch_rate / (predation_rate + catch_rate + escape_rate) *
+      (1 - exp(-predation_rate - catch_rate - escape_rate))
+    inst_escape <- escape_rate / (predation_rate + catch_rate + escape_rate) *
+      (1 - exp(-predation_rate - catch_rate - escape_rate))
+    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] * exp(-inst_predation - inst_catch_rate - inst_escape)
     
-    # assign actual consumption
-    salmon_consumed[seals_at_gauntlet, t, j] <- rep(round(predation/length(seals_at_gauntlet), 
-                                                          digits = 0), length(seals_at_gauntlet))
-    
-    # consumption impacts salmon survival to next time step
-    # salmon at the gauntlet on that day = arrive-leave
-    salmon_arriving <- sum(salmon_arrive(day = (t+1))$avg)
-    salmon_escape[t, j] <- gauntlet_salmon[t, j] * salmon_escape_rate(day = t)
-    gauntlet_salmon[t+1, j] <- round(gauntlet_salmon[t, j] - sum(salmon_consumed[ , t, j]) - 
-                                       salmon_escape[t, j] + salmon_arriving - fish_catch, digits = 0)
+    # assign consumed salmon to seals at the gauntlet
+    salmon_consumed[seals_at_gauntlet, t, j] <- inst_predation * 
+      gauntlet_salmon[t, j]/length(seals_at_gauntlet)
     
     # seal harvest
     H[t, j] <- 0
