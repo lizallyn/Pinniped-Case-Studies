@@ -5,7 +5,6 @@
 
 ## Load Packages and Data
 library(ggplot2)
-library(tidyr) #formatting for visualization
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
@@ -32,12 +31,8 @@ Y <- 1
 
 # salmon parameters
 escape_rate <- 0.3
-species <- 3
 
 # seal learning parameters
-alpha_fish <- 5
-alpha_hunt <- 2
-x_max <- 20
 w <- 0.1
 ymin <- -10
 ymax <- 0
@@ -51,13 +46,10 @@ seal_num_neighbours_2_copy <- 2
 seal_prob_2_copy <- 0.5
 
 # fishing parameters
-gillnetters <- 6
-fish_start <- 253
-fish_end <- 321
 catch_rate <- 0.3
 
 # hunting parameters
-exclusion <- 0.8
+
 
 ## Set Up Variables
 salmon_escape <- array(dim = c(days, years),
@@ -116,12 +108,11 @@ for(j in 1:years) {
     
     # calculate salmon consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
-    salmon_to_be_eaten <- 
-      eat_some_fish(gauntlet_salmon = gauntlet_salmon[t,j], 
+    predation_rate <- 
+      eat_some_fish(num_gauntlet_salmon = gauntlet_salmon[t,j], 
                     num_seals_at_gauntlet = length(seals_at_gauntlet), 
                     handling_time = seal_handling_time, 
                     satiation = seal_satiation, pd = pd, Y = Y)
-    predation_rate <- salmon_to_be_eaten/gauntlet_salmon[t, j]
     
     # calculate salmon inst mortality
     inst_predation <- predation_rate / (predation_rate + catch_rate + escape_rate) *
@@ -133,13 +124,16 @@ for(j in 1:years) {
     gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] * exp(-inst_predation - inst_catch_rate - inst_escape)
     
     # assign consumed salmon to seals at the gauntlet
-    salmon_consumed[seals_at_gauntlet, t, j] <- inst_predation * 
-      gauntlet_salmon[t, j]/length(seals_at_gauntlet)
+    if(predation_rate>0) {
+      salmon_consumed[seals_at_gauntlet, t, j] <- inst_predation * 
+        gauntlet_salmon[t, j]/length(seals_at_gauntlet)
+    }
     
     # seal harvest
     H[t, j] <- 0
     
     # calculate x, y and prob_gauntlet for next time step
+    ## This could all become some functions
     for(seal in 1:num_seals){
       C[seal, t, j] <- salmon_consumed[seal, t, j]/seal_satiation - w
       if(C[seal, t, j] > 0){
@@ -177,6 +171,3 @@ plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
 
-matplot(t(seal_prob_gauntlet), type = "l")
-  
-prob.gauntlet.plot
