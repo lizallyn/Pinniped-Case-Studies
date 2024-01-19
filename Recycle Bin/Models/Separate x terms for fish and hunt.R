@@ -4,8 +4,6 @@
 seals <- 5
 days <- 100
 
-a <- 1
-b <- 2
 w <- 0.1
 ymin <- -10
 ymax <- 0
