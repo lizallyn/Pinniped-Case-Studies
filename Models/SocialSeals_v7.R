@@ -43,6 +43,7 @@ steepness <- 5
 threshold <- -3
 
 # seal social learning parameters
+num_seals_2_copy <- 2
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
@@ -105,8 +106,9 @@ for(j in 1:years) {
     
     # round of copying
     for(seal in 1:num_seals) {
-      P_social[seal, t, j] <- collusion(forage_locs_list = seal_forage_loc[,t,j], 
-                                        prob_gauntlet_seal_i = seal_prob_gauntlet[seal, t, j], 
+      P_social[seal, t, j] <- collusion(probs_list = seal_prob_gauntlet[,t,j], 
+                                        prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t, j], 
+                                        seals_2_copy = num_seals_2_copy, 
                                         mean = mean, beta = beta)
     }
     
