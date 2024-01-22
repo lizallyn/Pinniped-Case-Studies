@@ -10,7 +10,8 @@ library(ggplot2)
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_3.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
+# source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
 
 ## Set Parameters
 
@@ -174,3 +175,12 @@ plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
 
+# with ggplot to show each seal individually
+
+library(reshape2)
+
+prob_gauntlet_plot <- melt(data = seal_prob_gauntlet[,,1], "Seal")
+colnames(prob_gauntlet_plot) <- c("Seal", "Day", "Prob")
+plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob, color = Seal)) + 
+  geom_point()
+plot_probs
