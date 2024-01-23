@@ -20,7 +20,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 20
+num_seals <- 2
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
@@ -43,7 +43,7 @@ steepness <- 5
 threshold <- -3
 
 # seal social learning parameters
-num_seals_2_copy <- 2
+num_seals_2_copy <- 0
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
