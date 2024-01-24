@@ -9,8 +9,12 @@ ymin <- -10
 ymax <- 0
 xmin <- -1
 xmax <- 9
-steepness <- 5
-threshold <- -3
+steepness <- 1
+threshold <- -5
+slope_x <- 0.1
+intercept_x <- 0.1
+step <- 0.25
+buffer_Pymin <- 0.1
 
 Pf <- array(dim = c(seals, days), data = rep(0.1, seals * days))
 Pd <- array(dim = c(seals, days), data = rep(0.1, seals * days))
@@ -30,22 +34,22 @@ for(i in 1:(days-1)){
   for(seal in 1:seals){
     C[seal, i] <- salmon[i]/satiation - w
     if(C[seal, i] > 0){
-      d_x <- 0.25*(xmax - x[seal, i])
+      d_x <- step*(xmax - x[seal, i])
     } else if(C[seal, i] < 0){
-      d_x <- 0.25*(xmin - x[seal, i])
+      d_x <- step*(xmin - x[seal, i])
     } else {d_x <- 0}
     x[seal, i+1] <- x[seal, i] + d_x
-    P_x[seal, i+1] <- x[seal, i+1] * 0.1 + 0.1
+    P_x[seal, i+1] <- x[seal, i+1] * slope_x + intercept_x
     
     B[seal, i] <- hunting[i]
     if(B[seal, i] == 0){
-      d_y <- 0.25*(ymax - y[seal, i])
+      d_y <- step*(ymax - y[seal, i])
     } else if(B[seal, i] > 0){
-      d_y <- 0.25*(ymin - y[seal, i])
+      d_y <- step*(ymin - y[seal, i])
     }
     y[seal, i+1] <- y[seal, i] + d_y
     
-    P_y[seal, i+1] <- 1-(1/(1.1 + exp(-steepness * (threshold - y[seal, i+1]))))
+    P_y[seal, i+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, i+1]))))
     
     P[seal, i+1] <- P_y[seal, i+1] * P_x[seal, i+1]
   }
@@ -56,8 +60,9 @@ plot(1:days, colSums(C), main = "C")
 plot(1:days, colSums(B), main = "B")
 plot(1:days, colSums(x), main = "x")
 plot(1:days, colSums(y), main = "y")
-plot(1:days, colSums(P_x), main = "P_x")
 plot(y, P_y)
 plot(x, P_x)
+plot(1:days, colMeans(P_x), main = "P_x")
+plot(1:days, colMeans(P_y), main = "P_y")
 plot(1:days, colMeans(P), main = "P")
 
