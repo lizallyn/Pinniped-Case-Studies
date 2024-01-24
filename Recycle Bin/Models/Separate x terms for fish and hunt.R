@@ -51,12 +51,13 @@ for(i in 1:(days-1)){
   }
 }
 
-plot(1:days, colSums(C))
-plot(1:days, colSums(B))
-plot(1:days, colSums(x))
-plot(1:days, colSums(y))
-plot(1:days, colSums(P_x))
+par(mfrow = c(2, 1))
+plot(1:days, colSums(C), main = "C")
+plot(1:days, colSums(B), main = "B")
+plot(1:days, colSums(x), main = "x")
+plot(1:days, colSums(y), main = "y")
+plot(1:days, colSums(P_x), main = "P_x")
 plot(y, P_y)
 plot(x, P_x)
-plot(1:days, colMeans(P))
+plot(1:days, colMeans(P), main = "P")
 
