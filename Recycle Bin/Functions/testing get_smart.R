@@ -15,6 +15,8 @@ slope_x <- 0.1
 intercept_x <- 0.1
 step <- 0.25
 buffer_Pymin <- 0.1
+alpha_y <- 1
+alpha_x <- 1
 
 Pf <- array(dim = c(seals, days), data = rep(0.1, seals * days))
 Pd <- array(dim = c(seals, days), data = rep(0.1, seals * days))
@@ -51,15 +53,15 @@ for(i in 1:(days-1)){
     
     P_y[seal, i+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, i+1]))))
     
-    P[seal, i+1] <- P_y[seal, i+1] * P_x[seal, i+1]
+    P[seal, i+1] <- alpha_y * P_y[seal, i+1] * alpha_x * P_x[seal, i+1]
   }
 }
 
 par(mfrow = c(2, 1))
-plot(1:days, colSums(C), main = "C")
-plot(1:days, colSums(B), main = "B")
-plot(1:days, colSums(x), main = "x")
-plot(1:days, colSums(y), main = "y")
+plot(1:days, colMeans(C), main = "C")
+plot(1:days, colMeans(B), main = "B")
+plot(1:days, colMeans(x), main = "x")
+plot(1:days, colMeans(y), main = "y")
 plot(y, P_y)
 plot(x, P_x)
 plot(1:days, colMeans(P_x), main = "P_x")
