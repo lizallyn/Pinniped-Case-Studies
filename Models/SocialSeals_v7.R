@@ -26,7 +26,7 @@ seal_start_loc <- 0
 
 # seal consumption parameters
 seal_handling_time <- 0.05
-seal_satiation <- 5
+seal_satiation <- 10
 pd <- 0
 Y <- 1
 
@@ -34,7 +34,7 @@ Y <- 1
 escape_rate <- 0.3
 
 # seal learning parameters
-w <- 0.1
+w <- 1
 ymin <- -10
 ymax <- 0
 xmin <- -1
@@ -43,11 +43,11 @@ steepness <- 1
 threshold <- -5
 slope_x <- 0.1
 intercept_x <- 0.1
-step <- 0.25
+step <- 0.5
 buffer_Pymin <- 0.1
 
 # seal social learning parameters
-num_seals_2_copy <- 5
+num_seals_2_copy <- 4
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
@@ -145,7 +145,7 @@ for(j in 1:years) {
     # calculate x, y and prob_gauntlet for next time step
     ## This could all become some functions
     for(seal in 1:num_seals){
-      C[seal, t, j] <- salmon_consumed[seal, t, j]/seal_satiation - w
+      C[seal, t, j] <- salmon_consumed[seal, t, j] - w
       if(C[seal, t, j] > 0){
         d_x <- step*(xmax - x[seal, t, j])
       } else if(C[seal, t, j] < 0){
@@ -154,7 +154,7 @@ for(j in 1:years) {
       x[seal, t+1, j] <- x[seal, t+1, j] + d_x
       P_x[seal, t+1, j] <- x[seal, t+1, j] * slope_x + intercept_x
       
-      if(sum(H[t, j]) == 0){
+      if(H[t, j] == 0){
         d_y <- step*(ymax - y[seal, t, j])
       } else if(sum(H[t, j]) > 0){
         d_y <- step*(ymin - y[seal, t, j])
@@ -181,13 +181,26 @@ plot(1:days, colSums(seal_forage_loc[,,j]), main = "Number of seals at the gaunt
 plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
 plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
+plot(1:days, colMeans(C))
 
 # with ggplot to show each seal individually
 
 library(reshape2)
 
 prob_gauntlet_plot <- melt(data = seal_prob_gauntlet[,,1], "Seal")
-colnames(prob_gauntlet_plot) <- c("Seal", "Day", "Prob")
-plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob, color = Seal)) + 
+colnames(prob_gauntlet_plot) <- c("Seal", "Day", "Prob_G")
+plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
   geom_point()
 plot_probs
+
+C_plot <- melt(data = C[,,1], "Seal")
+colnames(C_plot) <- c("Seal", "Day", "C")
+plot_C <- ggplot(data = C_plot, aes(x = Day, y = C, color = Seal)) + 
+  geom_point()
+plot_C
+
+x_plot <- melt(data = x[,,1], "Seal")
+colnames(x_plot) <- c("Seal", "Day", "x")
+plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
+  geom_point()
+plot_x
