@@ -20,7 +20,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 5
+num_seals <- 100
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
@@ -43,7 +43,8 @@ steepness <- 1
 threshold <- -5
 slope_x <- 0.1
 intercept_x <- 0.1
-step <- 0.5
+step <- 0.25
+decay <- 0.1
 buffer_Pymin <- 0.1
 
 # seal social learning parameters
@@ -145,23 +146,40 @@ for(j in 1:years) {
     # calculate x, y and prob_gauntlet for next time step
     ## This could all become some functions
     for(seal in 1:num_seals){
+      # calculate C
       C[seal, t, j] <- salmon_consumed[seal, t, j] - w
-      if(C[seal, t, j] > 0){
-        d_x <- step*(xmax - x[seal, t, j])
-      } else if(C[seal, t, j] < 0){
-        d_x <- step*(xmin - x[seal, t, j])
-      } else {d_x <- 0}
-      x[seal, t+1, j] <- x[seal, t+1, j] + d_x
+      
+      # calculate d_x and d_y
+      
+      # if they go to open water, decay:
+      if(seal_forage_loc[seal, t, j] == 0){
+        if(x[seal, t, j] == 0){d_x <- 0} else {
+          d_x <- (0-x[seal, t, j])/abs(x[seal, t, j])
+        }
+        d_y <- decay
+      } else {
+        if(C[seal, t, j] > 0){
+          d_x <- step*(xmax - x[seal, t, j])
+        } else if(C[seal, t, j] < 0){
+          d_x <- step*(xmin - x[seal, t, j])
+        } else {d_x <- 0}
+        
+        
+        if(H[t, j] == 0){
+          d_y <- step*(ymax - y[seal, t, j])
+        } else if(sum(H[t, j]) > 0){
+          d_y <- step*(ymin - y[seal, t, j])
+        }
+      }
+      # update x and y and P_x and P_y
+      
+      x[seal, t+1, j] <- x[seal, t, j] + d_x
       P_x[seal, t+1, j] <- x[seal, t+1, j] * slope_x + intercept_x
       
-      if(H[t, j] == 0){
-        d_y <- step*(ymax - y[seal, t, j])
-      } else if(sum(H[t, j]) > 0){
-        d_y <- step*(ymin - y[seal, t, j])
-      }
       y[seal, t+1, j] <- y[seal, t, j] + d_y
       P_y[seal, t+1, j] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1, j]))))
       
+      # calculate Prob gauntlet
       seal_prob_gauntlet[seal, t+1, j] <- P_x[seal, t+1, j] * P_y[seal, t+1, j]
     }
     
@@ -204,3 +222,9 @@ colnames(x_plot) <- c("Seal", "Day", "x")
 plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
   geom_point()
 plot_x
+
+Px_plot <- melt(data = P_x[,,1], "Seal")
+colnames(Px_plot) <- c("Seal", "Day", "P_x")
+plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
+  geom_point()
+plot_Px
