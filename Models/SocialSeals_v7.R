@@ -150,27 +150,14 @@ for(j in 1:years) {
       C[seal, t, j] <- salmon_consumed[seal, t, j] - w
       
       # calculate d_x and d_y
-      
-      # if they go to open water, decay:
-      if(seal_forage_loc[seal, t, j] == 0){
-        if(x[seal, t, j] == 0){d_x <- 0} else {
-          d_x <- (0-x[seal, t, j])/abs(x[seal, t, j])
-        }
-        d_y <- decay
-      } else {
-        if(C[seal, t, j] > 0){
-          d_x <- step*(xmax - x[seal, t, j])
-        } else if(C[seal, t, j] < 0){
-          d_x <- step*(xmin - x[seal, t, j])
-        } else {d_x <- 0}
-        
-        
-        if(H[t, j] == 0){
-          d_y <- step*(ymax - y[seal, t, j])
-        } else if(sum(H[t, j]) > 0){
-          d_y <- step*(ymin - y[seal, t, j])
-        }
-      }
+
+        d_x <- learn_x(food = C[seal, t, j], x_t = x[seal, t, j], 
+                       forage_loc = seal_forage_loc[seal, t, j],  step = step, 
+                       xmin = xmin, xmax = xmax, decay = decay)
+        d_y <- learn_y(hunting = H[t, j], y_t = y[seal, t, j], 
+                       seal_forage_loc[seal, t, j], step = step, 
+                       ymin = ymin, ymax = ymax, decay = decay)
+
       # update x and y and P_x and P_y
       
       x[seal, t+1, j] <- x[seal, t, j] + d_x
@@ -228,3 +215,4 @@ colnames(Px_plot) <- c("Seal", "Day", "P_x")
 plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
   geom_point()
 plot_Px
+
