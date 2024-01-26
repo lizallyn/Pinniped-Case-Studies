@@ -1,15 +1,19 @@
-# function for updating x
+# function for calculating d_x
 
-learn_x <- function(food, x_t, step, xmin, xmax) {
+learn_x <- function(food, x_t, forage_loc, step, xmin, xmax, decay) {
   
-  if(food > 0){
-    d_x <- step*(xmax - x_t)
-  } else if(food < 0){
-    d_x <- step*(xmin - x_t)
-  } else {d_x <- 0}
+  if(forage_loc == 0){
+    if(x_t == 0){d_x <- 0} else {
+      d_x <- decay * (0-x_t)/abs(x_t)
+    }
+  } else {
+    if(food > 0){
+      d_x <- step*(xmax - x_t)
+    } else if(food < 0){
+      d_x <- step*(xmin - x_t)
+    } else {d_x <- 0}
+  }
   
-  x_next <- x_t + d_x
-  return(x_next)
+  return(d_x)
 }
 
-  
