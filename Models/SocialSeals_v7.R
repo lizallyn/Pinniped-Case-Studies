@@ -121,30 +121,31 @@ for(j in 1:years) {
     }
     
     # calculate salmon consumption 
-    seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
-    mt_seals_at_gauntlet <- length(seals_at_gauntlet) * mean_seal_mt
-    mt_salmon_at_gauntlet <- gauntlet_salmon[t, j] * mean_salmon_mt
-    mt_salmon_consumed <- 
-      eat_some_fish_bm(mt_gauntlet_salmon = mt_salmon_at_gauntlet, 
-                    mt_seals_at_gauntlet = mt_seals_at_gauntlet, 
-                    handling_time = seal_handling_time, 
-                    satiation = seal_satiation, pd = pd, Y = Y)
-    predation_rate <- mt_salmon_consumed/mt_salmon_at_gauntlet
-    
-    # calculate salmon inst mortality
-    inst_predation <- predation_rate / (predation_rate + catch_rate + escape_rate) *
-      (1 - exp(-predation_rate - catch_rate - escape_rate))
-    inst_catch_rate <- catch_rate / (predation_rate + catch_rate + escape_rate) *
-      (1 - exp(-predation_rate - catch_rate - escape_rate))
-    inst_escape <- escape_rate / (predation_rate + catch_rate + escape_rate) *
-      (1 - exp(-predation_rate - catch_rate - escape_rate))
-    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] * exp(-inst_predation - inst_catch_rate - inst_escape)
-    
-    # assign consumed salmon to seals at the gauntlet
-    if(mt_salmon_consumed>0) {
-      salmon_consumed[seals_at_gauntlet, t, j] <- (inst_predation * mt_salmon_at_gauntlet)/
-        mean_salmon_mt/length(seals_at_gauntlet)
-    }
+    ## this is all hopefully getting the Tim makeover?
+      seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
+      mt_seals_at_gauntlet <- length(seals_at_gauntlet) * mean_seal_mt
+      mt_salmon_at_gauntlet <- gauntlet_salmon[t, j] * mean_salmon_mt
+      mt_salmon_consumed <- 
+        eat_some_fish_bm(mt_gauntlet_salmon = mt_salmon_at_gauntlet, 
+                      mt_seals_at_gauntlet = mt_seals_at_gauntlet, 
+                      handling_time = seal_handling_time, 
+                      satiation = seal_satiation, pd = pd, Y = Y)
+      predation_rate <- mt_salmon_consumed/mt_salmon_at_gauntlet
+      
+      # calculate salmon inst mortality
+      inst_predation <- predation_rate / (predation_rate + catch_rate + escape_rate) *
+        (1 - exp(-predation_rate - catch_rate - escape_rate))
+      inst_catch_rate <- catch_rate / (predation_rate + catch_rate + escape_rate) *
+        (1 - exp(-predation_rate - catch_rate - escape_rate))
+      inst_escape <- escape_rate / (predation_rate + catch_rate + escape_rate) *
+        (1 - exp(-predation_rate - catch_rate - escape_rate))
+      gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] * exp(-inst_predation - inst_catch_rate - inst_escape)
+      
+      # assign consumed salmon to seals at the gauntlet
+      if(mt_salmon_consumed>0) {
+        salmon_consumed[seals_at_gauntlet, t, j] <- (inst_predation * mt_salmon_at_gauntlet)/
+          mean_salmon_mt/length(seals_at_gauntlet)
+      }
     
     # seal harvest
     H[t, j] <- 0
@@ -156,16 +157,14 @@ for(j in 1:years) {
       C[seal, t, j] <- salmon_consumed[seal, t, j] - w
       
       # calculate d_x and d_y
-
-        d_x <- learn_x(food = C[seal, t, j], x_t = x[seal, t, j], 
-                       forage_loc = seal_forage_loc[seal, t, j],  step = step, 
-                       xmin = xmin, xmax = xmax, decay = decay)
-        d_y <- learn_y(hunting = H[t, j], y_t = y[seal, t, j], 
-                       seal_forage_loc[seal, t, j], step = step, 
-                       ymin = ymin, ymax = ymax, decay = decay)
+      d_x <- learn_x(food = C[seal, t, j], x_t = x[seal, t, j], 
+                     forage_loc = seal_forage_loc[seal, t, j],  step = step, 
+                     xmin = xmin, xmax = xmax, decay = decay)
+      d_y <- learn_y(hunting = H[t, j], y_t = y[seal, t, j], 
+                     seal_forage_loc[seal, t, j], step = step, 
+                     ymin = ymin, ymax = ymax, decay = decay)
 
       # update x and y and P_x and P_y
-      
       x[seal, t+1, j] <- x[seal, t, j] + d_x
       P_x[seal, t+1, j] <- x[seal, t+1, j] * slope_x + intercept_x
       
