@@ -28,13 +28,10 @@ seal_start_loc <- 0
 # seal consumption parameters
 mean_seal_mt <- 0.08
 mean_salmon_mt <- 0.006
-seal_handling_time <- 0.05
-seal_satiation <- 0.006
+seal_handling_time <- 0.9
+seal_satiation <- 0.6 # this is currently like 100 fish/seal/day which is insane
 pd <- -0.5
-Y <- 0.001
-
-# salmon parameters
-escape_rate <- 0.3
+Y <- 0.006
 
 # seal learning parameters
 w <- 1
@@ -54,6 +51,9 @@ buffer_Pymin <- 0.1
 num_seals_2_copy <- 4
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
+
+# salmon parameters
+escape_rate <- 0.3
 
 # fishing parameters
 catch_rate <- 0.3
