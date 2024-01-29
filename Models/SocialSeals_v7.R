@@ -8,10 +8,11 @@ library(ggplot2)
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_3.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_bm.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
-# source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_influenced.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_x.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_y.R")
 
 ## Set Parameters
 
@@ -20,7 +21,7 @@ years <- 1
 days <- 365
 
 # seal parameters
-num_seals <- 100
+num_seals <- 10
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
@@ -121,10 +122,10 @@ for(j in 1:years) {
     
     # calculate salmon consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
-    mt_seals_at_gauntlet <- mean_seal_mt * length(seals_at_gauntlet)
+    mt_seals_at_gauntlet <- length(seals_at_gauntlet) * mean_seal_mt
     mt_salmon_at_gauntlet <- gauntlet_salmon[t, j] * mean_salmon_mt
     mt_salmon_consumed <- 
-      eat_some_fish(mt_gauntlet_salmon = mt_salmon_at_gauntlet, 
+      eat_some_fish_bm(mt_gauntlet_salmon = mt_salmon_at_gauntlet, 
                     mt_seals_at_gauntlet = mt_seals_at_gauntlet, 
                     handling_time = seal_handling_time, 
                     satiation = seal_satiation, pd = pd, Y = Y)
