@@ -9,7 +9,6 @@ library(ggplot2)
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
-# source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/eat_some_fish_bm.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_x.R")
