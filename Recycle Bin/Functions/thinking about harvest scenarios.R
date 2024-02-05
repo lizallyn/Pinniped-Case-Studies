@@ -3,16 +3,12 @@
 
 ## Exclusion Zone
 
-if(gauntlet_salmon[t, j] > 0) {
-  H[t, j] <- length(seals_at_gauntlet) * zone_efficiency_rate
-} else {H[t, j] <- 0}
+H[t, j] <- length(seals_at_gauntlet) * zone_efficiency_rate
 
 
 ## Fishers Take as Observed
 
 # if like consumption:
-
-
 Hmax <- 2
 handling_time <- 0.05
 num_gillnetters <- 10
