@@ -11,8 +11,7 @@ if(gauntlet_salmon[t, j] > 0) {
 ## Fishers Take as Observed
 
 # if like consumption:
-H[t, j] <- (Hmax * handling_time * num_gillnetters^(1+gamma) * num_gauntlet_seals)/
-  (Hmax + handling_time * num_gauntlet_seals * num_gillnetters^gamma + Y)
+
 
 Hmax <- 2
 handling_time <- 0.05
@@ -21,5 +20,8 @@ gamma <- 0
 num_gauntlet_seals <- 20
 Y <- 0
 
-(Hmax * handling_time * num_gillnetters^(1+gamma) * num_gauntlet_seals)/
+H <- (Hmax * handling_time * num_gillnetters^(1+gamma) * num_gauntlet_seals)/
   (Hmax + handling_time * num_gauntlet_seals * num_gillnetters^gamma + Y)
+H
+seals_harvested <- sample(seals_at_gauntlet, H)
+seal_prob_gauntlet[seals_harvested, t, j] <- NA
