@@ -6,6 +6,8 @@ get_killed <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, hand
   } else if(day_plan == 2) {
     harvested <- (Hmax * handling_time * num_fishers^(1+gamma) * num_gauntlet_seals)/
       (Hmax + handling_time * num_gauntlet_seals * num_fishers^gamma + Y)
-  }
+  } else {harvested <- 0}
+  return(harvested)
 }
-  
+
+# plot(get_killed(2, 10, 0.8, 1, 0.05, 1:10, 0, 0))
