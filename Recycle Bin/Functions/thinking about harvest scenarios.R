@@ -19,5 +19,5 @@ Y <- 0
 H <- (Hmax * handling_time * num_gillnetters^(1+gamma) * num_gauntlet_seals)/
   (Hmax + handling_time * num_gauntlet_seals * num_gillnetters^gamma + Y)
 H
-seals_harvested <- sample(seals_at_gauntlet, H)
+seals_harvested <- sample(seals_at_gauntlet, 0)
 seal_prob_gauntlet[seals_harvested, t, j] <- NA
