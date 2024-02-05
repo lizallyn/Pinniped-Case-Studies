@@ -38,6 +38,6 @@ gamma <- 0
 # }
 
 # example call - returns an array that has # Salmon remaining, the total number of salmon eaten, the number of salmon caught, and the number of salmon the escaped the gauntlet
-day_result <- runge_kutta(Cmax, Nseal, alpha, Ns, gamma, Y, F, M, E, deltat = 0.01)
+day_result <- runge_kutta(Cmax, Nseal, alpha, Ns, gamma, Y, F, M, E, deltat = 0.02)
 day_result
 
