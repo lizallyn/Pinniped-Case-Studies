@@ -15,6 +15,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_y.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_dXdt.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/runge_kutta.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_killed.R")
 
 ## Set Parameters
 
@@ -60,7 +61,10 @@ natural_mort <- 0.0005
 catch_rate <- 0.3
 
 # hunting parameters
-
+zone_efficiency <- 0.8
+processing_time <- 0.05
+gamma_H <- 0
+Y_H <- 0
 
 ## Set Up Variables
 salmon_escape <- array(dim = c(days, years),
@@ -86,6 +90,14 @@ dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days,
 H <- array(dim = c(days, years),
            data = rep(NA, days * years))
 dimnames(H) <- list(Day = 1:days, Year = 1:years)
+
+# harvest matrix
+harvest_plan <- array(dim = c(days, years),
+                      data = rep(0, days * years))
+dimnames(harvest_plan) <- list(Day = 1:days, Year = 1:years)
+fishers <- array(dim = c(days, years),
+                        data = rep(0, days * years))
+dimnames(fishers) <- list(Day = 1:days, Year = 1:years)
 
 # Variables for x y learning bit
 x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
@@ -131,7 +143,13 @@ for(j in 1:years) {
     gauntlet_salmon[t+1, j] <- day_result[1]
     
     # seal harvest
-    H[t, j] <- 0
+    H[t, j] <- get_killed(harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
+                          zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
+                          processing = processing_time, num_fishers = fishers[t, j], 
+                          gamma = gamma_H, Y = Y_H)
+    if(H[t, j] > 0){
+      seal_prob_gauntlet[sample(seals_at_gauntlet, H[t, j]), t+1, j] <- NA
+    }
     
     # calculate x, y and prob_gauntlet for next time step
     ## This could all become some functions
