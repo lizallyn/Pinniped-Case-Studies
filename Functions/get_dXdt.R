@@ -8,3 +8,4 @@ get_dXdt <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F, M, E) {
   dEdt <- E * Ns
   return(c(dNdt, dCdt, dCatchdt, dEdt))
 }
+
