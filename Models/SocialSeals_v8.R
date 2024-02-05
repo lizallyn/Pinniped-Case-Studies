@@ -29,12 +29,10 @@ seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
 # seal consumption parameters
-mean_seal_mt <- 0.08
-mean_salmon_mt <- 0.006
-seal_handling_time <- 0.9
-seal_satiation <- 0.6 # this is currently like 100 fish/seal/day which is insane
-pd <- -0.5
-Y <- 0.006
+alpha <- 1
+Cmax <- 5
+gamma <- 0
+Y <- 0
 
 # seal learning parameters
 w <- 1
@@ -57,6 +55,7 @@ beta <- 15 # spread of the beta dist
 
 # salmon parameters
 escape_rate <- 0.3
+natural_mort <- 0.0005
 
 # fishing parameters
 catch_rate <- 0.3
@@ -124,31 +123,13 @@ for(j in 1:years) {
     }
     
     # calculate salmon consumption 
-    ## this is all hopefully getting the Tim makeover?
     seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
-    mt_seals_at_gauntlet <- length(seals_at_gauntlet) * mean_seal_mt
-    mt_salmon_at_gauntlet <- gauntlet_salmon[t, j] * mean_salmon_mt
-    mt_salmon_consumed <- 
-      eat_some_fish_bm(mt_gauntlet_salmon = mt_salmon_at_gauntlet, 
-                       mt_seals_at_gauntlet = mt_seals_at_gauntlet, 
-                       handling_time = seal_handling_time, 
-                       satiation = seal_satiation, pd = pd, Y = Y)
-    predation_rate <- mt_salmon_consumed/mt_salmon_at_gauntlet
-    
-    # calculate salmon inst mortality
-    inst_predation <- predation_rate / (predation_rate + catch_rate + escape_rate) *
-      (1 - exp(-predation_rate - catch_rate - escape_rate))
-    inst_catch_rate <- catch_rate / (predation_rate + catch_rate + escape_rate) *
-      (1 - exp(-predation_rate - catch_rate - escape_rate))
-    inst_escape <- escape_rate / (predation_rate + catch_rate + escape_rate) *
-      (1 - exp(-predation_rate - catch_rate - escape_rate))
-    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] * exp(-inst_predation - inst_catch_rate - inst_escape)
-    
-    # assign consumed salmon to seals at the gauntlet
-    if(mt_salmon_consumed>0) {
-      salmon_consumed[seals_at_gauntlet, t, j] <- (inst_predation * mt_salmon_at_gauntlet)/
-        mean_salmon_mt/length(seals_at_gauntlet)
-    }
+    day_result <- runge_kutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                              alpha = alpha, Ns = gauntlet_salmon[t, j], 
+                              gamma = gamma, Y = Y, E = escape_rate, 
+                              F_catch = catch_rate, M = natural_mort, deltat = 1)
+    salmon_consumed[seals_at_gauntlet, t, j] <- day_result[2]/length(seals_at_gauntlet)
+    gauntlet_salmon[t+1, j] <- day_result[1]
     
     # seal harvest
     H[t, j] <- 0
