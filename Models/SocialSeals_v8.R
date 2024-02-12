@@ -8,6 +8,7 @@
 library(ggplot2)
 
 ## Load Function Files
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/make_array.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
@@ -67,48 +68,31 @@ gamma_H <- 0
 Y_H <- 0
 
 ## Set Up Variables
-salmon_escape <- array(dim = c(days, years),
-                       data = rep(0, days * years))
-dimnames(salmon_escape) <- list(Day = 1:days, Year = 1:years)
-gauntlet_salmon <- array(dim = c(days, years),
-                         data = rep(0, days * years))
-dimnames(gauntlet_salmon) <- list(Day = 1:days, Year = 1:years)
-salmon_consumed <- array(dim = c(num_seals, days, years), 
-                         data = rep(0, num_seals * days * years))
-dimnames(salmon_consumed) <- list(Seal = 1:num_seals, Day = 1:days, 
-                                  Year = 1:years)
-seal_prob_gauntlet <- array(dim = c(num_seals, days, years), 
-                            data = rep(seal_initial_prob_gauntlet, 
-                                       num_seals * days * years))
-dimnames(seal_prob_gauntlet) <- list(Seal = 1:num_seals, Day = 1:days, 
-                                     Year = 1:years)
-seal_forage_loc <- array(dim = c(num_seals, days, years), 
-                         data = rep(seal_start_loc, 
-                                    num_seals * days * years))
-dimnames(seal_forage_loc) <- list(Seal = 1:num_seals, Day = 1:days, 
-                                  Year = 1:years)
-H <- array(dim = c(days, years),
-           data = rep(NA, days * years))
-dimnames(H) <- list(Day = 1:days, Year = 1:years)
+salmon_escape <- make_array(days, years, start.val = 0, namex = "Day", namey = "Year")
+gauntlet_salmon <- make_array(days, years, start.val = 0, namex = "Day", namey = "Year")
+H <- make_array(days, years, start.val = NA, namex = "Day", namey = "Year")
+
+salmon_consumed <- make_array(num_seals, days, years, start.val = 0, 
+                              namex = "Seal", namey = "Day", namez = "Year")
+seal_prob_gauntlet <- make_array(num_seals, days, years, start.val = seal_initial_prob_gauntlet, 
+                                 namex = "Seal", namey = "Day", namez = "Year")
+seal_forage_loc <- make_array(num_seals, days, years, start.val = seal_start_loc, 
+                              namex = "Seal", namey = "Day", namez = "Year")
 
 # harvest matrix
-harvest_plan <- array(dim = c(days, years),
-                      data = rep(0, days * years))
-dimnames(harvest_plan) <- list(Day = 1:days, Year = 1:years)
-fishers <- array(dim = c(days, years),
-                        data = rep(0, days * years))
-dimnames(fishers) <- list(Day = 1:days, Year = 1:years)
+harvest_plan <- make_array(days, years, start.val = 0, namex = "Day", namey = "Year")
+fishers <- make_array(days, years, start.val = 0, namex = "Day", namey = "Year")
 
 # Variables for x y learning bit
-x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
-y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
-C <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
-B <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
-P_x <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
-P_y <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+x <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+y <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+C <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+B <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+P_x <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+P_y <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
 
 # for social learning
-P_social <- array(dim = c(num_seals, days, years), data = rep(0, num_seals * days * years))
+P_social <- make_array(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
 
 
 #### Run time loop ####
@@ -143,7 +127,7 @@ for(j in 1:years) {
     gauntlet_salmon[t+1, j] <- day_result[1]
     
     # seal harvest
-    H[t, j] <- get_killed(harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
+    H[t, j] <- get_killed(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
                           zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
                           processing = processing_time, num_fishers = fishers[t, j], 
                           gamma = gamma_H, Y = Y_H)
@@ -221,3 +205,4 @@ colnames(Px_plot) <- c("Seal", "Day", "P_x")
 plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
   geom_point()
 plot_Px
+
