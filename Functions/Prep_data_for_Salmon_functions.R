@@ -21,4 +21,5 @@ Daily_fish$AvgCoho[is.nan(Daily_fish$AvgCoho)] <- 0
 Daily_fish$AvgChum <- 0
 Daily_fish$AvgPink <- 0
 Daily_fish$AvgSteelhead <- 0
+Daily_fish$total <- rowSums(Daily_fish[,-1])
 
