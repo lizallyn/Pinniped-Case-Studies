@@ -1,6 +1,6 @@
 # function to create arrays for loop variables
 
-make_array <- function(x, y, z=NA, start.val, namex, namey, namez=NA) {
+makeArray <- function(x, y, z=NA, start.val, namex, namey, namez=NA) {
   if(is.na(z)){
     new.array <- array(dim = c(x, y), 
                        data = rep(start.val, times = x * y),
