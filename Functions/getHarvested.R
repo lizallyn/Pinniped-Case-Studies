@@ -1,6 +1,6 @@
 # harvest according to a harvest plan matrix (?)
 
-get_killed <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, num_fishers, gamma, Y) {
+getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, num_fishers, gamma, Y) {
   if(day_plan == 1) {
     harvested <- num_gauntlet_seals * zone_efficiency
   } else if(day_plan == 2) {
