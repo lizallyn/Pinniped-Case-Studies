@@ -11,7 +11,7 @@ SalmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 
   Chum_day <- chum + (data %>% slice(day) %>% pull(AvgChum))
   Pink_day <- pink + (data %>% slice(day) %>% pull(AvgPink))
   Steelhead_day <- pink + (data %>% slice(day) %>% pull(AvgSteelhead))
-  return(c(Chinook = Chinook_day,
+  return(data.frame(Chinook = Chinook_day,
            Sockeye = Sockeye_day,
            Coho = Coho_day,
            Chum = Chum_day,
