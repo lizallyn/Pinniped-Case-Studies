@@ -101,14 +101,11 @@ for(j in 1:years) {
   for(t in 1:(days-1)) {
     
     # salmon arrive at the gauntlet
-    chinook_arriving <- SalmonSpeciesArrive(day = t)[1]
-    Sockeye_arriving <- SalmonSpeciesArrive(day = t)[2]
-    coho_arriving <- SalmonSpeciesArrive(day = t)[3]
-    
-    gauntlet_chinook[t, j] <- gauntlet_chinook[t, j] <- 
-    
-    salmon_arriving <- sum(c(chinook_arriving, Sockeye_arriving, coho_arriving))
-    gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] + salmon_arriving
+    gauntlet_chinook[t, j] <- SalmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Chinook)
+    gauntlet_Sockeye[t, j] <- SalmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Sockeye)
+    gauntlet_Coho[t, j] <- SalmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Coho)
+    # salmon_arriving <- sum(c(chinook_arriving, Sockeye_arriving, coho_arriving))
+    # gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] + salmon_arriving
     
     # decide where each seal goes that day
     for(seal in 1:num_seals) {
