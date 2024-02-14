@@ -13,13 +13,13 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/makeArray.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmonSpeciesUpdate.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decideForagingDestination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_x.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_y.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learnX.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learnY.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_dXdt.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/runge_kutta.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_killed.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/rungeKutta.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/getHarvested.R")
 
 ## Set Parameters
 
@@ -107,12 +107,11 @@ for(j in 1:years) {
     gauntlet_chinook[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Chinook)
     gauntlet_Sockeye[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Sockeye)
     gauntlet_Coho[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Coho)
-    # salmon_arriving <- sum(c(chinook_arriving, Sockeye_arriving, coho_arriving))
-    # gauntlet_salmon[t, j] <- gauntlet_salmon[t, j] + salmon_arriving
+    gauntlet_salmon[t, j] <- sum(c(gauntlet_chinook[t, j], gauntlet_sockeye[t, j], gauntlet_coho[t, j]))
     
     # decide where each seal goes that day
     for(seal in 1:num_seals) {
-      seal_forage_loc[seal,t,j] <- decide_foraging_destination(seal_prob_gauntlet[seal,t,j])
+      seal_forage_loc[seal,t,j] <- decideForagingDestination(seal_prob_gauntlet[seal,t,j])
     }
     
     # round of copying
@@ -125,15 +124,16 @@ for(j in 1:years) {
     
     # calculate salmon consumption 
     seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1) # think about escape rate here
-    day_result <- runge_kutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+    day_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                               alpha = alpha, Ns = gauntlet_salmon[t, j], 
                               gamma = gamma, Y = Y, E = escape_rate, 
                               F_catch = catch_rate, M = natural_mort, deltat = 1)
+    chinook_rates <- day_result * (gauntlet_chinook[t, j]/gauntlet_salmon[t, j])
     salmon_consumed[seals_at_gauntlet, t, j] <- day_result[2]/length(seals_at_gauntlet)
     gauntlet_salmon[t+1, j] <- day_result[1]
     
     # seal harvest
-    H[t, j] <- get_killed(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
+    H[t, j] <- getHarvested(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
                           zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
                           processing = processing_time, num_fishers = fishers[t, j], 
                           gamma = gamma_H, Y = Y_H)
