@@ -1,9 +1,5 @@
 # function that returns the arriving salmon of each species for a given day of the year
 
-library(tidyr)
-
-source()
-
 SalmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 0, pink = 0, steelhead = 0, data) {
   Chinook_day <- chinook + (data %>% slice(day) %>% pull(AvgChinook))
   Sockeye_day <- sockeye + (data %>% slice(day) %>% pull(AvgSockeye))
@@ -18,4 +14,3 @@ SalmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 
            Pink = Pink_day,
            Steelhead = Steelhead_day))
 }
-SalmonSpeciesUpdate(250, data = Daily_fish)
