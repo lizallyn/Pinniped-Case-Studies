@@ -7,9 +7,12 @@
 ## Load Packages and Data
 library(ggplot2)
 
+## Load Data Files
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Salmon_functions.R")
+
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/make_array.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmon_arrive.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/SalmonSpeciesUpdate.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decide_foraging_destination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learn_x.R")
