@@ -73,6 +73,9 @@ Y_H <- 0
 ## Set Up Variables
 salmon_escape <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
 gauntlet_salmon <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+gauntlet_chinook <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+gauntlet_sockeye <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+gauntlet_coho <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
 H <- makeArray(days, years, start.val = NA, namex = "Day", namey = "Year")
 
 salmon_consumed <- makeArray(num_seals, days, years, start.val = 0, 
@@ -105,8 +108,8 @@ for(j in 1:years) {
     
     # salmon arrive at the gauntlet
     gauntlet_chinook[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Chinook)
-    gauntlet_Sockeye[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Sockeye)
-    gauntlet_Coho[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Coho)
+    gauntlet_sockeye[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Sockeye)
+    gauntlet_coho[t, j] <- salmonSpeciesUpdate(day = t, data = Daily_fish) %>% pull(Coho)
     gauntlet_salmon[t, j] <- sum(c(gauntlet_chinook[t, j], gauntlet_sockeye[t, j], gauntlet_coho[t, j]))
     
     # decide where each seal goes that day

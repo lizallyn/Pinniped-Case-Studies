@@ -1,6 +1,6 @@
 # function for calculating d_x
 
-learn_x <- function(food, x_t, forage_loc, step, xmin, xmax, decay) {
+learnX <- function(food, x_t, forage_loc, step, xmin, xmax, decay) {
   
   if(forage_loc == 0){
     if(x_t == 0){d_x <- 0} else {

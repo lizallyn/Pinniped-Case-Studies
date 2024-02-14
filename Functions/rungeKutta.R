@@ -1,7 +1,7 @@
 # apply 4th order runge-kutta to integrate over time period deltat
 # From Tim Feb 2024
 
-runge_kutta <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F_catch, M, E, deltat = 1){
+rungeKutta <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F_catch, M, E, deltat = 1){
   X <- c(Ns, 0, 0, 0)
   K1s <- get_dXdt(Cmax, Nseal, alpha, Ns = X[1], gamma, Y, F_catch, M, E)
   midX <- X + deltat* 0.5 * K1s
