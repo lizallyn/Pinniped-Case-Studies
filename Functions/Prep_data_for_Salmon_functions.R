@@ -2,12 +2,6 @@
 
 fish.long <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Data/Ballard%20Locks%20Fish%20Counts/Ballard%20Locks%20Summarize%20all%20species%20all%20years.csv")
 
-# fish.long$Year <- as.factor(fish$Year)
-# fish.long$Residence[fish$Species == "Sockeye"] <- 3
-# fish.long$Residence[fish$Species == "Chinook"] <- 30
-# fish.long$Residence[fish$Species == "Coho"] <- 10
-# fish.long$Escape.Rate <- 1/fish$Residence
-
 fish <- spread(fish.long, Species, Count)
 
 Daily_fish <- fish %>% 
