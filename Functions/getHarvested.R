@@ -1,6 +1,7 @@
 # harvest according to a harvest plan matrix (?)
 
-getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, num_fishers, gamma, Y) {
+getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, min_fishers, max_fishers, gamma, Y) {
+  num_fishers <- sample(min_fishers:max_fishers, 1)
   if(day_plan == "Zone") {
     harvested <- num_gauntlet_seals * zone_efficiency
   } else if(day_plan == "Boat") {

@@ -9,9 +9,11 @@ library(ggplot2)
 
 ## Load Data Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Salmon_functions.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Harvest_functions.R")
 
 ## Load Function Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/makeArray.R")
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/createHarvestPlan.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmonSpeciesUpdate.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decideForagingDestination.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
@@ -87,8 +89,9 @@ seal_forage_loc <- makeArray(num_seals, days, years, start.val = seal_start_loc,
 
 # harvest matrix
 salmon_days <- which(Daily_fish$total > 0)
-harvest_plan <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-fishers <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
+min_fishers <- 13
+max_fishers <- 25
 
 # Variables for x y learning bit
 x <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
@@ -145,7 +148,7 @@ for(j in 1:years) {
     # seal harvest
     H[t, j] <- getHarvested(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
                           zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
-                          processing = processing_time, num_fishers = fishers[t, j], 
+                          processing = processing_time, min_fishers = min_fishers, max_fishers = max_fishers, 
                           gamma = gamma_H, Y = Y_H)
     if(H[t, j] > 0){
       seal_prob_gauntlet[sample(seals_at_gauntlet, H[t, j]), t+1, j] <- NA
