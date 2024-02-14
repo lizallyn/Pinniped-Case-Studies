@@ -1,8 +1,6 @@
 # Create some harvest_plan scenarios
 
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Harvest_functions.R")
 
-### No harvest
 createHarvestPlan <- function(scenario = c("None", "Zone", "Boat"), days, years, salmon_days = NA, boat_days = NA) {
   harvest_plan <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
   if(scenario == "None") {
