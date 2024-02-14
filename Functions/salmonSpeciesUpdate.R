@@ -15,5 +15,3 @@ salmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 
            Steelhead = Steelhead_day))
 }
 
-
-hello
