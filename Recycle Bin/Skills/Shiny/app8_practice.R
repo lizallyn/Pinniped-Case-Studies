@@ -3,16 +3,17 @@
 library(shiny)
 library(vroom)
 library(tidyverse)
+library(dplyr)
 
 dir.create("neiss")
 #> Warning in dir.create("neiss"): 'neiss' already exists
-download <- function(name) {
-  url <- "https://raw.githubusercontent.com/hadley/mastering-shiny/main/neiss/"
-  download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
-}
-download("injuries.tsv.gz")
-download("population.tsv")
-download("products.tsv")
+# download <- function(name) {
+#   url <- "https://raw.githubusercontent.com/hadley/mastering-shiny/main/neiss/"
+#   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
+# }
+# download("injuries.tsv.gz")
+# download("population.tsv")
+# download("products.tsv")
 
 injuries <- read_tsv("https://raw.githubusercontent.com/hadley/mastering-shiny/main/neiss/injuries.tsv.gz")
 head(injuries)
@@ -47,11 +48,13 @@ ui <- fluidPage(
     column(12, plotOutput("age_sex"))
   ),
   fluidRow(
-    column(2, actionButton("story", "Tell me a story")),
-    column(10, textOutput("narrative"))
+    column(2, actionButton("story_last", "Last story")),
+    column(8, textOutput("narrative")),
+    column(2, actionButton("story_next", "Next story"))
   )
 )
-iteration <- 0
+
+
 server <- function(input, output, session) {
   selected <- reactive(injuries %>% filter(prod_code == input$code))
 
@@ -80,12 +83,18 @@ server <- function(input, output, session) {
     }
   }, res = 96)
   
+  values <- reactiveValues()
+  values$count <- 1
+  
   narrative_sample <- eventReactive(
-    list(input$story, selected()),
-    selected() %>% pull(narrative) %>% sample(1)
+    list(input$story_next, selected()), {
+      values$count <- values$count + 1
+      selected() %>% slice(values$count) %>% pull(narrative)
+    }
   )
   output$narrative <- renderText(narrative_sample())
   
 }
 
 shinyApp(ui, server)
+
