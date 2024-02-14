@@ -8,9 +8,9 @@ createHarvestPlan <- function(scenario = c("None", "Zone", "Boat"), days, years,
   if(scenario == "None") {
     harvest_plan <- harvest_plan
   } else if(scenario == "Zone") {
-    harvest_plan[salmon_days,] <- zone_rate
+    harvest_plan[salmon_days,] <- scenario
   } else if(scenario == "Boat") {
-    harvest_plan[boat_days,] <- boat_rate
+    harvest_plan[boat_days,] <- scenario
   } else {
     return("Not a valid scenario option. Try: None, Zone, Boat.")
   }
