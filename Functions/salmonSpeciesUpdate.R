@@ -23,6 +23,5 @@ salmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 
              Pink = c(Pink_day, Pink_prop),
              Steelhead = c(Steelhead_day, Steelhead_prop), row.names = c("count", "prop"))
  )
-  
 }
 
