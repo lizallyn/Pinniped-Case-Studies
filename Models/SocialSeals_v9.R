@@ -151,6 +151,9 @@ for(j in 1:years) {
     salmon_consumed[seals_at_gauntlet, t, j] <- day_result[2]/length(seals_at_gauntlet)
     # escape salmon
     salmon_escape[t, j] <- day_result[4] * gauntlet_salmon[t, j]
+    escape_chinook[t+1, j] <- escape_chinook[t, j] + day_result[4] * daily_update %>% slice(2) %>%  pull(Chinook)
+    escape_sockeye[t+1, j] <- escape_sockeye[t, j] + day_result[4] * daily_update %>% slice(2) %>%  pull(Sockeye)
+    escape_coho[t+1, j] <- escape_coho[t, j] + day_result[4] * daily_update %>% slice(2) %>%  pull(Coho)
     
     # seal harvest
     H[t, j] <- getHarvested(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
@@ -232,3 +235,20 @@ plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) +
   geom_point()
 plot_Px
 
+y_plot <- melt(data = y[,,1], "Seal")
+colnames(y_plot) <- c("Seal", "Day", "y")
+plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
+  geom_point()
+plot_y
+
+Py_plot <- melt(data = P_y[,,1], "Seal")
+colnames(Py_plot) <- c("Seal", "Day", "P_y")
+plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) + 
+  geom_point()
+plot_Py
+
+# each salmon species escaping
+
+
+escape_plot <- ggplot() +
+  geom_point(data = escape_chinook, aes(x = da))
