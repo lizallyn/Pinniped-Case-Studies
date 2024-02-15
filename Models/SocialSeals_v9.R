@@ -71,13 +71,22 @@ zone_efficiency <- 0.8
 processing_time <- 0.05
 gamma_H <- 0
 Y_H <- 0
+min_fishers <- 13
+max_fishers <- 25
+salmon_days <- which(Daily_fish$total > 0)
+harvest_max_perboat = 2
 
 ## Set Up Variables
 salmon_escape <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+escape_chinook <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+escape_sockeye <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+escape_coho <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+
 gauntlet_salmon <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
 gauntlet_chinook <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
 gauntlet_sockeye <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
 gauntlet_coho <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+
 H <- makeArray(days, years, start.val = NA, namex = "Day", namey = "Year")
 
 salmon_consumed <- makeArray(num_seals, days, years, start.val = 0, 
@@ -88,10 +97,8 @@ seal_forage_loc <- makeArray(num_seals, days, years, start.val = seal_start_loc,
                               namex = "Seal", namey = "Day", namez = "Year")
 
 # harvest matrix
-salmon_days <- which(Daily_fish$total > 0)
 harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
-min_fishers <- 13
-max_fishers <- 25
+
 
 # Variables for x y learning bit
 x <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
@@ -139,7 +146,7 @@ for(j in 1:years) {
     # propogate to abundance in next time step for each species
     gauntlet_chinook[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Chinook)
     gauntlet_sockeye[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Sockeye)
-    gauntlet_coho[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(coho)
+    gauntlet_coho[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Coho)
     # assign consumed salmon to seals at gauntlet
     salmon_consumed[seals_at_gauntlet, t, j] <- day_result[2]/length(seals_at_gauntlet)
     # escape salmon
