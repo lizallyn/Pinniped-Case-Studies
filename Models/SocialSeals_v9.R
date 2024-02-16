@@ -66,7 +66,7 @@ coho_escape_rate <- 0.1
 natural_mort <- 0.0005
 
 # fishing parameters
-catch_rate <- 0.3
+coho_catch_rate <- 0.3
 
 # hunting parameters
 zone_efficiency <- 0.8
@@ -82,10 +82,14 @@ harvest_max_perboat = 2
 twoDzeroes <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
 threeDzeroes <- makeArray(num_seals, days, years, start.val = 0, 
                           namex = "Seal", namey = "Day", namez = "Year")
-salmon_escape <- twoDzeroes
+
 escape_chinook <- twoDzeroes
 escape_sockeye <- twoDzeroes
 escape_coho <- twoDzeroes
+coho_catch_rate <- twoDzeroes
+coho_catch_rate[boat_days,] <- 0.3
+chinook_catch_rate <- twoDzeroes
+sockeye_catch_rate <- twoDzeroes
 
 gauntlet_salmon <- twoDzeroes
 gauntlet_chinook <- twoDzeroes
@@ -143,15 +147,15 @@ for(j in 1:years) {
     sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                  alpha = alpha, Ns = gauntlet_sockeye[t, j], 
                                  gamma = gamma, Y = Y, E = sockeye_escape_rate, 
-                                 F_catch = catch_rate, M = natural_mort, deltat = 1)
+                                 F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
     chinook_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                  alpha = alpha, Ns = gauntlet_chinook[t, j], 
                                  gamma = gamma, Y = Y, E = chinook_escape_rate, 
-                                 F_catch = catch_rate, M = natural_mort, deltat = 1)
+                                 F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
     coho_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                  alpha = alpha, Ns = gauntlet_coho[t, j], 
                                  gamma = gamma, Y = Y, E = coho_escape_rate, 
-                                 F_catch = catch_rate, M = natural_mort, deltat = 1)
+                                 F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
     # propogate to abundance in next time step for each species
     gauntlet_chinook[t+1, j] <- chinook_result[1]
     gauntlet_sockeye[t+1, j] <- sockeye_result[1]
