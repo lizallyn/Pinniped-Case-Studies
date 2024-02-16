@@ -2,7 +2,9 @@
 
 learnY <- function(hunting, y_t, forage_loc, step, ymin, ymax, decay) {
   if(forage_loc == 0){
-    d_y <- decay
+    if(y_t == 0) {
+      d_y <- 0
+    } else {d_y <- decay}
   } else {
     if(hunting == 0){
       d_y <- step*(ymax - y_t)
