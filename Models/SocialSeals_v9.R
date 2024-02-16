@@ -60,7 +60,9 @@ mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
 # salmon parameters
-escape_rate <- 0.3
+sockeye_escape_rate <- 0.3
+chinook_escape_rate <- 0.03
+coho_escape_rate <- 0.1
 natural_mort <- 0.0005
 
 # fishing parameters
@@ -248,7 +250,6 @@ plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) +
 plot_Py
 
 # each salmon species escaping
-
 
 escape_plot <- ggplot() +
   geom_point(data = escape_chinook, aes(x = da))
