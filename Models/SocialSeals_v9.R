@@ -83,6 +83,7 @@ twoDzeroes <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year
 threeDzeroes <- makeArray(num_seals, days, years, start.val = 0, 
                           namex = "Seal", namey = "Day", namez = "Year")
 
+# salmon rates and accounting
 escape_chinook <- twoDzeroes
 escape_sockeye <- twoDzeroes
 escape_coho <- twoDzeroes
@@ -90,14 +91,13 @@ coho_catch_rate <- twoDzeroes
 coho_catch_rate[boat_days,] <- 0.3
 chinook_catch_rate <- twoDzeroes
 sockeye_catch_rate <- twoDzeroes
-
 gauntlet_salmon <- twoDzeroes
 gauntlet_chinook <- twoDzeroes
 gauntlet_sockeye <- twoDzeroes
 gauntlet_coho <- twoDzeroes
 
+# seals
 H <- twoDzeroes
-
 salmon_consumed <- threeDzeroes
 seal_prob_gauntlet <- threeDzeroes
 seal_forage_loc <- threeDzeroes
@@ -115,7 +115,6 @@ P_y <- threeDzeroes
 
 # for social learning
 P_social <- threeDzeroes
-
 
 #### Run time loop ####
 for(j in 1:years) {
@@ -156,16 +155,20 @@ for(j in 1:years) {
                                  alpha = alpha, Ns = gauntlet_coho[t, j], 
                                  gamma = gamma, Y = Y, E = coho_escape_rate, 
                                  F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
+    if(any(c(sockeye_result, chinook_result, coho_result)) < 0) {
+      
+    }
+    
     # propogate to abundance in next time step for each species
-    gauntlet_chinook[t+1, j] <- chinook_result[1]
-    gauntlet_sockeye[t+1, j] <- sockeye_result[1]
-    gauntlet_coho[t+1, j] <- coho_result[1]
+    gauntlet_chinook[t+1, j] <- chinook_result["Ns"]
+    gauntlet_sockeye[t+1, j] <- sockeye_result["Ns"]
+    gauntlet_coho[t+1, j] <- coho_result["Ns"]
     # assign consumed salmon to seals at gauntlet
-    salmon_consumed[seals_at_gauntlet, t, j] <- sum(c(sockeye_result[3], chinook_result[3], coho_result[3]))/length(seals_at_gauntlet)
+    salmon_consumed[seals_at_gauntlet, t, j] <- sum(c(sockeye_result["C"], chinook_result["C"], coho_result["C"]))/length(seals_at_gauntlet)
     # escape salmon
-    escape_chinook[t+1, j] <- escape_chinook[t, j] + chinook_result[4]
-    escape_sockeye[t+1, j] <- escape_sockeye[t, j] + sockeye_result[4]
-    escape_coho[t+1, j] <- escape_coho[t, j] + coho_result[4]
+    escape_chinook[t+1, j] <- escape_chinook[t, j] + chinook_result["E"]
+    escape_sockeye[t+1, j] <- escape_sockeye[t, j] + sockeye_result["E"]
+    escape_coho[t+1, j] <- escape_coho[t, j] + coho_result["E"]
     
     # seal harvest
     H[t, j] <- getHarvested(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
@@ -206,7 +209,6 @@ for(j in 1:years) {
 } # years loop
 
 # Testing Space
-
 
 
 
