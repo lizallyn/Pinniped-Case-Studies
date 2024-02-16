@@ -156,7 +156,15 @@ for(j in 1:years) {
                                  gamma = gamma, Y = Y, E = coho_escape_rate, 
                                  F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
     if(any(c(sockeye_result, chinook_result, coho_result)) < 0) {
+      consumed_chinook <- eat_some_fish(gauntlet_chinook[t, j], length(seals_at_gauntlet), 1, 5, 0, 0)
+      consumed_sockeye <- eat_some_fish(gauntlet_chinook[t, j], length(seals_at_gauntlet), 1, 5, 0, 0)
+      consumed_coho <- eat_some_fish(gauntlet_chinook[t, j], length(seals_at_gauntlet), 1, 5, 0, 0)
       
+      
+      
+      escape_chinook[t, j] <- escapeRate(gauntlet_chinook[t, j], chinook_escape_rate)
+      escape_sockeye[t, j] <- escapeRate(gauntlet_sockeye[t, j], sockeye_escape_rate)
+      escape_coho[t, j] <- escapeRate(gauntlet_coho[t, j], coho_escape_rate)
     }
     
     # propogate to abundance in next time step for each species

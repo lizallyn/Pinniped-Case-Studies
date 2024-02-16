@@ -38,8 +38,7 @@ runge_kutta <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F, M, E, deltat = 1){
 }
 
 # example call - returns an array that has # Salmon remaining, the total number of salmon eaten, the number of salmon caught, and the number of salmon the escaped the gauntlet
-day_result <- runge_kutta(Cmax, Nseal, alpha, Ns, gamma, Y, F, M, E, deltat = 0.02)
+day_result <- runge_kutta(Cmax, Nseal, alpha, Ns, gamma, Y, F, M, E, deltat = 0.1)
 day_result
 
-Ns <- 1:1000
-plot(Ns, get_dXdt(Cmax, Nseal, alpha, Ns = 1:1000, gamma, Y, F, M, E)[1:1000])
+
