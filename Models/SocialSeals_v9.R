@@ -1,6 +1,6 @@
 # Social Seals version 9
 # For separating out the salmon species
-# Februrary 2024
+# February 2024
 
 #### Set Up ####
 
@@ -79,39 +79,38 @@ salmon_days <- which(Daily_fish$total > 0)
 harvest_max_perboat = 2
 
 ## Set Up Variables
-salmon_escape <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-escape_chinook <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-escape_sockeye <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-escape_coho <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+twoDzeroes <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+threeDzeroes <- makeArray(num_seals, days, years, start.val = 0, 
+                          namex = "Seal", namey = "Day", namez = "Year")
+salmon_escape <- twoDzeroes
+escape_chinook <- twoDzeroes
+escape_sockeye <- twoDzeroes
+escape_coho <- twoDzeroes
 
-gauntlet_salmon <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-gauntlet_chinook <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-gauntlet_sockeye <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-gauntlet_coho <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
+gauntlet_salmon <- twoDzeroes
+gauntlet_chinook <- twoDzeroes
+gauntlet_sockeye <- twoDzeroes
+gauntlet_coho <- twoDzeroes
 
-H <- makeArray(days, years, start.val = NA, namex = "Day", namey = "Year")
+H <- twoDzeroes
 
-salmon_consumed <- makeArray(num_seals, days, years, start.val = 0, 
-                              namex = "Seal", namey = "Day", namez = "Year")
-seal_prob_gauntlet <- makeArray(num_seals, days, years, start.val = seal_initial_prob_gauntlet, 
-                                 namex = "Seal", namey = "Day", namez = "Year")
-seal_forage_loc <- makeArray(num_seals, days, years, start.val = seal_start_loc, 
-                              namex = "Seal", namey = "Day", namez = "Year")
+salmon_consumed <- threeDzeroes
+seal_prob_gauntlet <- threeDzeroes
+seal_forage_loc <- threeDzeroes
 
 # harvest matrix
 harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
 
-
 # Variables for x y learning bit
-x <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
-y <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
-C <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
-B <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
-P_x <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
-P_y <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+x <- threeDzeroes
+y <- threeDzeroes
+C <- threeDzeroes
+B <- threeDzeroes
+P_x <- threeDzeroes
+P_y <- threeDzeroes
 
 # for social learning
-P_social <- makeArray(num_seals, days, years, start.val = 0, namex = "Seal", namey = "Day", namez = "Year")
+P_social <- threeDzeroes
 
 
 #### Run time loop ####
@@ -140,26 +139,29 @@ for(j in 1:years) {
     }
     
     # calculate salmon mortality 
-    seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1) # think about escape rate here
-    day_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
-                              alpha = alpha, Ns = gauntlet_salmon[t, j], 
-                              gamma = gamma, Y = Y, E = escape_rate, 
-                              F_catch = catch_rate, M = natural_mort, deltat = 1)
+    seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
     sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                  alpha = alpha, Ns = gauntlet_sockeye[t, j], 
-                                 gamma = gamma, Y = Y, E = escape_rate, 
+                                 gamma = gamma, Y = Y, E = sockeye_escape_rate, 
+                                 F_catch = catch_rate, M = natural_mort, deltat = 1)
+    chinook_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                                 alpha = alpha, Ns = gauntlet_chinook[t, j], 
+                                 gamma = gamma, Y = Y, E = chinook_escape_rate, 
+                                 F_catch = catch_rate, M = natural_mort, deltat = 1)
+    coho_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                                 alpha = alpha, Ns = gauntlet_coho[t, j], 
+                                 gamma = gamma, Y = Y, E = coho_escape_rate, 
                                  F_catch = catch_rate, M = natural_mort, deltat = 1)
     # propogate to abundance in next time step for each species
-    gauntlet_chinook[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Chinook)
-    gauntlet_sockeye[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Sockeye)
-    gauntlet_coho[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Coho)
+    gauntlet_chinook[t+1, j] <- chinook_result[1]
+    gauntlet_sockeye[t+1, j] <- sockeye_result[1]
+    gauntlet_coho[t+1, j] <- coho_result[1]
     # assign consumed salmon to seals at gauntlet
-    salmon_consumed[seals_at_gauntlet, t, j] <- day_result[2]/length(seals_at_gauntlet)
+    salmon_consumed[seals_at_gauntlet, t, j] <- sum(c(sockeye_result[3], chinook_result[3], coho_result[3]))/length(seals_at_gauntlet)
     # escape salmon
-    salmon_escape[t, j] <- day_result[4] * gauntlet_salmon[t, j]
-    escape_chinook[t+1, j] <- escape_chinook[t, j] + day_result[4] * daily_update %>% slice(2) %>%  pull(Chinook)
-    escape_sockeye[t+1, j] <- escape_sockeye[t, j] + day_result[4] * daily_update %>% slice(2) %>%  pull(Sockeye)
-    escape_coho[t+1, j] <- escape_coho[t, j] + day_result[4] * daily_update %>% slice(2) %>%  pull(Coho)
+    escape_chinook[t+1, j] <- escape_chinook[t, j] + chinook_result[4]
+    escape_sockeye[t+1, j] <- escape_sockeye[t, j] + sockeye_result[4]
+    escape_coho[t+1, j] <- escape_coho[t, j] + coho_result[4]
     
     # seal harvest
     H[t, j] <- getHarvested(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
@@ -254,6 +256,12 @@ plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) +
 plot_Py
 
 # each salmon species escaping
+escape.data <- data.frame(cbind(melt(escape_chinook, "Day"), melt(escape_sockeye, "Day")$value, melt(escape_coho, "Day")$value))
+colnames(escape.data) <- c("Day", "Year", "Chinook", "Sockeye", "Coho")
+escape_plot <- ggplot(data = escape.data, aes(x = Day)) +
+  geom_point(data = escape.data, aes(y = Chinook), color = "dodgerblue") + 
+  geom_point(data = escape.data, aes(y = Sockeye), color = "salmon") + 
+  geom_point(aes(y = Coho), color = "green3")
+escape_plot
 
-escape_plot <- ggplot() +
-  geom_point(data = escape_chinook, aes(x = da))
+
