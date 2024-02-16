@@ -145,6 +145,10 @@ for(j in 1:years) {
                               alpha = alpha, Ns = gauntlet_salmon[t, j], 
                               gamma = gamma, Y = Y, E = escape_rate, 
                               F_catch = catch_rate, M = natural_mort, deltat = 1)
+    sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                                 alpha = alpha, Ns = gauntlet_sockeye[t, j], 
+                                 gamma = gamma, Y = Y, E = escape_rate, 
+                                 F_catch = catch_rate, M = natural_mort, deltat = 1)
     # propogate to abundance in next time step for each species
     gauntlet_chinook[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Chinook)
     gauntlet_sockeye[t+1, j] <- day_result[1] * daily_update %>% slice(2) %>%  pull(Sockeye)
