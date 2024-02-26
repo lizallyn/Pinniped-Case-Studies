@@ -26,7 +26,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Parameters
 
 # loop parameters
-years <- 1
+# years <- 1
 days <- 365
 
 # seal parameters
@@ -79,142 +79,142 @@ salmon_days <- which(Daily_fish$total > 0)
 harvest_max_perboat = 2
 
 ## Set Up Variables
-twoDzeroes <- makeArray(days, years, start.val = 0, namex = "Day", namey = "Year")
-threeDzeroes <- makeArray(num_seals, days, years, start.val = 0, 
-                          namex = "Seal", namey = "Day", namez = "Year")
+oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
+twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
+# threeDzeroes <- makeArray(c(num_seals, days, years), start.val = 0, 
+#                           names = c("Seal", "Day", "Year"))
 
 # salmon rates and accounting
-escape_chinook <- twoDzeroes
-escape_sockeye <- twoDzeroes
-escape_coho <- twoDzeroes
-coho_catch_rate <- twoDzeroes
-coho_catch_rate[boat_days,] <- 0.3
-chinook_catch_rate <- twoDzeroes
-sockeye_catch_rate <- twoDzeroes
-gauntlet_salmon <- twoDzeroes
-gauntlet_chinook <- twoDzeroes
-gauntlet_sockeye <- twoDzeroes
-gauntlet_coho <- twoDzeroes
+escape_chinook <- oneDzeroes
+escape_sockeye <- oneDzeroes
+escape_coho <- oneDzeroes
+coho_catch_rate <- oneDzeroes
+coho_catch_rate[boat_days] <- 0.3
+chinook_catch_rate <- oneDzeroes
+sockeye_catch_rate <- oneDzeroes
+gauntlet_salmon <- oneDzeroes
+gauntlet_chinook <- oneDzeroes
+gauntlet_sockeye <- oneDzeroes
+gauntlet_coho <- oneDzeroes
 
 # seals
-H <- twoDzeroes
-salmon_consumed <- threeDzeroes
-seal_prob_gauntlet <- threeDzeroes
-seal_forage_loc <- threeDzeroes
+H <- oneDzeroes
+salmon_consumed <- oneDzeroes
+seal_prob_gauntlet <- twoDzeroes
+seal_forage_loc <- twoDzeroes
 
 # harvest matrix
 harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
 
 # Variables for x y learning bit
-x <- threeDzeroes
-y <- threeDzeroes
-C <- threeDzeroes
-B <- threeDzeroes
-P_x <- threeDzeroes
-P_y <- threeDzeroes
+x <- twoDzeroes
+y <- twoDzeroes
+C <- twoDzeroes
+B <- twoDzeroes
+P_x <- twoDzeroes
+P_y <- twoDzeroes
 
 # for social learning
-P_social <- threeDzeroes
+P_social <- twoDzeroes
 
 #### Run time loop ####
-for(j in 1:years) {
+
   
-  for(t in 1:(days-1)) {
-    
-    # salmon arrive at the gauntlet
-    daily_update <- salmonSpeciesUpdate(day = t, data = Daily_fish)
-    gauntlet_chinook[t, j] <- daily_update %>% slice(1) %>% pull(Chinook)
-    gauntlet_sockeye[t, j] <- daily_update %>% slice(1) %>% pull(Sockeye)
-    gauntlet_coho[t, j] <- daily_update %>% slice(1) %>%  pull(Coho)
-    gauntlet_salmon[t, j] <- sum(c(gauntlet_chinook[t, j], gauntlet_sockeye[t, j], gauntlet_coho[t, j]))
-    
-    # decide where each seal goes that day
-    for(seal in 1:num_seals) {
-      seal_forage_loc[seal,t,j] <- decideForagingDestination(seal_prob_gauntlet[seal,t,j])
-    }
-    
-    # round of copying
-    for(seal in 1:num_seals) {
-      P_social[seal, t, j] <- collusion(probs_list = seal_prob_gauntlet[,t,j], 
-                                        prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t, j], 
-                                        seals_2_copy = num_seals_2_copy, 
-                                        mean = mean, beta = beta)
-    }
-    
-    # calculate salmon mortality 
-    seals_at_gauntlet <- which(seal_forage_loc[,t,j] == 1)
-    sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
-                                 alpha = alpha, Ns = gauntlet_sockeye[t, j], 
-                                 gamma = gamma, Y = Y, E = sockeye_escape_rate, 
-                                 F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
-    chinook_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
-                                 alpha = alpha, Ns = gauntlet_chinook[t, j], 
-                                 gamma = gamma, Y = Y, E = chinook_escape_rate, 
-                                 F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
-    coho_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
-                                 alpha = alpha, Ns = gauntlet_coho[t, j], 
-                                 gamma = gamma, Y = Y, E = coho_escape_rate, 
-                                 F_catch = coho_catch_rate[t, j], M = natural_mort, deltat = 1)
-    if(any(c(sockeye_result, chinook_result, coho_result)) < 0) {
-      consumed_chinook <- eat_some_fish(gauntlet_chinook[t, j], length(seals_at_gauntlet), 1, 5, 0, 0)
-      consumed_sockeye <- eat_some_fish(gauntlet_chinook[t, j], length(seals_at_gauntlet), 1, 5, 0, 0)
-      consumed_coho <- eat_some_fish(gauntlet_chinook[t, j], length(seals_at_gauntlet), 1, 5, 0, 0)
-      
-      
-      
-      escape_chinook[t, j] <- escapeRate(gauntlet_chinook[t, j], chinook_escape_rate)
-      escape_sockeye[t, j] <- escapeRate(gauntlet_sockeye[t, j], sockeye_escape_rate)
-      escape_coho[t, j] <- escapeRate(gauntlet_coho[t, j], coho_escape_rate)
-    }
-    
-    # propogate to abundance in next time step for each species
-    gauntlet_chinook[t+1, j] <- chinook_result["Ns"]
-    gauntlet_sockeye[t+1, j] <- sockeye_result["Ns"]
-    gauntlet_coho[t+1, j] <- coho_result["Ns"]
-    # assign consumed salmon to seals at gauntlet
-    salmon_consumed[seals_at_gauntlet, t, j] <- sum(c(sockeye_result["C"], chinook_result["C"], coho_result["C"]))/length(seals_at_gauntlet)
-    # escape salmon
-    escape_chinook[t+1, j] <- escape_chinook[t, j] + chinook_result["E"]
-    escape_sockeye[t+1, j] <- escape_sockeye[t, j] + sockeye_result["E"]
-    escape_coho[t+1, j] <- escape_coho[t, j] + coho_result["E"]
-    
-    # seal harvest
-    H[t, j] <- getHarvested(day_plan = harvest_plan[t, j], num_gauntlet_seals = length(seals_at_gauntlet), 
-                          zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
-                          processing = processing_time, min_fishers = min_fishers, max_fishers = max_fishers, 
-                          gamma = gamma_H, Y = Y_H)
-    if(H[t, j] > 0){
-      seal_prob_gauntlet[sample(seals_at_gauntlet, H[t, j]), t+1, j] <- NA
-    }
-    
-    # calculate x, y and prob_gauntlet for next time step
-    ## This could all become some functions
-    for(seal in 1:num_seals){
-      # calculate C
-      C[seal, t, j] <- salmon_consumed[seal, t, j] - w
-      
-      # calculate d_x and d_y
-      d_x <- learnX(food = C[seal, t, j], x_t = x[seal, t, j], 
-                     forage_loc = seal_forage_loc[seal, t, j],  step = step, 
-                     xmin = xmin, xmax = xmax, decay = decay)
-      d_y <- learnY(hunting = H[t, j], y_t = y[seal, t, j], 
-                     seal_forage_loc[seal, t, j], step = step, 
-                     ymin = ymin, ymax = ymax, decay = decay)
-      
-      # update x and y and P_x and P_y
-      x[seal, t+1, j] <- x[seal, t, j] + d_x
-      P_x[seal, t+1, j] <- x[seal, t+1, j] * slope_x + intercept_x
-      
-      y[seal, t+1, j] <- y[seal, t, j] + d_y
-      P_y[seal, t+1, j] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1, j]))))
-      
-      # calculate Prob gauntlet
-      seal_prob_gauntlet[seal, t+1, j] <- P_x[seal, t+1, j] * P_y[seal, t+1, j]
-    }
+for(t in 1:(days-1)) {
+  
+  # salmon arrive at the gauntlet
+  daily_update <- salmonSpeciesUpdate(day = t, data = Daily_fish)
+  gauntlet_chinook[t] <- daily_update %>% slice(1) %>% pull(Chinook)
+  gauntlet_sockeye[t] <- daily_update %>% slice(1) %>% pull(Sockeye)
+  gauntlet_coho[t] <- daily_update %>% slice(1) %>%  pull(Coho)
+  gauntlet_salmon[t] <- sum(c(gauntlet_chinook[t], gauntlet_sockeye[t], gauntlet_coho[t]))
+  
+  # decide where each seal goes that day
+  for(seal in 1:num_seals) {
+    seal_forage_loc[seal,t] <- decideForagingDestination(seal_prob_gauntlet[seal,t])
+  }
+  
+  # round of copying
+  for(seal in 1:num_seals) {
+    P_social[seal, t] <- collusion(probs_list = seal_prob_gauntlet[,t], 
+                                      prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t], 
+                                      seals_2_copy = num_seals_2_copy, 
+                                      mean = mean, beta = beta)
+  }
+  
+  # calculate salmon mortality 
+  seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
+  sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                               alpha = alpha, Ns = gauntlet_sockeye[t], 
+                               gamma = gamma, Y = Y, E = sockeye_escape_rate, 
+                               F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
+  chinook_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                               alpha = alpha, Ns = gauntlet_chinook[t], 
+                               gamma = gamma, Y = Y, E = chinook_escape_rate, 
+                               F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
+  coho_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+                               alpha = alpha, Ns = gauntlet_coho[t], 
+                               gamma = gamma, Y = Y, E = coho_escape_rate, 
+                               F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
+  if(any(c(sockeye_result, chinook_result, coho_result)) < 0) {
+    consumed_chinook <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
+    consumed_sockeye <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
+    consumed_coho <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
     
     
-  } # days loop
-} # years loop
+    
+    escape_chinook[t] <- escapeRate(gauntlet_chinook[t], chinook_escape_rate)
+    escape_sockeye[t] <- escapeRate(gauntlet_sockeye[t], sockeye_escape_rate)
+    escape_coho[t] <- escapeRate(gauntlet_coho[t], coho_escape_rate)
+  }
+  
+  # propagate to abundance in next time step for each species
+  gauntlet_chinook[t+1] <- chinook_result["Ns"]
+  gauntlet_sockeye[t+1] <- sockeye_result["Ns"]
+  gauntlet_coho[t+1] <- coho_result["Ns"]
+  # assign consumed salmon to seals at gauntlet
+  salmon_consumed[seals_at_gauntlet, t] <- sum(c(sockeye_result["C"], chinook_result["C"], coho_result["C"]))/length(seals_at_gauntlet)
+  # escape salmon
+  escape_chinook[t+1] <- escape_chinook[t] + chinook_result["E"]
+  escape_sockeye[t+1] <- escape_sockeye[t] + sockeye_result["E"]
+  escape_coho[t+1] <- escape_coho[t] + coho_result["E"]
+  
+  # seal harvest
+  H[t] <- getHarvested(day_plan = harvest_plan[t], num_gauntlet_seals = length(seals_at_gauntlet), 
+                        zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
+                        processing = processing_time, min_fishers = min_fishers, max_fishers = max_fishers, 
+                        gamma = gamma_H, Y = Y_H)
+  if(H[t] > 0){
+    seal_prob_gauntlet[sample(seals_at_gauntlet, H[t]), t+1] <- NA
+  }
+  
+  # calculate x, y and prob_gauntlet for next time step
+  ## This could all become some functions
+  for(seal in 1:num_seals){
+    # calculate C
+    C[seal, t] <- salmon_consumed[seal, t] - w
+    
+    # calculate d_x and d_y
+    d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
+                   forage_loc = seal_forage_loc[seal, t],  step = step, 
+                   xmin = xmin, xmax = xmax, decay = decay)
+    d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
+                   seal_forage_loc[seal, t], step = step, 
+                   ymin = ymin, ymax = ymax, decay = decay)
+    
+    # update x and y and P_x and P_y
+    x[seal, t+1] <- x[seal, t] + d_x
+    P_x[seal, t+1] <- x[seal, t+1] * slope_x + intercept_x
+    
+    y[seal, t+1] <- y[seal, t] + d_y
+    P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
+    
+    # calculate Prob gauntlet
+    seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
+  }
+  
+} # days loop
+
 
 # Testing Space
 
