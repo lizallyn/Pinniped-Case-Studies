@@ -1,13 +1,17 @@
 ---
 title: "Pinniped Case Studies"
-subtitle: "Updates etc."
-author: "Liz Allyn"
+subtitle: "Updates, Explorations, Questions, etc."
 date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "Liz Allyn"
 output: html_document
 ---
 
-The purpose of this document is for sharing Updates, Explorations, Questions, and Cries for Help...
+### Reminders
+Repo is here: <https://github.com/lizallyn/Pinniped-Case-Studies>
 
+### Currently Working On
+Picking my brain back up off the floor and managing to focus for more than 30 mins at a time and not cry at work.
 
-
-This will be info and updates and stuff!
+### Currently Need Help With
+* remembering what to do with the salmon bit
+  + 
