@@ -2,6 +2,7 @@
 title: "Pinniped Case Studies"
 subtitle: "Updates etc."
 author: "Liz Allyn"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
 
