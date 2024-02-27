@@ -5,8 +5,7 @@ author: "Liz Allyn"
 output: html_document
 ---
 
-# Pinniped Case Studies
-## Updates, Explorations, Questions, Cries for Help...
+The purpose of this document is for sharing Updates, Explorations, Questions, and Cries for Help...
 
 
 
