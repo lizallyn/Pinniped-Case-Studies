@@ -5,6 +5,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 author: "Liz Allyn"
 output: html_document
 ---
+![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
 
 ### Reminders
 Repo is here: <https://github.com/lizallyn/Pinniped-Case-Studies>
@@ -14,4 +15,8 @@ Picking my brain back up off the floor and managing to focus for more than 30 mi
 
 ### Currently Need Help With
 * remembering what to do with the salmon bit
-  + 
+  + currently we have lots of negative salmon bc not evaluated as often as necessary
+  + one option was to just kick it out into a manual discrete calculation process if the instantaneous process creates negative salmon
+  + currently trying this but it feels kinda wrong???
+
+
