@@ -28,7 +28,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 
 # loop parameters
 # years <- 1
-days <- 365
+days <- 187
 
 # seal parameters
 num_seals <- 10
@@ -77,7 +77,7 @@ Y_H <- 0
 min_fishers <- 13
 max_fishers <- 25
 salmon_days <- which(Daily_fish$total > 0)
-harvest_max_perboat = 2
+harvest_max_perboat <- 2
 
 #### Set Up Variables ####
 
@@ -149,38 +149,59 @@ for(t in 1:(days-1)) {
   sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                alpha = alpha, Ns = gauntlet_sockeye[t], 
                                gamma = gamma, Y = Y, E = sockeye_escape_rate, 
-                               F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
+                               F_catch = sockeye_catch_rate[t], M = natural_mort, deltat = 1)
   chinook_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                alpha = alpha, Ns = gauntlet_chinook[t], 
                                gamma = gamma, Y = Y, E = chinook_escape_rate, 
-                               F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
+                               F_catch = chinook_catch_rate[t], M = natural_mort, deltat = 1)
   coho_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                alpha = alpha, Ns = gauntlet_coho[t], 
                                gamma = gamma, Y = Y, E = coho_escape_rate, 
                                F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
-  if(any(c(sockeye_result, chinook_result, coho_result)) < 0) {
-    consumed_chinook <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
-    consumed_sockeye <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
-    consumed_coho <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
-    
-    
-    
-    escape_chinook[t] <- escapeRate(gauntlet_chinook[t], chinook_escape_rate)
-    escape_sockeye[t] <- escapeRate(gauntlet_sockeye[t], sockeye_escape_rate)
-    escape_coho[t] <- escapeRate(gauntlet_coho[t], coho_escape_rate)
-  }
+  if(any(sockeye_result < 0)) {
+   gauntlet_sockeye[t+1] <- gauntlet_sockeye[t]
+   escape_sockeye[t+1] <- escape_sockeye[t] + (gauntlet_sockeye[t])
+  } else {
+    gauntlet_sockeye[t+1] <- sockeye_result["Ns"]
+    escape_sockeye[t+1] <- escape_sockeye[t] + sockeye_result["E"]
+    }
+  if(any(chinook_result < 0)) {
+    gauntlet_chinook[t+1] <- gauntlet_chinook[t]
+  } else {
+    gauntlet_chinook[t+1] <- chinook_result["Ns"]
+    escape_chinook[t+1] <- escape_chinook[t] + chinook_result["E"]
+    }
+  if(any(coho_result < 0)) {
+    gauntlet_coho[t+1] <- gauntlet_coho[t]
+  } else {
+    gauntlet_coho[t+1] <- coho_result["Ns"]
+    escape_coho[t+1] <- escape_coho[t] + coho_result["E"]
+    }
+  
+  #   consumed_chinook <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
+  #   consumed_sockeye <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
+  #   consumed_coho <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
+  #   
+  #   gauntlet_chinook[t] <- gauntlet_chinook[t] - consumed_chinook
+  #   gauntlet_sockeye[t] <- gauntlet_sockeye[t] - consumed_sockeye
+  #   gauntlet_sockeye[t] <- gauntlet_coho[t] - consumed_coho
+  #   
+  #   caught_chinook <- gauntlet_chinook[t] * chinook_catch_rate[t]
+  #   caught_sockeye <- gauntlet_sockeye[t] * sockeye_catch_rate[t]
+  #   caught_sockeye <- gauntlet_sockeye[t] * sockeye_catch_rate[t]
+  #   
+  #   gauntlet_chinook[t] <- gauntlet_chinook[t] - caught_chinook
+  #   gauntlet_sockeye[t] <- gauntlet_sockeye[t] - caught_sockeye
+  #   gauntlet_sockeye[t] <- gauntlet_coho[t] - caught_coho
+  #   
+  #   escape_chinook[t] <- escapeRate(gauntlet_chinook[t], chinook_escape_rate)
+  #   escape_sockeye[t] <- escapeRate(gauntlet_sockeye[t], sockeye_escape_rate)
+  #   escape_coho[t] <- escapeRate(gauntlet_coho[t], coho_escape_rate)
+  # }
   
   
-  # propagate to abundance in next time step for each species
-  gauntlet_chinook[t+1] <- chinook_result["Ns"]
-  gauntlet_sockeye[t+1] <- sockeye_result["Ns"]
-  gauntlet_coho[t+1] <- coho_result["Ns"]
   # assign consumed salmon to seals at gauntlet
   salmon_consumed[seals_at_gauntlet, t] <- sum(c(sockeye_result["C"], chinook_result["C"], coho_result["C"]))/length(seals_at_gauntlet)
-  # escape salmon
-  escape_chinook[t+1] <- escape_chinook[t] + chinook_result["E"]
-  escape_sockeye[t+1] <- escape_sockeye[t] + sockeye_result["E"]
-  escape_coho[t+1] <- escape_coho[t] + coho_result["E"]
   
   # seal harvest
   H[t] <- getHarvested(day_plan = harvest_plan[t], num_gauntlet_seals = length(seals_at_gauntlet), 
