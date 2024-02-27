@@ -260,11 +260,16 @@ plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) +
   geom_point()
 plot_x
 
+Px_plot <- melt(data = P_x, "Seal")
+colnames(Px_plot) <- c("Seal", "Day", "P_x")
+plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
+  geom_point()
+plot_Px
 
 H_plot <- data.frame(cbind(1:days, H))
 colnames(H_plot) <- c("Day", "H")
 plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
-  geom_point()
+  geom_point(color = "turquoise")
 plot_H
 
 y_plot <- melt(data = y, "Seal")
@@ -273,15 +278,6 @@ plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) +
   geom_point()
 plot_y
 
-plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
-
-
-Px_plot <- melt(data = P_x, "Seal")
-colnames(Px_plot) <- c("Seal", "Day", "P_x")
-plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
-  geom_point()
-plot_Px
-
 Py_plot <- melt(data = P_y, "Seal")
 colnames(Py_plot) <- c("Seal", "Day", "P_y")
 plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) + 
@@ -289,12 +285,23 @@ plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) +
 plot_Py
 
 # each salmon species escaping
-escape.data <- data.frame(cbind(melt(escape_chinook, "Day"), melt(escape_sockeye, "Day")$value, melt(escape_coho, "Day")$value))
-colnames(escape.data) <- c("Day", "Year", "Chinook", "Sockeye", "Coho")
+
+escape.data <- data.frame(cbind(1:days, escape_chinook, escape_sockeye, escape_coho))
+colnames(escape.data) <- c("Day", "Chinook", "Sockeye", "Coho")
+escape.data <- melt(escape.data, "Day", variable.name = "Species", value.name = "Count")
+salmon.colors <- c("dodgerblue", "salmon", "green3")
+salmon.names <- levels(escape.data$Species)
+names(salmon.colors) <- salmon.names
 escape_plot <- ggplot(data = escape.data, aes(x = Day)) +
-  geom_point(data = escape.data, aes(y = Chinook), color = "dodgerblue") + 
-  geom_point(data = escape.data, aes(y = Sockeye), color = "salmon") + 
-  geom_point(aes(y = Coho), color = "green3")
+  geom_point(data = escape.data, aes(y = Count, color = Species)) + 
+  scale_color_manual(values = salmon.colors) +
+  labs(y = "Cumulative Salmon Escaped")
 escape_plot
 
+# Plot Composites ####
 
+# prob gauntlet with individual learning bits
+plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
+# P_x and P_y
+plot_Px + plot_Py + plot_layout(guides = "collect")
+# salmon consumed and salmon escaped
