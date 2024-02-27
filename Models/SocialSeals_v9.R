@@ -6,6 +6,7 @@
 
 ## Load Packages and Data
 library(ggplot2)
+library(patchwork)
 
 ## Load Data Files
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Salmon_functions.R")
@@ -225,11 +226,11 @@ for(t in 1:(days-1)) {
 
 #### Summary Plots ####
 
-par(mfrow = c(2,2))
-plot(1:days, colSums(seal_forage_loc), main = "Number of seals at the gauntlet")
-plot(1:days, colMeans(seal_prob_gauntlet), main = "avg. prob gauntlet")
-plot(1:days, gauntlet_salmon, main = "salmon at the gauntlet")
-plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
+p1 <- plot(1:days, colSums(seal_forage_loc), main = "Number of seals at the gauntlet")
+p2 <- plot(1:days, colMeans(seal_prob_gauntlet), main = "avg. prob gauntlet")
+p3 <- plot(1:days, gauntlet_salmon, main = "salmon at the gauntlet")
+p4 <- plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
+
 
 plot(1:days, colMeans(C))
 plot(1:days, colMeans(P_x))
@@ -259,17 +260,27 @@ plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) +
   geom_point()
 plot_x
 
-Px_plot <- melt(data = P_x, "Seal")
-colnames(Px_plot) <- c("Seal", "Day", "P_x")
-plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
+
+H_plot <- data.frame(cbind(1:days, H))
+colnames(H_plot) <- c("Day", "H")
+plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
   geom_point()
-plot_Px
+plot_H
 
 y_plot <- melt(data = y, "Seal")
 colnames(y_plot) <- c("Seal", "Day", "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
   geom_point()
 plot_y
+
+plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
+
+
+Px_plot <- melt(data = P_x, "Seal")
+colnames(Px_plot) <- c("Seal", "Day", "P_x")
+plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
+  geom_point()
+plot_Px
 
 Py_plot <- melt(data = P_y, "Seal")
 colnames(Py_plot) <- c("Seal", "Day", "P_y")
