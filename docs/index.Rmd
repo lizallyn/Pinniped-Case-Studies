@@ -1,14 +1,16 @@
 ---
 title: "Pinniped Case Studies"
 subtitle: "Updates, Explorations, Questions, etc."
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 author: "Liz Allyn"
 output: html_document
 ---
 ![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
 
 ### Reminders
-Repo is here: <https://github.com/lizallyn/Pinniped-Case-Studies>
+Repo is [here](https://github.com/lizallyn/Pinniped-Case-Studies)   
+Current working model is in [SocialSeals_v9.R](https://github.com/lizallyn/Pinniped-Case-Studies/blob/main/Models/SocialSeals_v9.R)  
+Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq)
 
 ### Currently Working On
 Picking my brain back up off the floor and managing to focus for more than 30 mins at a time and not cry at work.
@@ -19,4 +21,5 @@ Picking my brain back up off the floor and managing to focus for more than 30 mi
   + one option was to just kick it out into a manual discrete calculation process if the instantaneous process creates negative salmon
   + currently trying this but it feels kinda wrong???
 
-
+### Victories
+Created this page! Thanks to Emily!
