@@ -23,3 +23,12 @@ Picking my brain back up off the floor and managing to focus for more than 30 mi
 
 ### Victories
 Created this page! Thanks to Emily!
+
+### Updates
+For when it's needed at some point:
+
+```{r}
+# source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Models/SocialSeals_v9.R")
+```
+
+
