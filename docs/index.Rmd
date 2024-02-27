@@ -1,1 +1,7 @@
+---
+title: "Pinniped Case Studies"
+subtitle: "Updates etc."
+---
+
+
 This will be info and updates and stuff!
