@@ -3,5 +3,7 @@ title: "Pinniped Case Studies"
 subtitle: "Updates etc."
 ---
 
+#### Pinniped Case Studies
+### Updates, Explorations, Questions, Cries for Help...
 
 This will be info and updates and stuff!
