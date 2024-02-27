@@ -1,4 +1,4 @@
-# Social Seals version 9
+#### Social Seals version 9 ####
 # For separating out the salmon species
 # February 2024
 
@@ -23,7 +23,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/rungeKutta.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/getHarvested.R")
 
-## Set Parameters
+#### Set Up Parameters ####
 
 # loop parameters
 # years <- 1
@@ -78,7 +78,8 @@ max_fishers <- 25
 salmon_days <- which(Daily_fish$total > 0)
 harvest_max_perboat = 2
 
-## Set Up Variables
+#### Set Up Variables ####
+
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
 twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
 # threeDzeroes <- makeArray(c(num_seals, days, years), start.val = 0, 
@@ -117,7 +118,7 @@ P_y <- twoDzeroes
 # for social learning
 P_social <- twoDzeroes
 
-#### Run time loop ####
+#### Run Loop ####
 
   
 for(t in 1:(days-1)) {
@@ -168,6 +169,7 @@ for(t in 1:(days-1)) {
     escape_coho[t] <- escapeRate(gauntlet_coho[t], coho_escape_rate)
   }
   
+  
   # propagate to abundance in next time step for each species
   gauntlet_chinook[t+1] <- chinook_result["Ns"]
   gauntlet_sockeye[t+1] <- sockeye_result["Ns"]
@@ -216,12 +218,13 @@ for(t in 1:(days-1)) {
 } # days loop
 
 
-# Testing Space
+#### Testing Space ####
 
 
 
 
-# Summary Plots
+#### Summary Plots ####
+
 par(mfrow = c(2,2))
 plot(1:days, colSums(seal_forage_loc), main = "Number of seals at the gauntlet")
 plot(1:days, colMeans(seal_prob_gauntlet), main = "avg. prob gauntlet")
