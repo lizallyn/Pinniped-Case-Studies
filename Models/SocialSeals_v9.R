@@ -99,7 +99,7 @@ gauntlet_coho <- oneDzeroes
 
 # seals
 H <- oneDzeroes
-salmon_consumed <- oneDzeroes
+salmon_consumed <- twoDzeroes
 seal_prob_gauntlet <- twoDzeroes
 seal_forage_loc <- twoDzeroes
 
@@ -221,49 +221,54 @@ for(t in 1:(days-1)) {
 
 
 
-# These only show the last year
+# Summary Plots
 par(mfrow = c(2,2))
-plot(1:days, colSums(seal_forage_loc[,,j]), main = "Number of seals at the gauntlet")
-plot(1:days, colMeans(seal_prob_gauntlet[,,j]), main = "avg. prob gauntlet")
-plot(1:days, gauntlet_salmon[,j], main = "salmon at the gauntlet")
-plot(1:days, colSums(salmon_consumed[,,j]), main = "salmon consumed")
+plot(1:days, colSums(seal_forage_loc), main = "Number of seals at the gauntlet")
+plot(1:days, colMeans(seal_prob_gauntlet), main = "avg. prob gauntlet")
+plot(1:days, gauntlet_salmon, main = "salmon at the gauntlet")
+plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
+
 plot(1:days, colMeans(C))
+plot(1:days, colMeans(P_x))
+H.plot <- data.frame(cbind(1:days, H))
+plot(H.plot)
+plot(1:days, colMeans(P_y))
 
 # with ggplot to show each seal individually
 
 library(reshape2)
 
-prob_gauntlet_plot <- melt(data = seal_prob_gauntlet[,,1], "Seal")
+prob_gauntlet_plot <- melt(data = seal_prob_gauntlet, "Seal")
 colnames(prob_gauntlet_plot) <- c("Seal", "Day", "Prob_G")
 plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
   geom_point()
 plot_probs
 
-C_plot <- melt(data = C[,,1], "Seal")
+C_plot <- melt(data = C, "Seal")
 colnames(C_plot) <- c("Seal", "Day", "C")
 plot_C <- ggplot(data = C_plot, aes(x = Day, y = C, color = Seal)) + 
   geom_point()
 plot_C
 
-x_plot <- melt(data = x[,,1], "Seal")
+x_plot <- melt(data = x, "Seal")
 colnames(x_plot) <- c("Seal", "Day", "x")
 plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
   geom_point()
 plot_x
 
-Px_plot <- melt(data = P_x[,,1], "Seal")
+Px_plot <- melt(data = P_x, "Seal")
 colnames(Px_plot) <- c("Seal", "Day", "P_x")
 plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
   geom_point()
 plot_Px
 
-y_plot <- melt(data = y[,,1], "Seal")
+y_plot <- melt(data = y, "Seal")
 colnames(y_plot) <- c("Seal", "Day", "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
   geom_point()
 plot_y
 
-Py_plot <- melt(data = P_y[,,1], "Seal")
+Py_plot <- melt(data = P_y, "Seal")
 colnames(Py_plot) <- c("Seal", "Day", "P_y")
 plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) + 
   geom_point()
