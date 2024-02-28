@@ -27,7 +27,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Up Parameters ----
 
 # loop parameters
-days <- 194
+days <- 365
 
 # seal parameters
 num_seals <- 10
