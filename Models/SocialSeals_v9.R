@@ -194,6 +194,9 @@ for(t in 1:(days-1)) {
     print(c(consumed_sum, t))
     print(salmon_consumed[,t])
     print(gauntlet_chinook[t])
+    print(chinook_result)
+    print(gauntlet_sockeye[t])
+    print(sockeye_result)
     print(seals_at_gauntlet)
   }
   
