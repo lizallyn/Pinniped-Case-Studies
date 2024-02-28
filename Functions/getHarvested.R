@@ -11,4 +11,3 @@ getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, pr
   return(harvested)
 }
 
-# plot(get_killed(2, 10, 0.8, 1, 0.05, 1:10, 0, 0))
