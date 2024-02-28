@@ -30,7 +30,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 days <- 365
 
 # seal parameters
-num_seals <- 10
+num_seals <- 20
 seal_initial_prob_gauntlet <- 0.1
 seal_start_loc <- 0
 
@@ -119,7 +119,7 @@ P_y <- twoDzeroes
 P_social <- twoDzeroes
 
 # troubleshooting ghost salmons
-screwy <- c(species = NA, day = NA, Ns = NA, C = NA, Catch = NA, E = NA)
+screwy <- c(species = NA, day = NA, gauntlet_t = NA, Ns = NA, C = NA, Catch = NA, E = NA)
 
 
 # Run Loop ----
@@ -161,26 +161,31 @@ for(t in 1:(days-1)) {
                                alpha = alpha, Ns = gauntlet_coho[t], 
                                gamma = gamma, Y = Y, E = coho_escape_rate, 
                                F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
-  if(any(sockeye_result < 0)) {
-    screwy <- rbind(screwy, c(species = "Sockeye", day = t, sockeye_result))
+  if(any(c(sockeye_result, sum(sockeye_result[2:4])) > gauntlet_sockeye[t])) {
+    screwy <- rbind(screwy, c(species = "Sockeye", day = t, gauntlet_t = gauntlet_sockeye[t],sockeye_result))
     print(paste("day", t, "check screwy!!!"))
-    gauntlet_sockeye[t+1] <- gauntlet_sockeye[t]
+    escape_sockeye[t+1] <- escape_sockeye[t] + gauntlet_sockeye[t] * sockeye_escape_rate
+    gauntlet_sockeye[t+1] <- gauntlet_sockeye[t] - gauntlet_sockeye[t] * sockeye_escape_rate
   } else {
     gauntlet_sockeye[t+1] <- sockeye_result["Ns"]
     escape_sockeye[t+1] <- escape_sockeye[t] + sockeye_result["E"]
     }
-  if(any(chinook_result < 0)) {
-    screwy <- rbind(screwy, c(species = "Chinook", day = t, chinook_result))
+  if(any(c(chinook_result, sum(chinook_result[2:4])) > gauntlet_chinook[t])) {
+    screwy <- rbind(screwy, c(species = "Chinook", day = t, gauntlet_t = gauntlet_chinook[t],chinook_result))
     print(paste("day", t, "check screwy!!!"))
-    gauntlet_chinook[t+1] <- gauntlet_chinook[t]
+    escape_chinook[t+1] <- escape_chinook[t] + gauntlet_chinook[t] * chinook_escape_rate
+    gauntlet_chinook[t+1] <- gauntlet_chinook[t] - gauntlet_chinook[t] * chinook_escape_rate
+    
   } else {
     gauntlet_chinook[t+1] <- chinook_result["Ns"]
     escape_chinook[t+1] <- escape_chinook[t] + chinook_result["E"]
     }
-  if(any(coho_result < 0)) {
-    screwy <- rbind(screwy, c(species = "Coho", day = t, coho_result))
+  if(any(c(coho_result, sum(coho_result[2:4])) > gauntlet_coho[t])) {
+    screwy <- rbind(screwy, c(species = "Coho", day = t, gauntlet_t = gauntlet_coho[t], coho_result))
     print(paste("day", t, "check screwy!!!"))
-    gauntlet_coho[t+1] <- gauntlet_coho[t]
+    escape_coho[t+1] <- escape_coho[t] + gauntlet_coho[t] * coho_escape_rate
+    gauntlet_coho[t+1] <- gauntlet_coho[t] - gauntlet_coho[t] * coho_escape_rate
+    
   } else {
     gauntlet_coho[t+1] <- coho_result["Ns"]
     escape_coho[t+1] <- escape_coho[t] + coho_result["E"]
@@ -190,15 +195,15 @@ for(t in 1:(days-1)) {
   consumed_sum <- c(sockeye_result["C"], chinook_result["C"], coho_result["C"])
   consumed_sum[which(consumed_sum < 0)] <- 0
   salmon_consumed[seals_at_gauntlet, t] <- sum(consumed_sum)/length(seals_at_gauntlet)
-  if(any(salmon_consumed[,t] > 100)){
-    print(c(consumed_sum, t))
-    print(salmon_consumed[,t])
-    print(gauntlet_chinook[t])
-    print(chinook_result)
-    print(gauntlet_sockeye[t])
-    print(sockeye_result)
-    print(seals_at_gauntlet)
-  }
+  # if(any(salmon_consumed[,t] > 100)){
+  #   print(c(consumed_sum, t))
+  #   print(salmon_consumed[,t])
+  #   print(gauntlet_chinook[t])
+  #   print(chinook_result)
+  #   print(gauntlet_sockeye[t])
+  #   print(sockeye_result)
+  #   print(seals_at_gauntlet)
+  # } # for troubleshooting
   
   # salmon_consumed[!1:10 %in% c(1, 2, 3),183]
 
