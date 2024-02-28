@@ -27,7 +27,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 ## Set Up Parameters ----
 
 # loop parameters
-days <- 250
+days <- 194
 
 # seal parameters
 num_seals <- 10
@@ -193,7 +193,11 @@ for(t in 1:(days-1)) {
   if(any(salmon_consumed[,t] > 100)){
     print(c(consumed_sum, t))
     print(salmon_consumed[,t])
+    print(gauntlet_chinook[t])
+    print(seals_at_gauntlet)
   }
+  
+  # salmon_consumed[!1:10 %in% c(1, 2, 3),183]
 
   # seal harvest
   H[t] <- getHarvested(day_plan = harvest_plan[t], num_gauntlet_seals = length(seals_at_gauntlet), 
