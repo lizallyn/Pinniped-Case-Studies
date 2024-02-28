@@ -11,12 +11,10 @@ rungeKutta <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F_catch, M, E, deltat =
   endX <- X + deltat * K3s
   K4s <- get_dXdt(Cmax, Nseal, alpha, Ns= endX[1], gamma, Y, F_catch, M, E)
   Xsim <- X + deltat * (K1s / 6 + K2s / 3 + K3s / 3 + K4s / 6)
-  return(c(C = Xsim[2]
-           # Ns = Xsim[1],
-           
-           # Catch = Xsim[3],
-           # E = Xsim[4]
-           ))
+  return(c(Ns = Xsim[1],
+           C = Xsim[2],
+           Catch = Xsim[3],
+           E = Xsim[4]))
 }
 
 
