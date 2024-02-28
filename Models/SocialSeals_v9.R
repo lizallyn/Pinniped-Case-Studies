@@ -27,8 +27,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 #### Set Up Parameters ####
 
 # loop parameters
-# years <- 1
-days <- 187
+days <- 250
 
 # seal parameters
 num_seals <- 10
@@ -119,6 +118,10 @@ P_y <- twoDzeroes
 # for social learning
 P_social <- twoDzeroes
 
+# troubleshooting ghost salmons
+screwy <- c(species = NA, day = NA, Ns = NA, C = NA, Catch = NA, E = NA)
+
+
 #### Run Loop ####
 
   
@@ -159,50 +162,32 @@ for(t in 1:(days-1)) {
                                gamma = gamma, Y = Y, E = coho_escape_rate, 
                                F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
   if(any(sockeye_result < 0)) {
-   gauntlet_sockeye[t+1] <- gauntlet_sockeye[t]
-   escape_sockeye[t+1] <- escape_sockeye[t] + (gauntlet_sockeye[t])
+    screwy <- rbind(screwy, c(species = "Sockeye", day = t, sockeye_result))
+    gauntlet_sockeye[t+1] <- gauntlet_sockeye[t]
   } else {
     gauntlet_sockeye[t+1] <- sockeye_result["Ns"]
     escape_sockeye[t+1] <- escape_sockeye[t] + sockeye_result["E"]
     }
   if(any(chinook_result < 0)) {
+    screwy <- rbind(screwy, c(species = "Chinook", day = t, chinook_result))
     gauntlet_chinook[t+1] <- gauntlet_chinook[t]
   } else {
     gauntlet_chinook[t+1] <- chinook_result["Ns"]
     escape_chinook[t+1] <- escape_chinook[t] + chinook_result["E"]
     }
   if(any(coho_result < 0)) {
+    screwy <- rbind(screwy, c(species = "Coho", day = t, coho_result))
     gauntlet_coho[t+1] <- gauntlet_coho[t]
   } else {
     gauntlet_coho[t+1] <- coho_result["Ns"]
     escape_coho[t+1] <- escape_coho[t] + coho_result["E"]
     }
   
-  #   consumed_chinook <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
-  #   consumed_sockeye <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
-  #   consumed_coho <- eat_some_fish(gauntlet_chinook[t], length(seals_at_gauntlet), 1, 5, 0, 0)
-  #   
-  #   gauntlet_chinook[t] <- gauntlet_chinook[t] - consumed_chinook
-  #   gauntlet_sockeye[t] <- gauntlet_sockeye[t] - consumed_sockeye
-  #   gauntlet_sockeye[t] <- gauntlet_coho[t] - consumed_coho
-  #   
-  #   caught_chinook <- gauntlet_chinook[t] * chinook_catch_rate[t]
-  #   caught_sockeye <- gauntlet_sockeye[t] * sockeye_catch_rate[t]
-  #   caught_sockeye <- gauntlet_sockeye[t] * sockeye_catch_rate[t]
-  #   
-  #   gauntlet_chinook[t] <- gauntlet_chinook[t] - caught_chinook
-  #   gauntlet_sockeye[t] <- gauntlet_sockeye[t] - caught_sockeye
-  #   gauntlet_sockeye[t] <- gauntlet_coho[t] - caught_coho
-  #   
-  #   escape_chinook[t] <- escapeRate(gauntlet_chinook[t], chinook_escape_rate)
-  #   escape_sockeye[t] <- escapeRate(gauntlet_sockeye[t], sockeye_escape_rate)
-  #   escape_coho[t] <- escapeRate(gauntlet_coho[t], coho_escape_rate)
-  # }
-  
-  
   # assign consumed salmon to seals at gauntlet
-  salmon_consumed[seals_at_gauntlet, t] <- sum(c(sockeye_result["C"], chinook_result["C"], coho_result["C"]))/length(seals_at_gauntlet)
-  
+  consumed_sum <- c(sockeye_result["C"], chinook_result["C"], coho_result["C"])
+  consumed_sum[which(consumed_sum < 0)] <- 0
+  salmon_consumed[seals_at_gauntlet, t] <- sum(consumed_sum)/length(seals_at_gauntlet)
+
   # seal harvest
   H[t] <- getHarvested(day_plan = harvest_plan[t], num_gauntlet_seals = length(seals_at_gauntlet), 
                         zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
@@ -236,7 +221,7 @@ for(t in 1:(days-1)) {
     # calculate Prob gauntlet
     seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
   }
-  
+  if(length(screwy) > 6){print(paste("day", t, "check screwy!!!"))}
 } # days loop
 
 
@@ -246,11 +231,11 @@ for(t in 1:(days-1)) {
 
 
 #### Summary Plots ####
-
-p1 <- plot(1:days, colSums(seal_forage_loc), main = "Number of seals at the gauntlet")
-p2 <- plot(1:days, colMeans(seal_prob_gauntlet), main = "avg. prob gauntlet")
-p3 <- plot(1:days, gauntlet_salmon, main = "salmon at the gauntlet")
-p4 <- plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
+par(mfrow = c(2, 2))
+plot(1:days, colSums(seal_forage_loc), main = "Number of seals at the gauntlet")
+plot(1:days, colMeans(seal_prob_gauntlet), main = "avg. prob gauntlet")
+plot(1:days, gauntlet_salmon, main = "salmon at the gauntlet")
+plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
 
 
 plot(1:days, colMeans(C))
@@ -320,6 +305,8 @@ escape_plot <- ggplot(data = escape.data, aes(x = Day)) +
 escape_plot
 
 # Plot Composites ####
+
+# these use Patchwork!
 
 # prob gauntlet with individual learning bits
 plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
