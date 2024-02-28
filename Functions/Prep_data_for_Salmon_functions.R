@@ -6,6 +6,8 @@ fish.long <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-
 
 fish <- spread(fish.long, Species, Count)
 
+colnames(fish) <- c("DayofYear", "Date", "Year", "Comment", "Chinook", "Coho", "Sockeye")
+
 Daily_fish <- fish %>% 
   group_by(DayofYear) %>%
   summarize(AvgChinook = mean(Chinook, na.rm = T),
