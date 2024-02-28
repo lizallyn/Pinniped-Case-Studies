@@ -17,7 +17,8 @@ Picking my brain back up off the floor and managing to focus for more than 30 mi
 
 ### Currently Need Help With
 
-Right now I'm having an issue where the Chinook are returning utterly nonsense consumption estimates.
+#### *Issue 1:*
+Right now I'm having an issue where the Chinook are returning utterly nonsense consumption estimates. The below plot shows salmon consumed per seal that went to the gauntlet in each time step.
 
 ```{r, include=FALSE}
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Models/SocialSeals_v9.R")
@@ -28,10 +29,39 @@ plot_consumed <- ggplot(data = consumed_plot, aes(x = Day, y = Consumed)) +
   geom_point(color = "turquoise")
 ```
 
-```{r, echo = FALSE, fig.width = 5}
+```{r, echo = FALSE, fig.width = 5, fig.height=3}
 plot_consumed
 ```
 
+I did some sleuthing, and around day 182 & 194, the estimate for the number of Chinook consumed skyrockets (1000+), even though the number of Chinook in the system is only 5-6. I plotted the Chinook consumption estimate over a range of values for the starting number of Chinook, and there's clearly something weird that happens between 4 and 6.
+
+```{r, include = FALSE}
+rungeKutta.ts <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F_catch, M, E, deltat = 1){
+  X <- c(Ns, 0, 0, 0)
+  K1s <- get_dXdt(Cmax, Nseal, alpha, Ns = X[1], gamma, Y, F_catch, M, E)
+  midX <- X + deltat* 0.5 * K1s
+  K2s <- get_dXdt(Cmax, Nseal, alpha, Ns= midX[1], gamma, Y, F_catch, M, E)
+  midX <- X + deltat * 0.5 * K2s
+  K3s <- get_dXdt(Cmax, Nseal, alpha, Ns= midX[1], gamma, Y, F_catch, M, E)
+  endX <- X + deltat * K3s
+  K4s <- get_dXdt(Cmax, Nseal, alpha, Ns= endX[1], gamma, Y, F_catch, M, E)
+  Xsim <- X + deltat * (K1s / 6 + K2s / 3 + K3s / 3 + K4s / 6)
+  return(c(C = Xsim[2]))
+}
+```
+
+```{r, echo = FALSE, fig.width = 7, fig.height = 3}
+plot(x = seq(1, 7, 0.1), 
+     y = lapply(seq(1, 7, 0.1), rungeKutta.ts, Cmax = 5, Nseal = 8, alpha = 1, 
+                gamma = 0, Y = 0, F_catch = 0, M = 0.0005, E = 0.03, deltat = 1), 
+     ylab = "Estimate of salmon consumed", xlab = "Ns input", 
+     main = "Cmax = 5, Nseal = 8, alpha = 1, gamma = 0, Y = 0, F_catch = 0, 
+     M = 0.0005, E = 0.03, deltat = 1")
+```
+
+What am I looking at here?
+
+#### *Issue 2:*
 
 
 ### Victories
