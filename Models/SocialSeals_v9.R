@@ -147,6 +147,8 @@ for(t in 1:(days-1)) {
                                       mean = mean, beta = beta)
   }
   
+  
+  
   # calculate salmon mortality 
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
