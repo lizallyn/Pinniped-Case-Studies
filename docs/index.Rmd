@@ -13,9 +13,9 @@ Current working model is in [SocialSeals_v9.R](https://github.com/lizallyn/Pinni
 Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (but not updated right now)
 
 ### Currently Working On
-Apparently I never fully implemented the social copying piece in the full loop, so I need to do that. (Added March 6)  
+Apparently I never fully implemented the social copying piece in the full loop, so I need to do that. (Added March 6, not tested yet)  
 Getting the salmon bits to at least work, even if they aren't quite right...(Seems to depend on the run, need to dig into this more)  
-Updating model explanation document  
+Updating model explanation document - new parameter table is ok, but need to update with symbols and then check/update all the equtions!!  
 Picking my brain back up off the floor and managing to focus for more than 30 mins at a time and not cry at work.
 
 ### Currently Need Help With
@@ -27,7 +27,7 @@ Apparently I need to go back to 454 because I'm having a really hard time puttin
 #### *Issue 2: Low Confidence that I'm doing the salmon part well*
 
 
-#### *Issue 2: tabled bc it stopped happening???*
+#### *Issue 3: tabled bc it stopped happening???*
 
 Last meeting we talked about how the instantaneous salmon rates would need to be calculated at a shorter time step in order to produce reasonable estimates when the ratio of seals to salmon is high or the total number of salmon is low. Instead of doing that, we talked about just manually calculating the salmon mortality terms on days when the results from the instantaneous process don't make sense.  
 So my work-flow right now is:  
