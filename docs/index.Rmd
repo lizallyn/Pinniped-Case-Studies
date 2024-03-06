@@ -13,8 +13,8 @@ Current working model is in [SocialSeals_v9.R](https://github.com/lizallyn/Pinni
 Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (but not updated right now)
 
 ### Currently Working On
-Apparently I never fully implemented the social copying piece in the full loop, so I need to do that.  
-Getting the salmon bits to at least work, even if they aren't quite right...  
+Apparently I never fully implemented the social copying piece in the full loop, so I need to do that. (Added March 6)  
+Getting the salmon bits to at least work, even if they aren't quite right...(Seems to depend on the run, need to dig into this more)  
 Updating model explanation document  
 Picking my brain back up off the floor and managing to focus for more than 30 mins at a time and not cry at work.
 
