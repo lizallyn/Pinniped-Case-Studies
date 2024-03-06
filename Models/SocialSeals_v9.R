@@ -114,7 +114,6 @@ harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years,
 ### Troubleshooting & BS ----
 # for that one plot
 gauntlet_salmon <- oneDzeroes
-
 # troubleshooting ghost salmons
 screwy <- c(species = NA, day = NA, gauntlet_t = NA, Ns = NA, C = NA, Catch = NA, E = NA)
 
@@ -141,9 +140,8 @@ for(t in 1:(days-1)) {
                                       prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t], 
                                       seals_2_copy = num_seals_2_copy, 
                                       mean = mean, beta = beta)
+    seal_forage_loc[seal,t] <- decideForagingDestination(P_social[seal,t])
   }
-  
-  
   
   # calculate salmon mortality 
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
@@ -202,8 +200,6 @@ for(t in 1:(days-1)) {
   #   print(sockeye_result)
   #   print(seals_at_gauntlet)
   # } # for troubleshooting
-  
-  # salmon_consumed[!1:10 %in% c(1, 2, 3),183]
 
   # seal harvest
   H[t] <- getHarvested(day_plan = harvest_plan[t], num_gauntlet_seals = length(seals_at_gauntlet), 
