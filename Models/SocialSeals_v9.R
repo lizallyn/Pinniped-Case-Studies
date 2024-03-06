@@ -31,8 +31,6 @@ days <- 365
 
 # seal parameters
 num_seals <- 20
-seal_initial_prob_gauntlet <- 0.1
-seal_start_loc <- 0
 
 # seal consumption parameters
 alpha <- 1
@@ -52,7 +50,7 @@ slope_x <- 0.1
 intercept_x <- 0.1
 step <- 0.25
 decay <- 0.1
-buffer_Pymin <- 0.1
+buffer_Pymin <- 0.1 # Need to rememmber why this felt necessary?
 
 # seal social learning parameters
 num_seals_2_copy <- 4
@@ -64,9 +62,6 @@ sockeye_escape_rate <- 0.3
 chinook_escape_rate <- 0.03
 coho_escape_rate <- 0.1
 natural_mort <- 0.0005
-
-# fishing parameters
-coho_catch_rate <- 0.3
 
 # hunting parameters
 zone_efficiency <- 0.8
@@ -82,32 +77,12 @@ harvest_max_perboat <- 2
 
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
 twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
-# threeDzeroes <- makeArray(c(num_seals, days, years), start.val = 0, 
-#                           names = c("Seal", "Day", "Year"))
 
-# salmon rates and accounting
-escape_chinook <- oneDzeroes
-escape_sockeye <- oneDzeroes
-escape_coho <- oneDzeroes
-coho_catch_rate <- oneDzeroes
-coho_catch_rate[boat_days] <- 0.3
-chinook_catch_rate <- oneDzeroes
-sockeye_catch_rate <- oneDzeroes
-gauntlet_salmon <- oneDzeroes
-gauntlet_chinook <- oneDzeroes
-gauntlet_sockeye <- oneDzeroes
-gauntlet_coho <- oneDzeroes
-
-# seals
-H <- oneDzeroes
+### Individual Values ----
 salmon_consumed <- twoDzeroes
 seal_prob_gauntlet <- twoDzeroes
 seal_forage_loc <- twoDzeroes
 
-# harvest matrix
-harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
-
-# Variables for x y learning bit
 x <- twoDzeroes
 y <- twoDzeroes
 C <- twoDzeroes
@@ -115,15 +90,36 @@ B <- twoDzeroes
 P_x <- twoDzeroes
 P_y <- twoDzeroes
 
-# for social learning
 P_social <- twoDzeroes
+
+### Actual States that I Need ----
+escape_chinook <- oneDzeroes
+escape_sockeye <- oneDzeroes
+escape_coho <- oneDzeroes
+
+gauntlet_chinook <- oneDzeroes
+gauntlet_sockeye <- oneDzeroes
+gauntlet_coho <- oneDzeroes
+
+H <- oneDzeroes
+
+### Variable Rates ----
+coho_catch_rate <- oneDzeroes
+coho_catch_rate[boat_days] <- 0.3
+chinook_catch_rate <- oneDzeroes
+sockeye_catch_rate <- oneDzeroes
+
+harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
+
+### Troubleshooting & BS ----
+# for that one plot
+gauntlet_salmon <- oneDzeroes
 
 # troubleshooting ghost salmons
 screwy <- c(species = NA, day = NA, gauntlet_t = NA, Ns = NA, C = NA, Catch = NA, E = NA)
 
 
 # Run Loop ----
-
   
 for(t in 1:(days-1)) {
   
