@@ -70,6 +70,7 @@ gamma_H <- 0
 Y_H <- 0
 min_fishers <- 13
 max_fishers <- 25
+coho_fish_rate <- 0.3
 salmon_days <- which(Daily_fish$total > 0)
 harvest_max_perboat <- 2
 
@@ -104,11 +105,12 @@ H <- oneDzeroes
 
 ### Variable Rates ----
 coho_catch_rate <- oneDzeroes
-coho_catch_rate[boat_days] <- 0.3
+coho_catch_rate[boat_days] <- coho_fish_rate
 chinook_catch_rate <- oneDzeroes
 sockeye_catch_rate <- oneDzeroes
 
-harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, boat_days = boat_days, salmon_days = salmon_days)
+harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, 
+                                  boat_days = boat_days, salmon_days = salmon_days)
 
 ### Troubleshooting & BS ----
 # for that one plot
