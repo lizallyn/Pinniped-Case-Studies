@@ -30,7 +30,7 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 days <- 365
 
 # seal parameters
-num_seals <- 20
+num_seals <- 10
 
 # seal consumption parameters
 alpha <- 1
@@ -53,7 +53,7 @@ decay <- 0.1
 buffer_Pymin <- 0.1 # Need to rememmber why this felt necessary?
 
 # seal social learning parameters
-num_seals_2_copy <- 4
+num_seals_2_copy <- 0
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
@@ -86,7 +86,6 @@ seal_forage_loc <- twoDzeroes
 x <- twoDzeroes
 y <- twoDzeroes
 C <- twoDzeroes
-B <- twoDzeroes
 P_x <- twoDzeroes
 P_y <- twoDzeroes
 
@@ -136,11 +135,13 @@ for(t in 1:(days-1)) {
   
   # round of copying
   for(seal in 1:num_seals) {
-    P_social[seal, t] <- collusion(probs_list = seal_prob_gauntlet[,t], 
-                                      prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t], 
-                                      seals_2_copy = num_seals_2_copy, 
-                                      mean = mean, beta = beta)
-    seal_forage_loc[seal,t] <- decideForagingDestination(P_social[seal,t])
+    if(num_seals_2_copy > 0){
+      P_social[seal, t] <- collusion(probs_list = seal_prob_gauntlet[,t], 
+                                     prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t], 
+                                     seals_2_copy = num_seals_2_copy, 
+                                     mean = mean, beta = beta)
+      seal_forage_loc[seal,t] <- decideForagingDestination(P_social[seal,t])
+    }
   }
   
   # calculate salmon mortality 
@@ -265,28 +266,48 @@ plot(1:days, colMeans(P_y))
 
 library(reshape2)
 
-prob_gauntlet_plot <- melt(data = seal_prob_gauntlet, "Seal")
-colnames(prob_gauntlet_plot) <- c("Seal", "Day", "Prob_G")
+seal.colors <- RColorBrewer::brewer.pal(10, "Set3")
+seal.dfs <- c("seal_prob_gauntlet", "C")
+
+prepForPlots <- function(df, key.col = "Seal", 
+                         other.cols = "Day", value.col){
+  melted <- melt(data = df, key.col)
+  colnames(melted) <- c(key.col, other.cols, value.col)
+  melted[,key.col] <- as.factor(melted[,key.col])
+  return(melted)
+}
+
+# dummy for colors
+prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
+
+# Make Seal Palette
+colors <- RColorBrewer::brewer.pal(num_seals, "Set3")
+color.names <- levels(prob_gauntlet_plot[,"Seal"])
+names(colors) <- color.names
+
+# Make plots
+prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
 plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
-  geom_point()
+  geom_point() +
+  scale_color_manual(values = colors)
 plot_probs
 
-C_plot <- melt(data = C, "Seal")
-colnames(C_plot) <- c("Seal", "Day", "C")
+C_plot <- prepForPlots(C, value.col = "C")
 plot_C <- ggplot(data = C_plot, aes(x = Day, y = C, color = Seal)) + 
-  geom_point()
+  geom_point() +
+  scale_color_manual(values = colors)
 plot_C
 
-x_plot <- melt(data = x, "Seal")
-colnames(x_plot) <- c("Seal", "Day", "x")
+x_plot <- prepForPlots(x, value.col = "x")
 plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
-  geom_point()
+  geom_point() +
+  scale_color_manual(values = colors)
 plot_x
 
-Px_plot <- melt(data = P_x, "Seal")
-colnames(Px_plot) <- c("Seal", "Day", "P_x")
+Px_plot <- prepForPlots(P_x, value.col = "P_x")
 plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
-  geom_point()
+  geom_point() +
+  scale_color_manual(values = colors)
 plot_Px
 
 H_plot <- data.frame(cbind(1:days, H))
@@ -295,16 +316,16 @@ plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
   geom_point(color = "turquoise")
 plot_H
 
-y_plot <- melt(data = y, "Seal")
-colnames(y_plot) <- c("Seal", "Day", "y")
+y_plot <- prepForPlots(y, value.col = "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
-  geom_point()
+  geom_point() +
+  scale_color_manual(values = colors)
 plot_y
 
-Py_plot <- melt(data = P_y, "Seal")
-colnames(Py_plot) <- c("Seal", "Day", "P_y")
+Py_plot <- prepForPlots(P_y, value.col = "P_y")
 plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) + 
-  geom_point()
+  geom_point() +
+  scale_color_manual(values = colors)
 plot_Py
 
 # each salmon species escaping
@@ -328,5 +349,5 @@ escape_plot
 # prob gauntlet with individual learning bits
 plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
 # P_x and P_y
-plot_Px + plot_Py + plot_layout(guides = "collect")
+plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
 # salmon consumed and salmon escaped
