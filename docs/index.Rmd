@@ -10,13 +10,67 @@ output: html_document
 ### Reminders
 Repo is [here](https://github.com/lizallyn/Pinniped-Case-Studies)   
 Current working model is in [SocialSeals_v9.R](https://github.com/lizallyn/Pinniped-Case-Studies/blob/main/Models/SocialSeals_v9.R)  
-Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (but not updated right now)
+Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (haphazardly updated right now)
 
 ### Currently Working On
 Apparently I never fully implemented the social copying piece in the full loop, so I need to do that. (Added March 6, not tested yet)  
 Getting the salmon bits to at least work, even if they aren't quite right...(Seems to depend on the run, need to dig into this more)  
-Updating model explanation document - new parameter table is ok, but need to update with symbols and then check/update all the equtions!!  
-Picking my brain back up off the floor and managing to focus for more than 30 mins at a time and not cry at work.
+Updating model explanation document - new parameter table is ok, but need to update with symbols and then check/update all the equations!!  
+Picking my brain back up off the floor and managing to focus for more than 30 mins at a time and not cry at work :)))
+
+### Some Fun Plots!
+
+```{r, include=FALSE}
+source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Models/SocialSeals_v9.R")
+```
+
+First, here's a summary of the inputs. Right now it's parameterized for the Locks. 
+
+#### Inputs
+
+Species present here are Sockeye, Chinook, and Coho. Their arrival at the gauntlet each day is forced from count data at the Locks (provided by Muckleshoot).
+
+The number of salmon of each species present at the gauntlet for each day is presented below. Really it's just salmon arriving that are an input not total numbers but I didn't keep tabs on that separately, so here's a close approximation.
+
+```{r, echo = FALSE, fig.height=3}
+salmon.arrival.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
+colnames(salmon.arrival.data) <- c("Day", "Chinook", "Sockeye", "Coho")
+arrival.data <- melt(salmon.arrival.data, "Day", variable.name = "Species", value.name = "Count")
+# salmon.colors <- c("dodgerblue", "salmon", "green3")
+# salmon.names <- levels(escape.data$Species)
+# names(salmon.colors) <- salmon.names
+arrival_plot <- ggplot(data = arrival.data, aes(x = Day)) +
+  geom_point(data = arrival.data, aes(y = Count, color = Species)) + 
+  scale_color_manual(values = salmon.colors) +
+  labs(y = "Salmon at the Gauntlet by Species")
+arrival_plot
+```
+
+The only species with a fishery in this gauntlet is Coho. The fishery occurred from September 10 - November 17 in 2023. This is day 253 - 321. On those days, harvest of coho occurs via fishing effort and harvest of seals occurs via boat-based take.
+
+Here's a quick table of parameter values:
+
+```{r, echo = FALSE, fig.width = 5}
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, natural_mort, harvest_max_perboat))
+colnames(parameters) <- c("Value")
+knitr::kable(parameters)
+```
+
+#### Ok, Now the Plots
+
+##### Probability of going to the gauntlet based on foraging experience (P_x), experiences with hunting (P_y), and overall (Prob_G).
+
+```{r, echo = FALSE, fig.width = 10}
+plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
+```
+
+##### More
+
+```{r}
+plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
+```
+
+
 
 ### Currently Need Help With
 
