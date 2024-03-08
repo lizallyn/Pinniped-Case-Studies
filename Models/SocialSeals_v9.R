@@ -294,6 +294,12 @@ plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color =
   scale_color_manual(values = colors)
 plot_probs
 
+eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
+plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
+  geom_point() +
+  scale_color_manual(values = colors)
+plot_eaten
+
 C_plot <- prepForPlots(C, value.col = "C")
 plot_C <- ggplot(data = C_plot, aes(x = Day, y = C, color = Seal)) + 
   geom_point() +
