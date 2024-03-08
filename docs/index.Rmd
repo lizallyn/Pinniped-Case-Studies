@@ -48,26 +48,41 @@ arrival_plot
 
 The only species with a fishery in this gauntlet is Coho. The fishery occurred from September 10 - November 17 in 2023. This is day 253 - 321. On those days, harvest of coho occurs via fishing effort and harvest of seals occurs via boat-based take.
 
-Here's a quick table of parameter values:
+Here's a quick (not exhaustive) table of parameter values:
 
-```{r, echo = FALSE, fig.width = 5}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
 parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, natural_mort, harvest_max_perboat))
 colnames(parameters) <- c("Value")
-knitr::kable(parameters)
+kable(parameters) %>% kable_styling(full_width = F)
+
+
 ```
 
 #### Ok, Now the Plots
 
 ##### Probability of going to the gauntlet based on foraging experience (P_x), experiences with hunting (P_y), and overall (Prob_G).
+Right now these seem to be responding appropriately to the presence of salmon in the system and the presence of hunt effort. We still have decisions to make about how P_x and P_y combine, but this at least works.
 
 ```{r, echo = FALSE, fig.width = 10}
 plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
 ```
 
-##### More
+##### Salmon consumption and foraging learning
+Seal 10 is prominent because right now all the seals eat the same number of salmon on each day, if they are selected to eat any.
+```{r, echo = FALSE}
 
-```{r}
-plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
+went_plot <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
+colnames(went_plot) <- c("Day", "went")
+plot_went <- ggplot(data = went_plot, aes(x = Day, y = went)) +
+  geom_point(color = "turquoise") +
+  labs(y = "Seals at the Gauntlet")
+
+plot_went/plot_eaten
+
+(plot_C/plot_x/plot_Px/plot_probs) + plot_layout(guides = "collect")
 ```
 
 
