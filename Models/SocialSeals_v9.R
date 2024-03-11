@@ -66,6 +66,10 @@ for(t in 1:(days-1)) {
   escape_chinook[t+1] <- escape_chinook[t] + salmon_result["Chinook", "E"]
   escape_coho[t+1] <- escape_coho[t] + salmon_result["Coho", "E"]
   
+  eaten_sockeye[t] <- salmon_result["Sockeye", "C"]
+  eaten_chinook[t] <- salmon_result["Chinook", "C"]
+  eaten_coho[t] <- salmon_result["Coho", "C"]
+  
   gauntlet_sockeye[t+1] <- salmon_result["Sockeye", "Ns"]
   gauntlet_chinook[t+1] <- salmon_result["Chinook", "Ns"]
   gauntlet_coho[t+1] <- salmon_result["Coho", "Ns"]
@@ -161,8 +165,10 @@ plot(1:days, colMeans(P_y))
 
 source("Functions/Plots.R")
 
-escape_plot
+gauntlet_plot + eaten_plot + escape_plot + plot_layout(guides = "collect")
 
-plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
+eaten_plot/plot_C/plot_x/plot_Px + plot_layout(guides = "collect")
+
+plot_seals/plot_H/plot_y/plot_Py + plot_layout(guides = "collect")
 
 plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
