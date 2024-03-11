@@ -7,7 +7,7 @@ days <- 365
 num_seals <- 10
 
 # seal consumption parameters
-alpha <- 1
+alpha <- 0.1
 Cmax <- 5
 gamma <- 0
 Y <- 0

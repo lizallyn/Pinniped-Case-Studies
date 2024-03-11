@@ -1,3 +1,5 @@
+## Plots for Visualizing model results
+
 # with ggplot to show each seal individually
 
 library(reshape2)
