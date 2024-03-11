@@ -101,14 +101,14 @@ escape_plot <- ggplot(data = escape.data, aes(x = Day)) +
   labs(y = "Cumulative Salmon Escaped")
 escape_plot
 
-eaten.data <- data.frame(cbind(1:days, eaten_chinook, eaten_sockeye, eaten_coho))
-colnames(eaten.data) <- c("Day", "Chinook", "Sockeye", "Coho")
-eaten.data <- melt(eaten.data, "Day", variable.name = "Species", value.name = "Count")
-eaten_plot <- ggplot(data = eaten.data, aes(x = Day, y = Count)) + 
+eaten.sp.data <- data.frame(cbind(1:days, eaten_chinook, eaten_sockeye, eaten_coho))
+colnames(eaten.sp.data) <- c("Day", "Chinook", "Sockeye", "Coho")
+eaten.sp.data <- melt(eaten.sp.data, "Day", variable.name = "Species", value.name = "Count")
+eaten_sp_plot <- ggplot(data = eaten.sp.data, aes(x = Day, y = Count)) + 
   geom_point(aes(color = Species)) +
   scale_color_manual(values = salmon.colors) +
-  labs(y = "Daily Salmon Eaten")
-eaten_plot
+  labs(y = "Daily Salmon Eaten by Species")
+eaten_sp_plot
 
 gauntlet.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
 colnames(gauntlet.data) <- c("Day", "Chinook", "Sockeye", "Coho")
