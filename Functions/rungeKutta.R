@@ -37,11 +37,11 @@ run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, delt
   return(X.res)
 }
 
-# Ns <- c(1000, 500, 50)
+# Ns <- c(6.2, 500, 1)
 # E <- c(0.3, 0.003, 0.1)
 # F_catch <- c(0, 0, 0.1)
 # 
-# run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = 5, alpha = alpha, gamma = gamma, Y = Y, 
+# run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = 20, alpha = alpha, gamma = gamma, Y = Y,
 #                F_catch = F_catch, E = E, M = natural_mort)
 
 
