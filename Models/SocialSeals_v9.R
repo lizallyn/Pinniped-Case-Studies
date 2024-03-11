@@ -19,7 +19,6 @@ source("Functions/createHarvestPlan.R")
 source("Functions/decideForagingDestination.R")
 source("Functions/learnX.R")
 source("Functions/learnY.R")
-source("Functions/get_dXdt.R")
 source("Functions/rungeKutta.R")
 source("Functions/getHarvested.R")
 
@@ -91,8 +90,14 @@ for(t in 1:(days-1)) {
   }
   
   # assign consumed salmon to seals at gauntlet
-  consumed_sum <- sum(salmon_result[,"C"])
-  salmon_consumed[seals_at_gauntlet, t] <- sum(consumed_sum)/length(seals_at_gauntlet)
+  
+  consumed_total[t] <- sum(c(eaten_sockeye[t], eaten_chinook[t], eaten_coho[t]))
+  if(length(seals_at_gauntlet) == 0 | consumed_total[t] == 0) {
+    salmon_consumed[,t] <- 0
+  } else {
+    salmon_consumed[seals_at_gauntlet, t] <- consumed_total[t]/length(seals_at_gauntlet)
+  }
+
   # if(any(salmon_consumed[,t] > 100)){
   #   print(c(consumed_sum, t))
   #   print(salmon_consumed[,t])
@@ -104,16 +109,24 @@ for(t in 1:(days-1)) {
   # } # for troubleshooting
 
   # seal harvest
-  H[t] <- getHarvested(day_plan = harvest_plan[t], num_gauntlet_seals = length(seals_at_gauntlet), 
-                        zone_efficiency = zone_efficiency, Hmax = harvest_max_perboat, 
-                        processing = processing_time, min_fishers = min_fishers, max_fishers = max_fishers, 
-                        gamma = gamma_H, Y = Y_H)
+  num_fishers <- sample(min_fishers:max_fishers, 1)
+  H[t] <- getHarvested(day_plan = harvest_plan[t], list_gauntlet_seals = seals_at_gauntlet, num_fishers = num_fishers,
+                        zone_efficiency = zone_efficiency, efficiency = efficiency, steepness = steepness)
   if(H[t] > 0){
-    seal_prob_gauntlet[sample(seals_at_gauntlet, H[t]), t+1] <- NA
+    killed <- sample(seals_at_gauntlet, H[t])
+    seal_prob_gauntlet[killed, t+1] <- NA
+    seal_forage_loc[killed, t+1] <- NA
+    x[killed, t] <- NA
+    y[killed, t] <- NA
+    C[killed, t] <- NA
+  } else {
+    killed <- 0
   }
+  
   
   # calculate x, y and prob_gauntlet for next time step
   ## This could all become some functions
+  alive <- which(killed %in% 1:num_seals)
   for(seal in 1:num_seals){
     # calculate C
     C[seal, t] <- salmon_consumed[seal, t] - w
@@ -134,7 +147,11 @@ for(t in 1:(days-1)) {
     P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
     
     # calculate Prob gauntlet
-    seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
+    if(is.na(seal_prob_gauntlet[seal, t])) {
+      seal_prob_gauntlet[seal, t+1] <- NA
+    } else {
+      seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
+    }
   }
   
 } # days loop
@@ -165,9 +182,9 @@ plot(1:days, colMeans(P_y))
 
 source("Functions/Plots.R")
 
-gauntlet_plot + eaten_plot + escape_plot + plot_layout(guides = "collect")
+gauntlet_plot / eaten_sp_plot / escape_plot + plot_layout(guides = "collect")
 
-eaten_plot/plot_C/plot_x/plot_Px + plot_layout(guides = "collect")
+eaten_sp_plot/plot_eaten/plot_C/plot_x/plot_Px + plot_layout(guides = "collect")
 
 plot_seals/plot_H/plot_y/plot_Py + plot_layout(guides = "collect")
 
