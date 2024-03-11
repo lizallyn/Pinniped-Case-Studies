@@ -26,6 +26,8 @@ eaten_chinook <- oneDzeroes
 eaten_sockeye <- oneDzeroes
 eaten_coho <- oneDzeroes
 
+consumed_total <- oneDzeroes
+
 gauntlet_chinook <- oneDzeroes
 gauntlet_sockeye <- oneDzeroes
 gauntlet_coho <- oneDzeroes
