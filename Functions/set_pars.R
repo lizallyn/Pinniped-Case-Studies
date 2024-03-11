@@ -39,11 +39,10 @@ natural_mort <- 0.0005
 
 # hunting parameters
 zone_efficiency <- 0.8
-processing_time <- 0.05
-gamma_H <- 0
-Y_H <- 0
+steepness_H <- 5
+efficiency <- 0.5
 min_fishers <- 13
 max_fishers <- 25
-coho_fish_rate <- 0.3
+coho_fish_rate <- 0.1
 salmon_days <- which(Daily_fish$total > 0)
-harvest_max_perboat <- 2
+
