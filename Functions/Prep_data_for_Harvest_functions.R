@@ -1,6 +1,6 @@
 # Harvest Plan data
 
-# install.packages("cropgrowdays")
-library(cropgrowdays)
+library(lubridate)
 
-boat_days <- day_of_year(x = as.Date("2023-09-10")):day_of_year(x = as.Date("2023-11-17"))
+boat_days <- yday(as.Date("2023-09-10")):day_of_year(x = as.Date("2023-11-17"))
+
