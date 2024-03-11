@@ -9,7 +9,7 @@ get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E) {
   return(c(dNdt, dCdt, dCatchdt, dEdt))
 }
 
-rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = 1){
+rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = 1/24){
   K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
   midX <- X + deltat* 0.5 * K1s
   K2s <- get_dXdt(Ns = midX[1:n_species],Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
@@ -31,11 +31,18 @@ run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, delt
   for (i in 1:length(times)) {
     X <- rungeKutta(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = deltat)
   }
-  names(X) <- rep(c("Ns", "C", "Catch", "E"), each = n_species)
-  return(X)
+  X.res <- matrix(X, nrow = n_species, ncol = length(X)/n_species, byrow = F)
+  colnames(X.res) <- c("Ns", "C", "Catch", "E")
+  rownames(X.res) <- c("Sockeye", "Chinook", "Coho")
+  return(X.res)
 }
 
-
+# Ns <- c(1000, 500, 50)
+# E <- c(0.3, 0.003, 0.1)
+# F_catch <- c(0, 0, 0.1)
+# 
+# run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = 5, alpha = alpha, gamma = gamma, Y = Y, 
+#                F_catch = F_catch, E = E, M = natural_mort)
 
 
 
