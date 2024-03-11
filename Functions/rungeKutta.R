@@ -1,20 +1,30 @@
 # apply 4th order runge-kutta to integrate over time period deltat
 # From Tim Feb 2024
 
-rungeKutta <- function(Cmax, Nseal, alpha, Ns, gamma, Y, F_catch, M, E, deltat = 1){
-  X <- c(Ns, 0, 0, 0)
-  K1s <- get_dXdt(Cmax, Nseal, alpha, Ns = X[1], gamma, Y, F_catch, M, E)
+
+rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = 1){
+  K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
   midX <- X + deltat* 0.5 * K1s
-  K2s <- get_dXdt(Cmax, Nseal, alpha, Ns= midX[1], gamma, Y, F_catch, M, E)
+  K2s <- get_dXdt(Ns = midX[1:n_species],Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
   midX <- X + deltat * 0.5 * K2s
-  K3s <- get_dXdt(Cmax, Nseal, alpha, Ns= midX[1], gamma, Y, F_catch, M, E)
+  K3s <- get_dXdt(Ns = midX[1:n_species], Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
   endX <- X + deltat * K3s
-  K4s <- get_dXdt(Cmax, Nseal, alpha, Ns= endX[1], gamma, Y, F_catch, M, E)
+  K4s <- get_dXdt(Ns = endX[1:n_species],Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
   Xsim <- X + deltat * (K1s / 6 + K2s / 3 + K3s / 3 + K4s / 6)
-  return(c(Ns = Xsim[1],
-           C = Xsim[2],
-           Catch = Xsim[3],
-           E = Xsim[4]))
+  return(c(Xsim))
 }
 
+run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, deltat = 1/24) {
+  times <- seq(0, 1, by = deltat)
+  if (times[length(times)]!= 1) {
+    stop("deltat must be a division of 1")
+  }
+  n_species <- length(Ns)
+  X <- c(Ns, rep(0, n_species), rep(0, n_species), rep(0, n_species))
+  for (i in 1:length(times)) {
+    X <- rungeKutta(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = deltat)
+  }
+  names(X) <- c("Ns", "C", "Catch", "E")
+  return(X)
+}
 

@@ -13,66 +13,22 @@ source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Fu
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Harvest_functions.R")
 
 ## Load Function Files
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/makeArray.R")
+source("Functions/set_pars.R")
+source("Functions/makeArray.R")
+source("Functions/collusion.R")
+source("Functions/salmonSpeciesUpdate.R")
+
+
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/createHarvestPlan.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/salmonSpeciesUpdate.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decideForagingDestination.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/collusion.R")
+
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learnX.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learnY.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_dXdt.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/rungeKutta.R")
 source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/getHarvested.R")
 
-## Set Up Parameters ----
 
-# loop parameters
-days <- 365
-
-# seal parameters
-num_seals <- 10
-
-# seal consumption parameters
-alpha <- 1
-Cmax <- 5
-gamma <- 0
-Y <- 0
-
-# seal learning parameters
-w <- 1
-ymin <- -10
-ymax <- 0
-xmin <- -1
-xmax <- 9
-steepness <- 1
-threshold <- -5
-slope_x <- 0.1
-intercept_x <- 0.1
-step <- 0.25
-decay <- 0.1
-buffer_Pymin <- 0.1 # Need to rememmber why this felt necessary?
-
-# seal social learning parameters
-num_seals_2_copy <- 0
-mean <- 0.5 # of the beta dist
-beta <- 15 # spread of the beta dist
-
-# salmon parameters
-sockeye_escape_rate <- 0.3
-chinook_escape_rate <- 0.03
-coho_escape_rate <- 0.1
-natural_mort <- 0.0005
-
-# hunting parameters
-zone_efficiency <- 0.8
-processing_time <- 0.05
-gamma_H <- 0
-Y_H <- 0
-min_fishers <- 13
-max_fishers <- 25
-coho_fish_rate <- 0.3
-salmon_days <- which(Daily_fish$total > 0)
-harvest_max_perboat <- 2
 
 ## Set Up Variables ----
 
@@ -125,9 +81,9 @@ for(t in 1:(days-1)) {
   
   # salmon arrive at the gauntlet
   daily_update <- salmonSpeciesUpdate(day = t, data = Daily_fish)
-  gauntlet_chinook[t] <- daily_update %>% slice(1) %>% pull(Chinook)
-  gauntlet_sockeye[t] <- daily_update %>% slice(1) %>% pull(Sockeye)
-  gauntlet_coho[t] <- daily_update %>% slice(1) %>%  pull(Coho)
+  gauntlet_chinook[t] <- daily_update$Chinook[1]
+  gauntlet_sockeye[t] <- daily_update$Sockeye[1]
+  gauntlet_coho[t] <- daily_update$Coho[1]
   gauntlet_salmon[t] <- sum(c(gauntlet_chinook[t], gauntlet_sockeye[t], gauntlet_coho[t]))
   
   # decide where each seal goes that day
@@ -148,15 +104,15 @@ for(t in 1:(days-1)) {
   
   # calculate salmon mortality 
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
-  sockeye_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+  sockeye_result <- run_rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                alpha = alpha, Ns = gauntlet_sockeye[t], 
                                gamma = gamma, Y = Y, E = sockeye_escape_rate, 
                                F_catch = sockeye_catch_rate[t], M = natural_mort, deltat = 1)
-  chinook_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+  chinook_result <- run_rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                alpha = alpha, Ns = gauntlet_chinook[t], 
                                gamma = gamma, Y = Y, E = chinook_escape_rate, 
                                F_catch = chinook_catch_rate[t], M = natural_mort, deltat = 1)
-  coho_result <- rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+  coho_result <- run_rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                alpha = alpha, Ns = gauntlet_coho[t], 
                                gamma = gamma, Y = Y, E = coho_escape_rate, 
                                F_catch = coho_catch_rate[t], M = natural_mort, deltat = 1)
