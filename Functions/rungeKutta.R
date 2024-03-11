@@ -31,7 +31,11 @@ run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, delt
   for (i in 1:length(times)) {
     X <- rungeKutta(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = deltat)
   }
-  names(X) <- c("Ns", "C", "Catch", "E")
+  names(X) <- rep(c("Ns", "C", "Catch", "E"), each = n_species)
   return(X)
 }
+
+
+
+
 
