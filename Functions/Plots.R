@@ -32,12 +32,6 @@ plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color =
   scale_color_manual(values = colors)
 plot_probs
 
-# went_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
-# plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
-#   geom_point() +
-#   scale_color_manual(values = colors)
-# plot_eaten
-
 eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
 plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
   geom_point() +
@@ -74,6 +68,8 @@ colnames(H_plot) <- c("Day", "H")
 plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
   geom_point(color = "turquoise")
 plot_H
+
+# killed_plot <- data.frame(which(is.na(seal_forage_loc))
 
 y_plot <- prepForPlots(y, value.col = "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
