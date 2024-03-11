@@ -9,26 +9,24 @@ library(ggplot2)
 library(patchwork)
 
 ## Load Data Files
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Salmon_functions.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/Prep_data_for_Harvest_functions.R")
+source("Functions/Prep_data_for_Salmon_functions.R")
+source("Functions/Prep_data_for_Harvest_functions.R")
 
 ## Load Function Files
-source("Functions/set_pars.R")
 source("Functions/makeArray.R")
 source("Functions/collusion.R")
 source("Functions/salmonSpeciesUpdate.R")
+source("Functions/createHarvestPlan.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/get_dXdt.R")
+source("Functions/rungeKutta.R")
+source("Functions/getHarvested.R")
 
-
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/createHarvestPlan.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/decideForagingDestination.R")
-
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learnX.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/learnY.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/get_dXdt.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/rungeKutta.R")
-source("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Functions/getHarvested.R")
-
-
+## Load Set Up Files
+source("Functions/set_pars.R")
+source("Functions/initialize_variables.R")
 
 ## Set Up Variables ----
 
