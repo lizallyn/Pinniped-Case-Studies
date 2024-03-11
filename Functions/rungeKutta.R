@@ -1,6 +1,13 @@
-# apply 4th order runge-kutta to integrate over time period deltat
+# calculate derivative expressions. apply 4th order runge-kutta to integrate over time period deltat
 # From Tim Feb 2024
 
+get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E) {
+  dNdt <- -Cmax *alpha * Ns * Nseal^(1 + gamma) / (Cmax + alpha * Ns * Nseal^gamma + Y) - F_catch * Ns - M * Ns - E * Ns
+  dCdt <-   Cmax * Nseal *(alpha * Ns * Nseal^gamma + Y) / (Cmax + alpha * Ns * Nseal^gamma + Y)
+  dCatchdt <- F_catch * Ns
+  dEdt <- E * Ns
+  return(c(dNdt, dCdt, dCatchdt, dEdt))
+}
 
 rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = 1){
   K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
