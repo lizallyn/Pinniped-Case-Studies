@@ -22,6 +22,10 @@ escape_chinook <- oneDzeroes
 escape_sockeye <- oneDzeroes
 escape_coho <- oneDzeroes
 
+eaten_chinook <- oneDzeroes
+eaten_sockeye <- oneDzeroes
+eaten_coho <- oneDzeroes
+
 gauntlet_chinook <- oneDzeroes
 gauntlet_sockeye <- oneDzeroes
 gauntlet_coho <- oneDzeroes
