@@ -172,3 +172,8 @@ plot(1:days, colMeans(P_y))
 
 ## Slightly Nicer ----
 
+source("Functions/Plots.R")
+
+plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
+
+plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
