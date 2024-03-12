@@ -15,6 +15,8 @@ collusion <- function(probs_list, prob_gauntlet_of_seal, seals_2_copy, mean, bet
       sample(1:length(probs_list), seals_2_copy, replace = F)], na.rm = T)
     if(is.nan(social_info)){
       P_social <- NA
+    } else if(is.na(social_info)){
+      P_social <- prob_gauntlet_of_seal
     } else {
       P_social <- (1-scaled_rec) * prob_gauntlet_of_seal + scaled_rec * social_info
     }
