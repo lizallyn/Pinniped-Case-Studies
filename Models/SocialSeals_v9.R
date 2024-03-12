@@ -112,32 +112,35 @@ for(t in 1:(days-1)) {
   num_fishers <- sample(min_fishers:max_fishers, 1)
   H[t] <- getHarvested(day_plan = harvest_plan[t], list_gauntlet_seals = seals_at_gauntlet, num_fishers = num_fishers,
                         zone_efficiency = zone_efficiency, efficiency = efficiency, steepness = steepness)
+  
   if(H[t] > 0){
     killed <- sample(seals_at_gauntlet, H[t])
+    kill_list <- c(kill_list, killed)
     seal_prob_gauntlet[killed, t+1] <- NA
     seal_forage_loc[killed, t+1] <- NA
     x[killed, t] <- NA
     y[killed, t] <- NA
     C[killed, t] <- NA
-  } else {
-    killed <- 0
   }
   
   
   # calculate x, y and prob_gauntlet for next time step
   ## This could all become some functions
-  alive <- which(killed %in% 1:num_seals)
   for(seal in 1:num_seals){
     # calculate C
-    C[seal, t] <- salmon_consumed[seal, t] - w
+    if(seal %in% kill_list){
+      C[seal, t] <- NA
+    } else {
+      C[seal, t] <- salmon_consumed[seal, t] - w
+    }
     
     # calculate d_x and d_y
     d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
                    forage_loc = seal_forage_loc[seal, t],  step = step, 
-                   xmin = xmin, xmax = xmax, decay = decay)
+                   xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list)
     d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
                    seal_forage_loc[seal, t], step = step, 
-                   ymin = ymin, ymax = ymax, decay = decay)
+                   ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list)
     
     # update x and y and P_x and P_y
     x[seal, t+1] <- x[seal, t] + d_x
