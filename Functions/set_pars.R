@@ -24,7 +24,7 @@ slope_x <- 0.1
 intercept_x <- 0.1
 step <- 0.25
 decay <- 0.1
-buffer_Pymin <- 0.1 # Need to rememmber why this felt necessary?
+buffer_Pymin <- 0
 
 # seal social learning parameters
 num_seals_2_copy <- 3
@@ -39,8 +39,8 @@ natural_mort <- 0.0005
 
 # hunting parameters
 zone_efficiency <- 0.8
-steepness_H <- 10
-efficiency <- 0.2
+steepness_H <- 10 # how quick does it saturate
+efficiency <- 0.2 # what prop of seals are they capable of taking
 min_fishers <- 13
 max_fishers <- 25
 coho_fish_rate <- 0.1
