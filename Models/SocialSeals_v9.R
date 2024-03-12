@@ -116,44 +116,39 @@ for(t in 1:(days-1)) {
   if(H[t] > 0){
     killed <- sample(seals_at_gauntlet, H[t])
     kill_list <- c(kill_list, killed)
-    seal_prob_gauntlet[killed, t+1] <- NA
-    seal_forage_loc[killed, t+1] <- NA
-    x[killed, t] <- NA
-    y[killed, t] <- NA
-    C[killed, t] <- NA
   }
   
   
   # calculate x, y and prob_gauntlet for next time step
   ## This could all become some functions
   for(seal in 1:num_seals){
-    # calculate C
-    if(seal %in% kill_list){
-      C[seal, t] <- NA
-    } else {
+    if(!(seal %in% kill_list)){
       C[seal, t] <- salmon_consumed[seal, t] - w
-    }
-    
-    # calculate d_x and d_y
-    d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
-                   forage_loc = seal_forage_loc[seal, t],  step = step, 
-                   xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list)
-    d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
-                   seal_forage_loc[seal, t], step = step, 
-                   ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list)
-    
-    # update x and y and P_x and P_y
-    x[seal, t+1] <- x[seal, t] + d_x
-    P_x[seal, t+1] <- x[seal, t+1] * slope_x + intercept_x
-    
-    y[seal, t+1] <- y[seal, t] + d_y
-    P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
-    
-    # calculate Prob gauntlet
-    if(is.na(seal_prob_gauntlet[seal, t])) {
-      seal_prob_gauntlet[seal, t+1] <- NA
-    } else {
+      
+      # calculate d_x and d_y
+      d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
+                    forage_loc = seal_forage_loc[seal, t],  step = step, 
+                    xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list)
+      d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
+                    seal_forage_loc[seal, t], step = step, 
+                    ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list)
+      
+      # update x and y and P_x and P_y
+      x[seal, t+1] <- x[seal, t] + d_x
+      P_x[seal, t+1] <- x[seal, t+1] * slope_x + intercept_x
+      
+      y[seal, t+1] <- y[seal, t] + d_y
+      P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
+      
       seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
+    } else {
+      seal_prob_gauntlet[seal, t+1] <- 0
+      seal_forage_loc[seal, t+1] <- NA
+      x[seal, t+1] <- NA
+      y[seal, t+1] <- NA
+      C[seal, t] <- NA
+      P_x[seal, t+1] <- NA
+      P_y[seal, t+1] <- NA
     }
   }
   
@@ -175,7 +170,7 @@ plot(1:days, gauntlet_salmon, main = "salmon at the gauntlet")
 plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
 
 
-plot(1:days, colMeans(C))
+plot(1:days, colMeans(C, na.rm = T))
 plot(1:days, colMeans(P_x))
 H.plot <- data.frame(cbind(1:days, H))
 plot(H.plot)
