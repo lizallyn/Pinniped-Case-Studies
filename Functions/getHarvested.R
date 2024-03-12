@@ -11,7 +11,7 @@ getHarvested <- function(day_plan, list_gauntlet_seals, zone_efficiency, num_fis
   } else {
     print("No harvest plan submitted")
   }
-  return(harvested)
+  return(round(harvested))
 }
 
 # getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, min_fishers, max_fishers, gamma, Y) {
