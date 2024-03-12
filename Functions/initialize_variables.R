@@ -22,12 +22,6 @@ escape_chinook <- oneDzeroes
 escape_sockeye <- oneDzeroes
 escape_coho <- oneDzeroes
 
-eaten_chinook <- oneDzeroes
-eaten_sockeye <- oneDzeroes
-eaten_coho <- oneDzeroes
-
-consumed_total <- oneDzeroes
-
 gauntlet_chinook <- oneDzeroes
 gauntlet_sockeye <- oneDzeroes
 gauntlet_coho <- oneDzeroes
@@ -48,3 +42,11 @@ harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years,
 gauntlet_salmon <- oneDzeroes
 # troubleshooting ghost salmons
 screwy <- c(species = NA, day = NA, gauntlet_t = NA, Ns = NA, C = NA, Catch = NA, E = NA)
+
+# If you're using these it means you didn't clear out variables between runs!!!
+eaten_chinook <- oneDzeroes
+eaten_sockeye <- oneDzeroes
+eaten_coho <- oneDzeroes
+consumed_total <- oneDzeroes
+
+kill_list <- c()
