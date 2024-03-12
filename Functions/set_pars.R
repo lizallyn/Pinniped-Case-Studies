@@ -39,8 +39,8 @@ natural_mort <- 0.0005
 
 # hunting parameters
 zone_efficiency <- 0.8
-steepness_H <- 5
-efficiency <- 0.5
+steepness_H <- 10
+efficiency <- 0.2
 min_fishers <- 13
 max_fishers <- 25
 coho_fish_rate <- 0.1
