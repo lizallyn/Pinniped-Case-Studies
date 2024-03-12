@@ -1,7 +1,7 @@
 # function for calculating d_x
 
 learnX <- function(food, x_t, forage_loc, step, xmin, xmax, decay) {
-  if(is.na(forage_loc)){
+  if(is.na(food)){
     d_x <- NA
   } else if(forage_loc == 0){
     if(x_t == 0){

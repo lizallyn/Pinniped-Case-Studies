@@ -1,7 +1,7 @@
 # function for calculating d_y if they go to the gauntlet
 
 learnY <- function(hunting, y_t, forage_loc, step, ymin, ymax, decay) {
-  if(is.na(forage_loc)){
+  if(is.na(food)){
     d_y <- NA
   } else if(forage_loc == 0){
     if(y_t == 0) {
