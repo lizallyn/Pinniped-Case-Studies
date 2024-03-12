@@ -11,8 +11,15 @@ getHarvested <- function(day_plan, list_gauntlet_seals, zone_efficiency, num_fis
   } else {
     print("No harvest plan submitted")
   }
-  return(round(harvested))
+  # return(round(harvested))
+  return(harvested)
 }
+
+# efficiency <- seq(0, 1, 0.0001)
+# steepness <- seq(0, 10, 0.1)
+# num_fishers <- 0:50
+# plot(num_fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:20, zone_efficiency = 0.8,
+#                                num_fishers = num_fishers, efficiency = 0.2, steepness = 10))
 
 # getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, min_fishers, max_fishers, gamma, Y) {
 #   num_fishers <- sample(min_fishers:max_fishers, 1)
