@@ -7,7 +7,6 @@ salmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 
   Chum_day <- chum + (data %>% slice(day) %>% pull(AvgChum))
   Pink_day <- pink + (data %>% slice(day) %>% pull(AvgPink))
   Steelhead_day <- pink + (data %>% slice(day) %>% pull(AvgSteelhead))
-  total <- sum(data %>% slice(day))
   
  return(data.frame(Chinook = Chinook_day,
              Sockeye = Sockeye_day,
