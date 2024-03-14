@@ -55,7 +55,7 @@ Each seal's individual probability of going to the Gauntlet updates daily accord
 plot_eaten/plot_C/plot_x/plot_Px + plot_layout(guides = "collect")
 ```
 
-A seal's cumulative experience with hunting also updates daily. Seals that go to the Gauntlet on a day when hunting occurs gain negative experience with the Gauntlet that causes their "y" to decrease. If no hunting occurs, their "y" increases. If a seal does not go to the Gauntlet, they also begin to gain uncertainty about their knowledge and their "y" decays toward a neutral value. Each seal's "y" is then used to calculate their probability of going to the Gauntlet based on their cumulative experience with hunting "P_y".
+A seal's cumulative experience with hunting also updates daily. Seals are only harvested through incidental take associated with salmon fisheries in the Base Run Realm. Boat-based harvest occurs during the Coho fishery, which is modeled to occur between September and November. During this time, take of seals is a type 2 functional response on the number of fishers on the water. Seals that go to the Gauntlet on a day when a take occurs gain negative experience with the Gauntlet that causes their "y" to decrease. If no hunting occurs, their "y" increases. If a seal does not go to the Gauntlet, they also begin to gain uncertainty about their knowledge and their "y" decays toward a neutral value. Each seal's "y" is then used to calculate their probability of going to the Gauntlet based on their cumulative experience with hunting "P_y".
 
 ``` {r, plot5, echo = FALSE, fig.height = 6, warning = FALSE}
 plot_H/plot_y/plot_Py + plot_layout(guides = "collect")
@@ -85,6 +85,8 @@ receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = s
 receptivity_plot
 
 ```
+
+
 
 
 
