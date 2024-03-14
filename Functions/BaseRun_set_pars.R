@@ -4,7 +4,7 @@
 days <- 365
 
 # seal parameters
-num_seals <- 10
+num_seals <- 20
 
 # seal consumption parameters
 alpha <- 0.1
@@ -23,11 +23,11 @@ threshold <- -5
 slope_x <- 0.1
 intercept_x <- 0.1
 step <- 0.25
-decay <- 0.1
+decay <- 0.05
 buffer_Pymin <- 0
 
 # seal social learning parameters
-num_seals_2_copy <- 3
+num_seals_2_copy <- 2
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
@@ -39,8 +39,8 @@ natural_mort <- 0.0005
 
 # hunting parameters
 zone_efficiency <- 0.8
-steepness_H <- 10 # how quick does it saturate
-efficiency <- 0.2 # what prop of seals are they capable of taking
+steepness_H <- 10 # how quick does it saturate (higher = slower)
+efficiency <- 0.05 # what prop of seals are they capable of taking
 min_fishers <- 13
 max_fishers <- 25
 
