@@ -10,7 +10,7 @@ output: html_document
 ```{r, setup, include = FALSE}
 knitr::opts_knit$set(root.dir = '~/Github/PinnipedCaseStudies')
 source("Functions/assembleTheLegos.R")
-
+assembleTheLegos("Base")
 ```
 
 ### Reminders
@@ -28,15 +28,26 @@ Updating model explanation document
 
 This page is currently a place where I am developing the base run and describing the world it exists in.  
 Once upon a time in the Base Run Realm there lived `r num_seals` seals. In the Base Run Realm in the State of Ballard there is a magnificent river valley called the Gauntlet. Every summer, salmon of many species flood the Gauntlet and the seals move to their summer camp at Shilshole to gorge themselves until they are fat and happy. The people of Ballard also harvest salmon, and occasionally kill seals incidentally while they are fishing. There is no designated harvest of seals in the Base Run Realm.  
-In the Base Run Realm seals learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information between them. Seals decide whether to go to the Gauntlet each day using a combination of their own experience and the experience of `r num_seals_2_copy` other randomly picked seals.  
+
+#### The Daily Flow
+
 Some number of salmon arrive at the Gauntlet each day according to their run timing - Sockeye arrive earliest in the summer, followed by Chinook and then Coho in the fall. 
 
-```{r, include = FALSE}
+```{r, plot1, echo = FALSE, fig.height = 3}
 gauntlet_plot
 ```
 
-Salmon experience mortality via multiple pathways: consumption by seals, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. 
+Salmon experience mortality via multiple pathways: consumption by seals, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. In the Base Run Realm, the only fishery that exists within the Gauntlet targets Coho for a short window in September - November. [Note here to look at non-tribal, rec and Suquamish regs. And come up with a rate that matches the catch data] 
 
+```{r, plot2, echo = FALSE, fig.height = 6}
+fished_plot / eaten_sp_plot / escape_plot + plot_layout(guides = "collect")
+```
+
+In the Base Run Realm seals learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information between them. Seals decide whether to go to the Gauntlet each day using a combination of their own experience and the experience of `r num_seals_2_copy` other randomly picked seals.  
+
+```{r, plot3, echo = FALSE, fig.height = 5, warning = FALSE}
+plot_seals / plot_probs + plot_layout(guides = "collect")
+```
 
 ### Some Fun Plots!
 
