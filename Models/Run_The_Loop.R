@@ -41,6 +41,10 @@ for(t in 1:(days-1)) {
   eaten_chinook[t] <- salmon_result["Chinook", "C"]
   eaten_coho[t] <- salmon_result["Coho", "C"]
   
+  fished_sockeye[t] <- salmon_result["Sockeye", "Catch"]
+  fished_chinook[t] <- salmon_result["Chinook", "Catch"]
+  fished_coho[t] <- salmon_result["Coho", "Catch"]
+  
   gauntlet_sockeye[t+1] <- salmon_result["Sockeye", "Ns"]
   gauntlet_chinook[t+1] <- salmon_result["Chinook", "Ns"]
   gauntlet_coho[t+1] <- salmon_result["Coho", "Ns"]
