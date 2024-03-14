@@ -1,5 +1,5 @@
 source("Functions/assembleTheLegos.R")
-assemble
+assembleTheLegos("Base")
 
 gauntlet_plot / eaten_sp_plot / escape_plot + plot_layout(guides = "collect")
 
