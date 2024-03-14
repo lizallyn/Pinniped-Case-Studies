@@ -6,7 +6,6 @@
 
 ## Load Packages and Data
 
-
 ## Load Data Files
 source("Functions/Prep_data_for_Salmon_functions.R")
 source("Functions/Prep_data_for_Harvest_functions.R")
@@ -23,10 +22,11 @@ source("Functions/rungeKutta.R")
 source("Functions/getHarvested.R")
 
 ## Load Set Up Files
-source("Functions/set_pars.R")
 source("Functions/BaseRun_set_pars.R")
+source("Functions/BaseRun_initialize_variables.R")
 
-source("Functions/initialize_variables.R")
+# source("Functions/set_pars.R")
+# source("Functions/initialize_variables.R")
 
 
 # Run Loop ----
@@ -93,23 +93,12 @@ for(t in 1:(days-1)) {
   }
   
   # assign consumed salmon to seals at gauntlet
-  
   consumed_total[t] <- sum(c(eaten_sockeye[t], eaten_chinook[t], eaten_coho[t]))
   if(length(seals_at_gauntlet) == 0 | consumed_total[t] == 0) {
     salmon_consumed[,t] <- 0
   } else {
     salmon_consumed[seals_at_gauntlet, t] <- consumed_total[t]/length(seals_at_gauntlet)
   }
-
-  # if(any(salmon_consumed[,t] > 100)){
-  #   print(c(consumed_sum, t))
-  #   print(salmon_consumed[,t])
-  #   print(gauntlet_chinook[t])
-  #   print(chinook_result)
-  #   print(gauntlet_sockeye[t])
-  #   print(sockeye_result)
-  #   print(seals_at_gauntlet)
-  # } # for troubleshooting
 
   # seal harvest
   num_fishers <- sample(min_fishers:max_fishers, 1)
@@ -174,10 +163,10 @@ plot(1:days, colSums(salmon_consumed), main = "salmon consumed")
 
 
 plot(1:days, colMeans(C, na.rm = T))
-plot(1:days, colMeans(P_x))
+plot(1:days, colMeans(P_x, na.rm = T))
 H.plot <- data.frame(cbind(1:days, H))
 plot(H.plot)
-plot(1:days, colMeans(P_y))
+plot(1:days, colMeans(P_y, na.rm = T))
 
 ## Slightly Nicer ----
 
