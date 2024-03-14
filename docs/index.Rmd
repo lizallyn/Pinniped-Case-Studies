@@ -26,8 +26,8 @@ Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BO
 
 ### The Base Run Realm
 
-This page is currently a place where I am developing the base run and describing the world it exists in.  
-Once upon a time in the Base Run Realm there lived `r num_seals` seals. In the Base Run Realm in the State of Ballard there is a magnificent river valley called the Gauntlet. Every summer, salmon of many species flood the Gauntlet and the seals move to their summer camp at Shilshole to gorge themselves until they are fat and happy. The people of Ballard also harvest salmon, and occasionally kill seals incidentally while they are fishing. There is no designated harvest of seals in the Base Run Realm.  
+This page is currently a place where I am developing the base run and describing the world it exists in. This part sounds really dumb but I need a quick way to describe the world and differentiate it from the experimental runs.  
+Once upon a time in the Base Run Realm there lived `r num_seals` seals. In the Base Run Realm in the State of Ballard there is a river valley called the Gauntlet. Every summer, salmon of many species flood the Gauntlet and the seals move to their summer camp at Shilshole to gorge themselves until they are fat and happy. The people of Ballard also harvest salmon, and occasionally kill seals incidentally while they are fishing. There is no designated harvest of seals in the Base Run Realm.
 
 #### The Daily Flow
 
@@ -88,7 +88,7 @@ receptivity_plot
 
 
 
-
+#### Parameter Table
 
 Here's a quick (not exhaustive) table of parameter values:
 
