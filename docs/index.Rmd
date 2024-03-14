@@ -17,15 +17,21 @@ Current working model is in "Assemble_the_Legos.R"
 Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (haphazardly updated right now)
 
 ### Currently Working On
-Creating a Base Run and making sure it conceptually checks out
-Making the results of the base run print to this page for easy comparison
-Constructing a diagnostics recipe script
-Updating model explanation document
+Creating a Base Run and making sure it conceptually checks out  
+Making the results of the base run print to this page for easy comparison  
+Constructing a diagnostics recipe script  
+Updating model explanation document  
+
+### The Base Run Realm
+
+This page is currently a place where I am developing the base run and describing the world it exists in.  
+Once upon a time in the Base Run Realm there lived `r num_seals` seals. In the Base Run Realm in the State of Ballard there is a magnificent river valley called the Gauntlet. Every summer, salmon of many species flood the Gauntlet and the seals move to their summer camp at Shilshole to gorge themselves until they are fat and happy. The people of Ballard also harvest salmon, and occasionally kill seals incidentally while they are fishing. There is no designated harvest of seals in the Base Run Realm.  
+In the Base Run Realm seals learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information between them. Seals decide whether to go to the Gauntlet each day using a combination of their own experience and the experience of `r num_seals_2_copy` other randomly picked seals. 
+
 
 ### Some Fun Plots!
 
 ```{r, include=FALSE}
-getwd()
 source("Models/Assemble_The_Legos.R")
 
 ```
@@ -36,7 +42,7 @@ First, here's a summary of the inputs. Right now it's parameterized for the Lock
 
 Species present here are Sockeye, Chinook, and Coho. Their arrival at the gauntlet each day is forced from count data at the Locks (provided by Muckleshoot).
 
-The number of salmon of each species present at the gauntlet for each day is presented below. Really it's just salmon arriving that are an input not total numbers but I didn't keep tabs on that separately, so here's a close approximation.
+The number of salmon of each species present at the gauntlet for each day is presented below. Really it's just salmon arriving that are an input not total numbers but I didn't keep tabs on that separately, so here's a rough approximation.
 
 ```{r, echo = FALSE, fig.height=3}
 salmon.arrival.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
