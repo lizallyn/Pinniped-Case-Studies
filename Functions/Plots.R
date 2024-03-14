@@ -6,7 +6,6 @@ library(reshape2)
 library(ggplot2)
 library(patchwork)
 
-seal.colors <- RColorBrewer::brewer.pal(10, "Set3")
 seal.dfs <- c("seal_prob_gauntlet", "C")
 
 prepForPlots <- function(df, key.col = "Seal", 
@@ -21,7 +20,7 @@ prepForPlots <- function(df, key.col = "Seal",
 prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
 
 # Make Seal Palette
-colors <- RColorBrewer::brewer.pal(num_seals, "Set3")
+colors <- rep(RColorBrewer::brewer.pal(10, "Set3"), times = (num_seals/10))
 color.names <- levels(prob_gauntlet_plot[,"Seal"])
 names(colors) <- color.names
 
