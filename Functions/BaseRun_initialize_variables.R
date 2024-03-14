@@ -27,6 +27,10 @@ gauntlet_chinook <- oneDzeroes
 gauntlet_sockeye <- oneDzeroes
 gauntlet_coho <- oneDzeroes
 
+fished_chinook <- oneDzeroes
+fished_sockeye <- oneDzeroes
+fished_coho <- oneDzeroes
+
 H <- oneDzeroes
 
 ### Variable Rates ----
