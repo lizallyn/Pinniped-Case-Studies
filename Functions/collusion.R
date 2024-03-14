@@ -22,6 +22,5 @@ collusion <- function(probs_list, prob_gauntlet_of_seal, seals_2_copy, mean, bet
     }
     return(P_social)
   }
-  
 }
 

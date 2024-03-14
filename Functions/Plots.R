@@ -72,7 +72,17 @@ plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
   geom_point(color = "turquoise")
 plot_H
 
-# killed_plot <- data.frame(which(is.na(seal_forage_loc))
+prob_gauntlet_of_seal <- seq(0, 1, 0.01)
+alpha <- (-beta*mean)/(mean-1)
+receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
+max <- dbeta(x = mean, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
+min <- 0
+scaled_rec <- (receptivity - min)/(max - min)
+rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
+receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
+  geom_line(lwd = 2, color = "turquoise3") +
+  labs(y = "Receptivity", x = "P_G")
+receptivity_plot
 
 y_plot <- prepForPlots(y, value.col = "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
