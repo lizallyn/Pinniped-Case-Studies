@@ -12,9 +12,7 @@ for(t in 1:(days-1)) {
   gauntlet_salmon[t] <- sum(c(gauntlet_chinook[t], gauntlet_sockeye[t], gauntlet_coho[t]))
   
   # decide where each seal goes that day
-  for(seal in 1:num_seals) {
-    seal_forage_loc[seal,t] <- decideForagingDestination(seal_prob_gauntlet[seal,t])
-  }
+  seal_forage_loc[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = decideForagingDestination)
   
   # round of copying
   for(seal in 1:num_seals) {
