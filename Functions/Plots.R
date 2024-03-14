@@ -28,7 +28,8 @@ names(colors) <- color.names
 prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
 plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
   geom_point() +
-  scale_color_manual(values = colors)
+  scale_color_manual(values = colors) +
+  labs(y = "Prob go to Gauntlet")
 plot_probs
 
 eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
@@ -102,7 +103,7 @@ eaten.sp.data <- melt(eaten.sp.data, "Day", variable.name = "Species", value.nam
 eaten_sp_plot <- ggplot(data = eaten.sp.data, aes(x = Day, y = Count)) + 
   geom_point(aes(color = Species)) +
   scale_color_manual(values = salmon.colors) +
-  labs(y = "Daily Salmon Eaten by Species")
+  labs(y = "Daily Salmon Eaten")
 eaten_sp_plot
 
 gauntlet.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
@@ -113,6 +114,14 @@ gauntlet_plot <- ggplot(data = gauntlet.data, aes(x = Day, y = Count)) +
   scale_color_manual(values = salmon.colors) +
   labs(y = "Daily Salmon at Gauntlet")
 gauntlet_plot
+
+fished.data <- data.frame(cbind(1:days, fished_chinook, fished_sockeye, fished_coho))
+colnames(fished.data) <- c("Day", "Chinook", "Sockeye", "Coho")
+fished.data <- melt(fished.data, "Day", variable.name = "Species", value.name = "Count")
+fished_plot <- ggplot(data = fished.data, aes(x = Day, y = Count)) +
+  geom_point(aes(color = Species)) + 
+  scale_color_manual(values = salmon.colors) +
+  labs(y = "Daily Fished Salmon")
 
 ## Composites ----
 
