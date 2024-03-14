@@ -1,3 +1,5 @@
+### This is the Dashboard from which to run the social seals model
+
 ## Load Data Files
 source("Functions/Prep_data_for_Salmon_functions.R")
 source("Functions/Prep_data_for_Harvest_functions.R")

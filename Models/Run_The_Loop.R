@@ -1,4 +1,6 @@
 ## This will make no sense without "Assemble_the_Legos.R"
+# Runs just the daily loop
+# March 2024
 
 for(t in 1:(days-1)) {
   
