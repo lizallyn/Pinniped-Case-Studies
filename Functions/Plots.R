@@ -29,25 +29,28 @@ prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
 plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
   geom_point() +
   scale_color_manual(values = colors) +
-  labs(y = "Prob go to Gauntlet")
+  labs(y = "Prob_Gauntlet")
 plot_probs
 
 eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
 plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
   geom_point() +
-  scale_color_manual(values = colors)
+  scale_color_manual(values = colors) +
+  labs(y = "Salmon Eaten per Seal")
 plot_eaten
 
 C_plot <- prepForPlots(C, value.col = "C")
 plot_C <- ggplot(data = C_plot, aes(x = Day, y = C, color = Seal)) + 
   geom_point() +
-  scale_color_manual(values = colors)
+  scale_color_manual(values = colors) + 
+  labs(y = "C")
 plot_C
 
 x_plot <- prepForPlots(x, value.col = "x")
 plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
   geom_point() +
-  scale_color_manual(values = colors)
+  scale_color_manual(values = colors) + 
+  labs(y = "x")
 plot_x
 
 Px_plot <- prepForPlots(P_x, value.col = "P_x")
