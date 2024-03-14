@@ -4,21 +4,21 @@ source("Functions/Prep_data_for_Harvest_functions.R")
 
 ## Load Function Files
 source("Functions/makeArray.R")
-source("Functions/collusion.R")
-source("Functions/salmonSpeciesUpdate.R")
 source("Functions/createHarvestPlan.R")
+source("Functions/salmonSpeciesUpdate.R")
 source("Functions/decideForagingDestination.R")
-source("Functions/learnX.R")
-source("Functions/learnY.R")
+source("Functions/collusion.R")
 source("Functions/rungeKutta.R")
 source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
 
 ## Load Set Up Files
 source("Functions/BaseRun_set_pars.R")
 source("Functions/BaseRun_initialize_variables.R")
 
 ## Run the Loop
-
+source("Models/Run_The_Loop.R")
 
 ## Plots
 source("Functions/Plots.R")

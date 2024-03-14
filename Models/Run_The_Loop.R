@@ -45,22 +45,6 @@ for(t in 1:(days-1)) {
   gauntlet_chinook[t+1] <- salmon_result["Chinook", "Ns"]
   gauntlet_coho[t+1] <- salmon_result["Coho", "Ns"]
   
-  # check it's ok
-  if(sum(salmon_result["Sockeye",c("C", "Catch", "E")]) > gauntlet_sockeye[t]) {
-    screwy <- rbind(screwy, c(species = "Sockeye", day = t, gauntlet_t = gauntlet_sockeye[t], salmon_result["Sockeye",]))
-    print(paste("Sockeye day", t, "check screwy!!!"))
-  } 
-  if(sum(salmon_result["Chinook",c("C", "Catch", "E")]) > gauntlet_chinook[t]) {
-    screwy <- rbind(screwy, c(species = "Chinook", day = t, gauntlet_t = gauntlet_chinook[t], salmon_result["Chinook",]))
-    print(paste("Chinook day", t, "check screwy!!!"))
-    # 
-  } 
-  if(sum(salmon_result["Coho",c("C", "Catch", "E")]) > gauntlet_coho[t]) {
-    screwy <- rbind(screwy, c(species = "Coho", day = t, gauntlet_t = gauntlet_coho[t], salmon_result["Coho",]))
-    print(paste("Coho day", t, "check screwy!!!"))
-    # 
-  }
-  
   # assign consumed salmon to seals at gauntlet
   consumed_total[t] <- sum(c(eaten_sockeye[t], eaten_chinook[t], eaten_coho[t]))
   if(length(seals_at_gauntlet) == 0 | consumed_total[t] == 0) {
