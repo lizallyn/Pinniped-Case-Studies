@@ -1,4 +1,4 @@
-## This will make no sense without "Assemble_the_Legos.R"
+## This will make no sense without "assembleTheLegos.R"
 # Runs just the daily loop
 # March 2024
 
