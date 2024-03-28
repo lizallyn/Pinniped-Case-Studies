@@ -37,7 +37,17 @@ H <- oneDzeroes
 coho_catch_rate <- oneDzeroes
 coho_catch_rate[boat_days] <- coho_fish_rate
 chinook_catch_rate <- oneDzeroes
+chinook_catch_rate[boat_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
+sockeye_catch_rate[boat_days] <- sockeye_fish_rate
+
+Y_smolts <- oneDzeroes
+Y_smolts[91:244] <- Y_smolts_est #????
+# 0.005 = 5 smolts if 1 adult = 1000 smolts
+# 0.01 = 5 smolts if 1 adult = 500 smolts
+# 0.3 produces an uptick in C when only smolts present
+# Chasco 2017 Table 4
+# April 1 - Sept 1 right now
 
 harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, 
                                   boat_days = boat_days, salmon_days = salmon_days)

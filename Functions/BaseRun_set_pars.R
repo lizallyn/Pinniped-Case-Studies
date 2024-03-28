@@ -8,9 +8,10 @@ num_seals <- 20
 
 # seal consumption parameters
 alpha <- 0.1
-Cmax <- 5
+Cmax <- 5 # this was initially made up but actually makes some sense
 gamma <- 0
-Y <- 0
+Y <- 0 # replaced by Y_smolts variable
+Y_smolts_est <- 0.01
 
 # seal learning parameters
 w <- 1
@@ -44,6 +45,8 @@ efficiency <- 0.05 # what prop of seals are they capable of taking
 min_fishers <- 13
 max_fishers <- 25
 
-coho_fish_rate <- 0.1
+coho_fish_rate <- 0.1 # see "estFishingRate.R"
+chinook_fish_rate <- 0.1
+sockeye_fish_rate <- 0.1
 salmon_days <- which(Daily_fish$total > 0)
 
