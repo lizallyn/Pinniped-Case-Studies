@@ -7,14 +7,14 @@ days <- 365
 num_seals <- 20
 
 # seal consumption parameters
-alpha <- 0.1
-Cmax <- 5 # this was initially made up but actually makes some sense
+alpha <- 0.1 
+Cmax <- 1 # this was initially made up but actually makes some sense
 gamma <- 0
-Y <- 0 # replaced by Y_smolts variable
+Y <- 0.3 # replaced by Y_smolts variable
 Y_smolts_est <- 0.01
 
 # seal learning parameters
-w <- 1
+w <- 0.2
 ymin <- -10
 ymax <- 0
 xmin <- -1
