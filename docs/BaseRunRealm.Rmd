@@ -1,0 +1,18 @@
+---
+layout: page
+title: "Base-Run-Realm"
+permalink: /docs/base
+---
+
+![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
+
+```{r, setup, include = FALSE}
+knitr::opts_knit$set(root.dir = '~/Github/PinnipedCaseStudies')
+source("Functions/assembleTheLegos.R")
+assembleTheLegos("Base")
+```
+
+### Reminders
+Github Repo is [here](https://github.com/lizallyn/Pinniped-Case-Studies)   
+Current working model can be run with a single call to assembleTheLegos() in "assembleTheLegos.R"  
+Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (haphazardly updated right now)
