@@ -1,5 +1,5 @@
 ---
-title: "Pinniped Case Studies"
+title: "Pinniped Case Studies Is it thoughhhahskfjhaskjdhfakjsdf"
 subtitle: "Updates, Explorations, Questions, etc."
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
@@ -10,7 +10,10 @@ output: html_document
 
 ```{r, setup, include = FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
-source("Functions/assembleTheLegos.R")
+```
+
+```{r, include = FALSE}
+source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
 assembleTheLegos("Base")
 ```
 

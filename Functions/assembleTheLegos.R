@@ -1,5 +1,7 @@
 ### This function runs the whole thing and can be setup to run different types of runs
 
+setwd("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies")
+
 assembleTheLegos <- function(run){
   ## Load Data Files and Setup Functions 
   source("Functions/Prep_data_for_Salmon_functions.R")
