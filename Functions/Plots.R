@@ -69,7 +69,7 @@ plot_seals
 H_plot <- data.frame(cbind(1:days, H))
 colnames(H_plot) <- c("Day", "H")
 plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
-  geom_point(color = "turquoise")
+  geom_point(color = "black")
 plot_H
 
 prob_gauntlet_of_seal <- seq(0, 1, 0.01)
@@ -80,7 +80,7 @@ min <- 0
 scaled_rec <- (receptivity - min)/(max - min)
 rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
 receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
-  geom_line(lwd = 2, color = "turquoise3") +
+  geom_line(lwd = 2, color = "black") +
   labs(y = "Receptivity", x = "P_G")
 receptivity_plot
 
