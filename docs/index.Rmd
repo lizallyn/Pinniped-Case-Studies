@@ -9,7 +9,7 @@ output: html_document
 
 
 ```{r, setup, include = FALSE}
-knitr::opts_knit$set(root.dir = '~/Github/PinnipedCaseStudies')
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
 source("Functions/assembleTheLegos.R")
 assembleTheLegos("Base")
 ```
