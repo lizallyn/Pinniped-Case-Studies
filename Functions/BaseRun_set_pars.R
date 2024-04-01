@@ -1,5 +1,7 @@
 ## Set Up Parameters ----
 
+library(lubridate)
+
 # loop parameters
 days <- 365
 
