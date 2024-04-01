@@ -29,7 +29,7 @@ for(t in 1:(days-1)) {
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   salmon_result <- run_rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                   alpha = alpha, Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 
-                                  gamma = gamma, Y = Y_smolts[t], 
+                                  gamma = gamma, Y = Y, 
                                   E = c(sockeye_escape_rate, chinook_escape_rate, coho_escape_rate), 
                                   F_catch = c(sockeye_catch_rate[t], chinook_catch_rate[t], coho_catch_rate[t]), 
                                   M = natural_mort, deltat = 1/24)
