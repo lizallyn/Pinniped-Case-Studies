@@ -2,6 +2,7 @@
 title: "Pinniped Case Studies"
 subtitle: "Updates, Explorations, Questions, etc."
 date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
 ---
 ![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
 
@@ -12,6 +13,8 @@ knitr::opts_knit$set(root.dir = '~/Github/PinnipedCaseStudies')
 source("Functions/assembleTheLegos.R")
 assembleTheLegos("Base")
 ```
+
+still this?
 
 ### Reminders
 Github Repo is [here](https://github.com/lizallyn/Pinniped-Case-Studies)   
