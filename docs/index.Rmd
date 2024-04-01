@@ -80,7 +80,7 @@ scaled_rec <- (receptivity - min)/(max - min)
 rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
 
 receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
-  geom_line(lwd = 2, color = "turquoise3") +
+  geom_line(lwd = 2, color = "black") +
   labs(y = "Receptivity", x = "P_G")
 receptivity_plot
 
@@ -96,7 +96,7 @@ Here's a quick (not exhaustive) table of parameter values:
 library(knitr)
 library(flextable)
 library(kableExtra)
-parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, natural_mort))
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 
