@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Base-Run-Realm"
-permalink: /docs/base
+permalink: /base
 ---
 
 Hi Hi Hi
