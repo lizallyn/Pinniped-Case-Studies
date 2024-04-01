@@ -1,0 +1,12 @@
+name: "Pinniped Case Studies"
+output_dir: "docs"
+navbar:
+  title: "Pinniped Case Studies"
+  left:
+    - text: "HomePage"
+      href: index.html
+    - text: "BaseRunRealm"
+      href: BaseRunRealm.html
+output:
+  html_document:
+    theme: cosmo
