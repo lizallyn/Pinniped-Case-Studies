@@ -4,6 +4,8 @@ title: "Base-Run-Realm"
 permalink: /docs/base
 ---
 
+Hi Hi Hi
+
 ![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
 
 ```{r, setup, include = FALSE}
