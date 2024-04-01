@@ -2,12 +2,10 @@
 title: "Pinniped Case Studies"
 subtitle: "Updates, Explorations, Questions, etc."
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-author: "Liz Allyn"
-output: html_document
 ---
 ![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
 
-<a href="./BaseRunRealm">Go to description</a>
+
 
 ```{r, setup, include = FALSE}
 knitr::opts_knit$set(root.dir = '~/Github/PinnipedCaseStudies')

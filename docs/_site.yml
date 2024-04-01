@@ -1,4 +1,4 @@
-name: "Pinniped Case Studies"
+name: "Pinniped-Case-Studies"
 output_dir: "docs"
 navbar:
   title: "Pinniped Case Studies"
