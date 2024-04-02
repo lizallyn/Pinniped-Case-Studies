@@ -14,14 +14,15 @@ This Model Run is for a scenario where there are actually 150 seals in the area 
 knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
 ```
 
-```{r, include = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
 assembleTheLegos("Experiment", path_to_pars = "Functions/set_pars.R", path_to_vars = "Functions/initialize_vars.R")
 ```
 
 ### Parameter Table
 
-This scenario is focused on deviated values of:
+This scenario is focused on deviated values of:  
+
 * num_seals (`r num_seals`)
 
 Here's the (kinda) full parameter list:
