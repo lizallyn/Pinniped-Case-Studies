@@ -2,7 +2,7 @@
 
 setwd("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies")
 
-assembleTheLegos <- function(run){
+assembleTheLegos <- function(run, path_to_pars, path_to_vars){
   ## Load Data Files and Setup Functions 
   source("Functions/Prep_data_for_Salmon_functions.R")
   source("Functions/Prep_data_for_Harvest_functions.R")
@@ -21,8 +21,6 @@ assembleTheLegos <- function(run){
   }
   
   ## Load Function Files
-  source("Functions/makeArray.R")
-  source("Functions/createHarvestPlan.R")
   source("Functions/salmonSpeciesUpdate.R")
   source("Functions/decideForagingDestination.R")
   source("Functions/collusion.R")
@@ -39,5 +37,5 @@ assembleTheLegos <- function(run){
   
 }
 
-
+assembleTheLegos("Experiment", path_to_pars = "Functions/set_pars.R", path_to_vars = "Functions/initialize_variables.R")
 
