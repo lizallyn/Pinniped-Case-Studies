@@ -1,6 +1,6 @@
 ---
-title: "Diagnostics Recipe"
-subtitle: "Template for model pages: Making sure the model run ran right"
+title: "Experiment Test: More Seals"
+subtitle: "Making sure the model run ran right: Add more seals!!"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
@@ -34,3 +34,15 @@ parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
+
+### Things to Note
+
+In this model run, there are many more seals at the Gauntlet at the peak of salmon presence. In fact, all the seals eventually end up at the Gauntlet when there have been salmon present for long enough for them all to learn about it.
+
+```{r, plot3, echo = FALSE, fig.height = 3, warning = FALSE}
+plot_seals
+```
+
+[describe more things that are cool/important about this parameterization here]
+
+END
