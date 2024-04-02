@@ -7,9 +7,9 @@ collusion <- function(probs_list, prob_gauntlet_of_seal, seals_2_copy, mean, bet
     if (is.na(prob_gauntlet_of_seal)){
       P_social <- prob_gauntlet_of_seal
     } else {
-      alpha <- (-beta*mean)/(mean-1)
-      receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
-      max <- dbeta(x = mean, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
+      alpha_ <- (-beta*mean)/(mean-1)
+      receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha_ + 1, shape2 = beta + 1, ncp = 0)
+      max <- dbeta(x = mean, shape1 = alpha_ + 1, shape2 = beta + 1, ncp = 0)
       min <- 0
       scaled_rec <- (receptivity - min)/(max - min)
       social_info <- sample(probs_list, seals_2_copy, replace = F)
