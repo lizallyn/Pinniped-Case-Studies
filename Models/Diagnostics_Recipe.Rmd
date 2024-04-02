@@ -1,0 +1,35 @@
+---
+title: "Diagnostics Recipe"
+subtitle: "Template for model pages: Making sure the model run ran right"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where there are actually 150 seals in the area around the Gauntlet instead of the 20 that exist in the Base Run Realm.
+
+### Run the Model
+
+```{r, setup, include = FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
+assembleTheLegos("Experiment", path_to_pars = "Functions/set_pars.R", path_to_vars = "Functions/initialize_vars.R")
+```
+
+### Parameter Table
+
+This scenario is focused on deviated values of:
+* num_seals (`r num_seals`)
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
