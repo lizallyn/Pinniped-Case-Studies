@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-04-02" />
+
+<title>The Base Run Realm</title>
+
+<script src="site_libs/header-attrs-2.23/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pinniped Case Studies</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">HomePage</a>
+</li>
+<li>
+  <a href="BaseRunRealm.html">BaseRunRealm</a>
+</li>
+<li>
+  <a href="TestMoreSeals.html">MoreSeals</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">The Base Run Realm</h1>
+<h3 class="subtitle">Describing the Base Run</h3>
+<h4 class="date">April 02, 2024</h4>
+
+</div>
+
+
+<div id="the-base-run-realm" class="section level3">
+<h3>The Base Run Realm</h3>
+<p>This page is currently a place where I am developing the base run and
+describing the world it exists in. This part sounds really dumb but I
+need a quick way to describe the world and differentiate it from the
+experimental runs.<br />
+Once upon a time in the Base Run Realm there lived 20 seals. In the Base
+Run Realm in the State of Ballard there is a river valley called the
+Gauntlet. Every summer, salmon of many species flood the Gauntlet and
+the seals move to their summer camp at Shilshole to gorge themselves
+until they are fat and happy. The people of Ballard also harvest salmon,
+and occasionally kill seals incidentally while they are fishing. There
+is no designated harvest of seals in the Base Run Realm.</p>
+<div id="the-daily-flow" class="section level4">
+<h4>The Daily Flow</h4>
+<p>The model runs for 365 day starting January 1. Some number of salmon
+arrive at the Gauntlet each day according to their run timing - Sockeye
+arrive earliest in the summer, followed by Chinook and then Coho in the
+fall.</p>
+<p><img src="BaseRunRealm_files/figure-html/plot1-1.png" width="672" /></p>
+<p>Salmon experience mortality via multiple pathways: consumption by
+seals, fishery catch, and natural mortality. Salmon that are not killed
+are able to leave the Gauntlet and become part of the “Escape” crew. The
+speed at which they move through the Gauntlet is informed by residence
+time estimates. In the Base Run Realm, the only fishery that exists
+within the Gauntlet targets Coho for a short window in September -
+November. [Note here to look at non-tribal, rec and Suquamish regs. And
+come up with a rate that matches the catch data]</p>
+<p><img src="BaseRunRealm_files/figure-html/plot2-1.png" width="672" /></p>
+<p>In the Base Run Realm seals learn to balance the risk of being killed
+by fishers with the rewards of eating salmon. They learn through their
+own experiences and share information between them. Seals decide whether
+to go to the Gauntlet each day using a combination of their own
+experience (P_G) and the experience of other seals (P_social).</p>
+<p><img src="BaseRunRealm_files/figure-html/plot3-1.png" width="672" /></p>
+<p>Each seal’s individual probability of going to the Gauntlet updates
+daily according to their cumulative experiences with foraging
+opportunities and hunting risk at the Gauntlet. The number of salmon
+that are calculated to be consumed that day are divided evenly between
+the seals that went to the Gauntlet. For each seal, an adjusted
+consumption term “C” is calculated to account for the foraging
+opportunities they missed by going to the Gauntlet instead of somewhere
+else. For every day that a seal goes to the Gauntlet, the measure of
+their foraging knowledge “x” either increases due to foraging success (a
+positive C) or decreases due to unsuccessful foraging (a negative C). If
+a seal does not go to the Gauntlet, we assume they begin to forget and
+gain uncertainty in their knowledge of foraging opportunities at the
+Gauntlet, which causes their opinion of the Gauntlet to decay back to a
+neutral opinion. The measure of their experience “x” is then used to
+calculate a probability of going to the Gauntlet based on foraging
+knowledge alone “P_x”.</p>
+<p><img src="BaseRunRealm_files/figure-html/plot4-1.png" width="672" /></p>
+<p>A seal’s cumulative experience with hunting also updates daily. Seals
+are only harvested through incidental take associated with salmon
+fisheries in the Base Run Realm. Boat-based harvest occurs during the
+Coho fishery, which is modeled to occur between September and November.
+During this time, take of seals is a type 2 functional response on the
+number of fishers on the water. Seals that go to the Gauntlet on a day
+when a take occurs gain negative experience with the Gauntlet that
+causes their “y” to decrease. If no hunting occurs, their “y” increases.
+If a seal does not go to the Gauntlet, they also begin to gain
+uncertainty about their knowledge and their “y” decays toward a neutral
+value. Each seal’s “y” is then used to calculate their probability of
+going to the Gauntlet based on their cumulative experience with hunting
+“P_y”.</p>
+<p><img src="BaseRunRealm_files/figure-html/plot5-1.png" width="672" /></p>
+<p>For each seal, P_x and P_y are combined into a single probability of
+going to the Gauntlet (P_G). A coin flip (random uniform draw) is used
+to determine whether each seal goes to the Gauntlet that day based on
+their P_G.</p>
+<p><img src="BaseRunRealm_files/figure-html/plot6-1.png" width="672" /></p>
+<p>Seals then incorporate social information from 2 randomly chosen
+seals and their final foraging destination for the day is decided with
+another coin flip. Their receptivity to social information is informed
+by the strength of their existing knowledge. A P_G closer to 0.5
+indicates ambivalence and means the seal is more receptive to social
+influence. A P_G closer to 0 or 1 indicates a strong opinion that will
+not allow the incorporation of social information.</p>
+<p><img src="BaseRunRealm_files/figure-html/plot7-1.png" width="672" /></p>
+</div>
+<div id="parameter-table" class="section level4">
+<h4>Parameter Table</h4>
+<p>Here’s a quick (not exhaustive) table of parameter values:</p>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+days
+</td>
+<td style="text-align:right;">
+365.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+num_seals
+</td>
+<td style="text-align:right;">
+20.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+num_seals_2_copy
+</td>
+<td style="text-align:right;">
+2.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sockeye_escape_rate
+</td>
+<td style="text-align:right;">
+0.3000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chinook_escape_rate
+</td>
+<td style="text-align:right;">
+0.0300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coho_escape_rate
+</td>
+<td style="text-align:right;">
+0.1000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+min_fishers
+</td>
+<td style="text-align:right;">
+13.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+max_fishers
+</td>
+<td style="text-align:right;">
+25.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fishery_open
+</td>
+<td style="text-align:right;">
+253.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fishery_close
+</td>
+<td style="text-align:right;">
+321.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sockeye_fish_rate
+</td>
+<td style="text-align:right;">
+0.0100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chinook_fish_rate
+</td>
+<td style="text-align:right;">
+0.0100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coho_fish_rate
+</td>
+<td style="text-align:right;">
+0.1000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+natural_mort
+</td>
+<td style="text-align:right;">
+0.0005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cmax
+</td>
+<td style="text-align:right;">
+1.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+alpha
+</td>
+<td style="text-align:right;">
+15.0000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
