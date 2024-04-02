@@ -6,8 +6,8 @@ output:
   html_document:
     toc: true
     toc_float: true
-      collapsed: false
-      smooth_scroll: false
+    collapsed: false
+    smooth_scroll: true
 ---
 ![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}![](img/seal.png){width=100px}
 
