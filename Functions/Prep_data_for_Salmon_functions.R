@@ -2,7 +2,7 @@
 library(tidyr)
 library(dplyr)
 
-fish.long <- read.csv("https://raw.githubusercontent.com/lizallyn/Pinniped-Case-Studies/main/Data/BallardLocks/Ballard%20Locks%20Summarize%20all%20species%20all%20years.csv")
+fish.long <- read.csv("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Data/BallardLocks/Ballard_Locks_Summarize_all_species_all_years.csv")
 
 fish <- spread(fish.long, Species, Count)
 
