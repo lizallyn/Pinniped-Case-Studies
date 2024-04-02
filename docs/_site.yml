@@ -1,5 +1,5 @@
 name: "Pinniped-Case-Studies"
-output_dir: "docs_output"
+# output_dir: "docs_output"
 navbar:
   title: "Pinniped Case Studies"
   left:
