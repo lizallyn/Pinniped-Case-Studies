@@ -7,6 +7,8 @@ navbar:
       href: index.html
     - text: "BaseRunRealm"
       href: BaseRunRealm.html
+    - text: "MoreSeals"
+      href: TestMoreSeals.html
 output:
   html_document:
     theme: cosmo
