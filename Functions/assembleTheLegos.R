@@ -15,9 +15,11 @@ assembleTheLegos <- function(run, path_to_pars, path_to_vars){
   if(run == "Base"){
     source("Functions/BaseRun_set_pars.R")
     source("Functions/BaseRun_initialize_variables.R")
-  } else {
+  } else if(run == "Experiment") {
     source("Functions/set_pars.R")
     source("Functions/initialize_variables.R")
+  } else {
+    print("Not a valid run type. Try Base or Experiment")
   }
   
   ## Load Function Files

@@ -73,9 +73,9 @@ plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
 plot_H
 
 prob_gauntlet_of_seal <- seq(0, 1, 0.01)
-alpha <- (-beta*mean)/(mean-1)
-receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
-max <- dbeta(x = mean, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
+alpha_c <- (-beta*mean)/(mean-1)
+receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
+max <- dbeta(x = mean, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
 min <- 0
 scaled_rec <- (receptivity - min)/(max - min)
 rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))

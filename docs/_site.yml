@@ -3,11 +3,13 @@ output_dir: "docs"
 navbar:
   title: "Pinniped Case Studies"
   left:
-    - text: "HomePage"
+    - text: "Home"
       href: index.html
-    - text: "BaseRunRealm"
+    - text: "Progress & Issues"
+      href: ProgressIssues.html
+    - text: "Base Run"
       href: BaseRunRealm.html
-    - text: "MoreSeals"
+    - text: "More Seals"
       href: TestMoreSeals.html
 output:
   html_document:

@@ -10,7 +10,6 @@
 
 
 
-<meta name="date" content="2024-04-02" />
 
 <title>Pinniped Case Studies</title>
 
@@ -244,13 +243,16 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">HomePage</a>
+  <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="BaseRunRealm.html">BaseRunRealm</a>
+  <a href="ProgressIssues.html">Progress &amp; Issues</a>
 </li>
 <li>
-  <a href="TestMoreSeals.html">MoreSeals</a>
+  <a href="BaseRunRealm.html">Base Run</a>
+</li>
+<li>
+  <a href="TestMoreSeals.html">More Seals</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -265,8 +267,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Pinniped Case Studies</h1>
-<h3 class="subtitle">Updates, Explorations, Questions, etc.</h3>
-<h4 class="date">April 02, 2024</h4>
+<h3 class="subtitle">Model Description and Explanation</h3>
+<h4 class="date">Last Update: April 02, 2024</h4>
 
 </div>
 
@@ -275,33 +277,86 @@ $(document).ready(function () {
 width="100" /><img src="img/seal.png" width="100" /><img
 src="img/seal.png" width="100" /><img src="img/seal.png"
 width="100" /></p>
-<div id="reminders" class="section level3">
-<h3>Reminders</h3>
-<p>Github Repo is <a
-href="https://github.com/lizallyn/Pinniped-Case-Studies">here</a><br />
-Current working model can be run with a single call to
-assembleTheLegos() in “assembleTheLegos.R”<br />
-Model Explanation Doc is <a
-href="https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq">here</a>
-(haphazardly updated right now)</p>
-</div>
-<div id="currently-working-on" class="section level3">
-<h3>Currently Working On</h3>
+<div id="guiding-questions" class="section level3">
+<h3>Guiding Questions</h3>
 <ul>
-<li>Creating a Base Run and making sure it conceptually checks out<br />
+<li>How does the number of adult salmon migrating beyond the gauntlet
+zone change depending on the pinniped management strategy
+implemented?<br />
 </li>
-<li>Making the results of the base run print to this page for easy
-comparison<br />
+<li>How sensitive is the model to pinniped learning and social copying
+parameters?<br />
 </li>
-<li>Constructing a diagnostics recipe script<br />
-</li>
-<li>Updating model explanation document</li>
+<li>What other data gaps in the system are identified through this
+effort?</li>
 </ul>
 </div>
-<div id="victories" class="section level3">
-<h3>Victories</h3>
-<p>Created this page! Thanks to Emily for the idea! And added new pages
-functionality to separate different results summaries</p>
+<div id="defining-the-model-world" class="section level3">
+<h3>Defining the Model World</h3>
+<div id="breadth" class="section level4">
+<h4>Breadth</h4>
+<p>This model includes the dynamics between pinnipeds (Harbor seals,
+California sea lions, Steller sea lions), salmon who have reached the
+gauntlet area, and human harvesters of both salmon and pinnipeds.</p>
+</div>
+<div id="spatial" class="section level4">
+<h4>Spatial</h4>
+<p>This model represents the dynamics occurring between the relevant
+actors only within gauntlet systems. Gauntlets are areas where returning
+salmon are migrating from salt to fresh water and are forced to slow
+down, making them vulnerable to predation and harvest. There is no
+explicit spatial component, i.e. all dynamics either occur in an unnamed
+staging area outside the gauntlet (pinniped decision making and social
+copying), in an undescribed alternative foraging area called “open
+water” (pinniped baseline consumption, “forgetting” about hunt exposure
+or foraging opportunities at the gauntlet), or occur within a single
+spatial unit that is the gauntlet (predation on salmon, harvest of
+salmon and pinnipeds, pinniped exposure to hunt activity, salmon
+migration beyond gauntlet).</p>
+</div>
+<div id="temporal" class="section level4">
+<h4>Temporal</h4>
+<p>This model explores dynamics between the relevant actors on a daily
+time step and explores how those dynamics change over the course of a
+year.</p>
+</div>
+<div id="depth" class="section level4">
+<h4>Depth</h4>
+<p>Dynamics explored in this model include salmon migration through the
+gauntlet zone, pinniped predation on salmon, human harvest of salmon and
+pinnipeds, pinniped individual learning about foraging opportunities,
+pinniped individual learning about hunt risk, and pinniped social
+copying of foraging decisions. Inter-annual pinniped population dynamics
+are not represented. All individuals are assumed to have identical
+bioenergetic demands within each pinniped species group, though each
+individual accumulates their own learning and decision-making
+characteristics as described below. Salmon survival and movement outside
+of the gauntlet is not addressed. The response of interest is the number
+of salmon that escape beyond the gauntlet under different pinniped
+harvest conditions. Salmon species are tabulated separately, but age
+structure within species is not acknowledged.</p>
+</div>
+</div>
+<div id="daily-sequence-of-events" class="section level3">
+<h3>Daily Sequence of Events</h3>
+<ol style="list-style-type: decimal">
+<li>Decide which foraging location each seal goes to<br />
+</li>
+<li>Seals go to their foraging location (gauntlet or open water)<br />
+</li>
+<li>Calculate salmon dynamics (# present, # arriving, # eaten, #
+escaped)<br />
+</li>
+<li>Seals eat and/or die at foraging location<br />
+</li>
+<li>Update learning terms according to experience at foraging
+location</li>
+</ol>
+</div>
+<div id="parameter-table" class="section level3">
+<h3>Parameter Table</h3>
+<p>See in depth table <a
+href="https://docs.google.com/spreadsheets/d/14LWg-lLf4w3-IbQNVLDXNPXHsMHo4w5JEt5onHkIoR8/edit?usp=sharing">here</a></p>
 </div>
 
 
