@@ -10,14 +10,13 @@ assembleTheLegos <- function(run, path_to_pars, path_to_vars){
   source("Functions/makeArray.R")
   source("Functions/createHarvestPlan.R")
   
-  
 ## Set Parameters and Create Variables
   if(run == "Base"){
     source("Functions/BaseRun_set_pars.R")
     source("Functions/BaseRun_initialize_variables.R")
   } else if(run == "Experiment") {
-    source("Functions/set_pars.R")
-    source("Functions/initialize_variables.R")
+    source(path_to_pars)
+    source(path_to_vars)
   } else {
     print("Not a valid run type. Try Base or Experiment")
   }
@@ -39,5 +38,5 @@ assembleTheLegos <- function(run, path_to_pars, path_to_vars){
   
 }
 
-assembleTheLegos("Experiment", path_to_pars = "Functions/set_pars.R", path_to_vars = "Functions/initialize_variables.R")
+assembleTheLegos("Experiment", path_to_pars = "Functions/ExcZone_set_pars.R", path_to_vars = "Functions/ExcZone_initialize_variables.R")
 
