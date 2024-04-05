@@ -27,6 +27,7 @@ for(t in 1:(days-1)) {
   
   # calculate salmon mortality 
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
+  seals_at_gauntlet_save[[t]] <- seals_at_gauntlet
   salmon_result <- run_rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
                                   alpha = alpha, Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 
                                   gamma = gamma, Y = Y, 
@@ -93,7 +94,7 @@ for(t in 1:(days-1)) {
       
       seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
     } else {
-      seal_prob_gauntlet[seal, t+1] <- 0
+      seal_prob_gauntlet[seal, t+1] <- NA
       seal_forage_loc[seal, t+1] <- NA
       x[seal, t+1] <- NA
       y[seal, t+1] <- NA
