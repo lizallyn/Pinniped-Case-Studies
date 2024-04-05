@@ -11,6 +11,7 @@ In Depth Parameter Table is messy but [here now](https://docs.google.com/spreads
 
 ### Currently Working On
 * Creating a Base Run and making sure it conceptually checks out  
+* Coming up with a suite of experimental runs that make sense
 * Justifying parameter values in the lit
 * Constructing a diagnostics recipe script  
 

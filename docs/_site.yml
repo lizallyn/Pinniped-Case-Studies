@@ -11,6 +11,8 @@ navbar:
       href: BaseRunRealm.html
     - text: "More Seals"
       href: TestMoreSeals.html
+    - text: "Exc Zone"
+      href: ZoneExclusion.html
 output:
   html_document:
     theme: cosmo
