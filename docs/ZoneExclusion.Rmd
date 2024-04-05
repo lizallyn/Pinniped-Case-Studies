@@ -1,0 +1,58 @@
+---
+title: "Experiment: Exclusion Zone Implementation"
+subtitle: "Describing the model run when an exclusion zone management strategy is implemented"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where managers in the Gauntlet enact an "Exclusion Zone" management strategy. In this strategy, all seals that cross into the Gauntlet area when salmon are present in the Gauntlet are targeted for removal. We assume that managers are able to effectively remove a set percent of seals in the area. It might make more sense to switch this to a type I function...
+
+### Run the Model
+
+```{r, setup, include = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r, message = FALSE, warning = FALSE}
+source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
+assembleTheLegos("Experiment", path_to_pars = "Functions/ExcZone_set_pars.R", 
+                 path_to_vars = "Functions/ExcZone_initialize_variables.R")
+```
+
+### Parameter Table
+
+This scenario is focused on the effects of a different management strategy that changes the timing and quantity of seal harvest. Removals occur on all days that salmon are present in the Gauntlet instead of just during days when fishers are active in the area. The harvest strategy is also more aggressive as it is focused on seal removal directly not incidentally as in the base run.
+
+Removals occur from day `r salmon_days[1]` - `r salmon_days[length(salmon_days)]`.  
+Removal efficiency is assumed to be `r zone_efficiency * 100`%.
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(days, num_seals, zone_efficiency, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
+
+### Things to Note
+
+The total escaped sockeye, chinook, and Coho are as follows under this parameterization:
+
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
+
+This model run has a drastic impact on seal behavior, presence at the Gauntlet, and survival. 
+Colors are independent seals.
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+plot_seals/plot_C/plot_probs/plot_H + plot_layout(guides = "collect", axes = "collect")
+
+kable(kill_list)
+```
+
+
