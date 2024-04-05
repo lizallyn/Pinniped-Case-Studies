@@ -77,7 +77,13 @@ receptivity_plot
 
 ```
 
+The total escaped sockeye, chinook, and Coho are as follows under this parameterization:
 
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
 
 #### Parameter Table
 
