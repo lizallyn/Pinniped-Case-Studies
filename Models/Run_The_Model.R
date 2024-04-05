@@ -1,5 +1,7 @@
 source("Functions/assembleTheLegos.R")
 assembleTheLegos("Base")
+assembleTheLegos("Experiment", path_to_pars = "Functions/ExcZone_set_pars.R", 
+                 path_to_vars = "Functions/ExcZone_initialize_variables.R")
 
 gauntlet_plot / eaten_sp_plot / fished_plot / escape_plot + plot_layout(guides = "collect")
 
