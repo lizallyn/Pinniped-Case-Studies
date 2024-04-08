@@ -279,6 +279,34 @@ $(document).ready(function () {
 </div>
 
 
+<pre class="r"><code># source(&quot;C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R&quot;)
+# assembleTheLegos(path_to_pars = &quot;Functions/BaseRun_set_pars.R&quot;, path_to_vars = &quot;Functions/BaseRun_initialize_variables.R&quot;)
+
+## Load Data Files and Setup Functions 
+source(&quot;Functions/Prep_data_for_Salmon_functions.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/Prep_data_for_Harvest_functions.R&quot;, local = knitr::knit_global())
+
+source(&quot;Functions/makeArray.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/createHarvestPlan.R&quot;, local = knitr::knit_global())
+
+## Set Parameters and Create Variables
+source(&quot;Functions/BaseRun_set_pars.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/BaseRun_initialize_variables.R&quot;, local = knitr::knit_global())
+
+## Load Function Files
+source(&quot;Functions/salmonSpeciesUpdate.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/decideForagingDestination.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/collusion.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/rungeKutta.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/getHarvested.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/learnX.R&quot;, local = knitr::knit_global())
+source(&quot;Functions/learnY.R&quot;, local = knitr::knit_global())
+
+## Run the Loop
+source(&quot;Models/The_Loop.R&quot;, local = knitr::knit_global())
+
+## Plots
+source(&quot;Functions/Plots.R&quot;, local = knitr::knit_global())</code></pre>
 <div id="the-base-run-realm" class="section level3">
 <h3>The Base Run Realm</h3>
 <p>This page is currently a place where I am developing the base run and
@@ -358,7 +386,7 @@ indicates ambivalence and means the seal is more receptive to social
 influence. A P_G closer to 0 or 1 indicates a strong opinion that will
 not allow the incorporation of social information.</p>
 <p><img src="BaseRunRealm_files/figure-html/plot7-1.png" width="672" /></p>
-<p>The total escaped sockeye, chinook, and Coho are as follows under
+<p>The total escaped Sockeye, Chinook, and Coho are as follows under
 this parameterization:</p>
 <table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -377,13 +405,13 @@ Coho
 <tbody>
 <tr>
 <td style="text-align:right;">
-18410.65
+18410.82
 </td>
 <td style="text-align:right;">
-270.1546
+270.0526
 </td>
 <td style="text-align:right;">
-1598.977
+1598.769
 </td>
 </tr>
 </tbody>
@@ -521,6 +549,14 @@ Cmax
 </td>
 <td style="text-align:right;">
 1.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+alpha_c
+</td>
+<td style="text-align:right;">
+15.0000
 </td>
 </tr>
 <tr>

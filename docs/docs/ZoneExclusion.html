@@ -304,8 +304,11 @@ source(&quot;Functions/makeArray.R&quot;)
 source(&quot;Functions/createHarvestPlan.R&quot;)
 
 ## Set Parameters and Create Variables
-source(&quot;Functions/ExcZone_set_pars.R&quot;)
-source(&quot;Functions/ExcZone_initialize_variables.R&quot;)
+source(&quot;Functions/BaseRun_set_pars.R&quot;)
+source(&quot;Functions/BaseRun_initialize_variables.R&quot;)
+
+harvest_plan &lt;- createHarvestPlan(scenario = &quot;Zone&quot;, salmon_days =  salmon_days, 
+                                  empty.array = oneDzeroes)
 
 ## Load Function Files
 source(&quot;Functions/salmonSpeciesUpdate.R&quot;)
@@ -504,10 +507,10 @@ Coho
 <tbody>
 <tr>
 <td style="text-align:right;">
-18560.07
+18559.85
 </td>
 <td style="text-align:right;">
-288.7767
+288.8032
 </td>
 <td style="text-align:right;">
 1634.24
@@ -530,105 +533,7 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">20</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">4</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">17</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">5</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">9</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">16</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">12</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">19</td>
+<td align="right">11</td>
 </tr>
 </tbody>
 </table>
@@ -656,34 +561,6 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">15</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">10</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
 <td align="right">3</td>
 </tr>
 </tbody>
@@ -698,7 +575,7 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">13</td>
+<td align="right">6</td>
 </tr>
 </tbody>
 </table>
@@ -712,7 +589,35 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">2</td>
+<td align="right">19</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">12</td>
 </tr>
 </tbody>
 </table>
@@ -740,7 +645,7 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">14</td>
+<td align="right">2</td>
 </tr>
 </tbody>
 </table>
@@ -754,7 +659,49 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">11</td>
+<td align="right">13</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">17</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">20</td>
 </tr>
 </tbody>
 </table>
@@ -782,7 +729,63 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">14</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td align="right">8</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">9</td>
 </tr>
 </tbody>
 </table>

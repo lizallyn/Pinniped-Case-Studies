@@ -30,8 +30,11 @@ source("Functions/makeArray.R")
 source("Functions/createHarvestPlan.R")
 
 ## Set Parameters and Create Variables
-source("Functions/ExcZone_set_pars.R")
-source("Functions/ExcZone_initialize_variables.R")
+source("Functions/BaseRun_set_pars.R")
+source("Functions/BaseRun_initialize_variables.R")
+
+harvest_plan <- createHarvestPlan(scenario = "Zone", salmon_days =  salmon_days, 
+                                  empty.array = oneDzeroes)
 
 ## Load Function Files
 source("Functions/salmonSpeciesUpdate.R")

@@ -13,35 +13,33 @@ library(flextable)
 library(kableExtra)
 ```
 
-```{r, include = FALSE}
-# source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
-# assembleTheLegos(path_to_pars = "Functions/BaseRun_set_pars.R", path_to_vars = "Functions/BaseRun_initialize_variables.R")
+```{r, message = FALSE, warning = FALSE}
 
 ## Load Data Files and Setup Functions 
-source("Functions/Prep_data_for_Salmon_functions.R")
-source("Functions/Prep_data_for_Harvest_functions.R")
+source("Functions/Prep_data_for_Salmon_functions.R", local = knitr::knit_global())
+source("Functions/Prep_data_for_Harvest_functions.R", local = knitr::knit_global())
 
-source("Functions/makeArray.R")
-source("Functions/createHarvestPlan.R")
+source("Functions/makeArray.R", local = knitr::knit_global())
+source("Functions/createHarvestPlan.R", local = knitr::knit_global())
 
 ## Set Parameters and Create Variables
-source("Functions/BaseRun_set_pars.R")
-source("Functions/BaseRun_initialize_variables.R")
+source("Functions/BaseRun_set_pars.R", local = knitr::knit_global())
+source("Functions/BaseRun_initialize_variables.R", local = knitr::knit_global())
 
 ## Load Function Files
-source("Functions/salmonSpeciesUpdate.R")
-source("Functions/decideForagingDestination.R")
-source("Functions/collusion.R")
-source("Functions/rungeKutta.R")
-source("Functions/getHarvested.R")
-source("Functions/learnX.R")
-source("Functions/learnY.R")
+source("Functions/salmonSpeciesUpdate.R", local = knitr::knit_global())
+source("Functions/decideForagingDestination.R", local = knitr::knit_global())
+source("Functions/collusion.R", local = knitr::knit_global())
+source("Functions/rungeKutta.R", local = knitr::knit_global())
+source("Functions/getHarvested.R", local = knitr::knit_global())
+source("Functions/learnX.R", local = knitr::knit_global())
+source("Functions/learnY.R", local = knitr::knit_global())
 
 ## Run the Loop
-source("Models/The_Loop.R")
+source("Models/The_Loop.R", local = knitr::knit_global())
 
 ## Plots
-source("Functions/Plots.R")
+source("Functions/Plots.R", local = knitr::knit_global())
 ```
 
 ### The Base Run Realm
@@ -106,7 +104,7 @@ receptivity_plot
 
 ```
 
-The total escaped sockeye, chinook, and Coho are as follows under this parameterization:
+The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
 
 ```{r, echo = FALSE}
 salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
@@ -119,7 +117,7 @@ kable(salmon_escapement) %>% kable_styling(full_width = F)
 Here's a quick (not exhaustive) table of parameter values:
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha_c, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
