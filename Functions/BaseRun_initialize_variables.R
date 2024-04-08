@@ -46,7 +46,7 @@ sockeye_catch_rate[boat_days] <- sockeye_fish_rate
 # as a secondary adjustment to C
 # April 1 - Sept 1 right now
 
-harvest_plan <- createHarvestPlan(scenario = "Boat", days = days, years = years, 
+harvest_plan <- createHarvestPlan(scenario = "Boat", 
                                   boat_days = boat_days, salmon_days = salmon_days)
 
 ### Troubleshooting & BS ----
