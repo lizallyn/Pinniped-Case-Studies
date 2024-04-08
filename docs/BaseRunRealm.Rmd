@@ -8,6 +8,9 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 ```{r, setup, include = FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+library(knitr)
+library(flextable)
+library(kableExtra)
 ```
 
 ```{r, include = FALSE}
@@ -90,9 +93,6 @@ kable(salmon_escapement) %>% kable_styling(full_width = F)
 Here's a quick (not exhaustive) table of parameter values:
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-library(knitr)
-library(flextable)
-library(kableExtra)
 parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
