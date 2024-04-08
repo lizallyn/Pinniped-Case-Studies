@@ -15,14 +15,11 @@ for(t in 1:(days-1)) {
   seal_forage_loc[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = decideForagingDestination)
   
   # round of copying
-  for(seal in 1:num_seals) {
-    if(num_seals_2_copy > 0){
-      P_social[seal, t] <- collusion(probs_list = seal_prob_gauntlet[,t], 
-                                     prob_gauntlet_of_seal = seal_prob_gauntlet[seal, t], 
-                                     seals_2_copy = num_seals_2_copy, 
-                                     mean = mean, beta = beta)
-      seal_forage_loc[seal,t] <- decideForagingDestination(P_social[seal,t])
-    }
+  if(num_seals_2_copy > 0){
+    P_social[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = collusion, 
+                           probs_list = seal_prob_gauntlet[,t], seals_2_copy = num_seals_2_copy, 
+                           mean = mean, beta = beta)
+    seal_forage_loc[,t] <- sapply(X = P_social[,t], FUN = decideForagingDestination)
   }
   
   # calculate salmon mortality 
@@ -62,8 +59,9 @@ for(t in 1:(days-1)) {
   
   # seal harvest
   num_fishers <- sample(min_fishers:max_fishers, 1)
-  H[t] <- getHarvested(day_plan = harvest_plan[t], list_gauntlet_seals = seals_at_gauntlet, num_fishers = num_fishers,
-                       zone_efficiency = zone_efficiency, efficiency = efficiency, steepness = steepness)
+  H[t] <- getHarvested(day_plan = harvest_plan[t], list_gauntlet_seals = seals_at_gauntlet, 
+                       num_fishers = num_fishers, zone_efficiency = zone_efficiency, 
+                       efficiency = efficiency, steepness = steepness)
   
   if(H[t] > 0){
     killed <- sample(seals_at_gauntlet, H[t])
