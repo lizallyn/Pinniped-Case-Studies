@@ -1,0 +1,9 @@
+---
+title: "Experiment: Boat Harvest Implementation"
+subtitle: "Describing the model run when boat-based harvest is amplified above incidental levels"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where managers in the Gauntlet enact an "Exclusion Zone" management strategy. In this strategy, all seals that cross into the Gauntlet area when salmon are present in the Gauntlet are targeted for removal. We assume that managers are able to effectively remove a set percent of seals in the area. It might make more sense to switch this to a type I function...
