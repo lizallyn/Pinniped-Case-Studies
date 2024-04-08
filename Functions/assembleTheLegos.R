@@ -11,8 +11,8 @@ assembleTheLegos <- function(path_to_pars, path_to_vars){
   source("Functions/createHarvestPlan.R")
   
   ## Set Parameters and Create Variables
-    source(path_to_pars)
-    source(path_to_vars)
+  source(path_to_pars)
+  source(path_to_vars)
   
   ## Load Function Files
   source("Functions/salmonSpeciesUpdate.R")

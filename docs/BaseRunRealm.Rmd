@@ -14,8 +14,34 @@ library(kableExtra)
 ```
 
 ```{r, include = FALSE}
-source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
-assembleTheLegos("Base")
+# source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
+# assembleTheLegos(path_to_pars = "Functions/BaseRun_set_pars.R", path_to_vars = "Functions/BaseRun_initialize_variables.R")
+
+## Load Data Files and Setup Functions 
+source("Functions/Prep_data_for_Salmon_functions.R")
+source("Functions/Prep_data_for_Harvest_functions.R")
+
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+
+## Set Parameters and Create Variables
+source("Functions/BaseRun_set_pars.R")
+source("Functions/BaseRun_initialize_variables.R")
+
+## Load Function Files
+source("Functions/salmonSpeciesUpdate.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+
+## Run the Loop
+source("Models/The_Loop.R")
+
+## Plots
+source("Functions/Plots.R")
 ```
 
 ### The Base Run Realm
@@ -96,7 +122,5 @@ Here's a quick (not exhaustive) table of parameter values:
 parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
-
-
 ```
 

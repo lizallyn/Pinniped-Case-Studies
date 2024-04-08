@@ -43,12 +43,8 @@ chinook_catch_rate[boat_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
 sockeye_catch_rate[boat_days] <- sockeye_fish_rate
 
-# v_smolts <- oneDzeroes
-# v_smolts[91:244] <- v
-# as a secondary adjustment to C
-# April 1 - Sept 1 right now
-
-harvest_plan <- createHarvestPlan(scenario = "Zone", salmon_days =  salmon_days, empty.array = oneDzeroes)
+harvest_plan <- createHarvestPlan(scenario = "Zone", salmon_days =  salmon_days, 
+                                  empty.array = oneDzeroes)
 
 ### Troubleshooting & BS ----
 # for that one plot
@@ -61,4 +57,5 @@ eaten_chinook <- oneDzeroes
 eaten_sockeye <- oneDzeroes
 eaten_coho <- oneDzeroes
 consumed_total <- oneDzeroes
+
 

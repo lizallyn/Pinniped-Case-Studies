@@ -16,7 +16,6 @@ Y <- 0 # this freaks out when I make it > 0
 
 # seal learning parameters
 w <- 0.2
-# v <- 0.1
 ymin <- -10
 ymax <- 0
 xmin <- -1

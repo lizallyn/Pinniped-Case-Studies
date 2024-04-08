@@ -292,9 +292,35 @@ more sense to switch this to a type I function…</p>
 </div>
 <div id="run-the-model" class="section level3">
 <h3>Run the Model</h3>
-<pre class="r"><code>source(&quot;C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R&quot;)
-assembleTheLegos(&quot;Experiment&quot;, path_to_pars = &quot;Functions/ExcZone_set_pars.R&quot;, 
-                 path_to_vars = &quot;Functions/ExcZone_initialize_variables.R&quot;)</code></pre>
+<pre class="r"><code># source(&quot;C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R&quot;)
+# assembleTheLegos(&quot;Experiment&quot;, path_to_pars = &quot;Functions/ExcZone_set_pars.R&quot;, 
+#                  path_to_vars = &quot;Functions/ExcZone_initialize_variables.R&quot;)
+
+## Load Data Files and Setup Functions 
+source(&quot;Functions/Prep_data_for_Salmon_functions.R&quot;)
+source(&quot;Functions/Prep_data_for_Harvest_functions.R&quot;)
+
+source(&quot;Functions/makeArray.R&quot;)
+source(&quot;Functions/createHarvestPlan.R&quot;)
+
+## Set Parameters and Create Variables
+source(&quot;Functions/ExcZone_set_pars.R&quot;)
+source(&quot;Functions/ExcZone_initialize_variables.R&quot;)
+
+## Load Function Files
+source(&quot;Functions/salmonSpeciesUpdate.R&quot;)
+source(&quot;Functions/decideForagingDestination.R&quot;)
+source(&quot;Functions/collusion.R&quot;)
+source(&quot;Functions/rungeKutta.R&quot;)
+source(&quot;Functions/getHarvested.R&quot;)
+source(&quot;Functions/learnX.R&quot;)
+source(&quot;Functions/learnY.R&quot;)
+
+## Run the Loop
+source(&quot;Models/The_Loop.R&quot;)
+
+## Plots
+source(&quot;Functions/Plots.R&quot;)</code></pre>
 </div>
 <div id="parameter-table" class="section level3">
 <h3>Parameter Table</h3>
@@ -478,13 +504,13 @@ Coho
 <tbody>
 <tr>
 <td style="text-align:right;">
-18561.28
+18560.07
 </td>
 <td style="text-align:right;">
-288.8998
+288.7767
 </td>
 <td style="text-align:right;">
-1634.289
+1634.24
 </td>
 </tr>
 </tbody>
@@ -504,7 +530,7 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">3</td>
+<td align="right">20</td>
 </tr>
 </tbody>
 </table>
@@ -518,7 +544,7 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">18</td>
+<td align="right">4</td>
 </tr>
 </tbody>
 </table>
@@ -532,7 +558,35 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
+<td align="right">17</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">9</td>
 </tr>
 </tbody>
 </table>
@@ -560,7 +614,119 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">19</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td align="right">15</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">13</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">7</td>
 </tr>
 </tbody>
 </table>
@@ -602,161 +768,21 @@ Gauntlet, and survival. Colors are independent seals.
 </thead>
 <tbody>
 <tr class="odd">
+<td align="right">18</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td align="right">8</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">9</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">19</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">20</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">7</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">6</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">13</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">5</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">10</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">17</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">12</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">4</td>
 </tr>
 </tbody>
 </table>

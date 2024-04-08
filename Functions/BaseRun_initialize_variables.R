@@ -8,6 +8,8 @@ salmon_consumed <- twoDzeroes
 seal_prob_gauntlet <- twoDzeroes
 seal_forage_loc <- twoDzeroes
 
+seals_at_gauntlet_save <- list(rep(NA, days))
+
 x <- twoDzeroes
 y <- twoDzeroes
 C <- twoDzeroes
@@ -16,7 +18,7 @@ P_y <- twoDzeroes
 
 P_social <- twoDzeroes
 
-kill_list <- c()
+kill_list <- list()
 
 ### Actual States that I Need ----
 escape_chinook <- oneDzeroes
@@ -41,13 +43,9 @@ chinook_catch_rate[boat_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
 sockeye_catch_rate[boat_days] <- sockeye_fish_rate
 
-# v_smolts <- oneDzeroes
-# v_smolts[91:244] <- v
-# as a secondary adjustment to C
-# April 1 - Sept 1 right now
-
 harvest_plan <- createHarvestPlan(scenario = "Boat", 
-                                  boat_days = boat_days, salmon_days = salmon_days)
+                                  boat_days = boat_days, salmon_days = salmon_days, 
+                                  empty.array = oneDzeroes)
 
 ### Troubleshooting & BS ----
 # for that one plot
