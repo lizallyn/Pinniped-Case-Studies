@@ -40,8 +40,9 @@ coho_escape_rate <- 0.1
 natural_mort <- 0.0005
 
 # hunting parameters
+zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
-efficiency <- 0.05 # what prop of seals are they capable of taking
+efficiency <- 0.075 # what prop of seals are they capable of taking
 min_fishers <- 13
 max_fishers <- 25
 fishery_open <- yday(as.Date("2023-09-10"))
