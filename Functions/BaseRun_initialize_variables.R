@@ -44,7 +44,7 @@ sockeye_catch_rate <- oneDzeroes
 sockeye_catch_rate[boat_days] <- sockeye_fish_rate
 
 harvest_plan <- createHarvestPlan(scenario = "Boat", 
-                                  boat_days = boat_days, salmon_days = salmon_days, 
+                                  boat_days = boat_days,
                                   empty.array = oneDzeroes)
 
 ### Troubleshooting & BS ----

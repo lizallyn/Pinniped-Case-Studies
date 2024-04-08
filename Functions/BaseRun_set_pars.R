@@ -40,7 +40,6 @@ coho_escape_rate <- 0.1
 natural_mort <- 0.0005
 
 # hunting parameters
-zone_efficiency <- 0.8
 steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.05 # what prop of seals are they capable of taking
 min_fishers <- 13
