@@ -68,7 +68,7 @@ kable(parameters) %>% kable_styling(full_width = F)
 
 ### Things to Note
 
-The total escaped sockeye, chinook, and Coho are as follows under this parameterization:
+The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
 
 ```{r, echo = FALSE}
 salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
