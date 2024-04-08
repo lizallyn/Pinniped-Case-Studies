@@ -96,6 +96,12 @@ plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) +
   scale_color_manual(values = colors)
 plot_Py
 
+Psoc_plot <- prepForPlots(P_social, value.col = "P_social")
+plot_Psoc <- ggplot(data = Psoc_plot, aes(x = Day, y = P_social, color = Seal)) +
+  geom_point() +
+  scale_color_manual(values = colors)
+plot_Psoc
+
 # each salmon species
 
 escape.data <- data.frame(cbind(1:days, escape_chinook, escape_sockeye, escape_coho))
