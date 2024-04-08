@@ -6,7 +6,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 ### Reminders
 Github Repo is [here](https://github.com/lizallyn/Pinniped-Case-Studies)  
-Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (kinda replaced by homepage description)
+Model Explanation Doc is [here](https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq) (kinda replaced by homepage description)  
 In Depth Parameter Table is messy but [here now](https://docs.google.com/spreadsheets/d/14LWg-lLf4w3-IbQNVLDXNPXHsMHo4w5JEt5onHkIoR8/edit?usp=sharing)
 
 ### Currently Working On
@@ -16,5 +16,5 @@ In Depth Parameter Table is messy but [here now](https://docs.google.com/spreads
 * Constructing a diagnostics recipe script  
 
 ### Victories
-Created this page! Thanks to Emily for the idea!
+Created this page! Thanks to Emily for the idea!  
 And added new pages functionality to separate different results summaries
