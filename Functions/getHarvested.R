@@ -1,6 +1,6 @@
 # harvest according to a harvest plan matrix (?)
 
-getHarvested <- function(day_plan, list_gauntlet_seals, zone_efficiency, num_fishers, steepness, efficiency){
+getHarvested <- function(day_plan = 0, list_gauntlet_seals, zone_efficiency = NA, num_fishers = NA, steepness = NA, efficiency = NA){
   num_gauntlet_seals <- length(list_gauntlet_seals)
   if(day_plan == "Zone"){
     harvested <- num_gauntlet_seals * zone_efficiency
