@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-04-02" />
+<meta name="date" content="2024-04-08" />
 
 <title>Experiment Test: More Seals</title>
 
@@ -257,6 +257,9 @@ $(document).ready(function () {
 <li>
   <a href="TestMoreSeals.html">More Seals</a>
 </li>
+<li>
+  <a href="ZoneExclusion.html">Exc Zone</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -272,7 +275,7 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">Experiment Test: More Seals</h1>
 <h3 class="subtitle">Making sure the model run ran right: Add more
 seals!!</h3>
-<h4 class="date">April 02, 2024</h4>
+<h4 class="date">April 08, 2024</h4>
 
 </div>
 
@@ -285,8 +288,34 @@ Run Realm.</p>
 </div>
 <div id="run-the-model" class="section level3">
 <h3>Run the Model</h3>
-<pre class="r"><code>source(&quot;C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R&quot;)
-assembleTheLegos(&quot;Experiment&quot;, path_to_pars = &quot;Functions/set_pars.R&quot;, path_to_vars = &quot;Functions/initialize_vars.R&quot;)</code></pre>
+<pre class="r"><code>## Load Data Files and Setup Functions 
+source(&quot;Functions/Prep_data_for_Salmon_functions.R&quot;)
+source(&quot;Functions/Prep_data_for_Harvest_functions.R&quot;)
+
+source(&quot;Functions/makeArray.R&quot;)
+source(&quot;Functions/createHarvestPlan.R&quot;)
+
+## Set Parameters and Create Variables
+source(&quot;Functions/BaseRun_set_pars.R&quot;)
+
+num_seals &lt;- 150
+
+source(&quot;Functions/BaseRun_initialize_variables.R&quot;)
+
+## Load Function Files
+source(&quot;Functions/salmonSpeciesUpdate.R&quot;)
+source(&quot;Functions/decideForagingDestination.R&quot;)
+source(&quot;Functions/collusion.R&quot;)
+source(&quot;Functions/rungeKutta.R&quot;)
+source(&quot;Functions/getHarvested.R&quot;)
+source(&quot;Functions/learnX.R&quot;)
+source(&quot;Functions/learnY.R&quot;)
+
+## Run the Loop
+source(&quot;Models/The_Loop.R&quot;)
+
+## Plots
+source(&quot;Functions/Plots.R&quot;)</code></pre>
 </div>
 <div id="parameter-table" class="section level3">
 <h3>Parameter Table</h3>

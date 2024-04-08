@@ -18,9 +18,6 @@ knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
 ```
 
 ```{r, message = FALSE, warning = FALSE}
-# source("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Functions/assembleTheLegos.R")
-# assembleTheLegos("Experiment", path_to_pars = "Functions/ExcZone_set_pars.R", 
-#                  path_to_vars = "Functions/ExcZone_initialize_variables.R")
 
 ## Load Data Files and Setup Functions 
 source("Functions/Prep_data_for_Salmon_functions.R")
@@ -31,6 +28,9 @@ source("Functions/createHarvestPlan.R")
 
 ## Set Parameters and Create Variables
 source("Functions/BaseRun_set_pars.R")
+
+zone_efficiency <- 0.8
+
 source("Functions/BaseRun_initialize_variables.R")
 
 harvest_plan <- createHarvestPlan(scenario = "Zone", salmon_days =  salmon_days, 
@@ -80,8 +80,6 @@ This model run has a drastic impact on seal behavior, presence at the Gauntlet, 
 Colors are independent seals.
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
 plot_seals/plot_C/plot_probs/plot_H + plot_layout(guides = "collect", axes = "collect")
-
-kable(kill_list)
 ```
 
 
