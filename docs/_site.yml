@@ -12,7 +12,9 @@ navbar:
     - text: "More Seals"
       href: TestMoreSeals.html
     - text: "Exc Zone"
-      href: ZoneExclusion.html
+      href: ZoneExclusion.html   
+    - text: "More Boat"
+      href: BoatHarvest.html
 output:
   html_document:
     theme: cosmo
