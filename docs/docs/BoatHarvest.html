@@ -12,7 +12,7 @@
 
 <meta name="date" content="2024-04-08" />
 
-<title>Progress &amp; Issues</title>
+<title>Experiment: Boat Harvest Implementation</title>
 
 <script src="site_libs/header-attrs-2.23/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -33,6 +33,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -273,39 +275,261 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Progress &amp; Issues</h1>
-<h3 class="subtitle">Updates, Explorations, Questions, etc.</h3>
+<h1 class="title toc-ignore">Experiment: Boat Harvest
+Implementation</h1>
+<h3 class="subtitle">Describing the model run when boat-based harvest is
+amplified above incidental levels</h3>
 <h4 class="date">April 08, 2024</h4>
 
 </div>
 
 
-<div id="reminders" class="section level3">
-<h3>Reminders</h3>
-<p>Github Repo is <a
-href="https://github.com/lizallyn/Pinniped-Case-Studies">here</a><br />
-Model Explanation Doc is <a
-href="https://docs.google.com/document/d/1VYwdORJUO0BOJdU_s5iarZ0-YnNVYHJXVU9WCOc4RsY/edit#heading=h.wt3ajsmprmsq">here</a>
-(kinda replaced by homepage description)<br />
-In Depth Parameter Table is messy but <a
-href="https://docs.google.com/spreadsheets/d/14LWg-lLf4w3-IbQNVLDXNPXHsMHo4w5JEt5onHkIoR8/edit?usp=sharing">here
-now</a></p>
+<div id="the-narrative" class="section level3">
+<h3>The Narrative</h3>
+<p>This Model Run is for a scenario where managers open harvest of seals
+in the gauntlet by fishing vessels during the Coho fishery. This is
+modeled similarly to incidental fishery take but at a higher
+exploitation rate.</p>
 </div>
-<div id="currently-working-on" class="section level3">
-<h3>Currently Working On</h3>
-<ul>
-<li>Creating a Base Run and making sure it conceptually checks out<br />
-</li>
-<li>Coming up with a suite of experimental runs that make sense</li>
-<li>Justifying parameter values in the lit</li>
-<li>Constructing a diagnostics recipe script</li>
-</ul>
+<div id="run-the-model" class="section level3">
+<h3>Run the Model</h3>
+<pre class="r"><code>## Load Data Files and Setup Functions 
+source(&quot;Functions/Prep_data_for_Salmon_functions.R&quot;)
+source(&quot;Functions/Prep_data_for_Harvest_functions.R&quot;)
+
+source(&quot;Functions/makeArray.R&quot;)
+source(&quot;Functions/createHarvestPlan.R&quot;)
+
+## Set Parameters and Create Variables
+source(&quot;Functions/BaseRun_set_pars.R&quot;)
+
+steepness_H &lt;- 5 # how quick does it saturate (higher = slower)
+efficiency &lt;- 0.2 # what prop of seals are they capable of taking
+min_fishers &lt;- 13
+max_fishers &lt;- 25
+fishery_open &lt;- yday(as.Date(&quot;2023-09-10&quot;)) # coho fishery dates from 2023
+fishery_close &lt;- yday(as.Date(&quot;2023-11-17&quot;))
+boat_days &lt;- fishery_open:fishery_close
+
+source(&quot;Functions/BaseRun_initialize_variables.R&quot;)
+
+harvest_plan &lt;- createHarvestPlan(scenario = &quot;Boat&quot;, 
+                                  boat_days = boat_days,
+                                  empty.array = oneDzeroes)
+
+## Load Function Files
+source(&quot;Functions/salmonSpeciesUpdate.R&quot;)
+source(&quot;Functions/decideForagingDestination.R&quot;)
+source(&quot;Functions/collusion.R&quot;)
+source(&quot;Functions/rungeKutta.R&quot;)
+source(&quot;Functions/getHarvested.R&quot;)
+source(&quot;Functions/learnX.R&quot;)
+source(&quot;Functions/learnY.R&quot;)
+
+## Run the Loop
+source(&quot;Models/The_Loop.R&quot;)
+
+## Plots
+source(&quot;Functions/Plots.R&quot;)</code></pre>
 </div>
-<div id="victories" class="section level3">
-<h3>Victories</h3>
-<p>Created this page! Thanks to Emily for the idea!<br />
-And added new pages functionality to separate different results
-summaries</p>
+<div id="parameter-table" class="section level3">
+<h3>Parameter Table</h3>
+<p>This scenario is focused on the effects of a different management
+strategy that changes the quantity of seal harvest. Removals occur on
+days when the coho fishery is open in the gauntlet. The harvest strategy
+is still boat-based like incidental harvest but it is more aggressive as
+it is focused on seal removal directly not incidentally as in the base
+run.</p>
+<p>Removals occur from day 152 - 276.<br />
+Removals are a type 2 function as follows:</p>
+<pre class="r"><code>fishers &lt;- 0:max_fishers
+plot(fishers, getHarvested(day_plan = &quot;Boat&quot;, list_gauntlet_seals = 1:num_seals, 
+                           num_fishers = fishers, steepness = steepness_H, 
+                           efficiency = efficiency, round = F), ylab = &quot;Harvested Seals&quot;)</code></pre>
+<p><img src="BoatHarvest_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+Here’s the (kinda) full parameter list:
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+days
+</td>
+<td style="text-align:right;">
+365.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+num_seals
+</td>
+<td style="text-align:right;">
+20.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+zone_efficiency
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+num_seals_2_copy
+</td>
+<td style="text-align:right;">
+2.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sockeye_escape_rate
+</td>
+<td style="text-align:right;">
+0.3000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chinook_escape_rate
+</td>
+<td style="text-align:right;">
+0.0300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coho_escape_rate
+</td>
+<td style="text-align:right;">
+0.1000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+min_fishers
+</td>
+<td style="text-align:right;">
+13.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+max_fishers
+</td>
+<td style="text-align:right;">
+25.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fishery_open
+</td>
+<td style="text-align:right;">
+253.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fishery_close
+</td>
+<td style="text-align:right;">
+321.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sockeye_fish_rate
+</td>
+<td style="text-align:right;">
+0.0100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chinook_fish_rate
+</td>
+<td style="text-align:right;">
+0.0100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coho_fish_rate
+</td>
+<td style="text-align:right;">
+0.1000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+natural_mort
+</td>
+<td style="text-align:right;">
+0.0005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cmax
+</td>
+<td style="text-align:right;">
+1.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+alpha
+</td>
+<td style="text-align:right;">
+0.1000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="things-to-note" class="section level3">
+<h3>Things to Note</h3>
+<p>The total escaped sockeye, chinook, and Coho are as follows under
+this parameterization:</p>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Sockeye
+</th>
+<th style="text-align:right;">
+Chinook
+</th>
+<th style="text-align:right;">
+Coho
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+18408.52
+</td>
+<td style="text-align:right;">
+271.3109
+</td>
+<td style="text-align:right;">
+1615.3
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

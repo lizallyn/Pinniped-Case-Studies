@@ -260,6 +260,9 @@ $(document).ready(function () {
 <li>
   <a href="ZoneExclusion.html">Exc Zone</a>
 </li>
+<li>
+  <a href="BoatHarvest.html">More Boat</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -279,31 +282,6 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>## Load Data Files and Setup Functions 
-source(&quot;Functions/Prep_data_for_Salmon_functions.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/Prep_data_for_Harvest_functions.R&quot;, local = knitr::knit_global())
-
-source(&quot;Functions/makeArray.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/createHarvestPlan.R&quot;, local = knitr::knit_global())
-
-## Set Parameters and Create Variables
-source(&quot;Functions/BaseRun_set_pars.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/BaseRun_initialize_variables.R&quot;, local = knitr::knit_global())
-
-## Load Function Files
-source(&quot;Functions/salmonSpeciesUpdate.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/decideForagingDestination.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/collusion.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/rungeKutta.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/getHarvested.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/learnX.R&quot;, local = knitr::knit_global())
-source(&quot;Functions/learnY.R&quot;, local = knitr::knit_global())
-
-## Run the Loop
-source(&quot;Models/The_Loop.R&quot;, local = knitr::knit_global())
-
-## Plots
-source(&quot;Functions/Plots.R&quot;, local = knitr::knit_global())</code></pre>
 <div id="the-base-run-realm" class="section level3">
 <h3>The Base Run Realm</h3>
 <p>This page is currently a place where I am developing the base run and
@@ -368,24 +346,133 @@ If a seal does not go to the Gauntlet, they also begin to gain
 uncertainty about their knowledge and their “y” decays toward a neutral
 value. Each seal’s “y” is then used to calculate their probability of
 going to the Gauntlet based on their cumulative experience with hunting
-“P_y”.</p>
+“P_y”.<br />
+The following seals were killed during this run:</p>
+<table class="kable_wrapper">
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">13</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">19</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 <p><img src="BaseRunRealm_files/figure-html/plot5-1.png" width="672" /></p>
 <p>For each seal, P_x and P_y are combined into a single probability of
 going to the Gauntlet (P_G). A coin flip (random uniform draw) is used
 to determine whether each seal goes to the Gauntlet that day based on
 their P_G.</p>
 <p><img src="BaseRunRealm_files/figure-html/plot6-1.png" width="672" /></p>
-<p>Seals then incorporate social information from 2 randomly chosen
+<p>Seals then incorporate social information from 20 randomly chosen
 seals and their final foraging destination for the day is decided with
 another coin flip. Their receptivity to social information is informed
 by the strength of their existing knowledge. A P_G closer to 0.5
 indicates ambivalence and means the seal is more receptive to social
 influence. A P_G closer to 0 or 1 indicates a strong opinion that will
-not allow the incorporation of social information.</p>
+not allow the incorporation of social information. In the plots below,
+Prob_Gauntlet represents each seal’s own cumulative experience while
+P_social represents their opinion after social information sharing,
+which is what their final decision is based on.</p>
 <p><img src="BaseRunRealm_files/figure-html/plot7-1.png" width="672" /></p>
+<p><img src="BaseRunRealm_files/figure-html/plot8-1.png" width="672" /></p>
 <p>The total escaped Sockeye, Chinook, and Coho are as follows under
 this parameterization:</p>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;">
@@ -402,13 +489,13 @@ Coho
 <tbody>
 <tr>
 <td style="text-align:right;">
-18396.67
+18412.01
 </td>
 <td style="text-align:right;">
-269.7139
+270.594
 </td>
 <td style="text-align:right;">
-1598.935
+1607.051
 </td>
 </tr>
 </tbody>
@@ -417,7 +504,7 @@ Coho
 <div id="parameter-table" class="section level4">
 <h4>Parameter Table</h4>
 <p>Here’s a quick (not exhaustive) table of parameter values:</p>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -449,7 +536,7 @@ num_seals
 num_seals_2_copy
 </td>
 <td style="text-align:right;">
-2.0000
+20.0000
 </td>
 </tr>
 <tr>
@@ -546,14 +633,6 @@ Cmax
 </td>
 <td style="text-align:right;">
 1.0000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-alpha_c
-</td>
-<td style="text-align:right;">
-15.0000
 </td>
 </tr>
 <tr>
