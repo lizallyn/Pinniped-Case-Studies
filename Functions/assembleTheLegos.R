@@ -2,7 +2,7 @@
 
 setwd("C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies")
 
-assembleTheLegos <- function(run, path_to_pars, path_to_vars){
+assembleTheLegos <- function(path_to_pars, path_to_vars){
   ## Load Data Files and Setup Functions 
   source("Functions/Prep_data_for_Salmon_functions.R")
   source("Functions/Prep_data_for_Harvest_functions.R")
@@ -10,16 +10,9 @@ assembleTheLegos <- function(run, path_to_pars, path_to_vars){
   source("Functions/makeArray.R")
   source("Functions/createHarvestPlan.R")
   
-## Set Parameters and Create Variables
-  if(run == "Base"){
-    source("Functions/BaseRun_set_pars.R")
-    source("Functions/BaseRun_initialize_variables.R")
-  } else if(run == "Experiment") {
+  ## Set Parameters and Create Variables
     source(path_to_pars)
     source(path_to_vars)
-  } else {
-    print("Not a valid run type. Try Base or Experiment")
-  }
   
   ## Load Function Files
   source("Functions/salmonSpeciesUpdate.R")
@@ -38,5 +31,4 @@ assembleTheLegos <- function(run, path_to_pars, path_to_vars){
   
 }
 
-assembleTheLegos("Experiment", path_to_pars = "Functions/ExcZone_set_pars.R", path_to_vars = "Functions/ExcZone_initialize_variables.R")
 
