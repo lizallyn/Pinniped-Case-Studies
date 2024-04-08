@@ -6,4 +6,86 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 ### The Narrative
 
-This Model Run is for a scenario where managers in the Gauntlet enact an "Exclusion Zone" management strategy. In this strategy, all seals that cross into the Gauntlet area when salmon are present in the Gauntlet are targeted for removal. We assume that managers are able to effectively remove a set percent of seals in the area. It might make more sense to switch this to a type I function...
+This Model Run is for a scenario where managers open harvest of seals in the gauntlet by fishing vessels during the Coho fishery. This is modeled similarly to incidental fishery take but at a higher exploitation rate.  
+
+### Run the Model
+
+```{r, setup, include = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r, message = FALSE, warning = FALSE}
+
+## Load Data Files and Setup Functions 
+source("Functions/Prep_data_for_Salmon_functions.R")
+source("Functions/Prep_data_for_Harvest_functions.R")
+
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+
+## Set Parameters and Create Variables
+source("Functions/BaseRun_set_pars.R")
+
+steepness_H <- 5 # how quick does it saturate (higher = slower)
+efficiency <- 0.2 # what prop of seals are they capable of taking
+min_fishers <- 13
+max_fishers <- 25
+fishery_open <- yday(as.Date("2023-09-10")) # coho fishery dates from 2023
+fishery_close <- yday(as.Date("2023-11-17"))
+boat_days <- fishery_open:fishery_close
+
+source("Functions/BaseRun_initialize_variables.R")
+
+harvest_plan <- createHarvestPlan(scenario = "Boat", 
+                                  boat_days = boat_days,
+                                  empty.array = oneDzeroes)
+
+## Load Function Files
+source("Functions/salmonSpeciesUpdate.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+
+## Run the Loop
+source("Models/The_Loop.R")
+
+## Plots
+source("Functions/Plots.R")
+```
+
+### Parameter Table
+
+This scenario is focused on the effects of a different management strategy that changes the quantity of seal harvest. Removals occur on days when the coho fishery is open in the gauntlet. The harvest strategy is still boat-based like incidental harvest but it is more aggressive as it is focused on seal removal directly not incidentally as in the base run.
+
+Removals occur from day `r salmon_days[1]` - `r salmon_days[length(salmon_days)]`.  
+Removals are a type 2 function as follows:
+
+```{r}
+fishers <- 0:max_fishers
+plot(fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:num_seals, 
+                           num_fishers = fishers, steepness = steepness_H, 
+                           efficiency = efficiency, round = F), ylab = "Harvested Seals")
+```
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(days, num_seals, zone_efficiency, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
+
+### Things to Note
+
+The total escaped sockeye, chinook, and Coho are as follows under this parameterization:
+
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
