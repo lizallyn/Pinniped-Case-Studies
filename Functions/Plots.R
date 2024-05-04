@@ -81,11 +81,15 @@ scaled_rec <- (receptivity - min)/(max - min)
 rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
 receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
   geom_line(lwd = 2, color = "black") +
-  labs(y = "Receptivity", x = "P_G") +
-  theme_classic()
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        plot.background = element_rect(fill = "white", color = "white"),
+        panel.background = element_rect(fill = "white", color = "white"))
 receptivity_plot
-# ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
-       path = "Plot Exports", height = 5, width = 8)
+ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
+#        path = "Plot Exports", height = 3, width = 15)
 
 y_plot <- prepForPlots(y, value.col = "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 

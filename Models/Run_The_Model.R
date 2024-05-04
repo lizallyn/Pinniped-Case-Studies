@@ -11,3 +11,5 @@ plot_seals/plot_H/plot_y/plot_Py + plot_layout(guides = "collect")
 plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
 
 gauntlet_plot / fished_plot
+
+(gauntlet_plot + theme_classic()) / (plot_seals + theme_classic()) + plot_layout(guides = "collect")
