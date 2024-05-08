@@ -85,7 +85,7 @@ receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = s
   theme_classic()
 receptivity_plot
 # ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
-       path = "Plot Exports", height = 5, width = 8)
+#       path = "Plot Exports", height = 5, width = 8)
 
 y_plot <- prepForPlots(y, value.col = "y")
 plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 

@@ -1,0 +1,71 @@
+---
+title: "No Take"
+subtitle: "System with no take (direct or incidental)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where there is no take of seals, either direct or incidental.
+
+```{r, setup, include = FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+library(knitr)
+library(flextable)
+library(kableExtra)
+```
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+
+## Load Data Files and Setup Functions 
+source("Functions/Prep_data_for_Salmon_functions.R", local = knitr::knit_global())
+source("Functions/Prep_data_for_Harvest_functions.R", local = knitr::knit_global())
+
+source("Functions/makeArray.R", local = knitr::knit_global())
+source("Functions/createHarvestPlan.R", local = knitr::knit_global())
+
+## Set Parameters and Create Variables
+source("Functions/BaseRun_set_pars.R", local = knitr::knit_global())
+source("Functions/BaseRun_initialize_variables.R", local = knitr::knit_global())
+harvest_plan <- oneDzeroes
+
+## Load Function Files
+source("Functions/salmonSpeciesUpdate.R", local = knitr::knit_global())
+source("Functions/decideForagingDestination.R", local = knitr::knit_global())
+source("Functions/collusion.R", local = knitr::knit_global())
+source("Functions/rungeKutta.R", local = knitr::knit_global())
+source("Functions/getHarvested.R", local = knitr::knit_global())
+source("Functions/learnX.R", local = knitr::knit_global())
+source("Functions/learnY.R", local = knitr::knit_global())
+
+## Run the Loop
+source("Models/The_Loop.R", local = knitr::knit_global())
+
+## Plots
+source("Functions/Plots.R", local = knitr::knit_global())
+```
+
+### Parameter Table
+
+This scenario is focused on deviated values of:  
+
+* harvest_plan (all 0's)
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
+
+### Things to Note
+
+Seal presence just follows salmon presence as there is no deterrent activity in the Gauntlet. Maximum consumption impact.
+
+```{r, echo = FALSE} 
+gauntlet_plot / plot_seals
+```
+
