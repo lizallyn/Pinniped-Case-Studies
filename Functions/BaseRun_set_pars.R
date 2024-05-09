@@ -35,9 +35,14 @@ beta <- 15 # spread of the beta dist
 
 # salmon parameters
 sockeye_escape_rate <- 0.3
-chinook_escape_rate <- 0.03
+chinook_escape_rate <- 0.015
 coho_escape_rate <- 0.1
 natural_mort <- 0.0005
+
+coho_fish_rate <- 0.1 # see "estFishingRate.R"
+chinook_fish_rate <- 0.01
+sockeye_fish_rate <- 0.01
+salmon_days <- which(Daily_fish$total > 0)
 
 # hunting parameters
 zone_efficiency <- NA
@@ -49,8 +54,5 @@ fishery_open <- yday(as.Date("2023-09-10"))
 fishery_close <- yday(as.Date("2023-11-17"))
 boat_days <- fishery_open:fishery_close
 
-coho_fish_rate <- 0.1 # see "estFishingRate.R"
-chinook_fish_rate <- 0.01
-sockeye_fish_rate <- 0.01
-salmon_days <- which(Daily_fish$total > 0)
+
 
