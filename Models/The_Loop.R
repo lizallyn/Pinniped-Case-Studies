@@ -54,7 +54,7 @@ for(t in 1:(days-1)) {
   if(length(seals_at_gauntlet) == 0 | consumed_total[t] == 0) {
     salmon_consumed[,t] <- 0
   } else {
-    salmon_consumed[seals_at_gauntlet, t] <- floor(consumed_total[t]/length(seals_at_gauntlet))
+    salmon_consumed[seals_at_gauntlet, t] <- consumed_total[t]/length(seals_at_gauntlet)
   }
   
   # seal harvest
