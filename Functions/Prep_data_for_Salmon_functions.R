@@ -21,3 +21,18 @@ Daily_fish$AvgPink <- 0
 Daily_fish$AvgSteelhead <- 0
 Daily_fish$total <- rowSums(Daily_fish[,-1])
 
+### PIT data - Chinook from Bear and Cedar
+# start_date <- yday("2023-05-12")
+# end_date <- yday("2023-06-28")
+# beta_2 <- 100
+# mean_2 <- yday(x = "2023-06-22")
+# alpha_2 <- (-beta_2*mean_2)/(mean_2-1)
+# dpois(x = 173, lambda = mean_2)
+# curve(dbeta(x,4,2),xlim=c(0, 1))
+# x_list <- seq(0, 1, 1/(length(start_date:end_date)-1))
+# dbeta(x = x_list, 4, 2)
+# max_smolt <- 464/7
+# scale <- max_smolt/max(dbeta(x = x_list, 4, 2))
+# 
+# smolt_passage <- data.frame(dayofyear = start_date:end_date, smolt = dbeta(x = x_list, 4, 2) * scale)
+# plot(smolt_passage)
