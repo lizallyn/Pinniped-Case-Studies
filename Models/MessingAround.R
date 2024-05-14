@@ -13,7 +13,8 @@ source("Functions/BaseRun_set_pars.R")
 num_seals <- 20
 intercept_x <- 0.01
 num_seals_2_copy <- num_seals/2
-w <- 0.5
+w <- 0.9
+Cmax
 
 source("Functions/BaseRun_initialize_variables.R")
 
