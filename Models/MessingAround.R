@@ -14,7 +14,7 @@ num_seals <- 20
 intercept_x <- 0.01
 num_seals_2_copy <- num_seals/2
 w <- 0.9
-Cmax
+Cmax <- 1 # need to figure out what this actually does???
 
 source("Functions/BaseRun_initialize_variables.R")
 
