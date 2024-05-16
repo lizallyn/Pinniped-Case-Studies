@@ -14,7 +14,7 @@ num_seals <- 20
 intercept_x <- 0.01
 num_seals_2_copy <- num_seals/2
 w <- 0.9
-Cmax <- 1 # need to figure out what this actually does???
+Cmax <- 0.2 # need to figure out what this actually does???
 
 source("Functions/BaseRun_initialize_variables.R")
 
@@ -35,6 +35,9 @@ source("Models/The_Loop.R")
 ## Plots
 source("Functions/Plots.R")
 
+plot_eaten/plot_consumed
+
 plot_seals
+
 plot_eaten/plot_C/plot_x/plot_Px + plot_layout(guides = "collect", axes = "collect")
 plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")

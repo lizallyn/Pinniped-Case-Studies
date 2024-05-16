@@ -25,7 +25,8 @@ for(t in 1:(days-1)) {
   # calculate salmon mortality 
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   seals_at_gauntlet_save[[t]] <- seals_at_gauntlet
-  salmon_result <- run_rungeKutta(Cmax = Cmax, Nseal = length(seals_at_gauntlet), 
+  num_seals_at_gauntlet <- length(seals_at_gauntlet)
+  salmon_result <- run_rungeKutta(Cmax = Cmax, Nseal = num_seals_at_gauntlet, 
                                   alpha = alpha, Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 
                                   gamma = gamma, Y = Y, 
                                   E = c(sockeye_escape_rate, chinook_escape_rate, coho_escape_rate), 
@@ -51,10 +52,10 @@ for(t in 1:(days-1)) {
   
   # assign consumed salmon to seals at gauntlet
   consumed_total[t] <- sum(c(eaten_sockeye[t], eaten_chinook[t], eaten_coho[t]))
-  if(length(seals_at_gauntlet) == 0 | consumed_total[t] == 0) {
+  if(num_seals_at_gauntlet == 0 | consumed_total[t] == 0) {
     salmon_consumed[,t] <- 0
   } else {
-    salmon_consumed[seals_at_gauntlet, t] <- consumed_total[t]/length(seals_at_gauntlet)
+    salmon_consumed[seals_at_gauntlet, t] <- consumed_total[t]/num_seals_at_gauntlet
   }
   
   # seal harvest

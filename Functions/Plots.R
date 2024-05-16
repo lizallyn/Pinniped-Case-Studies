@@ -66,6 +66,13 @@ plot_seals <- ggplot(data = seal.data, aes(x = Day, y = Count)) +
   labs(y = "Num Seals at the Gauntlet")
 plot_seals
 
+consumed_plot <- data.frame(cbind(1:days, consumed_total))
+colnames(consumed_plot) <- c("Day", "consumed")
+plot_consumed <- ggplot(data = consumed_plot, aes(x = Day, y = consumed)) + 
+  geom_point() +
+  labs(y = "Total Salmon Consumed")
+plot_consumed
+
 H_plot <- data.frame(cbind(1:days, H))
 colnames(H_plot) <- c("Day", "H")
 plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +

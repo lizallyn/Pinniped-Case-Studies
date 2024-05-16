@@ -8,5 +8,8 @@ eat_some_fish <- function(num_gauntlet_salmon, num_seals_at_gauntlet, handling_t
       (satiation + handling_time*num_gauntlet_salmon*num_seals_at_gauntlet^pd+Y)
     theoretical_predation_rate <- theoretical_salmon_to_eat/num_gauntlet_salmon
   }
-  return(theoretical_predation_rate)
+  return(theoretical_salmon_to_eat/num_seals_at_gauntlet)
 }
+
+# satiation <- seq(0, 2, 0.1)
+# plot(satiation, eat_some_fish(500, 20, 0.1, satiation, 0, 0))
