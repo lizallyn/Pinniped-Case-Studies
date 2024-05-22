@@ -1,6 +1,6 @@
 # version for shiny with specific parameter manipulation
 
-assembleTheLegos_shiny <- function(num_seals_input){
+assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
   ## Load Data Files and Setup Functions 
   source("Functions/Prep_data_for_Salmon_functions.R")
   source("Functions/Prep_data_for_Harvest_functions.R")
@@ -50,9 +50,9 @@ assembleTheLegos_shiny <- function(num_seals_input){
     seal_forage_loc[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = decideForagingDestination)
 
     # round of copying
-    if(num_seals_2_copy > 0){
+    if(seals_copy_input > 0){
       P_social[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = collusion,
-                             probs_list = seal_prob_gauntlet[,t], seals_2_copy = num_seals_2_copy,
+                             probs_list = seal_prob_gauntlet[,t], seals_2_copy = seals_copy_input,
                              mean = mean, beta = beta)
       seal_forage_loc[,t] <- sapply(X = P_social[,t], FUN = decideForagingDestination)
     }
@@ -147,19 +147,9 @@ assembleTheLegos_shiny <- function(num_seals_input){
   library(ggplot2)
   library(patchwork)
   
-  # source("Functions/plotSealsColorPalette.R")
-  # colors <- plotSealsColorPalette(num_seals_input, palette = "Set3")
-  
   salmon.colors <- c("seagreen", "salmon", "goldenrod")
   salmon.names <- c("Chinook", "Sockeye", "Coho")
   names(salmon.colors) <- salmon.names
-  
-  # Daily Seals at Gauntlet
-  seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
-  colnames(seal.data) <- c("Day", "Count")
-  plot_seals <- ggplot(data = seal.data, aes(x = Day, y = Count)) +
-    geom_point(color = "dodgerblue") +
-    labs(y = "Num Seals at the Gauntlet")
   
   # Daily Salmon at Gauntlet
   gauntlet.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
@@ -168,27 +158,51 @@ assembleTheLegos_shiny <- function(num_seals_input){
   gauntlet_plot <- ggplot(data = gauntlet.data, aes(x = Day, y = Count)) + 
     geom_point(aes(color = Species)) +
     scale_color_manual(values = salmon.colors) +
-    labs(y = "Daily Salmon at Gauntlet")
+    labs(y = "Daily Salmon at Gauntlet") + 
+    theme(legend.position = "none")
   
-  # Daily Salmon Eaten
-  # eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
-  # plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
-  #   geom_point() +
-  #   scale_color_manual(values = colors) +
-  #   labs(y = "Salmon Eaten per Seal")
+  # Daily Seals at Gauntlet
+  seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
+  colnames(seal.data) <- c("Day", "Count")
+  plot_seals <- ggplot(data = seal.data, aes(x = Day, y = Count)) +
+    geom_point(color = "dodgerblue") +
+    labs(y = "Num Seals at the Gauntlet")
+  
+  # Daily Salmon Eaten by Species
+  eaten.sp.data <- data.frame(cbind(1:days, eaten_chinook, eaten_sockeye, eaten_coho))
+  colnames(eaten.sp.data) <- c("Day", "Chinook", "Sockeye", "Coho")
+  eaten.sp.data <- melt(eaten.sp.data, "Day", variable.name = "Species", value.name = "Count")
+  eaten_sp_plot <- ggplot(data = eaten.sp.data, aes(x = Day, y = Count)) + 
+    geom_point(aes(color = Species)) +
+    scale_color_manual(values = salmon.colors) +
+    labs(y = "Daily Salmon Eaten")
   
   # Prob Gauntlet Plot
-  # prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
-  # plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
-  #   geom_point() +
-  #   scale_color_manual(values = colors) +
-  #   labs(y = "Prob_Gauntlet")
+  prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
+  plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) +
+    geom_point() +
+    labs(y = "Prob_Gauntlet") + 
+    theme(legend.position = "none")
   
-  plot.list <- list(plot_seals, gauntlet_plot)
+  # Daily Salmon Eaten per Seal
+  eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
+  plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) +
+    geom_point() +
+    labs(y = "Salmon Eaten per Seal") + 
+    theme(legend.position = "none")
+  
+
+  
+  plot.list <- list("Salmon_G" = gauntlet_plot, 
+                    "Seals_G" = plot_seals, 
+                    "Salmon_Eaten" = eaten_sp_plot, 
+                    "Seals_Eaten" = plot_eaten, 
+                    "Prob_G" = plot_probs)
+  
   
   return(plot.list)
   
 }
 
-# assembleTheLegos_shiny(num_seals_input = 30)[[2]]
+# assembleTheLegos_shiny(num_seals_input = 20, seals_copy_input = 2)[["Prob_G"]]
 

@@ -25,21 +25,45 @@ source("Functions/assembleTheLegos_shiny.R")
 source("Functions/prepForPlots.R")
 
 ui <- fluidPage(
-  numericInput("seals", "Number of Seals", value = 25, min = 1, max = 100),
-  plotOutput("num_seals_plot"),
+  "This plot shows the underlying salmon presence at the Gauntlet over a 365 day period.",
   plotOutput("salmon_species_plot"),
+  "Manipulations Start Below:",
+  fluidRow(
+    column(6, numericInput("seals", "Number of Seals", value = 15, min = 1, max = 100)),
+    column(6, numericInput("seals2copy", "Number of Seals to Copy", value = 1, min = 0, max = 100))
+  ),
+  fluidRow(
+    column(6, plotOutput("num_seals_plot")),
+    column(6, plotOutput("salmon_eaten_plot"))
+  ),
+  "Social Manipulations",
+  fluidRow(
+    column(4, plotOutput("eaten_per_seal_plot")),
+    column(4, plotOutput("salmon_eaten_plot")),
+    column(4, plotOutput("prob_gauntlet_plot"))
+  ),
 )
 
 server <- function(input, output, session){
   loop_results <- reactive({
-    assembleTheLegos_shiny(num_seals_input = input$seals)
+    assembleTheLegos_shiny(num_seals_input = input$seals, 
+                           seals_copy_input = input$seals2copy)
   })
 
   output$num_seals_plot <- renderPlot({
-    loop_results()[[1]]
+    loop_results()[[2]]
   })
   output$salmon_species_plot <- renderPlot({
-    loop_results()[[2]]
+    loop_results()[["Salmon_G"]]
+  })
+  output$salmon_eaten_plot <- renderPlot({
+    loop_results()[["Salmon_Eaten"]]
+  })
+  output$prob_gauntlet_plot <- renderPlot({
+    loop_results()[["Prob_G"]]
+  })
+  output$eaten_per_seal_plot <- renderPlot({
+    loop_results()[["Seals_Eaten"]]
   })
   
 }
