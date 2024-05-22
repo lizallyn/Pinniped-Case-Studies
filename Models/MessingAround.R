@@ -10,8 +10,8 @@ source("Functions/createHarvestPlan.R")
 source("Functions/BaseRun_set_pars.R")
 
 # make changes
-num_seals <- 20
-intercept_x <- 0.01
+num_seals <- 15
+intercept_x <- 0.1
 num_seals_2_copy <- num_seals/2
 w <- 0.9
 Cmax <- 0.2 # need to figure out what this actually does???
