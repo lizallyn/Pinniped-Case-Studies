@@ -10,21 +10,21 @@ assembleTheLegos_shiny <- function(num_seals_input){
   
   ## Set Parameters and Create Variables
   source("Functions/Shiny_set_pars.R")
-  num_seals <- num_seals_input
   twoDzeroes <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  salmon_consumed <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  seal_prob_gauntlet <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  seal_forage_loc <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  salmon_consumed <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  seal_prob_gauntlet <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  seal_forage_loc <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
   
   seals_at_gauntlet_save <- list(rep(NA, days))
   
-  x <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  y <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  C <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  P_x <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
-  P_y <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  x <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  y <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  C <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  P_x <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  P_y <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
   
-  P_social <-makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  P_social <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
+  
   source("Functions/Shiny_initialize_variables.R")
   
   ## Load Function Files
@@ -107,7 +107,7 @@ assembleTheLegos_shiny <- function(num_seals_input){
 
     # calculate x, y and prob_gauntlet for next time step
     ## This could all become some functions
-    for(seal in 1:num_seals){
+    for(seal in 1:num_seals_input){
       if(!(seal %in% kill_list)){
         C[seal, t] <- salmon_consumed[seal, t] - w
 
@@ -143,15 +143,52 @@ assembleTheLegos_shiny <- function(num_seals_input){
 
   ## Plots
   
+  library(reshape2)
+  library(ggplot2)
+  library(patchwork)
+  
+  # source("Functions/plotSealsColorPalette.R")
+  # colors <- plotSealsColorPalette(num_seals_input, palette = "Set3")
+  
+  salmon.colors <- c("seagreen", "salmon", "goldenrod")
+  salmon.names <- c("Chinook", "Sockeye", "Coho")
+  names(salmon.colors) <- salmon.names
+  
+  # Daily Seals at Gauntlet
   seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
   colnames(seal.data) <- c("Day", "Count")
   plot_seals <- ggplot(data = seal.data, aes(x = Day, y = Count)) +
     geom_point(color = "dodgerblue") +
     labs(y = "Num Seals at the Gauntlet")
   
-  return(plot_seals)
+  # Daily Salmon at Gauntlet
+  gauntlet.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
+  colnames(gauntlet.data) <- c("Day", "Chinook", "Sockeye", "Coho")
+  gauntlet.data <- melt(gauntlet.data, "Day", variable.name = "Species", value.name = "Count")
+  gauntlet_plot <- ggplot(data = gauntlet.data, aes(x = Day, y = Count)) + 
+    geom_point(aes(color = Species)) +
+    scale_color_manual(values = salmon.colors) +
+    labs(y = "Daily Salmon at Gauntlet")
+  
+  # Daily Salmon Eaten
+  # eaten_plot <- prepForPlots(salmon_consumed, value.col = "eaten")
+  # plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
+  #   geom_point() +
+  #   scale_color_manual(values = colors) +
+  #   labs(y = "Salmon Eaten per Seal")
+  
+  # Prob Gauntlet Plot
+  # prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
+  # plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
+  #   geom_point() +
+  #   scale_color_manual(values = colors) +
+  #   labs(y = "Prob_Gauntlet")
+  
+  plot.list <- list(plot_seals, gauntlet_plot)
+  
+  return(plot.list)
   
 }
 
-# assembleTheLegos_shiny(num_seals_input = 10)
-# plot_seals
+# assembleTheLegos_shiny(num_seals_input = 30)[[2]]
+

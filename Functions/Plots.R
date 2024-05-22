@@ -6,8 +6,6 @@ library(reshape2)
 library(ggplot2)
 library(patchwork)
 
-seal.dfs <- c("seal_prob_gauntlet", "C")
-
 prepForPlots <- function(df, key.col = "Seal", 
                          other.cols = "Day", value.col){
   melted <- melt(data = df, key.col)
