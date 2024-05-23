@@ -175,7 +175,8 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
   eaten_sp_plot <- ggplot(data = eaten.sp.data, aes(x = Day, y = Count)) + 
     geom_point(aes(color = Species)) +
     scale_color_manual(values = salmon.colors) +
-    labs(y = "Daily Salmon Eaten")
+    labs(y = "Daily Salmon Eaten") + 
+    theme(legend.position = "none")
   
   # Prob Gauntlet Plot
   prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
@@ -204,5 +205,5 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
   
 }
 
-# assembleTheLegos_shiny(num_seals_input = 20, seals_copy_input = 2)[["Prob_G"]]
+# assembleTheLegos_shiny(num_seals_input = 20, seals_copy_input = 2)[["Seals_Eaten"]]
 

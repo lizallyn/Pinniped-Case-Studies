@@ -39,7 +39,7 @@ ui <- fluidPage(
   "Social Manipulations",
   fluidRow(
     column(4, plotOutput("eaten_per_seal_plot")),
-    column(4, plotOutput("salmon_eaten_plot")),
+    # column(4, plotOutput("salmon_eaten_plot")),
     column(4, plotOutput("prob_gauntlet_plot"))
   ),
 )
@@ -54,16 +54,16 @@ server <- function(input, output, session){
     loop_results()[[2]]
   })
   output$salmon_species_plot <- renderPlot({
-    loop_results()[["Salmon_G"]]
+    loop_results()[[1]]
   })
-  output$salmon_eaten_plot <- renderPlot({
-    loop_results()[["Salmon_Eaten"]]
-  })
+  # output$salmon_eaten_plot <- renderPlot({
+  #   loop_results()[[3]]
+  # })
   output$prob_gauntlet_plot <- renderPlot({
-    loop_results()[["Prob_G"]]
+    loop_results()[[4]]
   })
   output$eaten_per_seal_plot <- renderPlot({
-    loop_results()[["Seals_Eaten"]]
+    loop_results()[[5]]
   })
   
 }
