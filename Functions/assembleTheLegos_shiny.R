@@ -1,6 +1,8 @@
 # version for shiny with specific parameter manipulation
 
-assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
+assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input, w_input, 
+                                   x_intercept_input, step_input, decay_input, 
+                                   cmax_input, alpha_input){
   ## Load Data Files and Setup Functions 
   source("Functions/Prep_data_for_Salmon_functions.R")
   source("Functions/Prep_data_for_Harvest_functions.R")
@@ -10,6 +12,12 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
   
   ## Set Parameters and Create Variables
   source("Functions/Shiny_set_pars.R")
+  
+  step <- step_input
+  decay <- decay_input
+  Cmax <- cmax_input
+  alpha <- alpha_input
+  
   twoDzeroes <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
   salmon_consumed <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
   seal_prob_gauntlet <- makeArray(c(num_seals_input, days), start.val = 0, names = c("Seal", "Day"))
@@ -109,7 +117,7 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
     ## This could all become some functions
     for(seal in 1:num_seals_input){
       if(!(seal %in% kill_list)){
-        C[seal, t] <- salmon_consumed[seal, t] - w
+        C[seal, t] <- salmon_consumed[seal, t] - w_input
 
         # calculate d_x and d_y
         d_x <- learnX(food = C[seal, t], x_t = x[seal, t],
@@ -121,7 +129,7 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
 
         # update x and y and P_x and P_y
         x[seal, t+1] <- x[seal, t] + d_x
-        P_x[seal, t+1] <- x[seal, t+1] * slope_x + intercept_x
+        P_x[seal, t+1] <- x[seal, t+1] * slope_x + x_intercept_input
 
         y[seal, t+1] <- y[seal, t] + d_y
         P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
@@ -159,7 +167,7 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
     geom_point(aes(color = Species)) +
     scale_color_manual(values = salmon.colors) +
     labs(y = "Daily Salmon at Gauntlet") + 
-    theme(legend.position = "none")
+    theme(legend.position = "bottom")
   
   # Daily Seals at Gauntlet
   seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
@@ -198,21 +206,36 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
     geom_point() + 
     theme(legend.position = "none")
   
-  plot_num_seals <- plot_seals / eaten_sp_plot + plot_layout(guides = "collect", axes = "collect")
+  # x Plot
+  x_plot <- prepForPlots(x, value.col = "x")
+  plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
+    geom_point() + 
+    labs(y = "x")
+  
+  plot_num_seals <- plot_probs / plot_Psoc / plot_seals / eaten_sp_plot + 
+    plot_layout(guides = "collect", axes = "collect")
   
   plot_social <- plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")
+  
+  plot_x <- plot_eaten / plot_x
   
   plot.list <- list("Salmon_G" = gauntlet_plot, 
                     "Seals_G" = plot_seals, 
                     "Salmon_Eaten" = plot_num_seals, 
                     "Seals_Eaten" = plot_eaten, 
                     "Prob_G" = plot_probs,
-                    "Social" = plot_social)
+                    "Social" = plot_social,
+                    "X" = plot_x)
   
   
   return(plot.list)
   
 }
 
-# assembleTheLegos_shiny(num_seals_input = 15, seals_copy_input = 10)[["Social"]]
+# assembleTheLegos_shiny(num_seals_input = 20,
+#                        seals_copy_input = 10, 
+#                        w_input = 0.9,
+#                        x_intercept_input = 0.03, 
+#                        step_input = 0.25, 
+#                        decay_input = 0.05)[["Seals_G"]]
 
