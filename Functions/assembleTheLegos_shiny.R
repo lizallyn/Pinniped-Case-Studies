@@ -210,21 +210,21 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input, w_input,
   x_plot <- prepForPlots(x, value.col = "x")
   plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
     geom_point() + 
-    labs(y = "x")
+    labs(y = "x") + 
+    theme(legend.position = "none")
+  
+  ## Composite Plots
   
   plot_num_seals <- plot_probs / plot_Psoc / plot_seals / eaten_sp_plot + 
     plot_layout(guides = "collect", axes = "collect")
   
-  plot_social <- plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")
+  # plot_x <- plot_eaten / plot_x + 
+  #   plot_layout(guides = "collect", axes = "collect")
   
-  plot_x <- plot_eaten / plot_x
+  ## Plots to Return
   
-  plot.list <- list("Salmon_G" = gauntlet_plot, 
-                    "Seals_G" = plot_seals, 
-                    "Salmon_Eaten" = plot_num_seals, 
-                    "Seals_Eaten" = plot_eaten, 
-                    "Prob_G" = plot_probs,
-                    "Social" = plot_social,
+  plot.list <- list("Salmon_G" = gauntlet_plot,
+                    "Salmon_Eaten" = plot_num_seals,
                     "X" = plot_x)
   
   
@@ -233,9 +233,11 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input, w_input,
 }
 
 # assembleTheLegos_shiny(num_seals_input = 20,
-#                        seals_copy_input = 10, 
+#                        seals_copy_input = 10,
 #                        w_input = 0.9,
-#                        x_intercept_input = 0.03, 
-#                        step_input = 0.25, 
-#                        decay_input = 0.05)[["Seals_G"]]
+#                        x_intercept_input = 0.03,
+#                        step_input = 0.25,
+#                        decay_input = 0.05,
+#                        cmax_input = 1, 
+#                        alpha_input = 0.1)[["X"]]
 

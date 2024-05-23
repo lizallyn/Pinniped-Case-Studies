@@ -51,6 +51,9 @@ ui <- fluidPage(
     column(6, sliderInput("Cmax", "Maximum consumption", value = 1, min = 0, max = 10, step = 0.5)),
     column(6, sliderInput("alpha", "Search and Capture Rate",
                           value = 0.1, min = 0, max = 1, step = 0.01))
+  ),
+  fluidRow(
+    column(12, plotOutput("X"))
   )
 )
 
