@@ -192,18 +192,27 @@ assembleTheLegos_shiny <- function(num_seals_input, seals_copy_input){
     labs(y = "Salmon Eaten per Seal") + 
     theme(legend.position = "none")
   
-
+  # Prob Social Plot
+  Psoc_plot <- prepForPlots(P_social, value.col = "P_social")
+  plot_Psoc <- ggplot(data = Psoc_plot, aes(x = Day, y = P_social, color = Seal)) +
+    geom_point() + 
+    theme(legend.position = "none")
+  
+  plot_num_seals <- plot_seals / eaten_sp_plot + plot_layout(guides = "collect", axes = "collect")
+  
+  plot_social <- plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")
   
   plot.list <- list("Salmon_G" = gauntlet_plot, 
                     "Seals_G" = plot_seals, 
-                    "Salmon_Eaten" = eaten_sp_plot, 
+                    "Salmon_Eaten" = plot_num_seals, 
                     "Seals_Eaten" = plot_eaten, 
-                    "Prob_G" = plot_probs)
+                    "Prob_G" = plot_probs,
+                    "Social" = plot_social)
   
   
   return(plot.list)
   
 }
 
-# assembleTheLegos_shiny(num_seals_input = 20, seals_copy_input = 2)[["Seals_Eaten"]]
+# assembleTheLegos_shiny(num_seals_input = 15, seals_copy_input = 10)[["Social"]]
 

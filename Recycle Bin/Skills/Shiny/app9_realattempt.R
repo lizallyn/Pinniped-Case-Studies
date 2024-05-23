@@ -29,19 +29,18 @@ ui <- fluidPage(
   plotOutput("salmon_species_plot"),
   "Manipulations Start Below:",
   fluidRow(
-    column(6, numericInput("seals", "Number of Seals", value = 15, min = 1, max = 100)),
-    column(6, numericInput("seals2copy", "Number of Seals to Copy", value = 1, min = 0, max = 100))
+    column(6, numericInput("seals", "Number of Seals", value = 15, min = 1, max = 100))
   ),
   fluidRow(
-    column(6, plotOutput("num_seals_plot")),
-    column(6, plotOutput("salmon_eaten_plot"))
+    column(12, plotOutput("salmon_eaten_plot"))
   ),
   "Social Manipulations",
   fluidRow(
-    column(4, plotOutput("eaten_per_seal_plot")),
-    # column(4, plotOutput("salmon_eaten_plot")),
-    column(4, plotOutput("prob_gauntlet_plot"))
+    column(6, numericInput("seals2copy", "Number of Seals to Copy", value = 0, min = 0, max = 100))
   ),
+  fluidRow(
+    column(12, plotOutput("social_plot"))
+  )
 )
 
 server <- function(input, output, session){
@@ -51,19 +50,22 @@ server <- function(input, output, session){
   })
 
   output$num_seals_plot <- renderPlot({
-    loop_results()[[2]]
+    loop_results()[["Seals_G"]]
   })
   output$salmon_species_plot <- renderPlot({
-    loop_results()[[1]]
+    loop_results()[["Salmon_G"]]
   })
-  # output$salmon_eaten_plot <- renderPlot({
-  #   loop_results()[[3]]
-  # })
   output$prob_gauntlet_plot <- renderPlot({
-    loop_results()[[4]]
+    loop_results()[["Prob_G"]]
   })
   output$eaten_per_seal_plot <- renderPlot({
-    loop_results()[[5]]
+    loop_results()[['Seals_Eaten']]
+  })
+  output$salmon_eaten_plot <- renderPlot({
+    loop_results()[['Salmon_Eaten']]
+  })
+  output$social_plot <- renderPlot({
+    loop_results()[['Social']]
   })
   
 }
