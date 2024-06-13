@@ -13,3 +13,6 @@ plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
 gauntlet_plot / fished_plot
 
 (gauntlet_plot + theme_classic()) / (plot_seals + theme_classic()) + plot_layout(guides = "collect")
+
+# ggsave(plot = gauntlet_plot, filename = "gauntlet_plot.png", device = "png",
+#       path = "Plot Exports", height = 3, width = 8)

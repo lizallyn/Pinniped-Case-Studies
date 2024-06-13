@@ -150,6 +150,14 @@ fished_plot <- ggplot(data = fished.data, aes(x = Day, y = Count)) +
   scale_color_manual(values = salmon.colors) +
   labs(y = "Daily Fished Salmon")
 
+list_y <- seq(-10, 0, 0.1)
+plot(x = list_y, y = 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - list_y)))), 
+     ylab = "gauntlet probability", xlab = "y")
+
+list_x <- seq(-1, 9, 0.1)
+plot(x = list_x, y = list_x * slope_x + intercept_x, 
+     ylab = "gauntlet probability", xlab = "x")
+
 ## Composites ----
 
 # these use Patchwork!
