@@ -6,7 +6,12 @@ twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Da
 ### Individual Values ----
 salmon_consumed <- twoDzeroes
 seal_prob_gauntlet <- twoDzeroes
+specialist_seals <- sample(1:num_seals, num_specialists)
 seal_forage_loc <- twoDzeroes
+
+baseline_x <- makeArray(num_seals, start.val = baseline_x_val, names = "Seal")
+baseline_y <- makeArray(num_seals, start.val = baseline_y_val, names = "Seal")
+baseline_y[specialist_seals] <- specialist_baseline_y
 
 seals_at_gauntlet_save <- list(rep(NA, days))
 
