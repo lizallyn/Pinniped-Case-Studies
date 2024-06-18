@@ -6,6 +6,8 @@ library(reshape2)
 library(ggplot2)
 library(patchwork)
 
+# plot_x_range <- start_loop:end_loop
+
 prepForPlots <- function(df, key.col = "Seal", 
                          other.cols = "Day", value.col){
   melted <- melt(data = df, key.col)
@@ -151,12 +153,22 @@ fished_plot <- ggplot(data = fished.data, aes(x = Day, y = Count)) +
   labs(y = "Daily Fished Salmon")
 
 list_y <- seq(-10, 0, 0.1)
-plot(x = list_y, y = 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - list_y)))), 
-     ylab = "gauntlet probability", xlab = "y")
+y_over_Py_plot <- ggplot() + 
+  geom_line(aes(x = list_y, y = 1-(1/((1+buffer_Pymin_val) + 
+                                        exp(-steepness * (threshold_val - list_y))))), color = "seagreen", lwd = 2) + 
+  geom_line(aes(x = list_y, y = 1-(1/((1+buffer_Pymin_specialist) + 
+                                        exp(-steepness * (threshold_specialist - list_y))))), color = "salmon", lwd = 2) + 
+  labs(y = "gauntlet probability", x = "y")
+y_over_Py_plot
 
 list_x <- seq(-1, 9, 0.1)
-plot(x = list_x, y = list_x * slope_x + intercept_x, 
-     ylab = "gauntlet probability", xlab = "x")
+x_over_Px_plot <- ggplot() + 
+  geom_line(aes(x = list_x, y = list_x * slope_x_val + intercept_x_val), color = "seagreen", lwd = 2) + 
+  geom_line(aes(x = list_x, y = 1-(1/((1+0) + 
+                                        exp(-2 * (2 - list_x))))), color = "salmon", lwd = 2) + 
+  labs(y = "gauntlet probability", x = "x")
+x_over_Px_plot
+
 
 ## Composites ----
 
