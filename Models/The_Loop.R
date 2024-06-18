@@ -2,7 +2,7 @@
 # Runs just the daily loop
 # March 2024
 
-for(t in 1:(days-1)) {
+for(t in start_loop:(end_loop-1)) {
   
   # salmon arrive at the gauntlet
   daily_update <- salmonSpeciesUpdate(day = t, data = Daily_fish)
@@ -86,11 +86,12 @@ for(t in 1:(days-1)) {
       
       # update x and y and P_x and P_y
       x[seal, t+1] <- x[seal, t] + d_x
-      P_x[seal, t+1] <- x[seal, t+1] * slope_x + intercept_x
+      if(seal %in% specialist_seals){
+        P_x[seal, t+1] <- 1-(1/((1+buffer_Pxmin_specialist) + exp(-steepness * (threshold_x_specialist - x[seal, t+1]))))
+      } else {P_x[seal, t+1] <- x[seal, t+1] * slope_x_val + intercept_x_val}
       
       y[seal, t+1] <- y[seal, t] + d_y
-      y[specialist_seals] <- specialist_baseline_y
-      P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
+      P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin[seal]) + exp(-steepness * (threshold[seal] - y[seal, t+1]))))
       
       seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
     } else {

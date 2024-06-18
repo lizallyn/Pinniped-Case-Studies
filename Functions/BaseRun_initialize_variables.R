@@ -21,6 +21,12 @@ C <- twoDzeroes
 P_x <- twoDzeroes
 P_y <- twoDzeroes
 
+buffer_Pymin <- makeArray(num_seals, start.val = buffer_Pymin_val, names = "Seal")
+buffer_Pymin[specialist_seals] <- buffer_Pymin_specialist
+
+threshold <- makeArray(num_seals, start.val = threshold_val, names = "Seal")
+threshold[specialist_seals] <- threshold_specialist
+
 P_social <- twoDzeroes
 
 kill_list <- list()
