@@ -3,6 +3,8 @@
 library(lubridate)
 
 # loop parameters
+start_loop <- 140
+end_loop <- 290
 days <- 365
 
 # seal parameters
@@ -11,9 +13,10 @@ prop_specialists <- 0.1
 num_specialists <- round(num_seals * prop_specialists)
 
 # seal consumption parameters
-alpha <- 0.1 
-Cmax <- 1 # this was initially made up but actually makes some sense
-gamma <- 0
+deltat <- 1/24
+alpha <- 0.05 
+Cmax <- 5 # this was initially made up but actually makes some sense
+gamma <- 0.5
 Y <- 0 # this freaks out when I make it > 0
 
 # seal learning parameters
@@ -21,21 +24,26 @@ specialist_prob <- 0.5
 baseline_x_val <- 0
 baseline_y_val <- 0
 specialist_baseline_y <- 0
-w <- 0.2
+w <- 0.5
 ymin <- -10
 ymax <- 0
-xmin <- -1
-xmax <- 9
+xmin <- -0.1
+xmax <- 10
 steepness <- 1
-threshold <- -5
-slope_x <- 0.1
-intercept_x <- 0.1
+threshold_val <- -5
+threshold_specialist <- -10
+intercept_x_val <- 0.01
+slope_x_val <- (1 - intercept_x_val)/(xmax + abs(xmin))
+steepness_x_specialist <- 0.1
+threshold_x_specialist <- 0.1
 step <- 0.25
-decay <- 0.05
-buffer_Pymin <- 0
+decay <- 0.15
+buffer_Pymin_val <- 0
+buffer_Pymin_specialist <- 0.5
+buffer_Pxmin_specialist <- 0
 
 # seal social learning parameters
-num_seals_2_copy <- 2
+num_seals_2_copy <- 0
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
