@@ -9,7 +9,7 @@ get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E) {
   return(c(dNdt, dCdt, dCatchdt, dEdt))
 }
 
-rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = 1/24){
+rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species, deltat = deltat){
   K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
   midX <- X + deltat* 0.5 * K1s
   K2s <- get_dXdt(Ns = midX[1:n_species],Cmax, Nseal, alpha, gamma, Y, F_catch, M, E)
@@ -21,7 +21,7 @@ rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species
   return(c(Xsim))
 }
 
-run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, deltat = 1/24) {
+run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, deltat = deltat) {
   times <- seq(0, 1, by = deltat)
   if (times[length(times)]!= 1) {
     stop("deltat must be a division of 1")
