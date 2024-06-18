@@ -7,6 +7,8 @@ days <- 365
 
 # seal parameters
 num_seals <- 20
+prop_specialists <- 0.1
+num_specialists <- round(num_seals * prop_specialists)
 
 # seal consumption parameters
 alpha <- 0.1 
@@ -15,6 +17,10 @@ gamma <- 0
 Y <- 0 # this freaks out when I make it > 0
 
 # seal learning parameters
+specialist_prob <- 0.5
+baseline_x_val <- 0
+baseline_y_val <- 0
+specialist_baseline_y <- 0
 w <- 0.2
 ymin <- -10
 ymax <- 0

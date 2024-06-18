@@ -79,16 +79,17 @@ for(t in 1:(days-1)) {
       # calculate d_x and d_y
       d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
                     forage_loc = seal_forage_loc[seal, t],  step = step, 
-                    xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list)
+                    xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list, baseline = baseline_x[seal])
       d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
                     seal_forage_loc[seal, t], step = step, 
-                    ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list)
+                    ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list, baseline_y[seal])
       
       # update x and y and P_x and P_y
       x[seal, t+1] <- x[seal, t] + d_x
       P_x[seal, t+1] <- x[seal, t+1] * slope_x + intercept_x
       
       y[seal, t+1] <- y[seal, t] + d_y
+      y[specialist_seals] <- specialist_baseline_y
       P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin) + exp(-steepness * (threshold - y[seal, t+1]))))
       
       seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
