@@ -3,7 +3,6 @@
 assembleTheLegos <- function(path_to_pars, path_to_vars){
   ## Load Data Files and Setup Functions 
   source("Functions/Prep_data_for_Salmon_functions.R")
-  source("Functions/Prep_data_for_Harvest_functions.R")
   
   source("Functions/makeArray.R")
   source("Functions/createHarvestPlan.R")
