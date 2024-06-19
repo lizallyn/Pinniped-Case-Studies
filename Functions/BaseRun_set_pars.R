@@ -3,9 +3,11 @@
 library(lubridate)
 
 # loop parameters
-start_loop <- 140
-end_loop <- 290
+dates_buffer <- 10
+start_loop <- which(Daily_fish$total > 0)[1] - dates_buffer
+end_loop <- which(Daily_fish$total > 0)[length(which(Daily_fish$total > 0))] + dates_buffer
 days <- 365
+day_range <- start_loop:end_loop
 
 # seal parameters
 num_seals <- 20
@@ -66,7 +68,8 @@ min_fishers <- 13
 max_fishers <- 25
 fishery_open <- yday(as.Date("2023-09-10"))
 fishery_close <- yday(as.Date("2023-11-17"))
-boat_days <- fishery_open:fishery_close
+fishery_range <- fishery_open:fishery_close
+boat_days <- fishery_range[which(fishery_range %in% day_range)]
 
 
 

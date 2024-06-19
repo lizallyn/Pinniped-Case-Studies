@@ -12,6 +12,8 @@ gauntlet_plot / eaten_sp_plot / fished_plot / escape_plot + plot_layout(guides =
 x_over_Px_plot / y_over_Py_plot
 
 
+
+
 plot_seals/plot_H/plot_y/plot_Py + plot_layout(guides = "collect")
 
 
