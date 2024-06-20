@@ -21,7 +21,7 @@ rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, n_species
   return(c(Xsim))
 }
 
-run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, deltat = deltat) {
+run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, deltat = deltat_val) {
   times <- seq(0, 1, by = deltat)
   if (times[length(times)]!= 1) {
     stop("deltat must be a division of 1")
@@ -37,12 +37,13 @@ run_rungeKutta <- function(Ns, Cmax, Nseal, alpha, gamma, Y, F_catch, M, E, delt
   return(X.res)
 }
 
-# Ns <- c(6.2, 500, 1)
-# E <- c(0.3, 0.003, 0.1)
-# F_catch <- c(0, 0, 0.1)
-# 
-# run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = 20, alpha = alpha, gamma = gamma, Y = Y,
-#                F_catch = F_catch, E = E, M = natural_mort)
+Ns <- c(0, 0, 0)
+E <- c(0.3, 0.003, 0.1)
+F_catch <- c(0, 0, 0.1)
+gamma <- -0.5
+
+run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = 0, alpha = alpha, gamma = gamma, Y = Y,
+               F_catch = F_catch, E = E, M = natural_mort)
 
 
 
