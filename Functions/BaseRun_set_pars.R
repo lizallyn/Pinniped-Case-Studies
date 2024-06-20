@@ -16,7 +16,7 @@ prop_specialists <- 0.1
 num_specialists <- round(num_seals * prop_specialists)
 
 # seal consumption parameters
-deltat <- 1/24
+deltat_val <- 1/24
 alpha <- 0.05 
 Cmax <- 5 # this was initially made up but actually makes some sense
 gamma <- 0.5
@@ -71,7 +71,7 @@ max_fishers <- 25
 fishery_open <- yday(as.Date("2023-09-10"))
 fishery_close <- yday(as.Date("2023-11-17"))
 fishery_range <- fishery_open:fishery_close
-boat_days <- fishery_range[which(fishery_range %in% day_range)]
+boat_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
 
 
 

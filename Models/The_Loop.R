@@ -26,12 +26,12 @@ for(t in 1:(days - 1)) {
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   seals_at_gauntlet_save[[t]] <- seals_at_gauntlet
   num_seals_at_gauntlet <- length(seals_at_gauntlet)
-  salmon_result <- run_rungeKutta(Cmax = Cmax, Nseal = num_seals_at_gauntlet, 
-                                  alpha = alpha, Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 
-                                  gamma = gamma, Y = Y, 
+  salmon_result <- run_rungeKutta(Cmax = Cmax, Cmax_SL = Cmax, Nseal = num_seals_at_gauntlet, Nsealion = 0,
+                                  alpha = alpha, alpha_SL = alpha, Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 
+                                  gamma = gamma, gamma_SL = gamma, Y = Y, Y_SL = Y,
                                   E = c(sockeye_escape_rate, chinook_escape_rate, coho_escape_rate), 
                                   F_catch = c(sockeye_catch_rate[t], chinook_catch_rate[t], coho_catch_rate[t]), 
-                                  M = natural_mort, deltat = 1/24)
+                                  M = natural_mort, deltat = deltat_val)
   
   # assign escape and gauntlet updates
   escape_sockeye[t+1] <- escape_sockeye[t] + salmon_result["Sockeye", "E"]
