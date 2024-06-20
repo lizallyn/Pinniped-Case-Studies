@@ -2,10 +2,10 @@
 # Runs just the daily loop
 # March 2024
 
-for(t in start_loop:(end_loop-1)) {
+for(t in 1:(days - 1)) {
   
   # salmon arrive at the gauntlet
-  daily_update <- salmonSpeciesUpdate(day = t, data = Daily_fish)
+  daily_update <- salmonSpeciesUpdate(day = t, data = Chosen_fish)
   gauntlet_chinook[t] <- daily_update$Chinook[1]
   gauntlet_sockeye[t] <- daily_update$Sockeye[1]
   gauntlet_coho[t] <- daily_update$Coho[1]
@@ -79,7 +79,8 @@ for(t in start_loop:(end_loop-1)) {
       # calculate d_x and d_y
       d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
                     forage_loc = seal_forage_loc[seal, t],  step = step, 
-                    xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list, baseline = baseline_x[seal])
+                    xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list, 
+                    baseline = baseline_x[seal])
       d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
                     seal_forage_loc[seal, t], step = step, 
                     ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list, baseline_y[seal])
