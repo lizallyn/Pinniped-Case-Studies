@@ -7,7 +7,7 @@ learnX <- function(food, x_t, forage_loc, step, xmin, xmax, decay, dead, baselin
     if(x_t == baseline){
       d_x <- 0
       } else {
-      d_x <- decay * (baseline-x_t)/abs(x_t)
+      d_x <- decay * (baseline-x_t)
     }
   } else {
     if(food > 0){
