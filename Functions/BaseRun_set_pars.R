@@ -6,8 +6,9 @@ library(lubridate)
 dates_buffer <- 10
 start_loop <- which(Daily_fish$total > 0)[1] - dates_buffer
 end_loop <- which(Daily_fish$total > 0)[length(which(Daily_fish$total > 0))] + dates_buffer
-days <- 365
 day_range <- start_loop:end_loop
+days <- length(day_range)
+
 
 # seal parameters
 num_seals <- 20
@@ -29,17 +30,18 @@ specialist_baseline_y <- 0
 w <- 0.5
 ymin <- -10
 ymax <- 0
-xmin <- -0.1
+intercept_x_val <- 0.01
 xmax <- 10
+slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
+xmin <- (0 - intercept_x_val)/slope_x_val
 steepness <- 1
 threshold_val <- -5
 threshold_specialist <- -10
-intercept_x_val <- 0.01
-slope_x_val <- (1 - intercept_x_val)/(xmax + abs(xmin))
+
 steepness_x_specialist <- 0.1
 threshold_x_specialist <- 0.1
-step <- 0.25
-decay <- 0.15
+step <- 0.5
+decay <- 0.5
 buffer_Pymin_val <- 0
 buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
