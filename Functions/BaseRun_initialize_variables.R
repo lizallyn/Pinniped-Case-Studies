@@ -3,6 +3,9 @@
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
 twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
 
+### Truncate Salmon Data to start-end dates----
+Chosen_fish <- Daily_fish[start_loop:end_loop,]
+
 ### Individual Values ----
 salmon_consumed <- twoDzeroes
 seal_prob_gauntlet <- twoDzeroes
