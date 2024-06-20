@@ -17,7 +17,6 @@ library(kableExtra)
 
 ## Load Data Files and Setup Functions 
 source("Functions/Prep_data_for_Salmon_functions.R", local = knitr::knit_global())
-source("Functions/Prep_data_for_Harvest_functions.R", local = knitr::knit_global())
 
 source("Functions/makeArray.R", local = knitr::knit_global())
 source("Functions/createHarvestPlan.R", local = knitr::knit_global())
@@ -31,7 +30,7 @@ source("Functions/BaseRun_initialize_variables.R", local = knitr::knit_global())
 source("Functions/salmonSpeciesUpdate.R", local = knitr::knit_global())
 source("Functions/decideForagingDestination.R", local = knitr::knit_global())
 source("Functions/collusion.R", local = knitr::knit_global())
-source("Functions/rungeKutta.R", local = knitr::knit_global())
+source("Functions/rungeKutta_2.R", local = knitr::knit_global())
 source("Functions/getHarvested.R", local = knitr::knit_global())
 source("Functions/learnX.R", local = knitr::knit_global())
 source("Functions/learnY.R", local = knitr::knit_global())
