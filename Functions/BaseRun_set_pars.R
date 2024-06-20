@@ -19,7 +19,7 @@ num_specialists <- round(num_seals * prop_specialists)
 deltat_val <- 1/24
 alpha <- 0.05 
 Cmax <- 5 # this was initially made up but actually makes some sense
-gamma <- 0.5
+gamma <- -1 # pred dep, this expects something between -1, 0
 Y <- 0 # this freaks out when I make it > 0
 
 # seal learning parameters
