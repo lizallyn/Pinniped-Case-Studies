@@ -1,12 +1,13 @@
 # calculate derivative expressions. apply 4th order runge-kutta to integrate over time period deltat
 # From Tim Feb 2024
+# Edited to add second predator pop June 2024
 
 get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SL, alpha_SL, gamma_SL, Y_SL, F_catch, M, E) {
-  dNdt <- -Cmax *alpha * Ns * Nseal^(1 + gamma) / (Cmax + alpha * Ns * Nseal^gamma + Y) - 
-    Cmax_SL * Nsealion *(alpha_SL * Ns * Nsealion ^ gamma_SL + Y_SL) / (Cmax_SL + alpha_SL * Ns * Nsealion ^ gamma_SL + Y_SL) - 
+  dNdt <- ((-Cmax *alpha * Ns * Nseal^(1 + gamma)) / (Cmax + alpha * Ns * Nseal ^ gamma + Y)) - 
+    ((Cmax_SL * alpha_SL * Ns * Nsealion ^ (1 + gamma_SL)) / (Cmax_SL + alpha_SL * Ns * Nsealion ^ gamma_SL + Y_SL)) - 
     F_catch * Ns - M * Ns - E * Ns
   dC2dt <- Cmax_SL * Nsealion *(alpha_SL * Ns * Nsealion ^ gamma_SL + Y_SL) / (Cmax_SL + alpha_SL * Ns * Nsealion ^ gamma_SL + Y_SL)
-  dCdt <- Cmax * Nseal *(alpha * Ns * Nseal ^ gamma + Y) / (Cmax + alpha * Ns * Nseal ^ gamma + Y)
+  dCdt <- Cmax * Nseal *(alpha * Ns * Nseal^gamma + Y) / (Cmax + alpha * Ns * Nseal^gamma + Y)
   dCatchdt <- F_catch * Ns
   dEdt <- E * Ns
   return(c(dNdt, dCdt, dC2dt, dCatchdt, dEdt))
@@ -42,10 +43,28 @@ run_rungeKutta <- function(Ns, n_species, Cmax, Nseal, alpha, gamma, Y, Nsealion
   return(X.res)
 }
 
-# Ns <- c(6.2, 500, 1)
-# E <- c(0.3, 0.003, 0.1)
-# F_catch <- c(0, 0, 0.1)
-# 
-# run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = 20, alpha = alpha, gamma = gamma, Y = Y, 
-#                  Nsealion = 1, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y, 
-#                F_catch = F_catch, E = E, M = natural_mort, n_species = 3)
+### TESTING SPACE
+
+# seal consumption parameters
+deltat_val <- 1/24
+alpha <- 0.05 
+Cmax <- 5 
+gamma <- -1 # pred dep, this expects something between -1, 0
+Y <- 0 # other prey contribution
+
+natural_mort <- 0.0005
+
+Ns <- c(0, 0, 0)
+# Ns <- c(5, 5, 5)
+E <- c(0.3, 0.003, 0.1)
+F_catch <- c(0, 0, 0.1)
+gamma <- -0.5
+Nseal <- 0
+
+run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = Nseal, alpha = alpha, gamma = gamma, Y = Y,
+                 Nsealion = 0, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
+               F_catch = F_catch, E = E, M = natural_mort, n_species = length(Ns))
+
+# get_dXdt(Ns = Ns, Cmax = Cmax, Nseal = 0, alpha = alpha, gamma = gamma, Y = Y,
+#                Nsealion = 0, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
+#                F_catch = F_catch, E = E, M = natural_mort)
