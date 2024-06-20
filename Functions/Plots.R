@@ -152,7 +152,7 @@ fished_plot <- ggplot(data = fished.data, aes(x = Day, y = Count)) +
   scale_color_manual(values = salmon.colors) +
   labs(y = "Daily Fished Salmon")
 
-list_y <- seq(-10, 0, 0.1)
+list_y <- seq(ymin, ymax, 0.1)
 y_over_Py_plot <- ggplot() + 
   geom_line(aes(x = list_y, y = 1-(1/((1+buffer_Pymin_val) + 
                                         exp(-steepness * (threshold_val - list_y))))), color = "seagreen", lwd = 2) + 
@@ -161,7 +161,7 @@ y_over_Py_plot <- ggplot() +
   labs(y = "gauntlet probability", x = "y")
 y_over_Py_plot
 
-list_x <- seq(-1, 9, 0.1)
+list_x <- seq(xmin, xmax, 0.1)
 x_over_Px_plot <- ggplot() + 
   geom_line(aes(x = list_x, y = list_x * slope_x_val + intercept_x_val), color = "seagreen", lwd = 2) + 
   geom_line(aes(x = list_x, y = 1-(1/((1+0) + 
