@@ -1,0 +1,36 @@
+---
+title: "Parameter Manipulation"
+output: ioslides_presentation
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Purpose
+
+This presentation is meant to describe the base run realm and then document single parameter manipulations.
+
+## The Base Run Realm
+
+```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+assembleTheLegos(path_to_pars = "Functions/BaseRun_set_pars.R", 
+                 path_to_vars = "Functions/BaseRun_initialize_variables.R")
+
+plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
+```
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
