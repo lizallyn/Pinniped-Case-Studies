@@ -57,7 +57,9 @@ chinook_catch_rate[boat_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
 sockeye_catch_rate[boat_days] <- sockeye_fish_rate
 
-harvest_plan <- oneDzeroes
+harvest_plan <- createHarvestPlan(scenario = "Boat", 
+                                  boat_days = boat_days,
+                                  empty.array = oneDzeroes)
 
 ### Troubleshooting & BS ----
 # for that one plot

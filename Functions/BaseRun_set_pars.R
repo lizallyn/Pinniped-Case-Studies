@@ -11,7 +11,7 @@ days <- length(day_range)
 
 
 # seal parameters
-num_seals <- 20
+num_seals <- 50
 prop_specialists <- 0.1
 num_specialists <- round(num_seals * prop_specialists)
 
@@ -65,7 +65,7 @@ salmon_days <- which(Daily_fish$total > 0)
 # hunting parameters
 zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
-efficiency <- 0.075 # what prop of seals are they capable of taking
+efficiency <- 0.08 # what prop of seals are they capable of taking
 min_fishers <- 13
 max_fishers <- 25
 fishery_open <- yday(as.Date("2023-09-10"))

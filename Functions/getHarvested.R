@@ -56,9 +56,9 @@ getHarvested <- function(day_plan = 0, list_gauntlet_seals, zone_efficiency = NA
 # num_fishers <- 0:50
 # efficiency <- seq(0, 1, 0.0001)
 # steepness <- seq(0, 10, 0.1)
-
-# plot(num_fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:20, zone_efficiency = 0.8,
-#                                num_fishers = num_fishers, efficiency = 0.5, steepness = 5))
+# 
+# plot(num_fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:20, zone_efficiency = NA,
+#                                num_fishers = num_fishers, efficiency = 0.08, steepness = 10))
 
 
 # getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:20, zone_efficiency = 0.8, num_fishers = num_fishers, efficiency = 0.5, steepness = 5)
