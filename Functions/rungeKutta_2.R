@@ -48,24 +48,24 @@ run_rungeKutta <- function(Ns, n_species, Cmax, Nseal, alpha, gamma, Y, Nsealion
 ### TESTING SPACE
 
 # seal consumption parameters
-deltat_val <- 1/24
-alpha <- 0.05 
-Cmax <- 5 
-gamma <- -1 # pred dep, this expects something between -1, 0
-Y <- 0 # other prey contribution
+# deltat_val <- 1/24
+# alpha <- 0.05 
+# Cmax <- 5 
+# gamma <- -1 # pred dep, this expects something between -1, 0
+# Y <- 0 # other prey contribution
+# 
+# natural_mort <- 0.0005
+# 
+# Ns <- c(0, 0, 0)
+# # Ns <- c(5, 5, 5)
+# E <- c(0.3, 0.003, 0.1)
+# F_catch <- c(0, 0, 0.1)
+# gamma <- -0.5
+# Nseal <- 0
 
-natural_mort <- 0.0005
-
-Ns <- c(0, 0, 0)
-# Ns <- c(5, 5, 5)
-E <- c(0.3, 0.003, 0.1)
-F_catch <- c(0, 0, 0.1)
-gamma <- -0.5
-Nseal <- 0
-
-run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = Nseal, alpha = alpha, gamma = gamma, Y = Y,
-                 Nsealion = 0, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
-               F_catch = F_catch, E = E, M = natural_mort, n_species = length(Ns))
+# run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = Nseal, alpha = alpha, gamma = gamma, Y = Y,
+#                  Nsealion = 0, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
+#                F_catch = F_catch, E = E, M = natural_mort, n_species = length(Ns))
 
 # get_dXdt(Ns = Ns, Cmax = Cmax, Nseal = 0, alpha = alpha, gamma = gamma, Y = Y,
 #                Nsealion = 0, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
