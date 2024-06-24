@@ -7,7 +7,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 
 ```{r, setup, include = FALSE}
-#knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
 library(knitr)
 library(flextable)
 library(kableExtra)
