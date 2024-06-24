@@ -3,6 +3,8 @@
 # Edited to add second predator pop June 2024
 
 get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SL, alpha_SL, gamma_SL, Y_SL, F_catch, M, E) {
+  Nseal <- max(Nseal, 1E-20)
+  Nsealion <- max(Nsealion, 1E-20)
   dNdt <- ((-Cmax *alpha * Ns * Nseal^(1 + gamma)) / (Cmax + alpha * Ns * Nseal ^ gamma + Y)) - 
     ((Cmax_SL * alpha_SL * Ns * Nsealion ^ (1 + gamma_SL)) / (Cmax_SL + alpha_SL * Ns * Nsealion ^ gamma_SL + Y_SL)) - 
     F_catch * Ns - M * Ns - E * Ns
