@@ -59,7 +59,7 @@ plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) +
   scale_color_manual(values = colors)
 plot_Px
 
-seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc)))
+seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc, na.rm = T)))
 colnames(seal.data) <- c("Day", "Count")
 plot_seals <- ggplot(data = seal.data, aes(x = Day, y = Count)) +
   geom_point(color = "dodgerblue") +
