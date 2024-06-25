@@ -6,20 +6,54 @@ date: "`r Sys.Date()`"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(flextable)
+library(kableExtra)
 ```
 
 ## Purpose
 
-This presentation is meant to describe the base run realm and then document single parameter manipulations.
+This presentation is meant to document single parameter manipulations. The main comparison responses are the number of seals at the Gauntlet and the number of salmon escaped total of each species.
 
-## The Base Run Realm
+## The Base Realm
 
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height = 4, fig.width = 8}
 source("Models/Run_The_Model.R", local = knitr::knit_global())
 assembleTheLegos(path_to_pars = "Functions/BaseRun_set_pars.R", 
                  path_to_vars = "Functions/BaseRun_initialize_variables.R")
+(plot_seals+ theme_classic()) / (eaten_sp_plot+ theme_classic())
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement, caption = "Escaped Salmon") %>% kable_styling(full_width = F)
+```
 
-plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
+
+## num_seals
+
+```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+num_seals_list <- c(1:100)
+
+SAG <- list()
+Eaten <- list()
+Escape <- list()
+for(i in 1:length(num_seals_list)){
+  num_seals <- num_seals_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  SAG[[i]] <- seal.data
+  Eaten[[i]] <- eaten.sp.data
+  Escape[[i]] <- escape.data
+}
+
+
+
+
+plot_escape_manipulations <- ggplot(data = Escape) +
+  geom_line(aes())
+
 ```
 
 ## Slide with R Output
