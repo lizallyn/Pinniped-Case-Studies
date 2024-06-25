@@ -17,4 +17,4 @@ salmonSpeciesUpdate <- function(day, sockeye = 0, chinook = 0, coho = 0, chum = 
              Steelhead = Steelhead_day, row.names = c("count"))
  )
 }
-salmonSpeciesUpdate(12, sockeye = 15, data = Chosen_fish)
+salmonSpeciesUpdate(12, sockeye = 1, data = Arrive_fish)

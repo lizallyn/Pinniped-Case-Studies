@@ -63,7 +63,7 @@ predict_fish <- function(params, day, start.day) {
   return(y.hat)
 }
 
-# predict.fish(params, 1, 163)
+predict_fish(params, 155, 163)
 
 # y.hat <- rep(NA, 365)
 # days <- 1:365

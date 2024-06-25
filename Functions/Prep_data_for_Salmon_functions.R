@@ -21,6 +21,12 @@ Daily_fish$AvgPink <- 0
 Daily_fish$AvgSteelhead <- 0
 Daily_fish$total <- rowSums(Daily_fish[,-1])
 
+Daily_fish_offset <- rbind(rep(0, 8), Daily_fish[1:(nrow(Daily_fish)-1),])
+Daily_fish_offset[,1] <- 1:366
+
+Arrive_fish <- Daily_fish - Daily_fish_offset
+Arrive_fish[ Arrive_fish < 0 ] <- 0
+
 ### PIT data - Chinook from Bear and Cedar
 # start_date <- yday("2023-05-12")
 # end_date <- yday("2023-06-28")
