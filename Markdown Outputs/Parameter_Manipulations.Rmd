@@ -50,7 +50,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
   geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
   geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
-  geom_vline(xintercept = 0.1, lwd = 2, color = "gray", linetype = 3) +
+  geom_vline(xintercept = 50, lwd = 2, color = "gray", linetype = 3) +
   labs(y = "Salmon Escaped", x = "Number of Seals in Source Pool") +
   theme_classic()
 plot_escape_manipulations
@@ -98,7 +98,7 @@ assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
 
 alpha_list <- seq(0, 1, 0.01)
 
-Escape <- data_frame(Prop = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data_frame(Alpha = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(alpha_list)){
   alpha <- alpha_list[i]
   assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
@@ -116,4 +116,96 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Prop)) +
   theme_classic()
 plot_escape_manipulations
 ```
+
+## Cmax
+
+```{r Cmax, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+Cmax_list <- seq(1, 15, 0.5)
+
+Escape <- data_frame(Cmax = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(Cmax_list)){
+  Cmax <- Cmax_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(Cmax = Cmax, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Cmax)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 5, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "Cmax") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+## gamma
+
+```{r gamma, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+gamma_list <- seq(-1, 0, 0.05)
+
+Escape <- data_frame(Gamma = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(gamma_list)){
+  gamma <- gamma_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(Gamma = gamma, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Gamma)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = -1, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "gamma") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+## specialist_prob
+
+```{r specialist_prob, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+specialist_prob_list <- seq(0, 1, 0.05)
+
+Escape <- data_frame(specialist_prob = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(specialist_prob_list)){
+  specialist_prob <- specialist_prob_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(specialist_prob = specialist_prob, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = specialist_prob)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.5, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "specialist_prob") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+This has pretty much no impact at all, so we could actually probably get rid of this feature completely if we want.
+
+## 
+
+
+
+
 
