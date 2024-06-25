@@ -114,6 +114,9 @@ plot_Psoc
 
 # each salmon species
 
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+
 escape.data <- data.frame(cbind(1:days, escape_chinook, escape_sockeye, escape_coho))
 colnames(escape.data) <- c("Day", "Chinook", "Sockeye", "Coho")
 escape.data <- melt(escape.data, "Day", variable.name = "Species", value.name = "Count")
