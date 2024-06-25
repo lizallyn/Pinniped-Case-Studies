@@ -15,9 +15,9 @@ library(kableExtra)
 
 This presentation is meant to document single parameter manipulations. The main comparison responses are the number of seals at the Gauntlet and the number of salmon escaped total of each species.
 
-## The Base Realm
+## The Base Run Realm
 
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height = 4, fig.width = 8}
+```{r base run realm, message = FALSE, echo = FALSE, warning = FALSE, fig.height = 4, fig.width = 8}
 source("Models/Run_The_Model.R", local = knitr::knit_global())
 assembleTheLegos(path_to_pars = "Functions/BaseRun_set_pars.R", 
                  path_to_vars = "Functions/BaseRun_initialize_variables.R")
@@ -30,7 +30,7 @@ kable(salmon_escapement, caption = "Escaped Salmon") %>% kable_styling(full_widt
 
 ## num_seals
 
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+```{r num_seals, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
 source("Models/Run_The_Model.R", local = knitr::knit_global())
 
 assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
@@ -47,10 +47,12 @@ for(i in 1:length(num_seals_list)){
 Escape <- data_frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
-  geom_line(aes(y = Chinook), color = "seagreen") + 
-  geom_line(aes(y = Coho), color = "goldenrod") + 
-  geom_line(aes(y = Sockeye), color = "salmon") +
-  labs(y = "Salmon Escaped", x = "Number of Seals in Source Pool")
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.1, lwd = 2, color = "gray", linetype = 3) +
+  labs(y = "Salmon Escaped", x = "Number of Seals in Source Pool") +
+  theme_classic()
 plot_escape_manipulations
 
 ```
@@ -58,15 +60,60 @@ plot_escape_manipulations
 Declines to a minimum value, likely governed by the predator dependence/competition level.
 
 
-## Slide with R Output
+## prop_specialists
 
-```{r cars, echo = TRUE}
-summary(cars)
+```{r prop_specialists, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+prop_specialists_list <- seq(0, 1, 0.1)
+
+Escape <- data_frame(Prop = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(prop_specialists_list)){
+  prop_specialists <- prop_specialists_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(Prop = prop_specialists, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Prop)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.1, lwd = 2, color = "gray", linetype = 3) + 
+  labs(y = "Salmon Escaped", x = "Proportion of Seal Pop that are Specialists") +
+  theme_classic()
+plot_escape_manipulations
+
 ```
 
-## Slide with Plot
+## alpha (search and capture rate)
 
-```{r pressure}
-plot(pressure)
+```{r alpha, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+alpha_list <- seq(0, 1, 0.01)
+
+Escape <- data_frame(Prop = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(alpha_list)){
+  alpha <- alpha_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(Alpha = alpha, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Prop)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.05, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "Alpha (Search and Capture") +
+  theme_classic()
+plot_escape_manipulations
 ```
 
