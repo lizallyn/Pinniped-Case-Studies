@@ -35,24 +35,21 @@ source("Models/Run_The_Model.R", local = knitr::knit_global())
 
 assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
 
-num_seals_list <- c(1:100)
+num_seals_list <- c(1:10)
 
-SAG <- list()
-Eaten <- list()
-Escape <- list()
+Escape <- data_frame(Seals = 0, Sockeye = 0, Chinook = 0, Coho = 0)
 for(i in 1:length(num_seals_list)){
   num_seals <- num_seals_list[i]
   assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
-  SAG[[i]] <- seal.data
-  Eaten[[i]] <- eaten.sp.data
-  Escape[[i]] <- escape.data
+  Escape[i,] <- data_frame(Seals = num_seals, salmon_escapement)
 }
 
+Escape <- data_frame(Escape)
 
-
-
-plot_escape_manipulations <- ggplot(data = Escape) +
-  geom_line(aes())
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
+  geom_line(aes(y = Chinook), color = "seagreen") + 
+  geom_line(aes(y = Coho), color = "goldenrod") + 
+  geom_line(aes(y = Sockeye), color = "salmon") 
 
 ```
 
