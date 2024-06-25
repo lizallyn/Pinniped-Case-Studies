@@ -13,7 +13,6 @@ days <- length(day_range)
 # seal parameters
 num_seals <- 50
 prop_specialists <- 0.1
-num_specialists <- round(num_seals * prop_specialists)
 
 # seal consumption parameters
 deltat_val <- 1/24
@@ -32,8 +31,7 @@ ymin <- -10
 ymax <- 0
 intercept_x_val <- 0.01
 xmax <- 10
-slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
-xmin <- (0 - intercept_x_val)/slope_x_val
+
 steepness <- 1
 threshold_val <- -5
 threshold_specialist <- -10
@@ -65,13 +63,12 @@ salmon_days <- which(Daily_fish$total > 0)
 # hunting parameters
 zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
-efficiency <- 0.08 # what prop of seals are they capable of taking
+efficiency <- 0.075 # what prop of seals are they capable of taking
 min_fishers <- 13
 max_fishers <- 25
 fishery_open <- yday(as.Date("2023-09-10"))
 fishery_close <- yday(as.Date("2023-11-17"))
-fishery_range <- fishery_open:fishery_close
-boat_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
+
 
 
 

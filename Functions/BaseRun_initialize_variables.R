@@ -1,5 +1,17 @@
 ## Set Up Variables ----
 
+### Parameters that are derived from other parameters----
+
+num_specialists <- round(num_seals * prop_specialists)
+
+slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
+xmin <- (0 - intercept_x_val)/slope_x_val
+
+fishery_range <- fishery_open:fishery_close
+boat_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
+
+### Blank arrays----
+
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
 twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
 
@@ -9,7 +21,11 @@ Chosen_fish <- Daily_fish[start_loop:end_loop,]
 ### Individual Values ----
 salmon_consumed <- twoDzeroes
 seal_prob_gauntlet <- twoDzeroes
-specialist_seals <- sample(1:num_seals, num_specialists)
+if(num_specialists == 0){
+  specialist_seals <- NA
+} else {
+  specialist_seals <- sample(1:num_seals, num_specialists)
+}
 seal_forage_loc <- twoDzeroes
 
 baseline_x <- makeArray(num_seals, start.val = baseline_x_val, names = "Seal")
