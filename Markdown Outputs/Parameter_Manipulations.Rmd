@@ -35,7 +35,7 @@ source("Models/Run_The_Model.R", local = knitr::knit_global())
 
 assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
 
-num_seals_list <- c(1:10)
+num_seals_list <- seq(from = 1, to = 75, by = 5)
 
 Escape <- data_frame(Seals = 0, Sockeye = 0, Chinook = 0, Coho = 0)
 for(i in 1:length(num_seals_list)){
@@ -49,9 +49,14 @@ Escape <- data_frame(Escape)
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
   geom_line(aes(y = Chinook), color = "seagreen") + 
   geom_line(aes(y = Coho), color = "goldenrod") + 
-  geom_line(aes(y = Sockeye), color = "salmon") 
+  geom_line(aes(y = Sockeye), color = "salmon") +
+  labs(y = "Salmon Escaped", x = "Number of Seals in Source Pool")
+plot_escape_manipulations
 
 ```
+
+Declines to a minimum value, likely governed by the predator dependence/competition level.
+
 
 ## Slide with R Output
 
