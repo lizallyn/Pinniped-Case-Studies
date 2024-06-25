@@ -15,8 +15,12 @@ boat_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
 twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
 
-### Truncate Salmon Data to start-end dates----
-Chosen_fish <- Daily_fish[start_loop:end_loop,]
+### Create Salmon Data----
+
+The_Fish <- data_frame(DayofYear = start_loop:end_loop)
+The_Fish$Sockeye <- floor(predict_new_fish(sockeye_params, start_loop:end_loop))
+The_Fish$Chinook <- floor(predict_new_fish(chinook_params, start_loop:end_loop))
+The_Fish$Coho <- floor(predict_new_fish(coho_params, start_loop:end_loop))
 
 ### Individual Values ----
 salmon_consumed <- twoDzeroes

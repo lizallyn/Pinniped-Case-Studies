@@ -44,8 +44,9 @@ fit.to.fish <- function(params, data) {
   nll <- -sum(dpois(x=data, lambda=y.hat, log=TRUE))
   return(nll)
 }
-params <- c(73500, 23.62, 13.985)
-# fit.to.fish(params = params, data = Avg.Daily$avgdaily)
+params <- c(7350, 23.62, 13.985)
+fit.to.fish(params = params, data = Avg.Daily$avgdaily)
+fit.to.fish(params = params, data = Chosen_fish$AvgSockeye)
 
 fish.fit.optim <- optim(par = params,
                         fn = fit.to.fish,

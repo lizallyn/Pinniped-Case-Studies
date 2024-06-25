@@ -7,7 +7,7 @@ for(t in 1:(days - 1)) {
   # salmon arrive at the gauntlet
   daily_update <- salmonSpeciesUpdate(day = t, chinook = gauntlet_chinook[t], 
                                       sockeye = gauntlet_sockeye[t], coho = gauntlet_coho[t], 
-                                      data = Chosen_fish)
+                                      data = The_Fish)
   gauntlet_chinook[t] <- daily_update$Chinook[1]
   gauntlet_sockeye[t] <- daily_update$Sockeye[1]
   gauntlet_coho[t] <- daily_update$Coho[1]

@@ -3,9 +3,8 @@
 library(lubridate)
 
 # loop parameters
-dates_buffer <- 10
-start_loop <- which(Daily_fish$total > 0)[1] - dates_buffer
-end_loop <- which(Daily_fish$total > 0)[length(which(Daily_fish$total > 0))] + dates_buffer
+start_loop <- data_start
+end_loop <- data_end
 day_range <- start_loop:end_loop
 days <- length(day_range)
 
