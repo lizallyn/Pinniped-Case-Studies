@@ -20,7 +20,7 @@ prepForPlots <- function(df, key.col = "Seal",
 prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
 
 # Make Seal Palette
-colors <- rep(RColorBrewer::brewer.pal(10, "Set3"), times = (num_seals/10))
+colors <- rep(RColorBrewer::brewer.pal(10, "Set3"), length.out = num_seals)
 color.names <- levels(prob_gauntlet_plot[,"Seal"])
 names(colors) <- color.names
 
