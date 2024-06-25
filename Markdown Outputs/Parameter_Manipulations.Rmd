@@ -107,7 +107,7 @@ for(i in 1:length(alpha_list)){
 
 Escape <- data_frame(Escape)
 
-plot_escape_manipulations <- ggplot(data = Escape, aes(x = Prop)) +
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Alpha)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
   geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
   geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
@@ -203,9 +203,176 @@ plot_escape_manipulations
 
 This has pretty much no impact at all, so we could actually probably get rid of this feature completely if we want.
 
-## 
+## w (relative goodness of the Gauntlet)
 
+```{r w, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
 
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
 
+w_list <- seq(0, 1, 0.05)
+
+Escape <- data_frame(w = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(w_list)){
+  w <- w_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(w = w, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = w)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.5, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "w") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+This also has a very small impact, pretty much level.
+
+## intercept_x_val
+
+```{r intercept_x_val, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+intercept_x_val_list <- seq(0, 0.1, 0.001)
+
+Escape <- data_frame(intercept_x_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(intercept_x_val_list)){
+  intercept_x_val <- intercept_x_val_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(intercept_x_val = intercept_x_val, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = intercept_x_val)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.01, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "intercept_x_val") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+## steepness (y --> Py)
+
+```{r steepness (y), message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+steepness_list <- seq(0, 2.5, 0.1)
+
+Escape <- data_frame(steepness = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(steepness_list)){
+  steepness <- steepness_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(steepness = steepness, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.01, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "steepness (y)") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+## threshold_val (y --> Py)
+
+```{r threshold (y), message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+threshold_val_list <- seq(-10, 0, 0.2)
+
+Escape <- data_frame(threshold_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(threshold_val_list)){
+  threshold_val <- threshold_val_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(threshold_val = threshold_val, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = threshold_val)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.01, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "threshold_val") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+## steepness_x_specialist
+
+```{r steepness_x_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+steepness_x_specialist_list <- seq(0, 3, 0.2)
+
+Escape <- data_frame(steepness_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(steepness_x_specialist_list)){
+  steepness_x_specialist <- steepness_x_specialist_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(steepness_x_specialist = steepness_x_specialist, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness_x_specialist)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.01, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "steepness_x_specialist") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+## threshold_x_specialist
+
+```{r threshold_x_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+threshold_x_specialist_list <- seq(0, 10, 0.2)
+
+Escape <- data_frame(threshold_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(threshold_x_specialist_list)){
+  threshold_x_specialist <- threshold_x_specialist_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(threshold_x_specialist = threshold_x_specialist, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = threshold_x_specialist)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.01, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "threshold_x_specialist") +
+  theme_classic()
+plot_escape_manipulations
+```
+
+Slight increase
 
 
