@@ -589,7 +589,7 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 
 ## buffer_Pxmin_specialist
 
-```{r buffer_Pymin_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+```{r buffer_Pxmin_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
 source("Models/Run_The_Model.R", local = knitr::knit_global())
 
 assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
@@ -609,7 +609,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = buffer_Pxmin_speciali
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
   geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
   geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
-  geom_vline(xintercept = 0.5, lwd = 2, color = "gray", linetype = 2) +
+  geom_vline(xintercept = 0, lwd = 2, color = "gray", linetype = 2) +
   labs(y = "Salmon Escaped", x = "buffer_Pxmin_specialist") +
   theme_classic()
 plot_escape_manipulations
@@ -621,8 +621,79 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = 14)
 ```
 
+## num_seals_2_copy
 
+```{r num_seals_2_copy, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
 
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+num_seals_2_copy_list <- seq(0, num_seals, 2)
+
+Escape <- data_frame(num_seals_2_copy = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(num_seals_2_copy_list)){
+  num_seals_2_copy <- num_seals_2_copy_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(num_seals_2_copy = num_seals_2_copy, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = num_seals_2_copy)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "num_seals_2_copy") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("num_seals_2_copy", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = 14)
+```
+
+Surprisingly no effect.
+
+## beta (receptivity spread)
+
+```{r beta, message = FALSE, echo = FALSE, warning = FALSE, fig.height=4, fig.width = 4}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+beta_list <- seq(0, 100, 2)
+
+Escape <- data_frame(beta = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(beta_list)){
+  beta <- beta_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(beta = beta, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = beta)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 15, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "beta (spread)") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("beta", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = 14)
+```
+
+Contagion not super relevant here...
+
+## sockeye_escape_rate
 
 
 

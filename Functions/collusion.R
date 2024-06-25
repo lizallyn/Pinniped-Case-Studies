@@ -24,3 +24,8 @@ collusion <- function(probs_list, prob_gauntlet_of_seal, seals_2_copy, mean, bet
   }
 }
 
+# prob <- seq(0, 1, 0.01)
+# mean <- 0.5
+# beta <- 100
+# alpha_c <- (-beta*mean)/(mean-1)
+# plot(prob, dbeta(x = prob, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0))
