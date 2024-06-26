@@ -1,6 +1,7 @@
 ---
 title: "Parameter Manipulation"
 output: ioslides_presentation
+  smaller: true
 date: "`r Sys.Date()`"
 ---
 
@@ -707,7 +708,7 @@ assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
 sockeye_escape_rate_list <- seq(0, 0.5, 0.01)
 
 Escape <- data_frame(sockeye_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
-for(i in 1:length(chinook_escape_rate_list)){
+for(i in 1:length(sockeye_escape_rate_list)){
   sockeye_escape_rate <- sockeye_escape_rate_list[i]
   assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
   Escape[i,] <- data_frame(sockeye_escape_rate = sockeye_escape_rate, salmon_escapement)
@@ -833,8 +834,75 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
+## steepness_H
 
+```{r steepness_H, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
 
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+steepness_H_list <- seq(0, 20, 0.5)
+
+Escape <- data_frame(steepness_H = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(steepness_H_list)){
+  steepness_H <- steepness_H_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(steepness_H = steepness_H, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness_H)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 10, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "steepness_H") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("steepness_H", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
+
+This makes sense that it won't have an effect when the total take is very little - need to evaluate at other levels of harvest.
+
+## efficiency
+
+```{r efficiency, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+efficiency_list <- seq(0, 1, 0.01)
+
+Escape <- data_frame(efficiency = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(efficiency_list)){
+  efficiency <- efficiency_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(efficiency = efficiency, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = efficiency)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.075, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "efficiency") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("efficiency", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
 
 
 
