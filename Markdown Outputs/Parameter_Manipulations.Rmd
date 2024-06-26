@@ -12,7 +12,7 @@ library(kableExtra)
 
 fig.height <- 3
 fig.width <- 6
-font.size <- 12
+font_size <- 12
 ```
 
 ## Purpose
@@ -699,13 +699,139 @@ Contagion not super relevant here...
 
 ## sockeye_escape_rate
 
+```{r sockeye_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
 
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
 
+sockeye_escape_rate_list <- seq(0, 0.5, 0.01)
 
+Escape <- data_frame(sockeye_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(chinook_escape_rate_list)){
+  sockeye_escape_rate <- sockeye_escape_rate_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(sockeye_escape_rate = sockeye_escape_rate, salmon_escapement)
+}
 
+Escape <- data_frame(Escape)
 
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = sockeye_escape_rate)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.3, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "sockeye_escape_rate") +
+  theme_classic()
+plot_escape_manipulations
 
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("sockeye_escape_rate", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
+
+## chinook_escape_rate
+
+```{r chinook_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+chinook_escape_rate_list <- seq(0, 0.3, 0.005)
+
+Escape <- data_frame(chinook_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(chinook_escape_rate_list)){
+  chinook_escape_rate <- chinook_escape_rate_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(chinook_escape_rate = chinook_escape_rate, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = chinook_escape_rate)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.015, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "chinook_escape_rate") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("chinook_escape_rate", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
+
+## coho_escape_rate
+
+```{r coho_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+coho_escape_rate_list <- seq(0, 0.5, 0.01)
+
+Escape <- data_frame(coho_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(coho_escape_rate_list)){
+  coho_escape_rate <- coho_escape_rate_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(coho_escape_rate = coho_escape_rate, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = coho_escape_rate)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.1, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "coho_escape_rate") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("coho_escape_rate", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
+
+## natural_mort
+
+```{r natural_mort, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+source("Models/Run_The_Model.R", local = knitr::knit_global())
+
+assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+
+natural_mort_list <- seq(0, 0.01, 0.0001)
+
+Escape <- data_frame(natural_mort = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(natural_mort_list)){
+  natural_mort <- natural_mort_list[i]
+  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  Escape[i,] <- data_frame(natural_mort = natural_mort, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = natural_mort)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 0.0005, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "natural_mort") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("natural_mort", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
 
 
 
