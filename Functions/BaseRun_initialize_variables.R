@@ -7,9 +7,6 @@ num_specialists <- round(num_seals * prop_specialists)
 slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
 xmin <- (0 - intercept_x_val)/slope_x_val
 
-fishery_range <- fishery_open:fishery_close
-boat_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
-
 ### Blank arrays----
 
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
@@ -54,6 +51,16 @@ P_social <- twoDzeroes
 
 kill_list <- list()
 
+# harvest
+fishery_range <- fishery_open:fishery_close
+fishery_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
+harvest_range <- harvest_open:harvest_close
+harvest_days <- harvest_range[which(harvest_range %in% day_range)] - (start_loop - 1)
+
+harvest_plan <- createHarvestPlan(scenario = "Boat", 
+                                  boat_days = harvest_days,
+                                  empty.array = oneDzeroes)
+
 ### Actual States that I Need ----
 escape_chinook <- oneDzeroes
 escape_sockeye <- oneDzeroes
@@ -71,15 +78,13 @@ H <- oneDzeroes
 
 ### Variable Rates ----
 coho_catch_rate <- oneDzeroes
-coho_catch_rate[boat_days] <- coho_fish_rate
+coho_catch_rate[fishery_days] <- coho_fish_rate
 chinook_catch_rate <- oneDzeroes
-chinook_catch_rate[boat_days] <- chinook_fish_rate
+chinook_catch_rate[fishery_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
-sockeye_catch_rate[boat_days] <- sockeye_fish_rate
+sockeye_catch_rate[fishery_days] <- sockeye_fish_rate
 
-harvest_plan <- createHarvestPlan(scenario = "Boat", 
-                                  boat_days = boat_days,
-                                  empty.array = oneDzeroes)
+
 
 ### Troubleshooting & BS ----
 # for that one plot

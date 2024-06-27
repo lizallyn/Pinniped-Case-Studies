@@ -9,8 +9,10 @@ salmon_escapement
 
 num_seals <- 50
 efficiency <- 0.5
-fishery_close <- end_loop - 2
-fishery_open <- start_loop + 2
+harvest_close <- end_loop - 2
+harvest_open <- start_loop + 2
+min_harvesters <- 20
+max_harvesters <- 30
 assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
 salmon_escapement
 
