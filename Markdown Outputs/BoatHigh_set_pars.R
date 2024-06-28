@@ -71,6 +71,9 @@ min_harvesters <- 0
 max_harvesters <- 30
 harvest_open <- start_loop
 harvest_close <- end_loop
+harvest_range <- harvest_open:harvest_close
+harvest_days <- harvest_range[which(harvest_range %in% day_range)] - (start_loop - 1)
+scenario <- "Boat"
 
 
 

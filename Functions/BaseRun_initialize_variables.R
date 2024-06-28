@@ -54,11 +54,9 @@ kill_list <- list()
 # harvest
 fishery_range <- fishery_open:fishery_close
 fishery_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
-harvest_range <- harvest_open:harvest_close
-harvest_days <- harvest_range[which(harvest_range %in% day_range)] - (start_loop - 1)
 
-harvest_plan <- createHarvestPlan(scenario = "Boat", 
-                                  boat_days = harvest_days,
+harvest_plan <- createHarvestPlan(scenario = scenario, 
+                                  harvest_days = harvest_days,
                                   empty.array = oneDzeroes)
 
 ### Actual States that I Need ----

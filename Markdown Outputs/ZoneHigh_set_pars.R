@@ -80,6 +80,7 @@ weekends <- c(seq(from = harvest_open, to = harvest_close, by = 7), seq(from = h
 harvest_range <- harvest_range[! harvest_range %in% weekends]
 # days as index not dayofyear (start_loop is day 1 even if not January 1)
 harvest_days <- harvest_range[harvest_range %in% day_range] - (start_loop - 1)
+scenario <- "Zone"
 
 
 
