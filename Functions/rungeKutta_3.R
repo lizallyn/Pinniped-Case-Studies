@@ -1,6 +1,7 @@
 # calculate derivative expressions. apply 4th order runge-kutta to integrate over time period deltat
 # From Tim Feb 2024
 # Edited to add second predator pop June 2024
+# third added July 2024
 
 get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E) {
   Nseal <- max(Nseal, 1E-20)
@@ -15,28 +16,28 @@ get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alp
   dC3dt <- Cmax_CSL * NCSL *(alpha_CSL * Ns * NCSL ^ gamma_CSL + Y_CSL) / (Cmax_CSL + alpha_CSL * Ns * NCSL ^ gamma_CSL + Y_CSL)
   dCatchdt <- F_catch * Ns
   dEdt <- E * Ns
-  return(c(dNdt, dCdt, dC2dt, dc3dt, dCatchdt, dEdt))
+  return(c(dNdt, dCdt, dC2dt, dC3dt, dCatchdt, dEdt))
 }
 
-rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, 
-                       F_catch, M, E, n_species, deltat = deltat_val){
-  K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
+rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, 
+                       F_catch, M, E, n_species, deltat){
+  K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
                   Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E)
   midX <- X + deltat * 0.5 * K1s
-  K2s <- get_dXdt(Ns = midX[1:n_species],Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
+  K2s <- get_dXdt(Ns = midX[1:n_species],Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
                   Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E)
   midX <- X + deltat * 0.5 * K2s
-  K3s <- get_dXdt(Ns = midX[1:n_species], Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
+  K3s <- get_dXdt(Ns = midX[1:n_species], Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
                   Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E)
   endX <- X + deltat * K3s
-  K4s <- get_dXdt(Ns = endX[1:n_species],Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
+  K4s <- get_dXdt(Ns = endX[1:n_species],Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
                   Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E)
   Xsim <- X + deltat * (K1s / 6 + K2s / 3 + K3s / 3 + K4s / 6)
   return(c(Xsim))
 }
 
-run_rungeKutta <- function(Ns, species_list, Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
-                           Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E, deltat = deltat_val) {
+run_rungeKutta <- function(Ns, species_list, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
+                           Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E, deltat) {
   times <- seq(0, 1, by = deltat)
   if (times[length(times)]!= 1) {
     stop("deltat must be a division of 1")
@@ -44,9 +45,9 @@ run_rungeKutta <- function(Ns, species_list, Cmax, Nseal, alpha, gamma, Y, Nseal
   n_species <- length(species_list)
   X <- c(Ns, rep(0, n_species), rep(0, n_species), rep(0, n_species), rep(0, n_species), rep(0, n_species))
   for (i in 1:length(times)) {
-    X <- rungeKutta(X, Cmax, Nseal, alpha, gamma, Y, Nsealion, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
+    X <- rungeKutta(X, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
                     Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, 
-                    F_catch, M, E, n_species, deltat = deltat)
+                    F_catch, M, E, n_species, deltat)
   }
   X.res <- matrix(X, nrow = n_species, ncol = length(X)/n_species, byrow = F)
   colnames(X.res) <- c("Ns", "C", "C_SSL", "C_CSL", "Catch", "E")
@@ -75,10 +76,11 @@ Nseal <- 100
 NSSL <- 5
 NCSL <- 20
 
-run_rungeKutta(Ns = Ns, Cmax = Cmax, Nseal = Nseal, alpha = alpha, gamma = gamma, Y = Y,
-                 NSSL = NSSL, NSCL = NCSL, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
-               F_catch = F_catch, E = E, M = natural_mort, n_species = length(Ns))
-
+# run_rungeKutta(Ns = Ns, species_list = c("Sockeye", "Chinook", "Coho"), Cmax = Cmax, Nseal = Nseal, alpha = alpha, gamma = gamma, Y = Y,
+#                  NSSL = NSSL, NCSL = NCSL, Cmax_SSL = 20, alpha_SSL = alpha, gamma_SSL = gamma, Y_SSL = Y, 
+#                Cmax_CSL = 15, alpha_CSL = alpha, gamma_CSL = gamma, Y_CSL = Y,
+#                F_catch = F_catch, M = natural_mort, E = E, deltat = deltat_val)
+# 
 # get_dXdt(Ns = Ns, Cmax = Cmax, Nseal = 0, alpha = alpha, gamma = gamma, Y = Y,
 #                Nsealion = 0, Cmax_SL = 15, alpha_SL = alpha, gamma_SL = gamma, Y_SL = Y,
 #                F_catch = F_catch, E = E, M = natural_mort)
