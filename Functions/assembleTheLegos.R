@@ -46,7 +46,7 @@ assembleSecondHalf <- function(path_to_vars){
   source("Functions/salmonSpeciesUpdate.R")
   source("Functions/decideForagingDestination.R")
   source("Functions/collusion.R")
-  source("Functions/rungeKutta_2.R")
+  source("Functions/rungeKutta_3.R")
   source("Functions/getHarvested.R")
   source("Functions/learnX.R")
   source("Functions/learnY.R")

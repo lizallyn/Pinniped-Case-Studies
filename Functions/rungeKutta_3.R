@@ -58,26 +58,26 @@ run_rungeKutta <- function(Ns, species_list, Cmax, Nseal, alpha, gamma, Y, NSSL,
 ### TESTING SPACE
 
 # seal consumption parameters
-deltat_val <- 1/24
-alpha <- 0.05
-Cmax <- 5
-gamma <- -1 # pred dep, this expects something between -1, 0
-Y <- 0 # other prey contribution
-
-natural_mort <- 0.0005
-
-# Ns <- c(0, 0, 0)
-# Ns <- c(5, 5, 5)
-Ns <- c(500, 10, 50)
-E <- c(0.3, 0.003, 0.1)
-F_catch <- c(0, 0, 0.1)
-gamma <- -0.5
-Nseal <- 100
-NSSL <- 5
-NCSL <- 20
-
+# deltat_val <- 1/24
+# alpha <- 0.05
+# Cmax <- 5
+# gamma <- -1 # pred dep, this expects something between -1, 0
+# Y <- 0 # other prey contribution
+# 
+# natural_mort <- 0.0005
+# 
+# # Ns <- c(0, 0, 0)
+# # Ns <- c(5, 5, 5)
+# Ns <- c(500, 10, 50)
+# E <- c(0.3, 0.003, 0.1)
+# F_catch <- c(0, 0, 0.1)
+# gamma <- -0.5
+# Nseal <- 100
+# NSSL <- 5
+# NCSL <- 20
+# 
 # run_rungeKutta(Ns = Ns, species_list = c("Sockeye", "Chinook", "Coho"), Cmax = Cmax, Nseal = Nseal, alpha = alpha, gamma = gamma, Y = Y,
-#                  NSSL = NSSL, NCSL = NCSL, Cmax_SSL = 20, alpha_SSL = alpha, gamma_SSL = gamma, Y_SSL = Y, 
+#                  NSSL = NSSL, NCSL = NCSL, Cmax_SSL = 20, alpha_SSL = alpha, gamma_SSL = gamma, Y_SSL = Y,
 #                Cmax_CSL = 15, alpha_CSL = alpha, gamma_CSL = gamma, Y_CSL = Y,
 #                F_catch = F_catch, M = natural_mort, E = E, deltat = deltat_val)
 # 
