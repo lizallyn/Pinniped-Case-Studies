@@ -41,9 +41,27 @@ makePlot_2 <- function(x, x.name, y, y.name, color){
   colnames(data_for_plot) <- c(x.name, y.name)
   plot <- ggplot(data = data_for_plot, aes(x = data_for_plot[,1], y = data_for_plot[,2])) + 
     geom_point(color = color) +
-    labs(y = names(data_for_plot)[2])
+    labs(y = names(data_for_plot)[2], x = names(data_for_plot)[1])
   return(plot)
 }
+
+# Plotting Function - salmon species data 3D
+salmon.colors <- c("seagreen", "salmon", "goldenrod")
+salmon.names <- c("Chinook", "Sockeye", "Coho")
+names(salmon.colors) <- salmon.names
+
+makePlot_3 <- function(x, data, col.names, variable.name, value.name, colors){
+  data_for_melt <- data.frame(cbind(x, data))
+  colnames(data_for_melt) <- col.names
+  data_for_plot <- melt(data = data_for_melt, id.vars = col.names[1], variable.name = variable.name, value.name = value.name)
+  plot <- 
+    ggplot(data = data_for_plot) + 
+    geom_point(aes(x = data_for_plot[,1], y = data_for_plot[,3], color = data_for_plot[,2])) +
+    scale_color_manual(values = colors) +
+    labs(y = value.name, x = col.names[1], color = variable.name)
+  return(plot)
+}
+
 
 # Plots of Individual Seals
 plot_probs <- makePlot_1(seal_prob_gauntlet, "Gauntlet Probabilities", colors)
@@ -58,77 +76,24 @@ plot_Psoc <- makePlot_1(P_social, "P_social", colors)
 # Plots of Aggregated 1D data
 plot_seals <- makePlot_2(x = 1:days, x.name = "Day", y = colSums(seal_forage_loc), 
                          y.name = "Num Seals at Gauntlet", color = "turquoise3")
+plot_consumed <- makePlot_2(x = 1:days, x.name = "Day", y = consumed_total, y.name = "Daily Salmon Consumed", 
+                            color = "dodgerblue")
+plot_H <- makePlot_2(x = 1:days, x.name = "Day", y = H, y.name = "Seals Harvested", color = "orchid")
 
+# Plots of Salmon Species data
 
-
-seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc, na.rm = T)))
-colnames(seal.data) <- c("Day", "Count")
-plot_seals <- ggplot(data = seal.data, aes(x = Day, y = Count)) +
-  geom_point(color = "dodgerblue") +
-  labs(y = "Num Seals at the Gauntlet")
-plot_seals
-
-consumed_plot <- data.frame(cbind(1:days, consumed_total))
-colnames(consumed_plot) <- c("Day", "consumed")
-plot_consumed <- ggplot(data = consumed_plot, aes(x = Day, y = consumed)) + 
-  geom_point() +
-  labs(y = "Total Salmon Consumed")
-plot_consumed
-
-H_plot <- data.frame(cbind(1:days, H))
-colnames(H_plot) <- c("Day", "H")
-plot_H <- ggplot(data = H_plot, aes(x = Day, y = H)) +
-  geom_point(color = "black")
-plot_H
-
-prob_gauntlet_of_seal <- seq(0, 1, 0.01)
-alpha_c <- (-beta*mean)/(mean-1)
-receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
-max <- dbeta(x = mean, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
-min <- 0
-scaled_rec <- (receptivity - min)/(max - min)
-rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
-receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
-  geom_line(lwd = 2, color = "black") +
-  labs(y = "Receptivity", x = "P_G") +
-  theme_classic()
-receptivity_plot
-# ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
-#       path = "Plot Exports", height = 5, width = 8)
+escape_plot <- makePlot_3(x = 1:days, data = cbind(escape_chinook, escape_sockeye, escape_coho),
+           col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
+           value.name = "Cumulative Escaped Salmon", colors = salmon.colors)
+eaten_sp_plot <- makePlot_3(x = 1:days, data = cbind(eaten_chinook, eaten_sockeye, eaten_coho),
+                            col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
+                            value.name = "Daily Salmon Eaten", colors = salmon.colors)
+gauntlet_plot <- makePlot_3(x = 1:days, data = cbind(gauntlet_chinook, gauntlet_sockeye, gauntlet_coho),
+                            col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
+                            value.name = "Daily Salmon at Gauntlet", colors = salmon.colors)
 
 # each salmon species
 
-salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
-                                Coho = escape_coho[days])
-escape.data <- data.frame(cbind(1:days, escape_chinook, escape_sockeye, escape_coho))
-colnames(escape.data) <- c("Day", "Chinook", "Sockeye", "Coho")
-escape.data <- melt(escape.data, "Day", variable.name = "Species", value.name = "Count")
-salmon.colors <- c("seagreen", "salmon", "goldenrod")
-salmon.names <- levels(escape.data$Species)
-names(salmon.colors) <- salmon.names
-escape_plot <- ggplot(data = escape.data, aes(x = Day)) +
-  geom_point(data = escape.data, aes(y = Count, color = Species)) + 
-  scale_color_manual(values = salmon.colors) +
-  labs(y = "Cumulative Salmon Escaped")
-escape_plot
-
-eaten.sp.data <- data.frame(cbind(1:days, eaten_chinook, eaten_sockeye, eaten_coho))
-colnames(eaten.sp.data) <- c("Day", "Chinook", "Sockeye", "Coho")
-eaten.sp.data <- melt(eaten.sp.data, "Day", variable.name = "Species", value.name = "Count")
-eaten_sp_plot <- ggplot(data = eaten.sp.data, aes(x = Day, y = Count)) + 
-  geom_point(aes(color = Species)) +
-  scale_color_manual(values = salmon.colors) +
-  labs(y = "Daily Salmon Eaten")
-eaten_sp_plot
-
-gauntlet.data <- data.frame(cbind(1:days, gauntlet_chinook, gauntlet_sockeye, gauntlet_coho))
-colnames(gauntlet.data) <- c("Day", "Chinook", "Sockeye", "Coho")
-gauntlet.data <- melt(gauntlet.data, "Day", variable.name = "Species", value.name = "Count")
-gauntlet_plot <- ggplot(data = gauntlet.data, aes(x = Day, y = Count)) + 
-  geom_point(aes(color = Species)) +
-  scale_color_manual(values = salmon.colors) +
-  labs(y = "Daily Salmon at Gauntlet")
-gauntlet_plot
 
 fished.data <- data.frame(cbind(1:days, fished_chinook, fished_sockeye, fished_coho))
 colnames(fished.data) <- c("Day", "Chinook", "Sockeye", "Coho")
@@ -156,3 +121,22 @@ x_over_Px_plot <- ggplot() +
 x_over_Px_plot
 
 
+# OTHER
+
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+
+prob_gauntlet_of_seal <- seq(0, 1, 0.01)
+alpha_c <- (-beta*mean)/(mean-1)
+receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
+max <- dbeta(x = mean, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
+min <- 0
+scaled_rec <- (receptivity - min)/(max - min)
+rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
+receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
+  geom_line(lwd = 2, color = "black") +
+  labs(y = "Receptivity", x = "P_G") +
+  theme_classic()
+receptivity_plot
+# ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
+#       path = "Plot Exports", height = 5, width = 8)
