@@ -16,10 +16,9 @@ prepForPlots <- function(df, key.col = "Seal",
   return(melted)
 }
 
+# Make Palette
 # dummy for colors
 prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
-
-# Make Palette
 colors <- rep(RColorBrewer::brewer.pal(10, "Set3"), length.out = num_seals)
 color.names <- levels(prob_gauntlet_plot[,"Seal"])
 names(colors) <- color.names
@@ -91,17 +90,12 @@ eaten_sp_plot <- makePlot_3(x = 1:days, data = cbind(eaten_chinook, eaten_sockey
 gauntlet_plot <- makePlot_3(x = 1:days, data = cbind(gauntlet_chinook, gauntlet_sockeye, gauntlet_coho),
                             col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
                             value.name = "Daily Salmon at Gauntlet", colors = salmon.colors)
+fished_plot <- makePlot_3(x = 1:days, data = cbind(fished_chinook, fished_sockeye, fished_coho),
+                          col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
+                          value.name = "Daily Fished Salmon", colors = salmon.colors)
 
-# each salmon species
 
-
-fished.data <- data.frame(cbind(1:days, fished_chinook, fished_sockeye, fished_coho))
-colnames(fished.data) <- c("Day", "Chinook", "Sockeye", "Coho")
-fished.data <- melt(fished.data, "Day", variable.name = "Species", value.name = "Count")
-fished_plot <- ggplot(data = fished.data, aes(x = Day, y = Count)) +
-  geom_point(aes(color = Species)) + 
-  scale_color_manual(values = salmon.colors) +
-  labs(y = "Daily Fished Salmon")
+# OTHER
 
 list_y <- seq(ymin, ymax, 0.1)
 y_over_Py_plot <- ggplot() + 
@@ -120,8 +114,6 @@ x_over_Px_plot <- ggplot() +
   labs(y = "gauntlet probability", x = "x")
 x_over_Px_plot
 
-
-# OTHER
 
 salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
                                 Coho = escape_coho[days])
