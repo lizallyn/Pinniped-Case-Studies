@@ -36,7 +36,14 @@ makePlot_1 <- function(data, value.col, colors){
 }
 
 # Plotting Function - one dimension
-
+makePlot_2 <- function(x, x.name, y, y.name, color){
+  data_for_plot <- data.frame(col1 = x, col2 = y)
+  colnames(data_for_plot) <- c(x.name, y.name)
+  plot <- ggplot(data = data_for_plot, aes(x = data_for_plot[,1], y = data_for_plot[,2])) + 
+    geom_point(color = color) +
+    labs(y = names(data_for_plot)[2])
+  return(plot)
+}
 
 # Plots of Individual Seals
 plot_probs <- makePlot_1(seal_prob_gauntlet, "Gauntlet Probabilities", colors)
@@ -48,7 +55,9 @@ plot_y <- makePlot_1(y, "y (harvest risk opinion", colors)
 plot_Py <- makePlot_1(P_y, "P_y", colors)
 plot_Psoc <- makePlot_1(P_social, "P_social", colors)
 
-
+# Plots of Aggregated 1D data
+plot_seals <- makePlot_2(x = 1:days, x.name = "Day", y = colSums(seal_forage_loc), 
+                         y.name = "Num Seals at Gauntlet", color = "turquoise3")
 
 
 
