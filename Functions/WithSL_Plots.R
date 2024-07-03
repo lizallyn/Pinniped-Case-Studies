@@ -24,40 +24,33 @@ colors <- rep(RColorBrewer::brewer.pal(10, "Set3"), length.out = num_seals)
 color.names <- levels(prob_gauntlet_plot[,"Seal"])
 names(colors) <- color.names
 
-# Make plots
-prob_gauntlet_plot <- prepForPlots(seal_prob_gauntlet, value.col = "Prob_G")
-plot_probs <- ggplot(data = prob_gauntlet_plot, aes(x = Day, y = Prob_G, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors) +
-  labs(y = "Prob_Gauntlet")
-plot_probs
+# Plotting Function - individual seal dots
+makePlot_1 <- function(data, value.col, colors){
+  data_for_plot <- prepForPlots(data, value.col = value.col)
+  plot <- ggplot(data = data_for_plot, aes(x = data_for_plot[,2], 
+                                           y = data_for_plot[,3], color = data_for_plot[,1])) + 
+    geom_point() +
+    scale_color_manual(values = colors) +
+    labs(y = names(data_for_plot)[3], x = names(data_for_plot)[2], color = names(data_for_plot)[1])
+  return(plot)
+}
 
-eaten_plot <- prepForPlots(salmon_consumed_pv, value.col = "eaten")
-plot_eaten <- ggplot(data = eaten_plot, aes(x = Day, y = eaten, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors) +
-  labs(y = "Salmon Eaten per Seal")
-plot_eaten
+# Plotting Function - one dimension
 
-C_plot <- prepForPlots(C, value.col = "C")
-plot_C <- ggplot(data = C_plot, aes(x = Day, y = C, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors) + 
-  labs(y = "C")
-plot_C
 
-x_plot <- prepForPlots(x, value.col = "x")
-plot_x <- ggplot(data = x_plot, aes(x = Day, y = x, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors) + 
-  labs(y = "x")
-plot_x
+# Plots of Individual Seals
+plot_probs <- makePlot_1(seal_prob_gauntlet, "Gauntlet Probabilities", colors)
+plot_eaten <- makePlot_1(salmon_consumed_pv, "Salmon Eaten per Seal", colors)
+plot_C <- makePlot_1(C, "C (adjusted consumption)", colors)
+plot_x <- makePlot_1(x, "x (foraging opinion)", colors)
+plot_Px <- makePlot_1(P_x, "P_x", colors)
+plot_y <- makePlot_1(y, "y (harvest risk opinion", colors)
+plot_Py <- makePlot_1(P_y, "P_y", colors)
+plot_Psoc <- makePlot_1(P_social, "P_social", colors)
 
-Px_plot <- prepForPlots(P_x, value.col = "P_x")
-plot_Px <- ggplot(data = Px_plot, aes(x = Day, y = P_x, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors)
-plot_Px
+
+
+
 
 seal.data <- data.frame(cbind(1:days, colSums(seal_forage_loc, na.rm = T)))
 colnames(seal.data) <- c("Day", "Count")
@@ -93,24 +86,6 @@ receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = s
 receptivity_plot
 # ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
 #       path = "Plot Exports", height = 5, width = 8)
-
-y_plot <- prepForPlots(y, value.col = "y")
-plot_y <- ggplot(data = y_plot, aes(x = Day, y = y, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors)
-plot_y
-
-Py_plot <- prepForPlots(P_y, value.col = "P_y")
-plot_Py <- ggplot(data = Py_plot, aes(x = Day, y = P_y, color = Seal)) + 
-  geom_point() +
-  scale_color_manual(values = colors)
-plot_Py
-
-Psoc_plot <- prepForPlots(P_social, value.col = "P_social")
-plot_Psoc <- ggplot(data = Psoc_plot, aes(x = Day, y = P_social, color = Seal)) +
-  geom_point() +
-  scale_color_manual(values = colors)
-plot_Psoc
 
 # each salmon species
 
@@ -172,12 +147,3 @@ x_over_Px_plot <- ggplot() +
 x_over_Px_plot
 
 
-## Composites ----
-
-# these use Patchwork!
-
-# prob gauntlet with individual learning bits
-plot_probs + (plot_C/plot_x/plot_H/plot_y) + plot_layout(guides = "collect")
-# P_x and P_y
-plot_Px + plot_Py + plot_probs + plot_layout(guides = "collect")
-# salmon consumed and salmon escaped
