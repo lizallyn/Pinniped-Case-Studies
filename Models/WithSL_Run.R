@@ -18,6 +18,7 @@ source("Functions/learnY.R")
 ## Run the Loop
 source("Models/The_Loop.R")
 
-source("Functions/WithSL_Plots.R")
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
 
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
