@@ -1,3 +1,6 @@
+# this runs the model with the capacity for three pinniped species
+# created July 2024
+
 
 source("Functions/Prep_data_for_Salmon_functions.R")
 
