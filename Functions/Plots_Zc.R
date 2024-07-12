@@ -1,0 +1,17 @@
+# cALIFORNIA PLOTS
+
+# Plots of Individuals
+plot_probs_zc <- makePlot_1(zc_prob_gauntlet, "Gauntlet Probabilities SSL", colors)
+plot_eaten_zc <- makePlot_1(salmon_consumed_zc, "Salmon Eaten per SSL", colors)
+plot_C_zc <- makePlot_1(C_zc, "C (adjusted consumption) SSL", colors)
+plot_x_zc <- makePlot_1(x_zc, "x (foraging opinion) SSL", colors)
+plot_Px_zc <- makePlot_1(P_x_zc, "P_x SSL", colors)
+plot_y_zc <- makePlot_1(y_zc, "y (harvest risk opinion) SSL", colors)
+plot_Py_zc <- makePlot_1(P_y_zc, "P_y SSL", colors)
+plot_Psoc_zc <- makePlot_1(P_social_zc, "P_social SSL", colors)
+
+# Plots of Aggregated 1D data
+plot_zc <- makePlot_2(x = 1:days, x.name = "Day", y = colSums(zc_forage_loc), 
+                      y.name = "Num Steller Sea Lions at Gauntlet", color = "turquoise3")
+plot_H_zc <- makePlot_2(x = 1:days, x.name = "Day", y = H_zc, y.name = "SSL Harvested", color = "orchid")
+
