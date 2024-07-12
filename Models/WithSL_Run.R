@@ -23,5 +23,7 @@ source("Models/The_Loop.R")
 
 source("Functions/makePlots.R")
 source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
 
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
