@@ -49,10 +49,6 @@ decay <- 0.5
 buffer_Pymin_val <- 0
 buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
-bundle_x_pars <- tibble(step = step, xmin = xmin, xmax = xmax, decay = decay)
-bundle_y_pars <- tibble(step = step, ymin = ymin, ymax = ymax, decay = decay)
-bundle_x_shape_pars <- tibble(buffer = buffer_Pxmin_specialist, steepness = steepness, 
-                              threshold = threshold_x_specialist)
 
 # social learning parameters
 num_seals_2_copy <- 0
