@@ -135,38 +135,74 @@ for(t in 1:(days - 1)) {
   
   # calculate x, y and prob_gauntlet for next time step
   ## This could all become some functions
+  
   for(seal in 1:num_seals){
-    if(!(seal %in% kill_list)){
-      C[seal, t] <- salmon_consumed_pv[seal, t] - w
-      
-      # calculate d_x and d_y
-      d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
-                    forage_loc = seal_forage_loc[seal, t],  bundle_x_pars = bundle_x_pars, dead = seal %in% kill_list, 
-                    baseline = baseline_x[seal])
-      d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
-                    seal_forage_loc[seal, t], step = step, 
-                    ymin = ymin, ymax = ymax, decay = decay, dead = seal %in% kill_list, baseline_y[seal])
-      
-      # update x and y and P_x and P_y
-      x[seal, t+1] <- x[seal, t] + d_x
-      if(seal %in% specialist_seals){
-        P_x[seal, t+1] <- 1-(1/((1+buffer_Pxmin_specialist) + exp(-steepness * (threshold_x_specialist - x[seal, t+1]))))
-      } else {P_x[seal, t+1] <- x[seal, t+1] * slope_x_val + intercept_x_val}
-      
-      y[seal, t+1] <- y[seal, t] + d_y
-      P_y[seal, t+1] <- 1-(1/((1+buffer_Pymin[seal]) + exp(-steepness * (threshold[seal] - y[seal, t+1]))))
-      
-      seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
-    } else {
-      seal_prob_gauntlet[seal, t+1] <- NA
-      seal_forage_loc[seal, t+1] <- NA
-      x[seal, t+1] <- NA
-      y[seal, t+1] <- NA
-      C[seal, t] <- NA
-      P_x[seal, t+1] <- NA
-      P_y[seal, t+1] <- NA
-    }
+    bundle_y_shape_pars <- tibble(buffer = buffer_Pymin[seal],
+           steepness = steepness, threshold = threshold[seal])
+
+    update_output <- updateLearning(salmon_consumed = salmon_consumed_pv[seal, t], w = w, hunting = H[t],
+                 x_t = x[seal, t], y_t = y[seal, t],
+                 forage_loc = seal_forage_loc[seal, t], bundle_dx_pars = bundle_dx_pars,
+                 bundle_dy_pars = bundle_dy_pars, dead = seal %in% kill_list,
+                 baseline_x = baseline_x[seal], baseline_y = baseline_y[seal],
+                 specialist = seal %in% specialist_seals, bundle_x_shape_pars = bundle_x_shape_pars, 
+                 bundle_x_linear_pars = bundle_x_linear_pars, bundle_y_shape_pars = bundle_y_shape_pars)
+    x[seal, t+1] <- as.numeric(update_output["x_t1"])
+    y[seal, t+1] <- as.numeric(update_output["y_t1"])
+    P_x[seal, t+1] <- as.numeric(update_output["P_x"])
+    P_y[seal, t+1] <- as.numeric(update_output["P_y"])
+    seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
   }
+
+  if(seal %in% kill_list){
+    seal_prob_gauntlet[seal, t+1] <- NA
+    seal_forage_loc[seal, t+1] <- NA
+    x[seal, t+1] <- NA
+    y[seal, t+1] <- NA
+    C[seal, t] <- NA
+    P_x[seal, t+1] <- NA
+    P_y[seal, t+1] <- NA
+  }
+  
+  # for(seal in 1:num_seals){
+  #   if(!(seal %in% kill_list)){
+  #     C[seal, t] <- salmon_consumed_pv[seal, t] - w
+  # 
+  #     # calculate d_x and d_y
+  #     d_x <- learnX(food = C[seal, t], x_t = x[seal, t],
+  #                   forage_loc = seal_forage_loc[seal, t],  bundle_dx_pars = bundle_dx_pars, 
+  #                   dead = seal %in% kill_list,
+  #                   baseline = baseline_x[seal])
+  #     d_y <- learnY(hunting = H[t], y_t = y[seal, t],
+  #                   seal_forage_loc[seal, t], bundle_dy_pars = bundle_dy_pars, 
+  #                   dead = seal %in% kill_list, baseline_y[seal])
+  # 
+  #     # update x and y and P_x and P_y
+  #     x[seal, t+1] <- x[seal, t] + d_x
+  #     if(seal %in% specialist_seals){
+  #       P_x[seal, t+1] <- type3FuncRes(bundle_x_shape_pars, val = x[seal, t+1])
+  #     } else {
+  #       P_x[seal, t+1] <- linearFuncRes(bundle_x_linear_pars, val = x[seal, t+1])
+  #       }
+  # 
+  #     y[seal, t+1] <- y[seal, t] + d_y
+  #     bundle_y_shape_pars <- tibble(buffer = buffer_Pymin[seal], 
+  #                                   steepness = steepness, threshold = threshold[seal])
+  #     P_y[seal, t+1] <- type3FuncRes(bundle_y_shape_pars, 
+  #                                    val = y[seal, t+1])
+  # 
+  #     seal_prob_gauntlet[seal, t+1] <- P_x[seal, t+1] * P_y[seal, t+1]
+  #     
+  #   } else {
+  #     seal_prob_gauntlet[seal, t+1] <- NA
+  #     seal_forage_loc[seal, t+1] <- NA
+  #     x[seal, t+1] <- NA
+  #     y[seal, t+1] <- NA
+  #     C[seal, t] <- NA
+  #     P_x[seal, t+1] <- NA
+  #     P_y[seal, t+1] <- NA
+  #   }
+  # }
   
 } # days loop
 
