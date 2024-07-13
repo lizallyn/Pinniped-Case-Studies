@@ -1,6 +1,12 @@
 # function for calculating d_y if they go to the gauntlet
 
-learnY <- function(hunting, y_t, forage_loc, step, ymin, ymax, decay, dead, baseline = baseline_y) {
+learnY <- function(hunting, y_t, forage_loc, bundle_dy_pars, dead, baseline = baseline_y) {
+  step <- bundle_dy_pars["step"]
+  ymin <- bundle_dy_pars["ymin"]
+  ymax <- bundle_dy_pars["ymax"]
+  decay <- bundle_dy_pars["decay"]
+  
+
   if(dead == TRUE){
     d_y <- NA
   } else if(forage_loc == 0){
@@ -17,5 +23,5 @@ learnY <- function(hunting, y_t, forage_loc, step, ymin, ymax, decay, dead, base
     }
   }
   
-  return(d_y)
+  return(as.numeric(d_y))
 }
