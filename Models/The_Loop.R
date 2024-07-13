@@ -133,8 +133,8 @@ for(t in 1:(days - 1)) {
     kill_list_zc <- c(kill_list_zc, killed)
   }
   
-  # calculate x, y and prob_gauntlet for next time step
-  ## This could all become some functions
+  ## calculate x, y and prob_gauntlet for next time step
+  # seals
   
   for(seal in 1:num_seals){
     bundle_y_shape_pars <- tibble(buffer = buffer_Pymin[seal],
