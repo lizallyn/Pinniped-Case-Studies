@@ -1,18 +1,18 @@
 # functional response plots
 
 # RECEPTIVITY
-prob_gauntlet_of_seal <- seq(0, 1, 0.01)
-alpha_c <- (-beta*mean)/(mean-1)
-receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
-max <- dbeta(x = mean, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
-min <- 0
-scaled_rec <- (receptivity - min)/(max - min)
-rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
-receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
-  geom_line(lwd = 2, color = "black") +
-  labs(y = "Receptivity", x = "P_G") +
-  theme_classic()
-receptivity_plot
+# prob_gauntlet_of_seal <- seq(0, 1, 0.01)
+# alpha_c <- (-beta*mean)/(mean-1)
+# receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
+# max <- dbeta(x = mean, shape1 = alpha_c + 1, shape2 = beta + 1, ncp = 0)
+# min <- 0
+# scaled_rec <- (receptivity - min)/(max - min)
+# rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
+# receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
+#   geom_line(lwd = 2, color = "black") +
+#   labs(y = "Receptivity", x = "P_G") +
+#   theme_classic()
+# receptivity_plot
 # ggsave(plot = receptivity_plot, filename = "receptivity_plot.png", device = "png",
 #       path = "Plot Exports", height = 5, width = 8)
 
