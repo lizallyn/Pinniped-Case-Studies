@@ -1,4 +1,4 @@
-# cALIFORNIA PLOTS
+# California PLOTS
 
 # Plots of Individuals
 plot_probs_zc <- makePlot_1(zc_prob_gauntlet, "Gauntlet Probabilities CSL", colors)
