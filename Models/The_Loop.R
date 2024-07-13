@@ -185,14 +185,43 @@ for(t in 1:(days - 1)) {
     P_y[ssl, t+1] <- as.numeric(update_output["P_y"])
     seal_prob_gauntlet[ssl, t+1] <- P_x[ssl, t+1] * P_y[ssl, t+1]
     
-    if(ssl %in% kill_list){
+    if(ssl %in% kill_list_ej){
       ej_prob_gauntlet[ssl, t+1] <- NA
       ej_forage_loc[ssl, t+1] <- NA
-      x[ssl, t+1] <- NA
-      y[ssl, t+1] <- NA
-      C[ssl, t] <- NA
-      P_x[ssl, t+1] <- NA
-      P_y[ssl, t+1] <- NA
+      x_ej[ssl, t+1] <- NA
+      y_ej[ssl, t+1] <- NA
+      C_ej[ssl, t] <- NA
+      P_x_ej[ssl, t+1] <- NA
+      P_y_ej[ssl, t+1] <- NA
+    }
+  }
+  
+  # californias
+  
+  for(csl in 1:num_zc){
+    
+    update_output <- updateLearning(salmon_consumed = salmon_consumed_zc[csl, t], w = w, hunting = H_zc[t],
+                                    x_t = x_zc[csl, t], y_t = y_zc[csl, t],
+                                    forage_loc = zc_forage_loc[csl, t], bundle_dx_pars = bundle_dx_pars,
+                                    bundle_dy_pars = bundle_dy_pars, dead = csl %in% kill_list_zc,
+                                    baseline_x = baseline_x_val, baseline_y = specialist_baseline_y,
+                                    specialist = T, bundle_x_shape_pars = bundle_x_shape_pars_sl, 
+                                    bundle_x_linear_pars = bundle_x_linear_pars, 
+                                    bundle_y_shape_pars = bundle_y_shape_pars_sl)
+    x_zc[csl, t+1] <- as.numeric(update_output["x_t1"])
+    y_zc[csl, t+1] <- as.numeric(update_output["y_t1"])
+    P_x_zc[csl, t+1] <- as.numeric(update_output["P_x"])
+    P_y_zc[csl, t+1] <- as.numeric(update_output["P_y"])
+    zc_prob_gauntlet[csl, t+1] <- P_x_zc[csl, t+1] * P_y_zc[csl, t+1]
+    
+    if(csl %in% kill_list_zc){
+      zc_prob_gauntlet[csl, t+1] <- NA
+      zc_forage_loc[csl, t+1] <- NA
+      x_zc[csl, t+1] <- NA
+      y_zc[csl, t+1] <- NA
+      C_zc[csl, t] <- NA
+      P_x_zc[csl, t+1] <- NA
+      P_y_zc[csl, t+1] <- NA
     }
   }
   

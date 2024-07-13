@@ -23,6 +23,14 @@ colors <- rep(RColorBrewer::brewer.pal(10, "Set3"), length.out = num_seals)
 color.names <- levels(prob_gauntlet_plot[,"Seal"])
 names(colors) <- color.names
 
+colors_zc <- rep(RColorBrewer::brewer.pal(10, "Set3"), length.out = num_zc)
+color.names.zc <- 1:num_zc
+names(colors_zc) <- color.names.zc
+
+colors_ej <- rep(RColorBrewer::brewer.pal(10, "Set3"), length.out = num_ej)
+color.names.ej <- 1:num_ej
+names(colors_ej) <- color.names.ej
+
 # Plotting Function - individual seal dots
 makePlot_1 <- function(data, value.col, colors){
   data_for_plot <- prepForPlots(data, value.col = value.col)

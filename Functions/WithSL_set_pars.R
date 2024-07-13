@@ -9,7 +9,7 @@ day_range <- start_loop:end_loop
 days <- length(day_range)
 
 # seal parameters
-num_seals <- 15
+num_seals <- 25
 prop_specialists <- 0.1
 
 # sea lions
