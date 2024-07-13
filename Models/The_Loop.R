@@ -109,15 +109,29 @@ for(t in 1:(days - 1)) {
   
   # seal harvest
   num_harvesters <- sample(min_harvesters:max_harvesters, 1)
-  H[t] <- getHarvested(day_plan = harvest_plan[t], list_gauntlet_seals = seals_at_gauntlet, 
+  H[t] <- getHarvested(day_plan = harvest_plan_pv[t], list_gauntlet_seals = seals_at_gauntlet, 
                        num_fishers = num_harvesters, zone_efficiency = zone_efficiency, 
                        efficiency = efficiency, steepness = steepness)
+  H_ej[t] <- getHarvested(day_plan = harvest_plan_ej[t], list_gauntlet_seals = ej_at_gauntlet, 
+                          num_fishers = num_harvesters, zone_efficiency = zone_efficiency, 
+                          efficiency = efficiency, steepness = steepness)
+  H_zc[t] <- getHarvested(day_plan = harvest_plan_zc[t], list_gauntlet_seals = zc_at_gauntlet, 
+                          num_fishers = num_harvesters, zone_efficiency = zone_efficiency, 
+                          efficiency = efficiency, steepness = steepness)
+  
   
   if(H[t] > 0){
     killed <- sample(seals_at_gauntlet, H[t])
     kill_list <- c(kill_list, killed)
   }
-  
+  if(H_ej[t] > 0){
+    killed <- sample(ej_at_gauntlet, H_ej[t])
+    kill_list_ej <- c(kill_list_ej, killed)
+  }
+  if(H_zc[t] > 0){
+    killed <- sample(zc_at_gauntlet, H_zc[t])
+    kill_list_zc <- c(kill_list_zc, killed)
+  }
   
   # calculate x, y and prob_gauntlet for next time step
   ## This could all become some functions
@@ -127,8 +141,7 @@ for(t in 1:(days - 1)) {
       
       # calculate d_x and d_y
       d_x <- learnX(food = C[seal, t], x_t = x[seal, t], 
-                    forage_loc = seal_forage_loc[seal, t],  step = step, 
-                    xmin = xmin, xmax = xmax, decay = decay, dead = seal %in% kill_list, 
+                    forage_loc = seal_forage_loc[seal, t],  bundle_x_pars = bundle_x_pars, dead = seal %in% kill_list, 
                     baseline = baseline_x[seal])
       d_y <- learnY(hunting = H[t], y_t = y[seal, t], 
                     seal_forage_loc[seal, t], step = step, 

@@ -27,3 +27,4 @@ source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
 
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
+plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")

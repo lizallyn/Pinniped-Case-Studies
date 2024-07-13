@@ -42,13 +42,17 @@ steepness <- 1
 threshold_val <- -5
 threshold_specialist <- -10
 
-steepness_x_specialist <- 0.1
+# steepness_x_specialist <- 0.1
 threshold_x_specialist <- 0.1
 step <- 0.5
 decay <- 0.5
 buffer_Pymin_val <- 0
 buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
+bundle_x_pars <- tibble(step = step, xmin = xmin, xmax = xmax, decay = decay)
+bundle_y_pars <- tibble(step = step, ymin = ymin, ymax = ymax, decay = decay)
+bundle_x_shape_pars <- tibble(buffer = buffer_Pxmin_specialist, steepness = steepness, 
+                              threshold = threshold_x_specialist)
 
 # social learning parameters
 num_seals_2_copy <- 0
@@ -81,7 +85,9 @@ max_harvesters <- max_fishers
 harvest_open <- fishery_open
 harvest_close <- fishery_close
 scenario <- "Boat"
-harvest_days <- harvest_open:harvest_close
+harvest_days_pv <- harvest_open:harvest_close
+harvest_days_ej <- harvest_open:harvest_close
+harvest_days_zc <- harvest_open:harvest_close
 
 
 

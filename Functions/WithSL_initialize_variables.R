@@ -81,9 +81,15 @@ kill_list_ej <- list()
 fishery_range <- fishery_open:fishery_close
 fishery_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
 
-harvest_plan <- createHarvestPlan(scenario = scenario, 
-                                  harvest_days = harvest_days,
+harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
+                                  harvest_days = harvest_days_pv,
                                   empty.array = oneDzeroes)
+harvest_plan_ej <- createHarvestPlan(scenario = scenario, 
+                                     harvest_days = harvest_days_ej,
+                                     empty.array = oneDzeroes)
+harvest_plan_zc <- createHarvestPlan(scenario = scenario, 
+                                     harvest_days = harvest_days_zc,
+                                     empty.array = oneDzeroes)
 
 ### Actual States that I Need ----
 escape_chinook <- oneDzeroes
