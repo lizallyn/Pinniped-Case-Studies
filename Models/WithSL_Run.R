@@ -1,7 +1,7 @@
 # this runs the model with the capacity for three pinniped species
 # created July 2024
 
-
+rm(list=ls())
 source("Functions/Prep_data_for_Salmon_functions.R")
 
 source("Functions/makeArray.R")
@@ -29,6 +29,6 @@ source("Functions/Plots_Pv.R")
 source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
 
-plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
+plot_x + plot_Px + plot_probs + plot_layout(guides = "collect")
 plot_Py
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")

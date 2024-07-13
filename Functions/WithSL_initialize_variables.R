@@ -12,12 +12,18 @@ bundle_dy_pars <- tibble(step = step, ymin = ymin, ymax = ymax, decay = decay)
 bundle_x_shape_pars <- tibble(buffer = buffer_Pxmin_specialist, steepness = steepness, 
                               threshold = threshold_x_specialist)
 bundle_x_linear_pars <- tibble(slope = slope_x_val, intercept = intercept_x_val)
-bundle_y_shape_pars <- tibble(buffer = buffer_Pymin, steepness = steepness)
+
+bundle_x_shape_pars_sl <- tibble(buffer = buffer_Pxmin_specialist, steepness = steepness, 
+                                 threshold = threshold_x_specialist)
+bundle_y_shape_pars_sl <- tibble(buffer = buffer_Pymin_specialist, steepness = steepness, 
+                                 threshold = threshold_specialist)
 
 ### Blank arrays----
 
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
 twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Day"))
+twoDzeroes_zc <- makeArray(c(num_zc, days), start.val = 0, names = c("CSL", "Day"))
+twoDzeroes_ej <- makeArray(c(num_ej, days), start.val = 0, names = c("SSL", "Day"))
 
 ### Create Salmon Data----
 
@@ -28,12 +34,12 @@ The_Fish$Coho <- floor(predict_new_fish(coho_params, start_loop:end_loop))
 
 ### Individual Values ----
 salmon_consumed_pv <- twoDzeroes
-salmon_consumed_zc <- twoDzeroes
-salmon_consumed_ej <- twoDzeroes
+salmon_consumed_zc <- twoDzeroes_zc
+salmon_consumed_ej <- twoDzeroes_ej
 
 seal_prob_gauntlet <- twoDzeroes
-zc_prob_gauntlet <- twoDzeroes
-ej_prob_gauntlet <- twoDzeroes
+zc_prob_gauntlet <- twoDzeroes_zc
+ej_prob_gauntlet <- twoDzeroes_ej
 
 if(num_specialists == 0){
   specialist_seals <- NA
@@ -41,8 +47,8 @@ if(num_specialists == 0){
   specialist_seals <- sample(1:num_seals, num_specialists)
 }
 seal_forage_loc <- twoDzeroes
-zc_forage_loc <- twoDzeroes
-ej_forage_loc <- twoDzeroes
+zc_forage_loc <- twoDzeroes_zc
+ej_forage_loc <- twoDzeroes_ej
 
 baseline_x <- makeArray(num_seals, start.val = baseline_x_val, names = "Seal")
 baseline_y <- makeArray(num_seals, start.val = baseline_y_val, names = "Seal")
@@ -58,17 +64,17 @@ C <- twoDzeroes
 P_x <- twoDzeroes
 P_y <- twoDzeroes
 
-x_zc <- twoDzeroes
-y_zc <- twoDzeroes
-C_zc <- twoDzeroes
-P_x_zc <- twoDzeroes
-P_y_zc <- twoDzeroes
+x_zc <- twoDzeroes_zc
+y_zc <- twoDzeroes_zc
+C_zc <- twoDzeroes_zc
+P_x_zc <- twoDzeroes_zc
+P_y_zc <- twoDzeroes_zc
 
-x_ej <- twoDzeroes
-y_ej <- twoDzeroes
-C_ej <- twoDzeroes
-P_x_ej <- twoDzeroes
-P_y_ej <- twoDzeroes
+x_ej <- twoDzeroes_ej
+y_ej <- twoDzeroes_ej
+C_ej <- twoDzeroes_ej
+P_x_ej <- twoDzeroes_ej
+P_y_ej <- twoDzeroes_ej
 
 buffer_Pymin <- makeArray(num_seals, start.val = buffer_Pymin_val, names = "Seal")
 buffer_Pymin[specialist_seals] <- buffer_Pymin_specialist
@@ -77,8 +83,8 @@ threshold <- makeArray(num_seals, start.val = threshold_val, names = "Seal")
 threshold[specialist_seals] <- threshold_specialist
 
 P_social <- twoDzeroes
-P_social_zc <- twoDzeroes
-P_social_ej <- twoDzeroes
+P_social_zc <- twoDzeroes_zc
+P_social_ej <- twoDzeroes_ej
 
 kill_list <- list()
 kill_list_zc <- list()
