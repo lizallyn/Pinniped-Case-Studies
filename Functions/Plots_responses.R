@@ -29,8 +29,8 @@ y_over_Py_plot
 list_x <- seq(xmin, xmax, 0.1)
 x_over_Px_plot <- ggplot() + 
   geom_line(aes(x = list_x, y = list_x * slope_x_val + intercept_x_val), color = "seagreen", lwd = 2) + 
-  geom_line(aes(x = list_x, y = 1-(1/((1+0) + 
-                                        exp(-2 * (2 - list_x))))), color = "salmon", lwd = 2) + 
+  geom_line(aes(x = list_x, y = 1-(1/((1+buffer_Pxmin_specialist) + 
+                                        exp(-steepness * (threshold_x_specialist - list_x))))), color = "salmon", lwd = 2) + 
   labs(y = "gauntlet probability", x = "x")
 x_over_Px_plot
 
