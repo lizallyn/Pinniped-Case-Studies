@@ -17,6 +17,9 @@ source("Functions/rungeKutta_3.R")
 source("Functions/getHarvested.R")
 source("Functions/learnX.R")
 source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
 
 ## Run the Loop
 source("Models/The_Loop.R")
@@ -27,4 +30,5 @@ source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
 
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
+plot_Py
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
