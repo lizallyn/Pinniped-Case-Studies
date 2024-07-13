@@ -7,6 +7,13 @@ num_specialists <- round(num_seals * prop_specialists)
 slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
 xmin <- (0 - intercept_x_val)/slope_x_val
 
+bundle_dx_pars <- tibble(step = step, xmin = xmin, xmax = xmax, decay = decay)
+bundle_dy_pars <- tibble(step = step, ymin = ymin, ymax = ymax, decay = decay)
+bundle_x_shape_pars <- tibble(buffer = buffer_Pxmin_specialist, steepness = steepness, 
+                              threshold = threshold_x_specialist)
+bundle_x_linear_pars <- tibble(slope = slope_x_val, intercept = intercept_x_val)
+bundle_y_shape_pars <- tibble(buffer = buffer_Pymin, steepness = steepness)
+
 ### Blank arrays----
 
 oneDzeroes <- makeArray(days, start.val = 0, names = "Day")
