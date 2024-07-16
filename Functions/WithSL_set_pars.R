@@ -9,12 +9,12 @@ day_range <- start_loop:end_loop
 days <- length(day_range)
 
 # seal parameters
-num_seals <- 25
+num_seals <- 150
 prop_specialists <- 0.1
 
 # sea lions
-num_zc <- 20
-num_ej <- 15
+num_zc <- 100
+num_ej <- 50
 
 # seal consumption parameters
 deltat_val <- 1/24
@@ -51,7 +51,7 @@ buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
 
 # social learning parameters
-num_seals_2_copy <- 0
+num_seals_2_copy <- num_seals
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 num_zc_2_copy <- num_zc
