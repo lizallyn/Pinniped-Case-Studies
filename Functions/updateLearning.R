@@ -13,7 +13,7 @@ updateLearning <- function(salmon_consumed, w, hunting, x_t, y_t, forage_loc,
   x_t1 <- x_t + d_x
   y_t1 <- y_t + d_y
   
-  if(specialist == T){
+  if(specialist == TRUE){
     P_x <- type3FuncRes(bundle_x_shape_pars, val = x_t1)
   } else {
     P_x <- linearFuncRes(bundle_x_linear_pars, val = x_t1)

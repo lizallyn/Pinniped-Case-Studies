@@ -39,3 +39,4 @@ source("Functions/Plots_Zc.R")
 plot_x + plot_Px + plot_probs + plot_layout(guides = "collect")
 plot_Py
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
+

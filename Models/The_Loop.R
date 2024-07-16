@@ -148,6 +148,7 @@ for(t in 1:(days - 1)) {
                  baseline_x = baseline_x[seal], baseline_y = baseline_y[seal],
                  specialist = seal %in% specialist_seals, bundle_x_shape_pars = bundle_x_shape_pars, 
                  bundle_x_linear_pars = bundle_x_linear_pars, bundle_y_shape_pars = bundle_y_shape_pars)
+    
     x[seal, t+1] <- as.numeric(update_output["x_t1"])
     y[seal, t+1] <- as.numeric(update_output["y_t1"])
     P_x[seal, t+1] <- as.numeric(update_output["P_x"])
@@ -179,11 +180,11 @@ for(t in 1:(days - 1)) {
                                     specialist = T, bundle_x_shape_pars = bundle_x_shape_pars_sl, 
                                     bundle_x_linear_pars = bundle_x_linear_pars, 
                                     bundle_y_shape_pars = bundle_y_shape_pars_sl)
-    x[ssl, t+1] <- as.numeric(update_output["x_t1"])
-    y[ssl, t+1] <- as.numeric(update_output["y_t1"])
-    P_x[ssl, t+1] <- as.numeric(update_output["P_x"])
-    P_y[ssl, t+1] <- as.numeric(update_output["P_y"])
-    seal_prob_gauntlet[ssl, t+1] <- P_x[ssl, t+1] * P_y[ssl, t+1]
+    x_ej[ssl, t+1] <- as.numeric(update_output["x_t1"])
+    y_ej[ssl, t+1] <- as.numeric(update_output["y_t1"])
+    P_x_ej[ssl, t+1] <- as.numeric(update_output["P_x"])
+    P_y_ej[ssl, t+1] <- as.numeric(update_output["P_y"])
+    ej_prob_gauntlet[ssl, t+1] <- P_x_ej[ssl, t+1] * P_y_ej[ssl, t+1]
     
     if(ssl %in% kill_list_ej){
       ej_prob_gauntlet[ssl, t+1] <- NA
