@@ -7,7 +7,13 @@ dates_buffer <- 20
 ## Salmon ----
 
 # Chum
-run.min <- 2000
-run.max <- 62000
-run.avg <- 27000
-run.size <- rbeta(n = 1, 4, 5) * run.max
+chum.run.min <- 2000
+chum.run.max <- 62000
+chum.run.avg <- 27000
+chum.run.size <- rbeta(n = 1, 4, 5) * chum.run.max
+
+# Green river Chinook
+gr.run.min <- 6000
+gr.run.max <- 42000
+gr.run.avg <- 22000
+gr.run.size <- rnorm(1, gr.run.avg, 5500)
