@@ -13,7 +13,7 @@ Chum <- data.frame(fish.wide[chum_start:chum_end, c("Date", "DayofYear", "Chum_p
 Chum$DailyEst <- Chum$Chum_per * run.size
 Chum$DailyEst_int <- floor(Chum$DailyEst)
 
-plot(Chum$DayofYear, Chum$DailyEst)
+# plot(Chum$DayofYear, Chum$DailyEst)
 #looks kinda normal enough for a rough estimate I think
 
 params <- c(90196.94, 68.76944, 14.56296)
@@ -27,11 +27,11 @@ fish.fit.optim.chum <- optim(par = fish.fit.optim.chum$par,
                              method = "BFGS")
 chum_params <- fish.fit.optim.chum$par
 
-plot(Chum$DayofYear, Chum$DailyEst)
-lines(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
+# plot(Chum$DayofYear, Chum$DailyEst)
+# lines(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
 # looks ok to me!
 
-plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
+# plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
 
 
 ## CHINOOK ----
