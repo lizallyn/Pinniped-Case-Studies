@@ -1,12 +1,16 @@
 # Script to prep salmon data for SalmonSpeciesArrive function calls
 library(tidyr)
 library(dplyr)
+library(lubridate)
 
-fish.long <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
+fish.wide <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
 
-fish <- spread(fish.long, Species, Count)
+Chinook <- data.frame(fish.wide[fish.wide$GreenRiver_per + fish.wide$LocNis_per > 0, 
+                     c("Date", "DayofYear", "GreenRiver_per", "LocNis_per")])
 
-colnames(fish) <- c("DayofYear", "Date", "Year", "Comment", "Chinook", "Coho", "Sockeye")
+Chum <- data.frame(fish.wide[fish.wide$Chum_per > 0, c("Date", "DayofYear", "Chum_per")])
+
+
 
 Daily_fish <- fish %>% 
   group_by(DayofYear) %>%
