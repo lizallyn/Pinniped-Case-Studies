@@ -5,10 +5,42 @@ library(lubridate)
 
 fish.wide <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
 
-Chinook <- data.frame(fish.wide[fish.wide$GreenRiver_per + fish.wide$LocNis_per > 0, 
-                     c("Date", "DayofYear", "GreenRiver_per", "LocNis_per")])
+## CHUM ----
+chum_start <- min(which(fish.wide$Chum_per > 0)) - dates_buffer
+chum_end <- max(which(fish.wide$Chum_per > 0)) + dates_buffer
 
-Chum <- data.frame(fish.wide[fish.wide$Chum_per > 0, c("Date", "DayofYear", "Chum_per")])
+Chum <- data.frame(fish.wide[chum_start:chum_end, c("Date", "DayofYear", "Chum_per")])
+Chum$DailyEst <- Chum$Chum_per * run.size
+Chum$DailyEst_int <- floor(Chum$DailyEst)
+
+plot(Chum$DayofYear, Chum$DailyEst)
+#looks kinda normal enough for a rough estimate I think
+
+params <- c(90196.94, 68.76944, 14.56296)
+fish.fit.optim.chum <- optim(par = params,
+                                fn = fit.to.fish,
+                                data = Chum$DailyEst_int,
+                                method = "BFGS")
+fish.fit.optim.chum <- optim(par = fish.fit.optim.chum$par,
+                             fn = fit.to.fish,
+                             data = Chum$DailyEst_int,
+                             method = "BFGS")
+chum_params <- fish.fit.optim.chum$par
+
+plot(Chum$DayofYear, Chum$DailyEst)
+lines(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
+# looks ok to me!
+
+plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
+
+
+## CHINOOK ----
+
+Chinook <- data.frame(fish.wide[fish.wide$GreenRiver_per + fish.wide$LocNis_per > 0, 
+                                c("Date", "DayofYear", "GreenRiver_per", "LocNis_per")])
+
+
+
 
 
 
@@ -33,89 +65,5 @@ Chosen_fish_int <- round(Chosen_fish)
 
 # plot(Chosen_fish_int$AvgCoho)
 
-# create a function to fit a curve to the data
-fit.to.fish <- function(params, data) {
-  expand <- params[1]
-  mean <- params[2]
-  sd <- params[3]
-  y.hat <- rep(NA, length(data))
-  days <- 1:length(data)
-  for(i in days) {
-    y.hat[i] <- dnorm(x = i, mean = mean, sd = sd) * expand
-  }
-  nll <- -sum(dpois(x=data, lambda=y.hat, log=TRUE))
-  return(nll)
-}
-
-# params <- c(39000, 46, 12)
-# fit.to.fish(params = params, data = Chosen_fish_int$AvgSockeye)
-params <- c(69000, 43.13, 12.48)
-fish.fit.optim.sockeye <- optim(par = params,
-                        fn = fit.to.fish,
-                        data = Chosen_fish_int$AvgSockeye,
-                        method = "BFGS")
-sockeye_params <- fish.fit.optim.sockeye$par
-
-params <- c(9365.43, 86, 13.8)
-fish.fit.optim.chinook <- optim(par = params,
-                        fn = fit.to.fish,
-                        data = Chosen_fish_int$AvgChinook,
-                        method = "BFGS")
-chinook_params <- fish.fit.optim.chinook$par
-
-params <- c(17225, 115.26, 7.8)
-fish.fit.optim.coho <- optim(par = params,
-                                fn = fit.to.fish,
-                                data = Chosen_fish_int$AvgCoho,
-                                method = "BFGS")
-coho_params <- fish.fit.optim.coho$par
-
-predict_fish <- function(params, day, start.day = data_start) {
-  expand <- params[1]
-  mean <- params[2]
-  sd <- params[3]
-  y.hat <- dnorm(x = day, mean = mean+start.day, sd = sd) * expand
-  return(y.hat)
-}
-
-predict_new_fish <- function(params, day, start.day = data_start){
-  expand <- params[1]
-  mean <- params[2]
-  sd <- params[3]
-  y.hat <- dnorm(x = day, mean = mean+start.day, sd = sd) * expand
-  y.hat_t.1 <- dnorm(x = day-1, mean = mean+start.day, sd = sd) * expand
-  new.fish <- y.hat - y.hat_t.1
-  new.fish[ new.fish < 0] <- 0
-  return(new.fish)
-}
 
 
-# plot(predict_new_fish(sockeye_params, 130:290, data_start))
-# lines(predict_new_fish(coho_params, 130:290, data_start))
-# lines(predict_new_fish(chinook_params, 130:290, data_start))
-
-
-
-### Recycle Bin
-
-# Daily_fish_offset <- rbind(rep(0, 8), Daily_fish[1:(nrow(Daily_fish)-1),])
-# Daily_fish_offset[,1] <- 1:366
-# 
-# Arrive_fish <- Daily_fish - Daily_fish_offset
-# Arrive_fish[ Arrive_fish < 0 ] <- 0
-
-### PIT data - Chinook from Bear and Cedar
-# start_date <- yday("2023-05-12")
-# end_date <- yday("2023-06-28")
-# beta_2 <- 100
-# mean_2 <- yday(x = "2023-06-22")
-# alpha_2 <- (-beta_2*mean_2)/(mean_2-1)
-# dpois(x = 173, lambda = mean_2)
-# curve(dbeta(x,4,2),xlim=c(0, 1))
-# x_list <- seq(0, 1, 1/(length(start_date:end_date)-1))
-# dbeta(x = x_list, 4, 2)
-# max_smolt <- 464/7
-# scale <- max_smolt/max(dbeta(x = x_list, 4, 2))
-# 
-# smolt_passage <- data.frame(dayofyear = start_date:end_date, smolt = dbeta(x = x_list, 4, 2) * scale)
-# plot(smolt_passage)
