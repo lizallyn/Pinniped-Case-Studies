@@ -13,28 +13,19 @@ fit.to.fish <- function(params, data) {
   return(nll)
 }
 
-# params <- c(39000, 46, 12)
-# fit.to.fish(params = params, data = Chosen_fish_int$AvgSockeye)
-params <- c(69000, 43.13, 12.48)
-fish.fit.optim.sockeye <- optim(par = params,
-                                fn = fit.to.fish,
-                                data = Chosen_fish_int$AvgSockeye,
-                                method = "BFGS")
-sockeye_params <- fish.fit.optim.sockeye$par
-
-params <- c(9365.43, 86, 13.8)
-fish.fit.optim.chinook <- optim(par = params,
-                                fn = fit.to.fish,
-                                data = Chosen_fish_int$AvgChinook,
-                                method = "BFGS")
-chinook_params <- fish.fit.optim.chinook$par
-
-params <- c(17225, 115.26, 7.8)
-fish.fit.optim.coho <- optim(par = params,
-                             fn = fit.to.fish,
-                             data = Chosen_fish_int$AvgCoho,
-                             method = "BFGS")
-coho_params <- fish.fit.optim.coho$par
+fish.fit.optim <- function(params, fn = fit.to.fish, data, method = "BFGS") {
+  old.val <- 1
+  delta_val <- 1
+  while(delta_val > 0){
+    output <- optim(par = params,
+                    fn = fn,
+                    data = data,
+                    method = method)
+    delta_val <- output$value - old.val
+    old.val <- output$value
+  }
+  return(output)
+}
 
 predictFish <- function(params, day, start.day = data_start) {
   expand <- params[1]
