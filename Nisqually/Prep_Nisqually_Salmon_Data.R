@@ -45,15 +45,22 @@ GR_Chinook$DailyEst <- GR_Chinook$GreenRiver_per * gr.run.size
 GR_Chinook$DailyEst_int <- floor(GR_Chinook$GreenRiver_per * gr.run.size)
 
 params <- c(178398.40890, 73.54254, 15.21292)
-fish.fit.optim.gr <- optim(par = params,
-                             fn = fit.to.fish,
-                             data = GR_Chinook$DailyEst_int,
-                             method = "BFGS")
-fish.fit.optim.gr <- optim(par = fish.fit.optim.gr$par,
-                             fn = fit.to.fish,
-                             data = GR_Chinook$DailyEst_int,
-                             method = "BFGS")
-fish.fit.optim.gr$value
+fish.fit.optim <- function(params, fn, data, method = "BFGS") {
+  old.val <- 1
+  delta_val <- 1
+  while(delta_val > 0){
+    output <- optim(par = params,
+                               fn = fn,
+                               data = data,
+                               method = method)
+    delta_val <- output$value - old.val
+    old.val <- output$value
+  }
+  return(output)
+}
+
+fish.fit.optim.gr <- fish.fit.optim(params, fit.to.fish, GR_Chinook$DailyEst_int)
+
 gr_params <- fish.fit.optim.gr$par
 
 # plot(GR_Chinook$DayofYear, GR_Chinook$DailyEst)
@@ -70,28 +77,8 @@ locnis_end <- max(which(fish.wide$LocNis_per_corr > 0)) + dates_buffer
 
 LocNis_Chinook <- data.frame(fish.wide[locnis_start:locnis_end, 
                                        c("Date", "DayofYear", "LocNis_per_corr")])
+LocNis_Chinook$DailyEst <- LocNis_Chinook$LocNis_per_corr * ln.run.size
 
-
-Daily_fish <- fish %>% 
-  group_by(DayofYear) %>%
-  summarize(AvgChinook = mean(Chinook, na.rm = T),
-            AvgSockeye = mean(Sockeye, na.rm = T),
-            AvgCoho = mean(Coho, na.rm = T))
-Daily_fish$AvgChinook[is.nan(Daily_fish$AvgChinook)] <- 0
-Daily_fish$AvgSockeye[is.nan(Daily_fish$AvgSockeye)] <- 0
-Daily_fish$AvgCoho[is.nan(Daily_fish$AvgCoho)] <- 0
-Daily_fish$AvgChum <- 0
-Daily_fish$AvgPink <- 0
-Daily_fish$AvgSteelhead <- 0
-Daily_fish$total <- rowSums(Daily_fish[,-1])
-
-dates_buffer <- 20
-data_start <- which(Daily_fish$total > 0)[1] - dates_buffer
-data_end <- which(Daily_fish$total > 0)[length(which(Daily_fish$total > 0))] + dates_buffer
-Chosen_fish <- Daily_fish[data_start:data_end,]
-Chosen_fish_int <- round(Chosen_fish)
-
-# plot(Chosen_fish_int$AvgCoho)
 
 
 
