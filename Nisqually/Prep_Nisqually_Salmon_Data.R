@@ -10,7 +10,7 @@ chum_start <- min(which(fish.wide$Chum_per > 0)) - dates_buffer
 chum_end <- max(which(fish.wide$Chum_per > 0)) + dates_buffer
 
 Chum <- data.frame(fish.wide[chum_start:chum_end, c("Date", "DayofYear", "Chum_per")])
-Chum$DailyEst <- Chum$Chum_per * run.size
+Chum$DailyEst <- Chum$Chum_per * chum.run.size
 Chum$DailyEst_int <- floor(Chum$DailyEst)
 
 # plot(Chum$DayofYear, Chum$DailyEst)
@@ -34,14 +34,42 @@ chum_params <- fish.fit.optim.chum$par
 # plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
 
 
-## CHINOOK ----
+## GREEN RIVER CHINOOK ----
 
-Chinook <- data.frame(fish.wide[fish.wide$GreenRiver_per + fish.wide$LocNis_per > 0, 
-                                c("Date", "DayofYear", "GreenRiver_per", "LocNis_per")])
+gr_start <- min(which(fish.wide$GreenRiver_per > 0)) - dates_buffer
+gr_end <- max(which(fish.wide$GreenRiver_per > 0)) + dates_buffer
+
+GR_Chinook <- data.frame(fish.wide[gr_start:gr_end, 
+                                c("Date", "DayofYear", "GreenRiver_per")])
+GR_Chinook$DailyEst <- GR_Chinook$GreenRiver_per * gr.run.size
+GR_Chinook$DailyEst_int <- floor(GR_Chinook$GreenRiver_per * gr.run.size)
+
+params <- c(178398.40890, 73.54254, 15.21292)
+fish.fit.optim.gr <- optim(par = params,
+                             fn = fit.to.fish,
+                             data = GR_Chinook$DailyEst_int,
+                             method = "BFGS")
+fish.fit.optim.gr <- optim(par = fish.fit.optim.gr$par,
+                             fn = fit.to.fish,
+                             data = GR_Chinook$DailyEst_int,
+                             method = "BFGS")
+fish.fit.optim.gr$value
+gr_params <- fish.fit.optim.gr$par
+
+# plot(GR_Chinook$DayofYear, GR_Chinook$DailyEst)
+# lines(gr_start:gr_end, predictFish(gr_params, day = gr_start:gr_end, start.day = gr_start))
+# # looks good!
+# 
+# plot(gr_start:gr_end, predictNewFish(gr_params, day = gr_start:gr_end, start.day = gr_start))
 
 
+## LocNis CHINOOK ----
 
+locnis_start <- min(which(fish.wide$LocNis_per_corr > 0)) - dates_buffer
+locnis_end <- max(which(fish.wide$LocNis_per_corr > 0)) + dates_buffer
 
+LocNis_Chinook <- data.frame(fish.wide[locnis_start:locnis_end, 
+                                       c("Date", "DayofYear", "LocNis_per_corr")])
 
 
 Daily_fish <- fish %>% 
