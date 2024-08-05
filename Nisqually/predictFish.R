@@ -13,6 +13,20 @@ fit.to.fish <- function(params, data) {
   return(nll)
 }
 
+fit.to.fish.beta <- function(params, data) {
+  mean <- params[1]
+  beta <- params[2]
+  expand <- params[3]
+  alpha_f <- (-beta*mean)/(mean-1)
+  y.hat <- rep(NA, length(data))
+  days <- 1:length(data)
+  for(i in days) {
+    y.hat[i] <- dbeta(x = i, shape1 = alpha_f + 1, shape2 = beta + 1, ncp = 0) * expand
+  }
+  nll <- -sum(dpois(x=data, lambda=y.hat, log=TRUE))
+  return(nll)
+}
+
 fish.fit.optim <- function(params, fn = fit.to.fish, data, method = "BFGS") {
   old.val <- 1
   delta_val <- 1
