@@ -58,10 +58,10 @@ locnis_end <- max(which(fish.wide$LocNis_per_corr > 0)) + dates_buffer
 
 LocNis_Chinook <- data.frame(fish.wide[locnis_start:locnis_end, 
                                        c("Date", "DayofYear", "LocNis_per_corr")])
-LocNis_Chinook$DailyEst <- (LocNis_Chinook$LocNis_per_corr * ln.run.avg)/7
+LocNis_Chinook$DailyEst <- (LocNis_Chinook$LocNis_per_corr * ln.run.avg)
 LocNis_Chinook$DailyEst_int <- floor(LocNis_Chinook$DailyEst)
 
-params <- c(590, 85, 25)
+params <- c(5104.17195, 84.91841, 26.77771)
 fish.fit.optim.ln <- fish.fit.optim(params, fit.to.fish, LocNis_Chinook$DailyEst_int)
 fish.fit.optim.ln
 ln_params <- fish.fit.optim.ln$par
