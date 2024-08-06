@@ -79,7 +79,10 @@ ln_params <- fish.fit.optim.ln$par
 # 
 # plot(locnis_start:locnis_end, predictNewFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
 
-chinook_days <- min(locnis_start, gr_start):max(locnis_end, gr_end)
+chinook_start <- min(locnis_start, gr_start)
+chinook_end <- max(locnis_end, gr_end)
+chinook_days <- chinook_start:chinook_end
 Daily_Chinook <- data.frame(DayofYear = chinook_days, 
                             GR_Chinook = round(predictNewFish(gr_params, day = chinook_days, start.day = gr_start)),
-                            LN_Chinook = round(predictNewFish(ln_params, day = chinook_days, start.day = locnis_start)))
+                            LN_Chinook = round(predictNewFish(ln_params, day = chinook_days, start.day = locnis_start)),
+                            Total = Daily_Chinook$GR_Chinook + Daily_Chinook$LN_Chinook)
