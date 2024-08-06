@@ -1,4 +1,5 @@
-# Run the Nisqually Chum Model
+# Run the Nisqually Chinook Model
+# tracks Green River and LocNis separately
 
 
 # clear environment
