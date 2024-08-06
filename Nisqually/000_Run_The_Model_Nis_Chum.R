@@ -16,6 +16,7 @@ source("Nisqually/01_Nis_set_pars.R")
 source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 
 # 03 Initialize Variables
+source("Nisqually/03_Nis_set_pars_Chum.R")
 
 
 # 04 Loop Functions

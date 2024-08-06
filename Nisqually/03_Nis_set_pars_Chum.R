@@ -61,4 +61,23 @@ chum_escape_rate <- 1/chum_residence
 natural_mort <- 0.0005
 
 chum_fish_rate <- 0.01
-salmon_days <- which(Daily_fish$total > 0)
+salmon_days <- which(Daily_Chum$Chum > 0)
+
+# hunting parameters (same as fishery opening in base run realm)
+min_fishers <- 13
+max_fishers <- 25
+fishery_open <- yday(as.Date("2024-11-16"))
+fishery_close <- yday(as.Date("2025-01-18"))
+zone_efficiency <- NA
+steepness_H <- 10 # how quick does it saturate (higher = slower)
+efficiency <- 0.075 # what prop of seals are they capable of taking
+min_harvesters <- min_fishers
+max_harvesters <- max_fishers
+harvest_open <- fishery_open
+harvest_close <- fishery_close
+scenario <- "Boat"
+harvest_days_pv <- harvest_open:harvest_close
+harvest_days_ej <- harvest_open:harvest_close
+harvest_days_zc <- harvest_open:harvest_close
+
+
