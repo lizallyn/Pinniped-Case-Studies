@@ -3,7 +3,7 @@
 salmonSpeciesUpdate <- function(day, chum = 0, data) {
   Chum <- chum + (data %>% slice(day) %>% pull(Chum))
   #
- return(data.frame(Chinook_GR = Chinook_GR,
+ return(data.frame(Chum = Chum,
                    row.names = c("count"))
  )
 }
