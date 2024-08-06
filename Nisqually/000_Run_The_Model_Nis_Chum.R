@@ -5,21 +5,30 @@
 rm(list=ls())
 
 # 00 Set-Up Functions
-source("~/GitHub/PinnipedCaseStudies/Nisqually/00_predictFish.R")
-source("~/GitHub/PinnipedCaseStudies/Functions/makeArray.R")
-source("~/GitHub/PinnipedCaseStudies/Functions/createHarvestPlan.R")
+source("Nisqually/00_predictFish.R")
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
 
 # 01 Set Parameters
-source("~/GitHub/PinnipedCaseStudies/Nisqually/01_Nis_set_pars.R")
+source("Nisqually/01_Nis_set_pars.R")
 
 # 02 Prep Data
-source("~/GitHub/PinnipedCaseStudies/Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 
 # 03 Initialize Variables
 
 
 # 04 Loop Functions
-
+source("Nisqually/04_salmonSpeciesUpdate_Chum.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta_3.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
 
 # 05 Run The Loop
 source("~/GitHub/PinnipedCaseStudies/Nisqually/05_The_Loop_Nis_Chum.R")
