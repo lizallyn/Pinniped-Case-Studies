@@ -35,4 +35,9 @@ source("Functions/updateLearning.R")
 source("~/GitHub/PinnipedCaseStudies/Nisqually/05_The_Loop_Nis_Chum.R")
 
 # 06 Plots
-
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
+source("Functions/06_Plots_chum.R")
+source("Functions/Plots_responses.R")
