@@ -69,9 +69,7 @@ for(t in 1:(days - 1)) {
   
   # assign consumed salmon to pinnipeds at gauntlet
   
-  eaten_chum[t] <- salmon_result["Chum", "C"] + salmon_result["Chum", "C_CSL"] + salmon_result["Chum", "C_SSL"]
-  
-  consumed_total[t] <- eaten_chum[t]
+  consumed_total[t] <- salmon_result["Chum", "C"] + salmon_result["Chum", "C_CSL"] + salmon_result["Chum", "C_SSL"]
   
   consumed_by_pv <- sum(salmon_result[,"C"])
   consumed_by_zc <- sum(salmon_result[,"C_CSL"])

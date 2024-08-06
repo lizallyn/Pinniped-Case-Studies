@@ -8,12 +8,12 @@ day_range <- start_loop:end_loop
 days <- length(day_range)
 
 # seal parameters
-num_seals <- 150
+num_seals <- 50
 prop_specialists <- 0.1
 
 # sea lions
-num_zc <- 100
-num_ej <- 50
+num_zc <- 20
+num_ej <- 15
 
 # seal consumption parameters
 deltat_val <- 1/24
