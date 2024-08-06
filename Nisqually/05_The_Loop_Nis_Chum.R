@@ -1,17 +1,13 @@
-## This will make no sense without "assembleTheLegos.R"
-# Runs just the daily loop
-# March 2024
+## The model loop for Nisqually Chum
+# August 2024
 
 for(t in 1:(days - 1)) {
   
   # salmon arrive at the gauntlet
-  daily_update <- salmonSpeciesUpdate(day = t, chinook = gauntlet_chinook[t], 
-                                      sockeye = gauntlet_sockeye[t], coho = gauntlet_coho[t], 
-                                      data = The_Fish)
-  gauntlet_chinook[t] <- daily_update$Chinook[1]
-  gauntlet_sockeye[t] <- daily_update$Sockeye[1]
-  gauntlet_coho[t] <- daily_update$Coho[1]
-  gauntlet_salmon[t] <- sum(c(gauntlet_chinook[t], gauntlet_sockeye[t], gauntlet_coho[t]))
+  daily_update <- salmonSpeciesUpdate(day = t, chum = gauntlet_chum[t],
+                                      data = Daily_Chum)
+  gauntlet_chum[t] <- daily_update$Chum[1]
+  gauntlet_salmon[t] <- gauntlet_chum[t]
   
   # decide where each seal goes that day
   seal_forage_loc[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = decideForagingDestination)
@@ -54,36 +50,28 @@ for(t in 1:(days - 1)) {
   num_zc_at_gauntlet <- length(zc_at_gauntlet)
   num_ej_at_gauntlet <- length(ej_at_gauntlet)
   
-  salmon_result <- run_rungeKutta(Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 
-                                  species_list = c("Sockeye", "Chinook", "Coho"), Cmax = Cmax, 
+  salmon_result <- run_rungeKutta(Ns = gauntlet_chum[t], 
+                                  species_list = "Chum", Cmax = Cmax, 
                                   Nseal = num_seals_at_gauntlet, alpha = alpha, gamma = gamma, Y = Y,
                                   NSSL = num_ej_at_gauntlet, NCSL = num_zc_at_gauntlet, Cmax_SSL = Cmax_ej, 
                                   alpha_SSL = alpha, gamma_SSL = gamma, Y_SSL = Y, Cmax_CSL = Cmax_zc, 
                                   alpha_CSL = alpha, gamma_CSL = gamma, Y_CSL = Y,
-                                  F_catch = c(sockeye_catch_rate[t], chinook_catch_rate[t], coho_catch_rate[t]), 
-                                  M = natural_mort, E = c(sockeye_escape_rate, chinook_escape_rate, coho_escape_rate), 
+                                  F_catch = chum_catch_rate[t], 
+                                  M = natural_mort, E = chum_escape_rate, 
                                   deltat = deltat_val)
   
   # assign escape and gauntlet updates
-  escape_sockeye[t+1] <- escape_sockeye[t] + salmon_result["Sockeye", "E"]
-  escape_chinook[t+1] <- escape_chinook[t] + salmon_result["Chinook", "E"]
-  escape_coho[t+1] <- escape_coho[t] + salmon_result["Coho", "E"]
+  escape_chum[t+1] <- escape_chum[t] + salmon_result["Chum", "E"]
   
-  fished_sockeye[t] <- salmon_result["Sockeye", "Catch"]
-  fished_chinook[t] <- salmon_result["Chinook", "Catch"]
-  fished_coho[t] <- salmon_result["Coho", "Catch"]
+  fished_chum[t] <- salmon_result["Chum", "Catch"]
   
-  gauntlet_sockeye[t+1] <- salmon_result["Sockeye", "Ns"]
-  gauntlet_chinook[t+1] <- salmon_result["Chinook", "Ns"]
-  gauntlet_coho[t+1] <- salmon_result["Coho", "Ns"]
+  gauntlet_chum[t+1] <- salmon_result["Chum", "Ns"]
   
   # assign consumed salmon to pinnipeds at gauntlet
   
-  eaten_sockeye[t] <- salmon_result["Sockeye", "C"] + salmon_result["Sockeye", "C_CSL"] + salmon_result["Sockeye", "C_SSL"]
-  eaten_chinook[t] <- salmon_result["Chinook", "C"] + salmon_result["Chinook", "C_CSL"] + salmon_result["Chinook", "C_SSL"]
-  eaten_coho[t] <- salmon_result["Coho", "C"] + salmon_result["Coho", "C_CSL"] + salmon_result["Coho", "C_SSL"]
+  eaten_chum[t] <- salmon_result["Chum", "C"] + salmon_result["Chum", "C_CSL"] + salmon_result["Chum", "C_SSL"]
   
-  consumed_total[t] <- sum(c(eaten_sockeye[t], eaten_chinook[t], eaten_coho[t]))
+  consumed_total[t] <- eaten_chum[t]
   
   consumed_by_pv <- sum(salmon_result[,"C"])
   consumed_by_zc <- sum(salmon_result[,"C_CSL"])
