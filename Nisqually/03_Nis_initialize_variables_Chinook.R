@@ -105,6 +105,9 @@ gauntlet_ln <- oneDzeroes
 gauntlet_salmon <- oneDzeroes
 fished_gr <- oneDzeroes
 fished_ln <- oneDzeroes
+eaten_gr <- oneDzeroes
+eaten_ln <- oneDzeroes
+
 consumed_total <- oneDzeroes
 
 H <- oneDzeroes
