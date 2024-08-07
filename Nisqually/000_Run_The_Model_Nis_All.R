@@ -17,7 +17,7 @@ source("Nisqually/01_Nis_set_pars.R")
 source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 
 # 03 Initialize Variables
-source("Nisqually/03_Nis_set_pars_Chinook.R")
+source("Nisqually/03_Nis_set_pars_All.R")
 source("Nisqually/03_Nis_initialize_variables_Chinook.R")
 
 # 04 Loop Functions

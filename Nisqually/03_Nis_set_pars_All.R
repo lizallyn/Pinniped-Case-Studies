@@ -2,8 +2,8 @@
 # after data 
 
 # loop parameters
-start_loop <- chinook_start
-end_loop <- chinook_end
+start_loop <- fish_start
+end_loop <- fish_end
 day_range <- start_loop:end_loop
 days <- length(day_range)
 
@@ -57,19 +57,23 @@ num_zc_2_copy <- num_zc
 num_ej_2_copy <- num_ej
 
 # salmon parameters
+chum_escape_rate <- 1/chum_residence
 gr_escape_rate <- 1/gr_residence
 ln_escape_rate <- 1/locnis_residence
 natural_mort <- 0.0005
 
+chum_fish_rate <- 0.01
 gr_fish_rate <- 0.01
 ln_fish_rate <- 0
-salmon_days <- which(Daily_Chinook$Total > 0)
+salmon_days <- which(Daily_Fish$Total > 0)
 
 # hunting parameters (same as fishery opening in base run realm)
 min_fishers <- 13
 max_fishers <- 25
-fishery_open <- yday(as.Date("2024-11-16"))
-fishery_close <- yday(as.Date("2025-01-18"))
+fishery_open_chum <- yday(as.Date("2024-11-16"))
+fishery_close_chum <- yday(as.Date("2025-01-18"))
+fishery_open_chinook <- yday(as.Date("2024-11-16"))
+fishery_close_chinook <- yday(as.Date("2025-01-18"))
 zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
