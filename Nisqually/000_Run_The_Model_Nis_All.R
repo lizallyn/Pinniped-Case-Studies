@@ -1,5 +1,5 @@
-# Run the Nisqually Chinook Model
-# tracks Green River and LocNis separately
+# Run the Nisqually Model for all three runs
+# tracks Chum, Green River and LocNis separately
 
 
 # clear environment
@@ -18,10 +18,10 @@ source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 
 # 03 Initialize Variables
 source("Nisqually/03_Nis_set_pars_All.R")
-source("Nisqually/03_Nis_initialize_variables_Chinook.R")
+source("Nisqually/03_Nis_initialize_variables_All.R")
 
 # 04 Loop Functions
-source("Nisqually/04_salmonSpeciesUpdate_Chinook.R")
+source("Nisqually/04_salmonSpeciesUpdate_All.R")
 source("Functions/decideForagingDestination.R")
 source("Functions/collusion.R")
 source("Functions/rungeKutta_3.R")
@@ -33,17 +33,19 @@ source("Functions/linearFuncRes.R")
 source("Functions/updateLearning.R")
 
 # 05 Run The Loop
-source("Nisqually/05_The_Loop_Nis_Chinook.R")
+source("Nisqually/05_The_Loop_Nis_All.R")
 
 # 06 Plots
 source("Functions/makePlots.R")
 source("Functions/Plots_Pv.R")
 source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
-source("Nisqually/06_Plots_Chinook.R")
+source("Nisqually/06_Plots_All.R")
 source("Functions/Plots_responses.R")
 
 # check that it worked?
+salmon_escapement
+salmon_consumed
 gauntlet_plot
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
