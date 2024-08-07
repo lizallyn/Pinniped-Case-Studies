@@ -71,6 +71,9 @@ for(t in 1:(days - 1)) {
   gauntlet_gr[t+1] <- salmon_result["Chinook_GR", "Ns"]
   gauntlet_ln[t+1] <- salmon_result["Chinook_LN", "Ns"]
   
+  eaten_gr[t] <- sum(salmon_result["Chinook_GR", c("C", "C_CSL", "C_SSL")])
+  eaten_ln[t] <- sum(salmon_result["Chinook_LN", c("C", "C_CSL", "C_SSL")])
+  
   # assign consumed salmon to pinnipeds at gauntlet
   
   consumed_by_pv <- sum(salmon_result[,"C"])
