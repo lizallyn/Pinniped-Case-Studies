@@ -9,6 +9,8 @@ plot_consumed <- makePlot_2(x = 1:days, x.name = "Day", y = consumed_total, y.na
 # Plots of Salmon Species data
 
 salmon.colors <- c("seagreen2", "seagreen4")
+salmon.names <- c("Chinook_GR", "Chinook_LN")
+names(salmon.colors) <- salmon.names
 
 escape_plot <- makePlot_3(x = 1:days, data = cbind(escape_gr, escape_ln),
                           col.names = c("Day", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 

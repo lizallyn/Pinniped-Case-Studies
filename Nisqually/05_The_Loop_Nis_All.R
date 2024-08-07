@@ -4,8 +4,9 @@
 for(t in 1:(days - 1)) {
   
   # salmon arrive at the gauntlet
-  daily_update <- salmonSpeciesUpdate(day = t, gr_chinook = gauntlet_gr[t], 
-                                      ln_chinook = gauntlet_ln[t], data = Daily_Chinook)
+  daily_update <- salmonSpeciesUpdate(day = t, chum = gauntlet_chum[t], gr_chinook = gauntlet_gr[t], 
+                                      ln_chinook = gauntlet_ln[t], data = Daily_Fish)
+  gauntlet_chum[t] <- daily_update$Chum[1]
   gauntlet_gr[t] <- daily_update$Chinook_GR[1]
   gauntlet_ln[t] <- daily_update$Chinook_LN[1]
   gauntlet_salmon[t] <- sum(c(gauntlet_chum[t], gauntlet_gr[t], gauntlet_ln[t]))
@@ -51,8 +52,8 @@ for(t in 1:(days - 1)) {
   num_zc_at_gauntlet <- length(zc_at_gauntlet)
   num_ej_at_gauntlet <- length(ej_at_gauntlet)
   
-  salmon_result <- run_rungeKutta(Ns = c(gauntlet_gr[t], gauntlet_ln[t]),
-                                  species_list = c("Chinook_GR", "Chinook_LN"), Cmax = Cmax, 
+  salmon_result <- run_rungeKutta(Ns = c(gauntlet_chum[t], gauntlet_gr[t], gauntlet_ln[t]),
+                                  species_list = c("Chum", "Chinook_GR", "Chinook_LN"), Cmax = Cmax, 
                                   Nseal = num_seals_at_gauntlet, alpha = alpha, gamma = gamma, Y = Y,
                                   NSSL = num_ej_at_gauntlet, NCSL = num_zc_at_gauntlet, Cmax_SSL = Cmax_ej, 
                                   alpha_SSL = alpha, gamma_SSL = gamma, Y_SSL = Y, Cmax_CSL = Cmax_zc, 
@@ -62,15 +63,19 @@ for(t in 1:(days - 1)) {
                                   deltat = deltat_val)
   
   # assign escape and gauntlet updates
+  escape_chum[t+1] <- escape_chum[t] + salmon_result["Chum", "E"]
   escape_gr[t+1] <- escape_gr[t] + salmon_result["Chinook_GR", "E"]
   escape_ln[t+1] <- escape_ln[t] + salmon_result["Chinook_LN", "E"]
   
+  fished_chum[t] <- salmon_result["Chum", "Catch"]
   fished_gr[t] <- salmon_result["Chinook_GR", "Catch"]
   fished_ln[t] <- salmon_result["Chinook_LN", "Catch"]
   
+  gauntlet_chum[t+1] <- salmon_result["Chum", "Ns"]
   gauntlet_gr[t+1] <- salmon_result["Chinook_GR", "Ns"]
   gauntlet_ln[t+1] <- salmon_result["Chinook_LN", "Ns"]
   
+  eaten_chum[t] <- sum(salmon_result["Chum", c("C", "C_CSL", "C_SSL")])
   eaten_gr[t] <- sum(salmon_result["Chinook_GR", c("C", "C_CSL", "C_SSL")])
   eaten_ln[t] <- sum(salmon_result["Chinook_LN", c("C", "C_CSL", "C_SSL")])
   
