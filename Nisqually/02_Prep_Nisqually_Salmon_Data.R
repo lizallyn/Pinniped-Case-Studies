@@ -84,5 +84,5 @@ chinook_end <- max(locnis_end, gr_end)
 chinook_days <- chinook_start:chinook_end
 Daily_Chinook <- data.frame(DayofYear = chinook_days, 
                             GR_Chinook = round(predictNewFish(gr_params, day = chinook_days, start.day = gr_start)),
-                            LN_Chinook = round(predictNewFish(ln_params, day = chinook_days, start.day = locnis_start)),
-                            Total = Daily_Chinook$GR_Chinook + Daily_Chinook$LN_Chinook)
+                            LN_Chinook = round(predictNewFish(ln_params, day = chinook_days, start.day = locnis_start)))
+Daily_Chinook$Total <- Daily_Chinook$GR_Chinook + Daily_Chinook$LN_Chinook
