@@ -79,8 +79,8 @@ steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
 min_harvesters <- min_fishers
 max_harvesters <- max_fishers
-harvest_open <- fishery_open
-harvest_close <- fishery_close
+harvest_open <- fishery_open_chum
+harvest_close <- fishery_close_chum
 scenario <- "Boat"
 harvest_days_pv <- harvest_open:harvest_close
 harvest_days_ej <- harvest_open:harvest_close
