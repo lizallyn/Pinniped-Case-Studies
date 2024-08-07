@@ -1,4 +1,5 @@
 Date,DayofYear,GreenRiver_per,LocNis_per,LocNis_per_corr,Chum_per
+,,7.0021,,,
 1-Jan,1,0,0,0,0
 2-Jan,2,0,0,0,0
 3-Jan,3,0,0,0,0
@@ -188,8 +189,8 @@ Date,DayofYear,GreenRiver_per,LocNis_per,LocNis_per_corr,Chum_per
 5-Jul,187,0,0,0,0
 6-Jul,188,0,0,0,0
 7-Jul,189,0,0,0,0
-8-Jul,190,0,0,0,0
-9-Jul,191,0,0,0,0
+8-Jul,190,0,0,0.01,0
+9-Jul,191,0,0,0.01,0
 10-Jul,192,0,0,0.01,0
 11-Jul,193,0,0,0.01,0
 12-Jul,194,0,0,0.01,0
