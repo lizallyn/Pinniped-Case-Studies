@@ -98,10 +98,13 @@ harvest_plan_zc <- createHarvestPlan(scenario = scenario,
                                      empty.array = oneDzeroes)
 
 ### Actual States that I Need ----
-escape_chum <- oneDzeroes
-gauntlet_chum <- oneDzeroes
+escape_gr <- oneDzeroes
+escape_ln <- oneDzeroes
+gauntlet_gr <- oneDzeroes
+gauntlet_ln <- oneDzeroes
 gauntlet_salmon <- oneDzeroes
-fished_chum <- oneDzeroes
+fished_gr <- oneDzeroes
+fished_ln <- oneDzeroes
 consumed_total <- oneDzeroes
 
 H <- oneDzeroes
@@ -109,6 +112,8 @@ H_zc <- oneDzeroes
 H_ej <- oneDzeroes
 
 ### Variable Rates ----
-chum_catch_rate <- oneDzeroes
-chum_catch_rate[fishery_days] <- chum_fish_rate
+gr_catch_rate <- oneDzeroes
+ln_catch_rate <- oneDzeroes
+gr_catch_rate[fishery_days] <- gr_fish_rate
+ln_catch_rate[fishery_days] <- ln_fish_rate
 
