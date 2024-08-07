@@ -1,4 +1,4 @@
-## The model loop for Nisqually Chum
+## The model loop for Nisqually Chinook
 # August 2024
 
 for(t in 1:(days - 1)) {
