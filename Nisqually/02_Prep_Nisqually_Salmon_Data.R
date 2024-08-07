@@ -86,3 +86,15 @@ Daily_Chinook <- data.frame(DayofYear = chinook_days,
                             GR_Chinook = round(predictNewFish(gr_params, day = chinook_days, start.day = gr_start)),
                             LN_Chinook = round(predictNewFish(ln_params, day = chinook_days, start.day = locnis_start)))
 Daily_Chinook$Total <- Daily_Chinook$GR_Chinook + Daily_Chinook$LN_Chinook
+
+# All Runs
+
+fish_start <- min(chum_start, chinook_start)
+fish_end <- max(chum_end, chinook_end)
+fish_days <- fish_start:fish_end
+
+Daily_Fish <- data.frame(DayofYear = fish_days,
+                         Chum = round(predictNewFish(chum_params, day = fish_days, chum_start)),
+                         GR_Chinook = round(predictNewFish(gr_params, day = fish_days, start.day = gr_start)),
+                         LN_Chinook = round(predictNewFish(ln_params, day = fish_days, start.day = locnis_start)))
+Daily_Fish$Total <- Daily_Fish$Chum + Daily_Fish$GR_Chinook + Daily_Fish$LN_Chinook
