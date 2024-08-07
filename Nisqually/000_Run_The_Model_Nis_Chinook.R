@@ -43,3 +43,12 @@ source("Functions/Plots_Zc.R")
 source("Nisqually/06_Plots_Chinook.R")
 source("Functions/Plots_responses.R")
 
+# check that it worked?
+gauntlet_plot
+plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
+plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
+plot_Px_zc + plot_probs_zc + plot_zc + plot_layout(guides = "collect")
+
+escape_plot
+eaten_sp_plot
+plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
