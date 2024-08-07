@@ -32,7 +32,7 @@ chum_params <- fish.fit.optim.chum$par
 # plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
 
 Daily_Chum <- data.frame(DayofYear = chum_start:chum_end, 
-                         Chum = floor(predictNewFish(chum_params, day = chum_start:chum_end, chum_start)))
+                         Chum = round(predictFish(chum_params, day = chum_start:chum_end, chum_start)))
 
 ## GREEN RIVER CHINOOK ----
 
@@ -51,7 +51,7 @@ fish.fit.optim.gr <- fish.fit.optim(params, fit.to.fish, GRiver_Chinook$DailyEst
 fish.fit.optim.gr
 gr_params <- fish.fit.optim.gr$par
 
-# check fit!
+# # check fit!
 # plot(GRiver_Chinook$DayofYear, GRiver_Chinook$DailyEst)
 # lines(gr_start:gr_end, predictFish(gr_params, day = gr_start:gr_end, start.day = gr_start))
 # # looks good!
@@ -76,11 +76,11 @@ fish.fit.optim.ln <- fish.fit.optim(params, fit.to.fish, LocNis_Chinook$DailyEst
 fish.fit.optim.ln
 ln_params <- fish.fit.optim.ln$par
 
-plot(LocNis_Chinook$DayofYear, LocNis_Chinook$DailyEst)
-lines(locnis_start:locnis_end, predictFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
-# ehh looks not great but maybe workable for now.
+# plot(LocNis_Chinook$DayofYear, LocNis_Chinook$DailyEst)
+# lines(locnis_start:locnis_end, predictFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
+# # ehh looks not great but maybe workable for now.
 
-plot(locnis_start:locnis_end, predictNewFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
+# plot(locnis_start:locnis_end, predictNewFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
 
 chinook_start <- min(locnis_start, gr_start)
 chinook_end <- max(locnis_end, gr_end)
