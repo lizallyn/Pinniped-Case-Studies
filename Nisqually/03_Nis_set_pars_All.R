@@ -12,7 +12,7 @@ num_seals <- 150
 prop_specialists <- 0.1
 
 # sea lions
-num_zc <- 100
+num_zc <- 80
 num_ej <- 10
 
 # seal consumption parameters
@@ -71,12 +71,14 @@ sealion_arrival_date <- (min(Daily_Fish$DayofYear[Daily_Fish$Chum > 0]) - sealio
 sealion_arrival_loopday <- sealion_arrival_date - (start_loop - 1)
 
 # hunting parameters (same as fishery opening in base run realm)
-min_fishers <- 13
-max_fishers <- 25
+min_fishers_chum <- 13
+max_fishers_chum <- 25
+min_fishers_chinook <- 13
+max_fishers_chinook <- 25
 fishery_open_chum <- yday(as.Date("2024-11-16"))
-fishery_close_chum <- yday(as.Date("2025-01-18"))
-fishery_open_chinook <- yday(as.Date("2024-11-16"))
-fishery_close_chinook <- yday(as.Date("2025-01-18"))
+fishery_close_chum <- yday(as.Date("2025-01-24"))
+fishery_open_chinook <- yday(as.Date("2024-08-06"))
+fishery_close_chinook <- yday(as.Date("2025-11-18"))
 zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
@@ -85,8 +87,8 @@ max_harvesters <- max_fishers
 harvest_open <- fishery_open_chum
 harvest_close <- fishery_close_chum
 scenario <- "Boat"
-harvest_days_pv <- harvest_open:harvest_close
-harvest_days_ej <- harvest_open:harvest_close
-harvest_days_zc <- harvest_open:harvest_close
+harvest_days_pv <- c(fishery_open_chinook:fishery_close_chinook, fishery_open_chum:fishery_close_chum)
+harvest_days_ej <- fishery_open_chum:fishery_close_chum
+harvest_days_zc <- fishery_open_chum:fishery_close_chum
 
 
