@@ -89,6 +89,8 @@ fishery_range_chinook <- fishery_open_chinook:fishery_close_chinook
 fishery_days_chum <- fishery_range_chum[which(fishery_range_chum %in% day_range)] - (start_loop - 1)
 fishery_days_chinook <- fishery_range_chinook[which(fishery_range_chinook %in% day_range)] - (start_loop - 1)
 
+
+
 harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
                                      harvest_days = harvest_days_pv,
                                      empty.array = oneDzeroes)
