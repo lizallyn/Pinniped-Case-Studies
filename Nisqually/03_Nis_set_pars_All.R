@@ -8,12 +8,12 @@ day_range <- start_loop:end_loop
 days <- length(day_range)
 
 # seal parameters
-num_seals <- 50
+num_seals <- 150
 prop_specialists <- 0.1
 
 # sea lions
-num_zc <- 20
-num_ej <- 15
+num_zc <- 100
+num_ej <- 10
 
 # seal consumption parameters
 deltat_val <- 1/24
@@ -66,6 +66,9 @@ chum_fish_rate <- 0.01
 gr_fish_rate <- 0.01
 ln_fish_rate <- 0
 salmon_days <- which(Daily_Fish$Total > 0)
+sealion_arrival_buffer <- 10
+sealion_arrival_date <- (min(Daily_Fish$DayofYear[Daily_Fish$Chum > 0]) - sealion_arrival_buffer)
+sealion_arrival_loopday <- sealion_arrival_date - (start_loop - 1)
 
 # hunting parameters (same as fishery opening in base run realm)
 min_fishers <- 13

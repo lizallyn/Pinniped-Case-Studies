@@ -13,30 +13,44 @@ for(t in 1:(days - 1)) {
   
   # decide where each seal goes that day
   seal_forage_loc[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = decideForagingDestination)
-  zc_forage_loc[,t] <- sapply(X = zc_prob_gauntlet[,t], FUN = decideForagingDestination)
-  ej_forage_loc[,t] <- sapply(X = ej_prob_gauntlet[,t], FUN = decideForagingDestination)
   
   # round of copying
-  # seals
   if(num_seals_2_copy > 0){
     P_social[,t] <- sapply(X = seal_prob_gauntlet[,t], FUN = collusion, 
                            probs_list = seal_prob_gauntlet[,t], seals_2_copy = num_seals_2_copy, 
                            mean = mean, beta = beta)
     seal_forage_loc[,t] <- sapply(X = P_social[,t], FUN = decideForagingDestination)
   }
-  # Zc
-  if(num_zc_2_copy > 0){
-    P_social_zc[,t] <- sapply(X = zc_prob_gauntlet[,t], FUN = collusion, 
-                           probs_list = zc_prob_gauntlet[,t], seals_2_copy = num_zc_2_copy, 
-                           mean = mean, beta = beta)
-    zc_forage_loc[,t] <- sapply(X = P_social_zc[,t], FUN = decideForagingDestination)
-  }
-  #Ej
-  if(num_ej_2_copy > 0){
-    P_social_ej[,t] <- sapply(X = ej_prob_gauntlet[,t], FUN = collusion, 
-                              probs_list = ej_prob_gauntlet[,t], seals_2_copy = num_ej_2_copy, 
-                              mean = mean, beta = beta)
-    ej_forage_loc[,t] <- sapply(X = P_social_ej[,t], FUN = decideForagingDestination)
+  
+  # sea lions only make decisions if they've migrated to the river yet
+  if(t >= sealion_arrival_loopday) {
+    
+    ## Individual Decision
+    zc_forage_loc[,t] <- sapply(X = zc_prob_gauntlet[,t], FUN = decideForagingDestination)
+    ej_forage_loc[,t] <- sapply(X = ej_prob_gauntlet[,t], FUN = decideForagingDestination)
+    
+    ## Copying
+    # Zc
+    if(num_zc_2_copy > 0){
+      P_social_zc[,t] <- sapply(X = zc_prob_gauntlet[,t], FUN = collusion, 
+                                probs_list = zc_prob_gauntlet[,t], seals_2_copy = num_zc_2_copy, 
+                                mean = mean, beta = beta)
+      zc_forage_loc[,t] <- sapply(X = P_social_zc[,t], FUN = decideForagingDestination)
+    }
+    #Ej
+    if(num_ej_2_copy > 0){
+      P_social_ej[,t] <- sapply(X = ej_prob_gauntlet[,t], FUN = collusion, 
+                                probs_list = ej_prob_gauntlet[,t], seals_2_copy = num_ej_2_copy, 
+                                mean = mean, beta = beta)
+      ej_forage_loc[,t] <- sapply(X = P_social_ej[,t], FUN = decideForagingDestination)
+    }
+    
+  } else {
+    zc_forage_loc[,t] <- 0
+    ej_forage_loc[,t] <- 0
+    
+    P_social_ej[,t] <- NA
+    P_social_zc[,t] <- NA
   }
   
   # calculate salmon mortality 
