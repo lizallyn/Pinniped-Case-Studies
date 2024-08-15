@@ -4,6 +4,7 @@
 library(reshape2)
 library(ggplot2)
 library(patchwork)
+library(kableExtra)
 
 # plot_x_range <- start_loop:end_loop
 
