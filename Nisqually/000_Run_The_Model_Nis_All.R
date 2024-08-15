@@ -1,10 +1,10 @@
 # Run the Nisqually Model for all three runs
 # tracks Chum, Green River and LocNis separately
 
-library(kableExtra)
 
 # clear environment
 rm(list=ls())
+setwd("/Users/lizallyn/Documents/GitHub/Pinniped-Case-Studies")
 
 # 00 Set-Up Functions
 source("Nisqually/00_predictFish.R")
