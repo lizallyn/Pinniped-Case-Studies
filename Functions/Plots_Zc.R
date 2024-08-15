@@ -11,7 +11,7 @@ plot_Py_zc <- makePlot_1(P_y_zc, "P_y CSL", colors)
 plot_Psoc_zc <- makePlot_1(P_social_zc, "P_social CSL", colors)
 
 # Plots of Aggregated 1D data
-plot_zc <- makePlot_2(x = 1:days, x.name = "Day", y = colSums(zc_forage_loc), 
+plot_zc <- makePlot_2(x = 1:days, x.name = "Day", y = colSums(zc_forage_loc, na.rm = T), 
                       y.name = "Num California Sea Lions at Gauntlet", color = "turquoise3")
 plot_H_zc <- makePlot_2(x = 1:days, x.name = "Day", y = H_zc, y.name = "CSL Harvested", color = "orchid")
 
