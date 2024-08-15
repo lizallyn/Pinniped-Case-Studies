@@ -3,7 +3,7 @@
 # Edited to add second predator pop June 2024
 # third added July 2024
 
-get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E) {
+get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y=0, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL=0, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL=0, F_catch, M, E) {
   Nseal <- max(Nseal, 1E-20)
   NSSL <- max(NSSL, 1E-20)
   NCSL <- max(NCSL, 1E-20)

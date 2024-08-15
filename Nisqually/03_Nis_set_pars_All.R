@@ -20,7 +20,6 @@ deltat_val <- 1/24
 alpha <- 0.05 
 Cmax <- 5 # this was initially made up but actually makes some sense
 gamma <- -1 # pred dep, this expects something between -1 and 0
-Y <- 0 # this freaks out when I make it > 0, might just delete
 
 # sea lion consumption
 Cmax_zc <- 20
@@ -77,24 +76,21 @@ max_fishers_chum <- 25
 min_fishers_chinook <- 13
 max_fishers_chinook <- 25
 fishery_open_chum <- yday(as.Date("2024-11-16"))
-fishery_close_chum <- yday(as.Date("2025-01-24"))
+fishery_close_chum <- yday(as.Date("2025-01-24")) + 365
 fishery_open_chinook <- yday(as.Date("2024-08-06"))
-fishery_close_chinook <- yday(as.Date("2025-11-18"))
-harvest_effort <- data.frame(fishery = c("chinook", "chum"),
-                             min_fishers = c(min_fishers_chum, min_fishers_chinook),
-                             max_fishers = c(max_fishers_chum, max_fishers_chinook),
-                             fishery_open = c(fishery_open_chum, fishery_open_chinook),
-                             fishery_close = c(fishery_close_chum, fishery_close_chinook))
+fishery_close_chinook <- yday(as.Date("2024-11-18"))
+fishery_range_chum <- fishery_open_chum:fishery_close_chum
+fishery_range_chinook <- fishery_open_chinook:fishery_close_chinook
+
 zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
-min_harvesters <- min(harvest_effort$min_fishers)
-max_harvesters <- max(harvest_effort$max_fishers)
-# harvest_open <- fishery_open_chum
-# harvest_close <- fishery_close_chum
-scenario <- "Boat"
-harvest_days_pv <- c(fishery_open_chinook:fishery_close_chinook, fishery_open_chum:fishery_close_chum)
-harvest_days_ej <- fishery_open_chum:fishery_close_chum
-harvest_days_zc <- fishery_open_chum:fishery_close_chum
 
+min_harvesters <- min_fishers_chum
+max_harvesters <- max_fishers_chum
+
+scenario <- "Boat"
+harvest_days_pv <- c(fishery_open_chinook:fishery_close_chinook, fishery_open_chum:fishery_close_chum) - (start_loop - 1)
+harvest_days_ej <- fishery_open_chum:fishery_close_chum - (start_loop - 1)
+harvest_days_zc <- fishery_open_chum:fishery_close_chum - (start_loop - 1)
 

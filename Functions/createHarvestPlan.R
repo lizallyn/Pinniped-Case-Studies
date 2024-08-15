@@ -1,7 +1,7 @@
 # Create some harvest_plan scenarios
 
 
-createHarvestPlan <- function(scenario = c("None", "Zone", "Boat"), harvest_days = NA, empty.array = oneDzeroes) {
+createHarvestPlan <- function(scenario = c("None", "Zone", "Boat"), harvest_days, empty.array = oneDzeroes) {
   harvest_plan <- empty.array
   if(scenario == "None") {
     harvest_plan <- harvest_plan
