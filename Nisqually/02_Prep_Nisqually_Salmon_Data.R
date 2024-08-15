@@ -3,7 +3,7 @@ library(tidyr)
 library(dplyr)
 library(lubridate)
 
-source("~/GitHub/PinnipedCaseStudies/Nisqually/00_predictFish.R")
+source("Nisqually/00_predictFish.R")
 
 fish.wide <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
 
