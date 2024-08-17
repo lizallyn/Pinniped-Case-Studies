@@ -19,7 +19,7 @@ get_dXdt <- function(Ns, Cmax, Nseal, alpha, gamma, Y=0, NSSL, NCSL, Cmax_SSL, a
   return(c(dNdt, dCdt, dC2dt, dC3dt, dCatchdt, dEdt))
 }
 
-rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, 
+rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y=0, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL=0, Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL=0, 
                        F_catch, M, E, n_species, deltat){
   K1s <- get_dXdt(Ns = X[1:n_species], Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
                   Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E)
@@ -36,8 +36,8 @@ rungeKutta <- function(X, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, al
   return(c(Xsim))
 }
 
-run_rungeKutta <- function(Ns, species_list, Cmax, Nseal, alpha, gamma, Y, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL, 
-                           Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL, F_catch, M, E, deltat) {
+run_rungeKutta <- function(Ns, species_list, Cmax, Nseal, alpha, gamma, Y=0, NSSL, NCSL, Cmax_SSL, alpha_SSL, gamma_SSL, Y_SSL=0, 
+                           Cmax_CSL, alpha_CSL, gamma_CSL, Y_CSL=0, F_catch, M, E, deltat) {
   times <- seq(0, 1, by = deltat)
   if (times[length(times)]!= 1) {
     stop("deltat must be a division of 1")

@@ -68,10 +68,10 @@ for(t in 1:(days - 1)) {
   
   salmon_result <- run_rungeKutta(Ns = c(gauntlet_chum[t], gauntlet_gr[t], gauntlet_ln[t]),
                                   species_list = c("Chum", "Chinook_GR", "Chinook_LN"), Cmax = Cmax, 
-                                  Nseal = num_seals_at_gauntlet, alpha = alpha, gamma = gamma, Y = Y,
+                                  Nseal = num_seals_at_gauntlet, alpha = alpha, gamma = gamma,
                                   NSSL = num_ej_at_gauntlet, NCSL = num_zc_at_gauntlet, Cmax_SSL = Cmax_ej, 
-                                  alpha_SSL = alpha, gamma_SSL = gamma, Y_SSL = Y, Cmax_CSL = Cmax_zc, 
-                                  alpha_CSL = alpha, gamma_CSL = gamma, Y_CSL = Y,
+                                  alpha_SSL = alpha, gamma_SSL = gamma, Cmax_CSL = Cmax_zc, 
+                                  alpha_CSL = alpha, gamma_CSL = gamma,
                                   F_catch = c(gr_catch_rate[t], ln_catch_rate[t]), 
                                   M = natural_mort, E = c(gr_escape_rate, ln_escape_rate), 
                                   deltat = deltat_val)

@@ -10,6 +10,7 @@ days <- length(day_range)
 # seal parameters
 num_seals <- 150
 prop_specialists <- 0.1
+social_circle <- 15
 
 # sea lions
 num_zc <- 80
@@ -49,7 +50,7 @@ buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
 
 # social learning parameters
-num_seals_2_copy <- num_seals
+num_seals_2_copy <- social_circle
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 num_zc_2_copy <- num_zc
@@ -86,7 +87,7 @@ zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
 
-min_harvesters <- min_fishers_chum
+min_harvesters <- 0
 max_harvesters <- max_fishers_chum
 
 scenario <- "Boat"
