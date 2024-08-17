@@ -59,3 +59,4 @@ plot_Px_zc + plot_probs_zc + plot_zc + plot_layout(guides = "collect")
 escape_plot
 eaten_sp_plot
 plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
+
