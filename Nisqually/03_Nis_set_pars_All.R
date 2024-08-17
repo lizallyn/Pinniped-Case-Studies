@@ -72,9 +72,9 @@ sealion_arrival_loopday <- sealion_arrival_date - (start_loop - 1)
 
 # hunting parameters (same as fishery opening in base run realm)
 
-min_fishers_chum <- 13
-max_fishers_chum <- 25
-min_fishers_chinook <- 13
+min_fishers_chum <- 10
+max_fishers_chum <- 50
+min_fishers_chinook <- 10
 max_fishers_chinook <- 25
 fishery_open_chum <- yday(as.Date("2024-11-16"))
 fishery_close_chum <- yday(as.Date("2025-01-24")) + 365
