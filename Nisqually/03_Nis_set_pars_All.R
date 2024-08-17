@@ -84,7 +84,7 @@ fishery_range_chum <- fishery_open_chum:fishery_close_chum
 fishery_range_chinook <- fishery_open_chinook:fishery_close_chinook
 
 zone_efficiency <- NA
-steepness_H <- 10 # how quick does it saturate (higher = slower)
+steepness_H <- 500 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
 
 min_harvesters <- 0
