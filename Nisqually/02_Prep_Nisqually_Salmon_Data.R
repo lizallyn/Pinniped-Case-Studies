@@ -101,3 +101,11 @@ Daily_Fish <- data.frame(DayofYear = fish_days,
                          GR_Chinook = round(predictFish(gr_params, day = fish_days, start.day = gr_start)),
                          LN_Chinook = round(predictFish(ln_params, day = fish_days, start.day = locnis_start)))
 Daily_Fish$Total <- Daily_Fish$Chum + Daily_Fish$GR_Chinook + Daily_Fish$LN_Chinook
+
+
+### Fishing Rates ----
+# from catch data from Craig
+# see "Nisqually_Fishery_Data_from_Craig.xlsx" for process
+
+catch.wide <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
+
