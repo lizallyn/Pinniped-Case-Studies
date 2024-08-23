@@ -107,5 +107,25 @@ Daily_Fish$Total <- Daily_Fish$Chum + Daily_Fish$GR_Chinook + Daily_Fish$LN_Chin
 # from catch data from Craig
 # see "Nisqually_Fishery_Data_from_Craig.xlsx" for process
 
-catch.wide <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
-
+catch <- read.csv("Data/Nisqually/Summarized_Nisqually_Fishery_Data_from_Craig.csv")
+catch$Dates <- as.Date(catch$Day, format = "%j", origin = "1.1.2024")
+# add days before/after fisheries
+if(fish_start<catch$Day[1]){
+  add_days <- fish_start:catch$Day[1]
+  add_dates <- as.Date(add_days, format = "%j", origin = "1.1.2024")
+  add_start <- data.frame(Week = rep(NA, length(add_days)), 
+                          Dates = add_dates,
+                          Day = add_days)
+  add_start <- cbind(add_start, matrix(data = 0, nrow = length(add_days), ncol = (ncol(catch)-3)))
+}
+colnames(add_start) <- colnames(catch)
+if(fish_end>catch$Day[nrow(catch)]){
+  add_days <- catch$Day[nrow(catch)]:fish_end
+  add_dates <- as.Date(add_days, format = "%j", origin = "1.1.2024")
+  add_end <- data.frame(Week = rep(NA, length(add_days)), 
+                          Dates = add_dates,
+                          Day = add_days)
+  add_end <- cbind(add_end, matrix(data = 0, nrow = length(add_days), ncol = (ncol(catch)-3)))
+}
+colnames(add_end) <- colnames(catch)
+catch <- rbind(add_start, catch, add_end)
