@@ -16,6 +16,9 @@ salmon.colors <- c("dodgerblue", "seagreen2", "seagreen4")
 salmon.names <- c("Chum", "Chinook_GR", "Chinook_LN")
 names(salmon.colors) <- salmon.names
 
+arrival_plot <- makePlot_3(x = 1:days, data = Daily_Fish[,c("Chum", "GR_Chinook", "LN_Chinook")], 
+                           col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 
+                           value.name = "Daily Arriving Salmon", colors = salmon.colors)
 escape_plot <- makePlot_3(x = 1:days, data = cbind(escape_chum, escape_gr, escape_ln),
                           col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 
                           value.name = "Cumulative Escaped Salmon", colors = salmon.colors)

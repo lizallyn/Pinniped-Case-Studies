@@ -47,9 +47,10 @@ source("Functions/Plots_responses.R")
 # check that it worked?
 harvested <- data.frame(Seals = sum(H), Stellers = sum(H_ej), Californias = sum(H_zc))
 print(harvested)
+arrival_plot
+gauntlet_plot
 salmon_escapement
 salmon_consumed
-gauntlet_plot
 plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")
 plot_H + plot_H_ej + plot_H_zc
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
