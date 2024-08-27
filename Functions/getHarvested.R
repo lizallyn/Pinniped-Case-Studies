@@ -22,8 +22,8 @@ getHarvested <- function(day_plan = 0, list_gauntlet_seals, zone_efficiency = NA
 # efficiency <- seq(0, 1, 0.0001)
 # steepness <- seq(0, 1000, 1)
 # num_fishers <- 0:50
-# plot(steepness, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:200, zone_efficiency = 0.8,
-#                                num_fishers = 50, efficiency = 0.075, steepness = steepness))
+# plot(steepness, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:150, zone_efficiency = 0.8,
+#                                num_fishers = 20, efficiency = 0.075, steepness = steepness))
 
 # getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, min_fishers, max_fishers, gamma, Y) {
 #   num_fishers <- sample(min_fishers:max_fishers, 1)
