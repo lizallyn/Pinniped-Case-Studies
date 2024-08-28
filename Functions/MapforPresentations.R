@@ -26,15 +26,16 @@ outline.long <- c(insleft, insright, insright, insleft, insleft)
 outline <- data.frame(cbind(outline.lat, outline.long))
 
 inset <- get_stadiamap(bbox=c(insleft, insbott, insright, instop), 
-                       zoom=4, maptype="stamen_terrain_background")
+                       zoom=7, maptype="stamen_terrain_background")
 base_ter <- get_stadiamap(bbox = c(maxlong, minlat, minlong, maxlat), 
                           zoom=11, maptype="stamen_terrain_background")
 insetmap <- ggmap(inset) +
-  geom_path(data = insetbox.shape, aes(x = insetbox.long, y = insetbox.lat), lwd = 0.5) +
+  geom_path(data = insetbox.shape, aes(x = insetbox.long, y = insetbox.lat), lwd = 0.75) +
   theme_void() +
   geom_path(data = outline, aes(x = outline.long, y = outline.lat), lwd = 1.5)
+
 map1 <- ggmap(base_ter) +
-  labs(x = "Longitude", y = "Latitude")
+  theme_void()
 
 map_with_inset <- ggdraw() + 
   draw_plot(map1) + 
