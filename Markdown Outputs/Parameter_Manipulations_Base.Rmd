@@ -1,7 +1,6 @@
 ---
 title: "Parameter Manipulation"
 output: ioslides_presentation
-  smaller: true
 date: "`r Sys.Date()`"
 ---
 
