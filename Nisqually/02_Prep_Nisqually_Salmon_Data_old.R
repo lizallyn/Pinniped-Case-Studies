@@ -5,34 +5,31 @@ library(lubridate)
 
 source("Nisqually/00_predictFish.R")
 
-fish.wide <- read.csv("Data/Nisqually/Adjusted_Nisqually_Data_from_Craig.csv")
-
-fish.wide$DayofYear <- yday(fish.wide$Dates)
-fish.wide$DayofYear[fish.wide$DayofYear<100] <- fish.wide$DayofYear[fish.wide$DayofYear<100] + 365
+fish.wide <- read.csv("Data/Nisqually/Nisqually_Chinook_and_Chum_July2024.csv")
 
 ## CHUM ----
-chum_start <- min(which(fish.wide$Chum > 0)) - dates_buffer
-chum_end <- max(which(fish.wide$Chum > 0)) + dates_buffer
+chum_start <- min(which(fish.wide$Chum_per > 0)) - dates_buffer
+chum_end <- max(which(fish.wide$Chum_per > 0)) + dates_buffer
 chum_residence <- 21
 
-WChum <- data.frame(fish.wide[chum_start:chum_end, c("Dates", "Chum", "DayofYear")])
-WChum$DailyEst <- WChum$Chum
+WChum <- data.frame(fish.wide[chum_start:chum_end, c("Date", "DayofYear", "Chum_per")])
+WChum$DailyEst <- (WChum$Chum_per * chum.run.avg)/7
 WChum$DailyEst_int <- round(WChum$DailyEst)
 
-plot(WChum$DayofYear, WChum$DailyEst)
+# plot(Chum$DayofYear, Chum$DailyEst)
 #looks kinda normal enough for a rough estimate I think
 
-params <- c(25800, 68, 15)
-fish.fit.optim.chum <- fish.fit.optim(params = params, fn = fit.to.fish, data = WChum$DailyEst_int)
+params <- c(27800, 68.769, 14.59)
+fish.fit.optim.chum <- fish.fit.optim(params, fit.to.fish, WChum$DailyEst_int)
 fish.fit.optim.chum
 chum_params <- fish.fit.optim.chum$par
 
 # check fit!
-plot(WChum$DayofYear, WChum$DailyEst)
-plot(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
-# looks ok to me!
-
-plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
+# plot(WChum$DayofYear, WChum$DailyEst)
+# lines(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
+# # looks ok to me!
+# 
+# plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
 
 Daily_Chum <- data.frame(DayofYear = chum_start:chum_end, 
                          Chum = round(predictFish(chum_params, day = chum_start:chum_end, chum_start)))
