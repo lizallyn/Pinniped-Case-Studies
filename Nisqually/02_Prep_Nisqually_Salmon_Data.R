@@ -8,7 +8,8 @@ source("Nisqually/00_predictFish.R")
 fish.wide <- read.csv("Data/Nisqually/Adjusted_Nisqually_Data_from_Craig.csv")
 
 fish.wide$DayofYear <- yday(fish.wide$Dates)
-fish.wide$DayofYear[fish.wide$DayofYear<100] <- fish.wide$DayofYear[fish.wide$DayofYear<100] + 365
+fish.wide$DayofYear[fish.wide$DayofYear<100] <- fish.wide$DayofYear[fish.wide$DayofYear<100] + 366
+
 
 check_dates_row <- fish.wide[dates_buffer, c("GR", "LocNis", "Chum")]
 if(any(check_dates_row > 0)){
@@ -30,7 +31,7 @@ WChum$DailyEst_int <- round(WChum$DailyEst)
 plot(WChum$DayofYear, WChum$DailyEst)
 #looks kinda normal enough for a rough estimate I think
 
-params <- c(25800, 68, 15)
+params <- c(25800, 54, 12)
 fish.fit.optim.chum <- fish.fit.optim(params = params, fn = fit.to.fish, data = WChum$DailyEst_int)
 fish.fit.optim.chum
 chum_params <- fish.fit.optim.chum$par
@@ -52,10 +53,10 @@ gr_residence <- 14
 
 GRiver_Chinook <- data.frame(fish.wide[fish.wide$DayofYear %in% gr_start:gr_end, 
                                 c("Dates", "DayofYear", "GR")])
-GRiver_Chinook$DailyEst <- (GRiver_Chinook$GreenRiver_per * gr.run.avg)/7
+GRiver_Chinook$DailyEst <- GRiver_Chinook$GR
 GRiver_Chinook$DailyEst_int <- round(GRiver_Chinook$DailyEst)
 
-params <- c(22000, 73, 15)
+params <- c(20900, 73, 15)
 fish.fit.optim.gr <- fish.fit.optim(params, fit.to.fish, GRiver_Chinook$DailyEst_int)
 fish.fit.optim.gr
 gr_params <- fish.fit.optim.gr$par
@@ -64,23 +65,21 @@ gr_params <- fish.fit.optim.gr$par
 # plot(GRiver_Chinook$DayofYear, GRiver_Chinook$DailyEst)
 # lines(gr_start:gr_end, predictFish(gr_params, day = gr_start:gr_end, start.day = gr_start))
 # # looks good!
-# 
-# plot(gr_start:gr_end, predictNewFish(gr_params, day = gr_start:gr_end, start.day = gr_start))
 
 
 ## LocNis CHINOOK ----
 
-locnis_start <- min(which(fish.wide$LocNis_per_corr > 0)) - dates_buffer
-locnis_end <- max(which(fish.wide$LocNis_per_corr > 0)) + dates_buffer
+locnis_start <- min(fish.wide$DayofYear[which(fish.wide$LocNis > 0)]) - dates_buffer
+locnis_end <- max(fish.wide$DayofYear[which(fish.wide$LocNis > 0)]) + dates_buffer
 
 locnis_residence <- 7
 
-LocNis_Chinook <- data.frame(fish.wide[locnis_start:locnis_end, 
-                                       c("Date", "DayofYear", "LocNis_per_corr")])
-LocNis_Chinook$DailyEst <- (LocNis_Chinook$LocNis_per_corr * ln.run.avg)/7
+LocNis_Chinook <- data.frame(fish.wide[fish.wide$DayofYear %in% locnis_start:locnis_end, 
+                                       c("Dates", "DayofYear", "LocNis")])
+LocNis_Chinook$DailyEst <- LocNis_Chinook$LocNis
 LocNis_Chinook$DailyEst_int <- round(LocNis_Chinook$DailyEst)
 
-params <- c(645.8, 86, 27)
+params <- c(804, 93, 27)
 fish.fit.optim.ln <- fish.fit.optim(params, fit.to.fish, LocNis_Chinook$DailyEst_int)
 fish.fit.optim.ln
 ln_params <- fish.fit.optim.ln$par
@@ -89,15 +88,11 @@ ln_params <- fish.fit.optim.ln$par
 # lines(locnis_start:locnis_end, predictFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
 # # ehh looks not great but maybe workable for now.
 
-# plot(locnis_start:locnis_end, predictNewFish(ln_params, day = locnis_start:locnis_end, start.day = locnis_start))
 
 chinook_start <- min(locnis_start, gr_start)
 chinook_end <- max(locnis_end, gr_end)
 chinook_days <- chinook_start:chinook_end
-Daily_Chinook <- data.frame(DayofYear = chinook_days, 
-                            GR_Chinook = round(predictNewFish(gr_params, day = chinook_days, start.day = gr_start)),
-                            LN_Chinook = round(predictNewFish(ln_params, day = chinook_days, start.day = locnis_start)))
-Daily_Chinook$Total <- Daily_Chinook$GR_Chinook + Daily_Chinook$LN_Chinook
+
 
 # All Runs
 
@@ -116,25 +111,23 @@ Daily_Fish$Total <- Daily_Fish$Chum + Daily_Fish$GR_Chinook + Daily_Fish$LN_Chin
 # from catch data from Craig
 # see "Nisqually_Fishery_Data_from_Craig.xlsx" for process
 
-catch <- read.csv("Data/Nisqually/Summarized_Nisqually_Fishery_Data_from_Craig.csv")
-catch$Dates <- as.Date(catch$Day, format = "%j", origin = "1.1.2024")
-# add days before/after fisheries
-if(fish_start<catch$Day[1]){
-  add_days <- fish_start:catch$Day[1]
-  add_dates <- as.Date(add_days, format = "%j", origin = "1.1.2024")
-  add_start <- data.frame(Week = rep(NA, length(add_days)), 
-                          Dates = add_dates,
-                          Day = add_days)
-  add_start <- cbind(add_start, matrix(data = 0, nrow = length(add_days), ncol = (ncol(catch)-3)))
+fish.wide$GR_tally <- 0
+fish.wide$LocNis_tally <- 0
+fish.wide$Chum_tally <- 0
+
+
+for(i in (chum_residence+1):nrow(fish.wide)){
+  fish.wide$GR_tally[i] <- fish.wide$GR_tally[i-1] + fish.wide$GR[i] - fish.wide$GR[(i-gr_residence)]
+  fish.wide$LocNis_tally[i] <- fish.wide$LocNis_tally[i-1] + fish.wide$LocNis[i] - fish.wide$LocNis[(i-locnis_residence)]
+  fish.wide$Chum_tally[i] <- fish.wide$Chum_tally[i-1] + fish.wide$Chum[i] - fish.wide$Chum[(i-chum_residence)]
 }
-colnames(add_start) <- colnames(catch)
-if(fish_end>catch$Day[nrow(catch)]){
-  add_days <- catch$Day[nrow(catch)]:fish_end
-  add_dates <- as.Date(add_days, format = "%j", origin = "1.1.2024")
-  add_end <- data.frame(Week = rep(NA, length(add_days)), 
-                          Dates = add_dates,
-                          Day = add_days)
-  add_end <- cbind(add_end, matrix(data = 0, nrow = length(add_days), ncol = (ncol(catch)-3)))
-}
-colnames(add_end) <- colnames(catch)
-catch <- rbind(add_start, catch, add_end)
+
+
+fish.wide$GR_rate <- fish.wide$GR_catch/fish.wide$GR_tally
+fish.wide$LocNis_rate <- fish.wide$LocNis_catch/fish.wide$LocNis_tally
+fish.wide$Chum_rate <- fish.wide$Chum_catch/fish.wide$Chum_tally
+fish.wide[(is.na(fish.wide))] <- 0
+
+Daily_Fish$GR_rate <- fish.wide$GR_rate[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
+Daily_Fish$LocNis_rate <- fish.wide$LocNis_rate[fish.wide$DayofYear %in% fish_days]
+Daily_Fish$Chum_rate <- fish.wide$Chum_rate[fish.wide$DayofYear %in% fish_days]
