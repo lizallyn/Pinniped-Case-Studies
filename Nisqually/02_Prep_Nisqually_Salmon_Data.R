@@ -10,12 +10,20 @@ fish.wide <- read.csv("Data/Nisqually/Adjusted_Nisqually_Data_from_Craig.csv")
 fish.wide$DayofYear <- yday(fish.wide$Dates)
 fish.wide$DayofYear[fish.wide$DayofYear<100] <- fish.wide$DayofYear[fish.wide$DayofYear<100] + 365
 
+check_dates_row <- fish.wide[dates_buffer, c("GR", "LocNis", "Chum")]
+if(any(check_dates_row > 0)){
+  add_blanks <- data.frame(matrix(data = 0, nrow = dates_buffer, ncol = ncol(fish.wide)))
+  colnames(add_blanks) <- colnames(fish.wide)
+  add_blanks$DayofYear <- (fish.wide$DayofYear[1] - dates_buffer):(fish.wide$DayofYear[1] - 1)
+  fish.wide <- rbind(add_blanks, fish.wide)
+}
+
 ## CHUM ----
-chum_start <- min(which(fish.wide$Chum > 0)) - dates_buffer
-chum_end <- max(which(fish.wide$Chum > 0)) + dates_buffer
+chum_start <- min(fish.wide$DayofYear[which(fish.wide$Chum > 0)]) - dates_buffer
+chum_end <- max(fish.wide$DayofYear[which(fish.wide$Chum > 0)]) + dates_buffer
 chum_residence <- 21
 
-WChum <- data.frame(fish.wide[chum_start:chum_end, c("Dates", "Chum", "DayofYear")])
+WChum <- data.frame(fish.wide[fish.wide$DayofYear %in% chum_start:chum_end, c("Dates", "Chum", "DayofYear")])
 WChum$DailyEst <- WChum$Chum
 WChum$DailyEst_int <- round(WChum$DailyEst)
 
@@ -27,25 +35,23 @@ fish.fit.optim.chum <- fish.fit.optim(params = params, fn = fit.to.fish, data = 
 fish.fit.optim.chum
 chum_params <- fish.fit.optim.chum$par
 
-# check fit!
-plot(WChum$DayofYear, WChum$DailyEst)
-plot(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
-# looks ok to me!
-
-plot(chum_start:chum_end, predictNewFish(chum_params, day = chum_start:chum_end, chum_start))
+# # check fit!
+# plot(WChum$DayofYear, WChum$DailyEst)
+# lines(chum_start:chum_end, predictFish(chum_params, day = chum_start:chum_end, start.day = chum_start))
+# # looks ok to me!
 
 Daily_Chum <- data.frame(DayofYear = chum_start:chum_end, 
                          Chum = round(predictFish(chum_params, day = chum_start:chum_end, chum_start)))
 
 ## GREEN RIVER CHINOOK ----
 
-gr_start <- min(which(fish.wide$GreenRiver_per > 0)) - dates_buffer
-gr_end <- max(which(fish.wide$GreenRiver_per > 0)) + dates_buffer
+gr_start <- min(fish.wide$DayofYear[which(fish.wide$GR > 0)]) - dates_buffer
+gr_end <- max(fish.wide$DayofYear[which(fish.wide$GR > 0)]) + dates_buffer
 
 gr_residence <- 14
 
-GRiver_Chinook <- data.frame(fish.wide[gr_start:gr_end, 
-                                c("Date", "DayofYear", "GreenRiver_per")])
+GRiver_Chinook <- data.frame(fish.wide[fish.wide$DayofYear %in% gr_start:gr_end, 
+                                c("Dates", "DayofYear", "GR")])
 GRiver_Chinook$DailyEst <- (GRiver_Chinook$GreenRiver_per * gr.run.avg)/7
 GRiver_Chinook$DailyEst_int <- round(GRiver_Chinook$DailyEst)
 
