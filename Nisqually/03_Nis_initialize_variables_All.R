@@ -123,10 +123,7 @@ H_zc <- oneDzeroes
 H_ej <- oneDzeroes
 
 ### Variable Rates ----
-chum_catch_rate <- oneDzeroes
-gr_catch_rate <- oneDzeroes
-ln_catch_rate <- oneDzeroes
-chum_catch_rate[fishery_days_chum] <- chum_fish_rate
-gr_catch_rate[fishery_days_chinook] <- gr_fish_rate
-ln_catch_rate[fishery_days_chinook] <- ln_fish_rate
+chum_catch_rate <- Daily_Fish$Chum_rate
+gr_catch_rate <- Daily_Fish$GR_rate
+ln_catch_rate <- Daily_Fish$LocNis_rate
 
