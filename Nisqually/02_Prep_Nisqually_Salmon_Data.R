@@ -28,7 +28,7 @@ WChum <- data.frame(fish.wide[fish.wide$DayofYear %in% chum_start:chum_end, c("D
 WChum$DailyEst <- WChum$Chum
 WChum$DailyEst_int <- round(WChum$DailyEst)
 
-plot(WChum$DayofYear, WChum$DailyEst)
+# plot(WChum$DayofYear, WChum$DailyEst)
 #looks kinda normal enough for a rough estimate I think
 
 params <- c(25800, 54, 12)
@@ -109,7 +109,7 @@ Daily_Fish$Total <- Daily_Fish$Chum + Daily_Fish$GR_Chinook + Daily_Fish$LN_Chin
 
 ### Fishing Rates ----
 # from catch data from Craig
-# see "Nisqually_Fishery_Data_from_Craig.xlsx" for process
+# 
 
 fish.wide$GR_tally <- 0
 fish.wide$LocNis_tally <- 0
@@ -122,11 +122,14 @@ for(i in (chum_residence+1):nrow(fish.wide)){
   fish.wide$Chum_tally[i] <- fish.wide$Chum_tally[i-1] + fish.wide$Chum[i] - fish.wide$Chum[(i-chum_residence)]
 }
 
+fish.wide[fish.wide < 0] <- 0
 
 fish.wide$GR_rate <- fish.wide$GR_catch/fish.wide$GR_tally
 fish.wide$LocNis_rate <- fish.wide$LocNis_catch/fish.wide$LocNis_tally
 fish.wide$Chum_rate <- fish.wide$Chum_catch/fish.wide$Chum_tally
 fish.wide[(is.na(fish.wide))] <- 0
+
+fish.wide$LocNis_rate[fish.wide$LocNis_rate == Inf] <- fish.wide$LocNis_rate[(which(fish.wide$LocNis_rate == Inf) - 1)]
 
 Daily_Fish$GR_rate <- fish.wide$GR_rate[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
 Daily_Fish$LocNis_rate <- fish.wide$LocNis_rate[fish.wide$DayofYear %in% fish_days]
