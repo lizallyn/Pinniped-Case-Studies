@@ -50,6 +50,7 @@ print(harvested)
 arrival_plot
 gauntlet_plot
 fished_plot
+salmon_catch
 salmon_escapement
 salmon_consumed
 plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")
