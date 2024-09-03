@@ -134,3 +134,8 @@ fish.wide$LocNis_rate[fish.wide$LocNis_rate == Inf] <- fish.wide$LocNis_rate[(wh
 Daily_Fish$GR_rate <- fish.wide$GR_rate[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
 Daily_Fish$LocNis_rate <- fish.wide$LocNis_rate[fish.wide$DayofYear %in% fish_days]
 Daily_Fish$Chum_rate <- fish.wide$Chum_rate[fish.wide$DayofYear %in% fish_days]
+
+Daily_Fish$GR_catch <- fish.wide$GR_catch[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
+Daily_Fish$LocNis_catch <- fish.wide$LocNis_catch[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
+Daily_Fish$Chum_catch <- fish.wide$Chum_catch[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
+
