@@ -3,12 +3,16 @@
 salmon_escapement <- data.frame(Chum = escape_chum[days],
                                 Chinook_GR = escape_gr[days],
                                 Chinook_LN = escape_ln[days])
+salmon_catch <- data.frame(Chum = sum(fished_chum),
+                           Chinook_GR = sum(fished_gr),
+                           Chinook_LN = sum(fished_ln))
 
 salmon_consumed <- data.frame(Chum = sum(eaten_chum), Chinook_GR = sum(eaten_gr),
                               Chinook_LN = sum(eaten_ln))
 
 plot_consumed <- makePlot_2(x = 1:days, x.name = "Day", y = consumed_total, y.name = "Daily Salmon Consumed", 
                             color = "dodgerblue")
+
 
 # Plots of Salmon Species data
 
