@@ -34,7 +34,7 @@ source("Functions/linearFuncRes.R")
 source("Functions/updateLearning.R")
 
 # 05 Run The Loop
-source("Nisqually/05_The_Loop_Nis_All.R")
+source("Nisqually/05_The_Loop_Nis_All_fishing.R")
 
 # 06 Plots
 source("Functions/makePlots.R")
@@ -49,6 +49,7 @@ harvested <- data.frame(Seals = sum(H), Stellers = sum(H_ej), Californias = sum(
 print(harvested)
 arrival_plot
 gauntlet_plot
+fished_plot
 salmon_escapement
 salmon_consumed
 plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")
