@@ -67,9 +67,9 @@ for(t in 1:(days - 1)) {
   num_ej_at_gauntlet <- length(ej_at_gauntlet)
   
   # use catch data to est rate assuming base run
-  gr_catch_rate[t] <- Daily_Fish$GR_catch/gauntlet_gr[t]
-  ln_catch_rate[t] <- Daily_Fish$LocNis_catch/gauntlet_ln[t]
-  chum_catch_rate[t] <- Daily_Fish$Chum_catch/gauntlet_chum[t]
+  gr_catch_rate[t] <- Daily_Fish$GR_catch[t]/gauntlet_gr[t]
+  ln_catch_rate[t] <- Daily_Fish$LocNis_catch[t]/gauntlet_ln[t]
+  chum_catch_rate[t] <- Daily_Fish$Chum_catch[t]/gauntlet_chum[t]
   gr_catch_rate[is.na(gr_catch_rate)] <- 0
   ln_catch_rate[is.na(ln_catch_rate)] <- 0
   chum_catch_rate[is.na(chum_catch_rate)] <- 0
