@@ -53,8 +53,6 @@ buffer_Pxmin_specialist <- 0
 num_seals_2_copy <- social_circle
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
-num_zc_2_copy <- num_zc
-num_ej_2_copy <- num_ej
 
 # salmon parameters
 chum_escape_rate <- 1/chum_residence
@@ -67,8 +65,6 @@ gr_fish_rate <- 0.01
 ln_fish_rate <- 0
 salmon_days <- which(Daily_Fish$Total > 0)
 sealion_arrival_buffer <- 10
-sealion_arrival_date <- (min(Daily_Fish$DayofYear[Daily_Fish$Chum > 0]) - sealion_arrival_buffer)
-sealion_arrival_loopday <- sealion_arrival_date - (start_loop - 1)
 
 # hunting parameters (same as fishery opening in base run realm)
 
@@ -80,8 +76,6 @@ fishery_open_chum <- yday(as.Date("2024-11-16"))
 fishery_close_chum <- yday(as.Date("2025-01-24")) + 365
 fishery_open_chinook <- yday(as.Date("2024-08-06"))
 fishery_close_chinook <- yday(as.Date("2024-11-18"))
-fishery_range_chum <- fishery_open_chum:fishery_close_chum
-fishery_range_chinook <- fishery_open_chinook:fishery_close_chinook
 
 zone_efficiency <- NA
 steepness_H <- 200 # how quick does it saturate (higher = slower)
@@ -91,7 +85,5 @@ min_harvesters <- 0
 max_harvesters <- max_fishers_chum
 
 scenario <- "Boat"
-harvest_days_pv <- c(fishery_open_chinook:fishery_close_chinook, fishery_open_chum:fishery_close_chum) - (start_loop - 1)
-harvest_days_ej <- fishery_open_chum:fishery_close_chum - (start_loop - 1)
-harvest_days_zc <- fishery_open_chum:fishery_close_chum - (start_loop - 1)
+
 
