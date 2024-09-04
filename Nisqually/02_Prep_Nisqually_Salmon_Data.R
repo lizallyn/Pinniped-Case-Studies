@@ -1,12 +1,14 @@
 # Script to prep salmon data for SalmonSpeciesArrive function calls
 library(tidyr)
 library(dplyr)
+library(anytime)
 library(lubridate)
 
 source("Nisqually/00_predictFish.R")
 
 fish.wide <- read.csv("Data/Nisqually/Adjusted_Nisqually_Data_from_Craig.csv")
 
+fish.wide$Dates <- anydate(fish.wide$Dates)
 fish.wide$DayofYear <- yday(fish.wide$Dates)
 fish.wide$DayofYear[fish.wide$DayofYear<100] <- fish.wide$DayofYear[fish.wide$DayofYear<100] + 366
 
