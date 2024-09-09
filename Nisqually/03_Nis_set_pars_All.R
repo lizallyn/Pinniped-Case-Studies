@@ -9,7 +9,7 @@ days <- length(day_range)
 
 # seal parameters
 num_seals <- 150
-prop_specialists <- 0.75
+prop_specialists <- 0.1
 
 # sea lions
 num_zc <- 80
@@ -49,7 +49,7 @@ buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
 
 # social learning parameters
-num_seals_2_copy <- 15 # general haulout size?
+num_seals_2_copy <- 25 # general haulout size? total guess rn
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
@@ -59,8 +59,7 @@ gr_escape_rate <- 1/gr_residence
 ln_escape_rate <- 1/locnis_residence
 natural_mort <- 0.0005
 
-salmon_days <- which(Daily_Fish$Total > 0)
-sealion_arrival_buffer <- 10
+sealion_arrival_buffer <- 10 # days arrival before chum arrive
 
 # hunting parameters (same as fishery opening in base run realm)
 

@@ -4,9 +4,12 @@ library(dplyr)
 library(anytime)
 library(lubridate)
 
-source("Nisqually/00_predictFish.R")
+# source("Nisqually/01_predictFish.R")
+# Not necessary unless running this script as a standalone
 
 fish.wide <- read.csv("Data/Nisqually/Adjusted_Nisqually_Data_from_Craig.csv")
+
+dates_buffer <- 20
 
 fish.wide$Dates <- anydate(fish.wide$Dates)
 fish.wide$DayofYear <- yday(fish.wide$Dates)

@@ -6,23 +6,22 @@
 rm(list=ls())
 # setwd("/Users/lizallyn/Documents/GitHub/Pinniped-Case-Studies")
 
-# 00 Set-Up Functions
-source("Nisqually/00_predictFish.R")
+# 01 Set-Up Functions
+source("Nisqually/01_predictFish.R")
 source("Functions/makeArray.R")
 source("Functions/createHarvestPlan.R")
-
-# 01 Set Parameters
-source("Nisqually/01_Nis_set_pars.R")
 
 # 02 Prep Data
 source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 
-# 03 Initialize Variables
+# 03 Set Model Parameters
 source("Nisqually/03_Nis_set_pars_All.R")
-source("Nisqually/03_Nis_initialize_variables_All.R")
 
-# 04 Loop Functions
-source("Nisqually/04_salmonSpeciesUpdate_All.R")
+# 04 Initialize Variables
+source("Nisqually/04_Nis_initialize_variables_All.R")
+
+# 05 Loop Functions
+source("Nisqually/05_salmonSpeciesUpdate_All.R")
 source("Functions/decideForagingDestination.R")
 source("Functions/collusion.R")
 source("Functions/rungeKutta_3.R")
@@ -33,15 +32,15 @@ source("Functions/type3FuncRes.R")
 source("Functions/linearFuncRes.R")
 source("Functions/updateLearning.R")
 
-# 05 Run The Loop
-source("Nisqually/05_The_Loop_Nis_All_fishing.R")
+# 06 Run The Loop
+source("Nisqually/06_The_Loop_Nis_All_fishing.R")
 
-# 06 Plots
+# 07 Plots
 source("Functions/makePlots.R")
 source("Functions/Plots_Pv.R")
 source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
-source("Nisqually/06_Plots_All.R")
+source("Nisqually/07_Plots_All.R")
 source("Functions/Plots_responses.R")
 
 # check that it worked?
