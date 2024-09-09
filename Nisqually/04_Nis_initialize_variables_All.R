@@ -35,7 +35,7 @@ twoDzeroes <- makeArray(c(num_seals, days), start.val = 0, names = c("Seal", "Da
 twoDzeroes_zc <- makeArray(c(num_zc, days), start.val = 0, names = c("CSL", "Day"))
 twoDzeroes_ej <- makeArray(c(num_ej, days), start.val = 0, names = c("SSL", "Day"))
 
-### Individual Values ----
+### Empty Arrays (mostly) ----
 salmon_consumed_pv <- twoDzeroes
 salmon_consumed_zc <- twoDzeroes_zc
 salmon_consumed_ej <- twoDzeroes_ej
@@ -93,18 +93,6 @@ kill_list <- list()
 kill_list_zc <- list()
 kill_list_ej <- list()
 
-# harvest
-harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
-                                     harvest_days = harvest_days_pv,
-                                     empty.array = oneDzeroes)
-harvest_plan_ej <- createHarvestPlan(scenario = scenario, 
-                                     harvest_days = harvest_days_ej,
-                                     empty.array = oneDzeroes)
-harvest_plan_zc <- createHarvestPlan(scenario = scenario, 
-                                     harvest_days = harvest_days_zc,
-                                     empty.array = oneDzeroes)
-
-### Actual States that I Need ----
 escape_chum <- oneDzeroes
 escape_gr <- oneDzeroes
 escape_ln <- oneDzeroes
@@ -125,8 +113,20 @@ H <- oneDzeroes
 H_zc <- oneDzeroes
 H_ej <- oneDzeroes
 
-### Variable Rates ----
 chum_catch_rate <- oneDzeroes
 gr_catch_rate <- oneDzeroes
 ln_catch_rate <- oneDzeroes
+
+# harvest
+harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
+                                     harvest_days = harvest_days_pv,
+                                     empty.array = oneDzeroes)
+harvest_plan_ej <- createHarvestPlan(scenario = scenario, 
+                                     harvest_days = harvest_days_ej,
+                                     empty.array = oneDzeroes)
+harvest_plan_zc <- createHarvestPlan(scenario = scenario, 
+                                     harvest_days = harvest_days_zc,
+                                     empty.array = oneDzeroes)
+
+
 
