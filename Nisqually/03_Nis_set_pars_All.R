@@ -9,7 +9,7 @@ days <- length(day_range)
 
 # seal parameters
 num_seals <- 150
-prop_specialists <- 0.1
+prop_specialists <- 0.75
 
 # sea lions
 num_zc <- 80
@@ -59,29 +59,14 @@ gr_escape_rate <- 1/gr_residence
 ln_escape_rate <- 1/locnis_residence
 natural_mort <- 0.0005
 
-chum_fish_rate <- 0.01
-gr_fish_rate <- 0.01
-ln_fish_rate <- 0
 salmon_days <- which(Daily_Fish$Total > 0)
 sealion_arrival_buffer <- 10
 
 # hunting parameters (same as fishery opening in base run realm)
 
-min_fishers_chum <- 10
-max_fishers_chum <- 20
-min_fishers_chinook <- 10
-max_fishers_chinook <- 20
-fishery_open_chum <- yday(as.Date("2024-11-16"))
-fishery_close_chum <- yday(as.Date("2025-01-24")) + 365
-fishery_open_chinook <- yday(as.Date("2024-08-06"))
-fishery_close_chinook <- yday(as.Date("2024-11-18"))
-
 zone_efficiency <- NA
 steepness_H <- 200 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
-
-min_harvesters <- 0
-max_harvesters <- max_fishers_chum
 
 scenario <- "Boat"
 

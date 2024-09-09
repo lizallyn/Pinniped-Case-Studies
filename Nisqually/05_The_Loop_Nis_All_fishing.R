@@ -129,7 +129,7 @@ for(t in 1:(days - 1)) {
   }
   
   # seal harvest
-  num_harvesters <- sample(min_harvesters:max_harvesters, 1)
+  num_harvesters <- Daily_Fish$harvesters[t]
   H[t] <- getHarvested(day_plan = harvest_plan_pv[t], list_gauntlet_seals = seals_at_gauntlet, 
                        num_fishers = num_harvesters, zone_efficiency = zone_efficiency, 
                        efficiency = efficiency, steepness = steepness_H)

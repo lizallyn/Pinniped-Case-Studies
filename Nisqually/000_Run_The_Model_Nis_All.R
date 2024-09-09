@@ -19,8 +19,6 @@ source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 
 # 03 Initialize Variables
 source("Nisqually/03_Nis_set_pars_All.R")
-num_zc <- 20
-num_ej <- 5
 source("Nisqually/03_Nis_initialize_variables_All.R")
 
 # 04 Loop Functions
@@ -60,7 +58,6 @@ plot_H + plot_H_ej + plot_H_zc
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
 plot_Px_zc + plot_probs_zc + plot_zc + plot_layout(guides = "collect")
-
 
 escape_plot
 eaten_sp_plot

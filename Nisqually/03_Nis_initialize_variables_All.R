@@ -10,12 +10,9 @@ num_specialists <- round(num_seals * prop_specialists)
 sealion_arrival_date <- (min(Daily_Fish$DayofYear[Daily_Fish$Chum > 0]) - sealion_arrival_buffer)
 sealion_arrival_loopday <- sealion_arrival_date - (start_loop - 1)
 
-fishery_range_chum <- fishery_open_chum:fishery_close_chum
-fishery_range_chinook <- fishery_open_chinook:fishery_close_chinook
-
-harvest_days_pv <- c(fishery_open_chinook:fishery_close_chinook, fishery_open_chum:fishery_close_chum) - (start_loop - 1)
-harvest_days_ej <- fishery_open_chum:fishery_close_chum - (start_loop - 1)
-harvest_days_zc <- fishery_open_chum:fishery_close_chum - (start_loop - 1)
+harvest_days_pv <- which(Daily_Fish$harvesters > 0)
+harvest_days_ej <- which(Daily_Fish$harvesters > 0)
+harvest_days_zc <- which(Daily_Fish$harvesters > 0)
 
 slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
 xmin <- (0 - intercept_x_val)/slope_x_val
@@ -97,13 +94,6 @@ kill_list_zc <- list()
 kill_list_ej <- list()
 
 # harvest
-fishery_range_chum <- fishery_open_chum:fishery_close_chum
-fishery_range_chinook <- fishery_open_chinook:fishery_close_chinook
-fishery_days_chum <- fishery_range_chum[which(fishery_range_chum %in% day_range)] - (start_loop - 1)
-fishery_days_chinook <- fishery_range_chinook[which(fishery_range_chinook %in% day_range)] - (start_loop - 1)
-
-
-
 harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
                                      harvest_days = harvest_days_pv,
                                      empty.array = oneDzeroes)
