@@ -4,8 +4,7 @@
 # loop parameters
 start_loop <- fish_start
 end_loop <- fish_end
-day_range <- start_loop:end_loop
-days <- length(day_range)
+days <- length(start_loop:end_loop)
 
 # seal parameters
 num_seals <- 150
@@ -15,13 +14,11 @@ prop_specialists <- 0.1
 num_zc <- 80
 num_ej <- 10
 
-# seal consumption parameters
+# consumption parameters
 deltat_val <- 1/24
 alpha <- 0.05 
-Cmax <- 5 # this was initially made up but actually makes some sense
 gamma <- -1 # pred dep, this expects something between -1 and 0
-
-# sea lion consumption
+Cmax <- 5 # this was initially made up but actually makes some sense
 Cmax_zc <- 20
 Cmax_ej <- 20
 
