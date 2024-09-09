@@ -10,7 +10,6 @@ days <- length(day_range)
 # seal parameters
 num_seals <- 150
 prop_specialists <- 0.1
-social_circle <- 15
 
 # sea lions
 num_zc <- 80
@@ -50,7 +49,7 @@ buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
 
 # social learning parameters
-num_seals_2_copy <- social_circle
+num_seals_2_copy <- 15 # general haulout size?
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
