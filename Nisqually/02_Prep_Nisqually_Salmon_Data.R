@@ -141,3 +141,9 @@ Daily_Fish$GR_catch <- fish.wide$GR_catch[fish.wide$DayofYear %in% Daily_Fish$Da
 Daily_Fish$LocNis_catch <- fish.wide$LocNis_catch[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
 Daily_Fish$Chum_catch <- fish.wide$Chum_catch[fish.wide$DayofYear %in% Daily_Fish$DayofYear]
 
+# days that boats are on the water for hunting purposes (any day that catch is landed)
+# estimated boats on water per day
+Daily_Fish$harvesters <- 0
+Daily_Fish$harvesters[(Daily_Fish$GR_catch + Daily_Fish$Chum_catch) > 0] <- 14
+Daily_Fish$harvesters[Daily_Fish$LocNis_catch > 0] <- 12
+
