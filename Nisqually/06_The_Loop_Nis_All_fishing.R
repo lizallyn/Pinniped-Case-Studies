@@ -53,7 +53,7 @@ for(t in 1:(days - 1)) {
     P_social_zc[,t] <- NA
   }
   
-  # calculate salmon mortality 
+  # calculate pinnipeds at the gauntlet
   seals_at_gauntlet <- which(seal_forage_loc[,t] == 1)
   zc_at_gauntlet <- which(zc_forage_loc[,t] == 1)
   ej_at_gauntlet <- which(ej_forage_loc[,t] == 1)
@@ -66,7 +66,7 @@ for(t in 1:(days - 1)) {
   num_zc_at_gauntlet <- length(zc_at_gauntlet)
   num_ej_at_gauntlet <- length(ej_at_gauntlet)
   
-  # use catch data to est rate assuming base run
+  # use catch data to est catch rate assuming base run
   gr_catch_rate[t] <- Daily_Fish$GR_catch[t]/gauntlet_gr[t]
   ln_catch_rate[t] <- Daily_Fish$LocNis_catch[t]/gauntlet_ln[t]
   chum_catch_rate[t] <- Daily_Fish$Chum_catch[t]/gauntlet_chum[t]
@@ -74,7 +74,7 @@ for(t in 1:(days - 1)) {
   ln_catch_rate[is.na(ln_catch_rate)] <- 0
   chum_catch_rate[is.na(chum_catch_rate)] <- 0
   
-  
+  # calculate salmon rates
   salmon_result <- run_rungeKutta(Ns = c(gauntlet_chum[t], gauntlet_gr[t], gauntlet_ln[t]),
                                   species_list = c("Chum", "Chinook_GR", "Chinook_LN"), Cmax = Cmax, 
                                   Nseal = num_seals_at_gauntlet, alpha = alpha, gamma = gamma,
