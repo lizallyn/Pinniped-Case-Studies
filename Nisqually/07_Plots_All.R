@@ -13,6 +13,8 @@ salmon_consumed <- data.frame(Chum = sum(eaten_chum), Chinook_GR = sum(eaten_gr)
 plot_consumed <- makePlot_2(x = 1:days, x.name = "Day", y = consumed_total, y.name = "Daily Salmon Consumed", 
                             color = "dodgerblue")
 
+harvested <- data.frame(Seals = sum(H), Stellers = sum(H_ej), Californias = sum(H_zc))
+
 
 # Plots of Salmon Species data
 
