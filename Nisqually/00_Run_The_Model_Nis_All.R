@@ -44,8 +44,7 @@ source("Nisqually/07_Plots_All.R")
 source("Functions/Plots_responses.R")
 
 # check that it worked?
-harvested <- data.frame(Seals = sum(H), Stellers = sum(H_ej), Californias = sum(H_zc))
-print(harvested)
+harvested
 arrival_plot
 gauntlet_plot
 fished_plot
@@ -54,11 +53,13 @@ salmon_escapement
 salmon_consumed
 plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")
 plot_H + plot_H_ej + plot_H_zc
+escape_plot
+eaten_sp_plot
+plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
+
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
 plot_Px_zc + plot_probs_zc + plot_zc + plot_layout(guides = "collect")
 
-escape_plot
-eaten_sp_plot
-plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
+
 
