@@ -8,7 +8,7 @@
 # min <- 0
 # scaled_rec <- (receptivity - min)/(max - min)
 # rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
-# receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
+# receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) +
 #   geom_line(lwd = 2, color = "black") +
 #   labs(y = "Receptivity", x = "P_G") +
 #   theme_classic()
