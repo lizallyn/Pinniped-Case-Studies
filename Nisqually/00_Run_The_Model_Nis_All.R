@@ -35,6 +35,10 @@ source("Functions/updateLearning.R")
 # 06 Run The Loop
 source("Nisqually/06_The_Loop_Nis_All_fishing.R")
 
+# save catch rates from base run to csv for use in manipulated runs
+write.csv(data.frame(Chum = chum_catch_rate, LocNis = ln_catch_rate, GR = gr_catch_rate),
+          "C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Data/Nisqually/catch_rates_from_base_run.csv")
+
 # 07 Plots
 source("Functions/makePlots.R")
 source("Functions/Plots_Pv.R")
