@@ -1,5 +1,8 @@
-# Defining the Base Run
-## *Nisqually River*
+---
+title: "Defining the Base Run"
+subtitle: "Nisqually River"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
 
 ```{r setup, include=FALSE}
 
@@ -31,15 +34,23 @@ raw_arrival_plot + catch_rate_plot
 
 ```
 
-Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. For Chum, they also might spawn in the gauntlet, so their "escape" rate also encompasses successful spawning, and their residence time includes potential spawning activities and behaviors.
+Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. The escape rate is simply 1/residence time. For Chum, they also might spawn in the gauntlet, so their "escape" rate also encompasses successful spawning, and their residence time includes potential spawning activities and behaviors.
 
 `r kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locnis_residence)) %>% kable_styling(full_width = F)`
 
 ### Pinniped Inputs
 
-The number of each species of pinniped in the source pool is informed by observations from managers and biologists in the system. 
+Three species of pinnipeds are included: Harbor seals, California sea lions, and Steller sea lions. The number of each species of pinniped in the source pool (Count in table below) is informed by observations from managers and biologists in the system. Each pinniped has a maximum consumption (Cmax) parameter that is set high so it doesn't unnecessarily limit them from gorging behavior. The below table also lists the number of other individuals that each pinniped is learning from during social contagion of information. For harbor seals, we think they use relatively small and dispersed haulouts, which might limit information spread. For sea lions, they generally use the same large haulout so the size of their social circle (Copy) includes all other individuals of their species. 
 
-`r kable(data.frame(HarborSeal = num_seals, California = num_zc, Steller = num_ej)) %>% kable_styling(full_width = F)`
+```{r pinniped par table, message = FALSE, echo = FALSE, warning = FALSE}
+
+Count <- data.frame(HarborSeal = num_seals, California = num_zc, Steller = num_ej)
+Cmax_ <- data.frame(HarborSeal = Cmax, California = Cmax_zc, Steller = Cmax_ej)
+Copy <- data.frame(HarborSeal = num_seals_2_copy, California = num_zc_2_copy, Steller = num_ej_2_copy)
+kable(data.frame(rbind(Count, Cmax_, Copy), row.names = c("Count", "Cmax", "Copy"))) %>% kable_styling(full_width = F)
+
+```
 
 In this model we assume that `r prop_specialists * 100`% of seals are specialists and all sea lions are specialists. This designation means that they are given higher baseline probabilities of going to the gauntlet to forage and have a higher resilience to harvest exposure.
+
 
