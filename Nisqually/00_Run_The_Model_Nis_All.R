@@ -36,8 +36,8 @@ source("Functions/updateLearning.R")
 source("Nisqually/06_The_Loop_Nis_All_fishing.R")
 
 # save catch rates from base run to csv for use in manipulated runs
-write.csv(data.frame(Chum = chum_catch_rate, LocNis = ln_catch_rate, GR = gr_catch_rate),
-          "C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Data/Nisqually/catch_rates_from_base_run.csv")
+# write.csv(data.frame(Chum = chum_catch_rate, LocNis = ln_catch_rate, GR = gr_catch_rate),
+#           "C:/Users/Elizabeth Allyn/Documents/GitHub/PinnipedCaseStudies/Data/Nisqually/catch_rates_from_base_run.csv")
 
 # 07 Plots
 source("Functions/makePlots.R")
@@ -64,6 +64,5 @@ plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
 plot_Px + plot_probs + plot_seals + plot_layout(guides = "collect")
 plot_Px_ej + plot_probs_ej + plot_ej + plot_layout(guides = "collect")
 plot_Px_zc + plot_probs_zc + plot_zc + plot_layout(guides = "collect")
-
 
 
