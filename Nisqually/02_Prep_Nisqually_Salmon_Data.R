@@ -122,8 +122,11 @@ Daily_Fish$Chum_catch <- fish.wide$Chum_catch[fish.wide$DayofYear %in% Daily_Fis
 # days that boats are on the water for hunting purposes (any day that catch is landed)
 # estimated boats on water per day from Craig
 Daily_Fish$harvesters <- 0
-Daily_Fish$harvesters[(Daily_Fish$GR_catch + Daily_Fish$LocNis_catch) > 0] <- 14
-num_harvesters <- sample(1:25, length(Daily_Fish$harvesters[Daily_Fish$Chum_catch > 0]), replace = TRUE)
+min_chum_boats <- 1
+max_chum_boats <- 25
+chin_boats <- 14
+Daily_Fish$harvesters[(Daily_Fish$GR_catch + Daily_Fish$LocNis_catch) > 0] <- chin_boats
+num_harvesters <- sample(min_chum_boats:max_chum_boats, length(Daily_Fish$harvesters[Daily_Fish$Chum_catch > 0]), replace = TRUE)
 Daily_Fish$harvesters[Daily_Fish$Chum_catch > 0] <- num_harvesters
 
 
