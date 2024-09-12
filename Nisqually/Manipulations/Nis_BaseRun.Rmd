@@ -20,23 +20,23 @@ The purpose of this document is to describe the base run for the Nisqually River
 
 ### Underlying Salmon Data
 
-`r source("Nisqually/01_predictFish.R")`
-`r source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")`
-
-
-Three run of salmon are included in the Nisqually model: Green River Chinook, LocNis (local natural) Chinook, and winter Chum. Due to the timing of these three salmon runs, the model runs from `r as.Date(fish_start, origin = "2024-01-01")` until `r as.Date(fish_end, origin = "2024-01-01")` the following year. Data was provided from the Nisqually Indian Tribe to estimate daily arriving salmon from each run and daily catch of each run. Chinook are caught both in a directed fishery on the Green River run and as bycatch in the coho fishery. Chum are caught in the directed chum fishery only. In recent years the chum fishery has not been active, so there is a second base run with no chum fishery - see other file (coming soon). The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model. Plots of daily catch are also shown with the derived catch rates side-by-side. Catch rates come from dividing the catch data by the number of each run modeled to be in the gauntlet on each day. 
-
 ```{r salmon data, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
 
 source("Nisqually/00_Run_The_Model_Nis_All.R", local = knitr::knit_global())
 
-raw_arrival_plot + catch_rate_plot
-
 ```
+
+Three run of salmon are included in the Nisqually model: Green River Chinook, LocNis (local natural) Chinook, and winter Chum. Due to the timing of these three salmon runs, the model runs from `r as.Date(fish_start, origin = "2024-01-01")` until `r as.Date(fish_end, origin = "2024-01-01")` the following year. Data was provided from the Nisqually Indian Tribe to estimate daily arriving salmon from each run and daily catch of each run. Chinook are caught both in a directed fishery on the Green River run and as bycatch in the coho fishery. Chum are caught in the directed chum fishery only. In recent years the chum fishery has not been active, so there is a second base run with no chum fishery - see other file (coming soon). The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model. Plots of daily catch are also shown with the derived catch rates side-by-side. Catch rates come from dividing the catch data by the number of each run modeled to be in the gauntlet on each day.
+
+`r raw_arrival_plot + catch_rate_plot`
 
 Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. The escape rate is simply 1/residence time. For Chum, they also might spawn in the gauntlet, so their "escape" rate also encompasses successful spawning, and their residence time includes potential spawning activities and behaviors.
 
 `r kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locnis_residence)) %>% kable_styling(full_width = F)`
+
+`r gauntlet_plot + escape_plot / fished_plot + eaten_sp_plot`
+
+`r kable(salmon_escapement)`
 
 ### Pinniped Inputs
 
@@ -53,4 +53,10 @@ kable(data.frame(rbind(Count, Cmax_, Copy), row.names = c("Count", "Cmax", "Copy
 
 In this model we assume that `r prop_specialists * 100`% of seals are specialists and all sea lions are specialists. This designation means that they are given higher baseline probabilities of going to the gauntlet to forage and have a higher resilience to harvest exposure.
 
+`r plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")`
 
+### Harvest Scenario
+
+The baseline harvest scenario involves a very low level of boat-based bycatch during fishing activity. This comes from the ~3 removals that were reported via NWIFC in south Puget Sound in 2021. In this scenario, harvest effort is occurring on all days when catch was recorded. The number of boats participating in harvest is an average for the Chinook and Coho fisheries from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the model it does a random sample of 1:25 to determine the number of harvesters active that day. In the base run, the harvest is 0 pretty much all the time, so no results to show for that.
+
+### 
