@@ -59,3 +59,8 @@ coho_params <- fish.fit.optim.coho$par
 # lines(predict_new_fish(coho_params, 130:290, data_start))
 # lines(predict_new_fish(chinook_params, 130:290, data_start))
 
+## call fishing data
+
+catch <- read.csv("Data/BallardLocks/FisheryCatchNumbers2023ShipCanal.csv")
+
+
