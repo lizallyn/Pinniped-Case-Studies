@@ -29,3 +29,19 @@ source("Functions/learnY.R")
 source("Functions/type3FuncRes.R")
 source("Functions/linearFuncRes.R")
 source("Functions/updateLearning.R")
+
+# 06 Run The Loop
+source("Ballard/06_The_Loop.R")
+
+# 07 Plots
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
+source("Functions/Plots_salmon.R")
+source("Functions/Plots_responses.R")
+
+# Look at the Results
+escape_plot
+eaten_sp_plot
+plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
