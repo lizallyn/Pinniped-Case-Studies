@@ -123,11 +123,11 @@ H_ej <- oneDzeroes
 
 ### Variable Rates ----
 coho_catch_rate <- oneDzeroes
-coho_catch_rate[fishery_days] <- coho_fish_rate
+# coho_catch_rate[fishery_days] <- coho_fish_rate
 chinook_catch_rate <- oneDzeroes
-chinook_catch_rate[fishery_days] <- chinook_fish_rate
+# chinook_catch_rate[fishery_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
-sockeye_catch_rate[fishery_days] <- sockeye_fish_rate
+# sockeye_catch_rate[fishery_days] <- sockeye_fish_rate
 
 
 
