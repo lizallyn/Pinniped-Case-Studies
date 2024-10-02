@@ -54,11 +54,11 @@ for(t in 1:(days - 1)) {
   num_zc_at_gauntlet <- length(zc_at_gauntlet)
   num_ej_at_gauntlet <- length(ej_at_gauntlet)
   
-  sockeye_catch_rate[t] <- catch$SockeyeCatch[catch$DayofYear == t]/gauntlet_sockeye[t]
+  sockeye_catch_rate[t] <- Chosen_catch$SockeyeCatch[t]/gauntlet_sockeye[t]
   sockeye_catch_rate[is.na(sockeye_catch_rate)] <- 0
-  chinook_catch_rate[t] <- catch$ChinookCatch[catch$DayofYear == t]/gauntlet_chinook[t]
+  chinook_catch_rate[t] <- Chosen_catch$ChinookCatch[t]/gauntlet_chinook[t]
   chinook_catch_rate[is.na(chinook_catch_rate)] <- 0
-  coho_catch_rate[t] <- catch$CohoCatch[catch$DayofYear == t]/gauntlet_coho[t]
+  coho_catch_rate[t] <- Chosen_catch$CohoCatch[t]/gauntlet_coho[t]
   coho_catch_rate[is.na(coho_catch_rate)] <- 0
   
   salmon_result <- run_rungeKutta(Ns = c(gauntlet_sockeye[t], gauntlet_chinook[t], gauntlet_coho[t]), 

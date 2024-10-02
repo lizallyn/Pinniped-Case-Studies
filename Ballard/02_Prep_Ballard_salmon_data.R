@@ -63,4 +63,4 @@ coho_params <- fish.fit.optim.coho$par
 
 catch <- read.csv("Data/BallardLocks/FisheryCatchNumbers2023ShipCanal.csv")
 
-
+Chosen_catch <- catch[data_start:data_end,]

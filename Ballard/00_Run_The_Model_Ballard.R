@@ -45,3 +45,4 @@ source("Functions/Plots_responses.R")
 escape_plot
 eaten_sp_plot
 plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
+fished_plot
