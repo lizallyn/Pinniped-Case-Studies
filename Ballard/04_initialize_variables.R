@@ -2,6 +2,10 @@
 
 ### Parameters that are derived from other parameters----
 
+harvest_days_pv <- harvest_open:harvest_close
+harvest_days_ej <- harvest_open:harvest_close
+harvest_days_zc <- harvest_open:harvest_close
+
 num_specialists <- round(num_seals * prop_specialists)
 
 slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
@@ -92,6 +96,7 @@ kill_list_ej <- list()
 
 # harvest
 fishery_range <- fishery_open:fishery_close
+# convert to loop t from dayofyear
 fishery_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
 
 harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
@@ -123,11 +128,11 @@ H_ej <- oneDzeroes
 
 ### Variable Rates ----
 coho_catch_rate <- oneDzeroes
-# coho_catch_rate[fishery_days] <- coho_fish_rate
+coho_catch_rate[fishery_days] <- coho_fish_rate
 chinook_catch_rate <- oneDzeroes
-# chinook_catch_rate[fishery_days] <- chinook_fish_rate
+chinook_catch_rate[fishery_days] <- chinook_fish_rate
 sockeye_catch_rate <- oneDzeroes
-# sockeye_catch_rate[fishery_days] <- sockeye_fish_rate
+sockeye_catch_rate[fishery_days] <- sockeye_fish_rate
 
 
 

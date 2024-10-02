@@ -63,9 +63,9 @@ chinook_escape_rate <- 0.015
 coho_escape_rate <- 0.1
 natural_mort <- 0.0005
 
-# coho_fish_rate <- 0.1 # see "estFishingRate.R"
-# chinook_fish_rate <- 0.01
-# sockeye_fish_rate <- 0.01
+coho_fish_rate <- 0.1 # see "estFishingRate.R"
+chinook_fish_rate <- 0.1
+sockeye_fish_rate <- 0
 salmon_days <- which(Daily_fish$total > 0)
 
 # hunting parameters (same as fishery opening in base run realm)
@@ -78,12 +78,10 @@ steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
 min_harvesters <- min_fishers
 max_harvesters <- max_fishers
-harvest_open <- fishery_open
-harvest_close <- fishery_close
+harvest_open <- yday(as.Date("2023-09-10"))
+harvest_close <- yday(as.Date("2023-11-17"))
 scenario <- "Boat"
-harvest_days_pv <- harvest_open:harvest_close
-harvest_days_ej <- harvest_open:harvest_close
-harvest_days_zc <- harvest_open:harvest_close
+
 
 
 
