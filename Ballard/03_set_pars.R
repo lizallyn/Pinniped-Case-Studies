@@ -51,11 +51,8 @@ buffer_Pymin_specialist <- 0.5
 buffer_Pxmin_specialist <- 0
 
 # social learning parameters
-num_seals_2_copy <- num_seals
 mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
-num_zc_2_copy <- num_zc
-num_ej_2_copy <- num_ej
 
 # salmon parameters
 sockeye_escape_rate <- 0.3
