@@ -8,6 +8,10 @@ harvest_days_zc <- harvest_open:harvest_close
 
 num_specialists <- round(num_seals * prop_specialists)
 
+num_seals_2_copy <- num_seals
+num_zc_2_copy <- num_zc
+num_ej_2_copy <- num_ej
+
 slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
 xmin <- (0 - intercept_x_val)/slope_x_val
 
