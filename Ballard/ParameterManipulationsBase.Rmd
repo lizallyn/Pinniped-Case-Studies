@@ -4,10 +4,9 @@ output: ioslides_presentation
 date: "`r Sys.Date()`"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+```{r setup, message = FALSE, echo = FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
 library(knitr)
-library(flextable)
 library(kableExtra)
 
 fig.height <- 3
@@ -127,16 +126,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## alpha (search and capture rate)
 
 ```{r alpha, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 alpha_list <- seq(0, 1, 0.01)
 
 Escape <- data_frame(Alpha = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(alpha_list)){
   alpha <- alpha_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(Alpha = alpha, salmon_escapement)
 }
 
@@ -161,16 +161,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## Cmax
 
 ```{r Cmax, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 Cmax_list <- seq(1, 15, 0.5)
 
 Escape <- data_frame(Cmax = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(Cmax_list)){
   Cmax <- Cmax_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(Cmax = Cmax, salmon_escapement)
 }
 
@@ -195,16 +196,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## gamma
 
 ```{r gamma, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 gamma_list <- seq(-1, 0, 0.05)
 
 Escape <- data_frame(Gamma = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(gamma_list)){
   gamma <- gamma_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(Gamma = gamma, salmon_escapement)
 }
 
@@ -229,16 +231,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## specialist_prob
 
 ```{r specialist_prob, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 specialist_prob_list <- seq(0, 1, 0.05)
 
 Escape <- data_frame(specialist_prob = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(specialist_prob_list)){
   specialist_prob <- specialist_prob_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(specialist_prob = specialist_prob, salmon_escapement)
 }
 
@@ -265,16 +268,17 @@ This has pretty much no impact at all, so we could actually probably get rid of 
 ## w (relative goodness of the Gauntlet)
 
 ```{r w, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 w_list <- seq(0, 1, 0.05)
 
 Escape <- data_frame(w = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(w_list)){
   w <- w_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(w = w, salmon_escapement)
 }
 
@@ -301,16 +305,17 @@ This also has a very small impact, pretty much level.
 ## intercept_x_val
 
 ```{r intercept_x_val, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 intercept_x_val_list <- seq(0, 0.1, 0.001)
 
 Escape <- data_frame(intercept_x_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(intercept_x_val_list)){
   intercept_x_val <- intercept_x_val_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(intercept_x_val = intercept_x_val, salmon_escapement)
 }
 
@@ -335,16 +340,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## steepness (y --> Py)
 
 ```{r steepness (y), message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 steepness_list <- seq(0, 2.5, 0.1)
 
 Escape <- data_frame(steepness = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(steepness_list)){
   steepness <- steepness_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(steepness = steepness, salmon_escapement)
 }
 
@@ -369,16 +375,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## threshold_val (y --> Py)
 
 ```{r threshold (y), message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 threshold_val_list <- seq(-10, 0, 0.2)
 
 Escape <- data_frame(threshold_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(threshold_val_list)){
   threshold_val <- threshold_val_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(threshold_val = threshold_val, salmon_escapement)
 }
 
@@ -403,16 +410,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## steepness_x_specialist
 
 ```{r steepness_x_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 steepness_x_specialist_list <- seq(0, 3, 0.2)
 
 Escape <- data_frame(steepness_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(steepness_x_specialist_list)){
   steepness_x_specialist <- steepness_x_specialist_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(steepness_x_specialist = steepness_x_specialist, salmon_escapement)
 }
 
@@ -437,16 +445,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## threshold_x_specialist
 
 ```{r threshold_x_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 threshold_x_specialist_list <- seq(0, 10, 0.2)
 
 Escape <- data_frame(threshold_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(threshold_x_specialist_list)){
   threshold_x_specialist <- threshold_x_specialist_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(threshold_x_specialist = threshold_x_specialist, salmon_escapement)
 }
 
@@ -473,16 +482,17 @@ Slight increase
 ## step
 
 ```{r step, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 step_list <- seq(0, 2, 0.01)
 
 Escape <- data_frame(step = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(step_list)){
   step <- step_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(step = step, salmon_escapement)
 }
 
@@ -509,16 +519,17 @@ Weird...needs some investigation...
 ## decay
 
 ```{r decay, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 decay_list <- seq(0, 2, 0.01)
 
 Escape <- data_frame(decay = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(decay_list)){
   decay <- decay_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(decay = decay, salmon_escapement)
 }
 
@@ -543,16 +554,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## buffer_Pymin_val
 
 ```{r buffer_Pymin_val, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 buffer_Pymin_val_list <- seq(0, 0.5, 0.01)
 
 Escape <- data_frame(buffer_Pymin_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(buffer_Pymin_val_list)){
   buffer_Pymin_val <- buffer_Pymin_val_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(buffer_Pymin_val = buffer_Pymin_val, salmon_escapement)
 }
 
@@ -577,16 +589,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## buffer_Pymin_specialist
 
 ```{r buffer_Pymin_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 buffer_Pymin_specialist_list <- seq(0, 0.75, 0.05)
 
 Escape <- data_frame(buffer_Pymin_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(buffer_Pymin_specialist_list)){
   buffer_Pymin_specialist <- buffer_Pymin_specialist_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(buffer_Pymin_specialist = buffer_Pymin_specialist, salmon_escapement)
 }
 
@@ -611,16 +624,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## buffer_Pxmin_specialist
 
 ```{r buffer_Pxmin_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 buffer_Pxmin_specialist_list <- seq(0, 0.75, 0.05)
 
 Escape <- data_frame(buffer_Pxmin_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(buffer_Pxmin_specialist_list)){
   buffer_Pxmin_specialist <- buffer_Pxmin_specialist_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(buffer_Pxmin_specialist = buffer_Pxmin_specialist, salmon_escapement)
 }
 
@@ -645,16 +659,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## num_seals_2_copy
 
 ```{r num_seals_2_copy, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 num_seals_2_copy_list <- seq(0, num_seals, 2)
 
 Escape <- data_frame(num_seals_2_copy = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(num_seals_2_copy_list)){
   num_seals_2_copy <- num_seals_2_copy_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(num_seals_2_copy = num_seals_2_copy, salmon_escapement)
 }
 
@@ -681,16 +696,17 @@ Surprisingly no effect.
 ## beta (receptivity spread)
 
 ```{r beta, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 beta_list <- seq(0, 100, 2)
 
 Escape <- data_frame(beta = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(beta_list)){
   beta <- beta_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(beta = beta, salmon_escapement)
 }
 
@@ -717,16 +733,17 @@ Contagion not super relevant here...
 ## sockeye_escape_rate
 
 ```{r sockeye_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 sockeye_escape_rate_list <- seq(0, 0.5, 0.01)
 
 Escape <- data_frame(sockeye_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(sockeye_escape_rate_list)){
   sockeye_escape_rate <- sockeye_escape_rate_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(sockeye_escape_rate = sockeye_escape_rate, salmon_escapement)
 }
 
@@ -751,16 +768,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## chinook_escape_rate
 
 ```{r chinook_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 chinook_escape_rate_list <- seq(0, 0.3, 0.005)
 
 Escape <- data_frame(chinook_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(chinook_escape_rate_list)){
   chinook_escape_rate <- chinook_escape_rate_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(chinook_escape_rate = chinook_escape_rate, salmon_escapement)
 }
 
@@ -785,16 +803,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## coho_escape_rate
 
 ```{r coho_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 coho_escape_rate_list <- seq(0, 0.5, 0.01)
 
 Escape <- data_frame(coho_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(coho_escape_rate_list)){
   coho_escape_rate <- coho_escape_rate_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(coho_escape_rate = coho_escape_rate, salmon_escapement)
 }
 
@@ -819,16 +838,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## natural_mort
 
 ```{r natural_mort, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 natural_mort_list <- seq(0, 0.01, 0.0001)
 
 Escape <- data_frame(natural_mort = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(natural_mort_list)){
   natural_mort <- natural_mort_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(natural_mort = natural_mort, salmon_escapement)
 }
 
@@ -853,16 +873,17 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ## steepness_H
 
 ```{r steepness_H, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 steepness_H_list <- seq(0, 20, 0.5)
 
 Escape <- data_frame(steepness_H = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(steepness_H_list)){
   steepness_H <- steepness_H_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(steepness_H = steepness_H, salmon_escapement)
 }
 
@@ -889,16 +910,17 @@ This makes sense that it won't have an effect when the total take is very little
 ## efficiency
 
 ```{r efficiency, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
-source("Models/Run_The_Model.R", local = knitr::knit_global())
 
-assembleFirstHalf(path_to_pars = "Functions/BaseRun_set_pars.R")
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
 
 efficiency_list <- seq(0, 1, 0.01)
 
 Escape <- data_frame(efficiency = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(efficiency_list)){
   efficiency <- efficiency_list[i]
-  assembleSecondHalf(path_to_vars = "Functions/BaseRun_initialize_variables.R")
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
   Escape[i,] <- data_frame(efficiency = efficiency, salmon_escapement)
 }
 
