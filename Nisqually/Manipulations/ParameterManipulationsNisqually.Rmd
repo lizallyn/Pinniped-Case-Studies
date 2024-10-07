@@ -1,0 +1,29 @@
+---
+title: "Parameter Manipulation - Nisqually"
+output: ioslides_presentation
+date: "`r Sys.Date()`"
+---
+
+```{r setup, message = FALSE, echo = FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+library(knitr)
+library(kableExtra)
+
+fig.height <- 3
+fig.width <- 6
+font_size <- 12
+
+source("Functions/01_predictFish.R")
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta_3.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
+```
+
