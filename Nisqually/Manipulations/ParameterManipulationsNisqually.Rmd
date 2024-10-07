@@ -27,3 +27,61 @@ source("Functions/linearFuncRes.R")
 source("Functions/updateLearning.R")
 ```
 
+## Purpose
+
+This presentation is meant to document single parameter manipulations. The main comparison responses are the number of seals at the Gauntlet and the number of salmon escaped total of each species.
+
+## The Base Run Realm
+
+```{r base run realm, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_set_pars_All.R")
+source("Nisqually/04_initialize_variables_All.R")
+
+source("Nisqually/Manipulations/assembleLegosNis.R")
+
+(plot_seals + theme_classic()) / (eaten_sp_plot+ theme_classic())
+salmon_escapement <- data.frame(Run = "Base", Sockeye = escape_sockeye[days], Chinook = escape_chinook[days], Coho = escape_coho[days])
+
+base_salmon_escapement <- salmon_escapement
+kable(salmon_escapement, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
+
+## num_seals
+
+```{r base run realm, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_set_pars_All.R")
+num_seals_list <- seq(from = 1, to = 200, by = 25)
+
+Escape <- data.frame(Seals = 0, Chum = 0, GR_Chinook = 0, LN_Chinook = 0)
+
+for(i in 1:length(num_seals_list)){
+  num_seals <- num_seals_list[i]
+  source("Nisqually/04_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(Seals = num_seals, salmon_escapement)
+}
+
+Escape <- data_frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
+  geom_line(aes(y = Chum), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = GR_Chinook), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = LN_Chinook), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 50, lwd = 2, color = "gray", linetype = 3) +
+  labs(y = "Salmon Escaped", x = "Number of Seals in Source Pool") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Seals", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+
+```
+
+
