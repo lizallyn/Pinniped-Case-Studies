@@ -42,7 +42,7 @@ source("Ballard/04_initialize_variables.R")
 source("Ballard/assembleLegosBallard.R")
 
 (plot_seals + theme_classic()) / (eaten_sp_plot+ theme_classic())
-salmon_escapement <- data.frame(Seals = num_seals, Ej = num_ej, Zc = num_zc, Sockeye = escape_sockeye[days], Chinook = escape_chinook[days], Coho = escape_coho[days])
+salmon_escapement <- data.frame(Run = "Base", Sockeye = escape_sockeye[days], Chinook = escape_chinook[days], Coho = escape_coho[days])
 
 base_salmon_escapement <- salmon_escapement
 kable(salmon_escapement, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -59,17 +59,17 @@ num_seals_list <- seq(from = 1, to = 200, by = 25)
 num_Ej_list <- seq(from = 1, to = 200, by = 25)
 num_Zc_list <- seq(from = 1, to = 200, by = 25)
 
-Escape <- data.frame(Seals = 0, Ej = 0, Zc = 0, Sockeye = 0, Chinook = 0, Coho = 0)
+Escape <- data.frame(Seals = 0, Sockeye = 0, Chinook = 0, Coho = 0)
 for(i in 1:length(num_seals_list)){
   num_seals <- num_seals_list[i]
   num_ej <- num_Ej_list[i]
   num_zc <- num_Zc_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data.frame(Seals = num_seals, Ej = num_ej, Zc = num_zc, salmon_escapement)
+  Escape[i,] <- data.frame(Seals = num_seals, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -81,6 +81,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Seals)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape)/2,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Seals", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -99,15 +100,15 @@ source("Ballard/03_set_pars.R")
 
 prop_specialists_list <- seq(0, 1, 0.2)
 
-Escape <- data_frame(Prop = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(Prop = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(prop_specialists_list)){
   prop_specialists <- prop_specialists_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(Prop = prop_specialists, salmon_escapement)
+  Escape[i,] <- data.frame(Prop = prop_specialists, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Prop)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -118,7 +119,8 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Prop)) +
   theme_classic()
 plot_escape_manipulations
 
-escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape)/2,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Prop", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -134,15 +136,15 @@ source("Ballard/03_set_pars.R")
 
 alpha_list <- seq(0, 1, 0.1)
 
-Escape <- data_frame(Alpha = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(Alpha = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(alpha_list)){
   alpha <- alpha_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(Alpha = alpha, salmon_escapement)
+  Escape[i,] <- data.frame(Alpha = alpha, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Alpha)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -154,6 +156,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Alpha)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Alpha", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -168,15 +171,15 @@ source("Ballard/03_set_pars.R")
 
 Cmax_list <- seq(1, 15, 3)
 
-Escape <- data_frame(Cmax = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(Cmax = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(Cmax_list)){
   Cmax <- Cmax_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(Cmax = Cmax, salmon_escapement)
+  Escape[i,] <- data.frame(Cmax = Cmax, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Cmax)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -188,6 +191,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Cmax)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Cmax", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -202,15 +206,15 @@ source("Ballard/03_set_pars.R")
 
 gamma_list <- seq(-1, 0, 0.2)
 
-Escape <- data_frame(Gamma = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(Gamma = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(gamma_list)){
   gamma <- gamma_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(Gamma = gamma, salmon_escapement)
+  Escape[i,] <- data.frame(Gamma = gamma, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = Gamma)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -222,6 +226,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = Gamma)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Gamma", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -236,15 +241,15 @@ source("Ballard/03_set_pars.R")
 
 specialist_prob_list <- seq(0, 1, 0.2)
 
-Escape <- data_frame(specialist_prob = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(specialist_prob = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(specialist_prob_list)){
   specialist_prob <- specialist_prob_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(specialist_prob = specialist_prob, salmon_escapement)
+  Escape[i,] <- data.frame(specialist_prob = specialist_prob, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = specialist_prob)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -256,6 +261,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = specialist_prob)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Prob", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -272,15 +278,15 @@ source("Ballard/03_set_pars.R")
 
 w_list <- seq(0, 1, 0.2)
 
-Escape <- data_frame(w = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(w = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(w_list)){
   w <- w_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(w = w, salmon_escapement)
+  Escape[i,] <- data.frame(w = w, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = w)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -292,6 +298,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = w)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("W", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -308,15 +315,15 @@ source("Ballard/03_set_pars.R")
 
 intercept_x_val_list <- seq(0, 0.1, 0.02)
 
-Escape <- data_frame(intercept_x_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(intercept_x_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(intercept_x_val_list)){
   intercept_x_val <- intercept_x_val_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(intercept_x_val = intercept_x_val, salmon_escapement)
+  Escape[i,] <- data.frame(intercept_x_val = intercept_x_val, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = intercept_x_val)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -328,6 +335,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = intercept_x_val)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Intercept", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -342,15 +350,15 @@ source("Ballard/03_set_pars.R")
 
 steepness_list <- seq(0, 2.5, 0.5)
 
-Escape <- data_frame(steepness = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(steepness = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(steepness_list)){
   steepness <- steepness_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(steepness = steepness, salmon_escapement)
+  Escape[i,] <- data.frame(steepness = steepness, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -362,6 +370,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Steepness", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -376,15 +385,15 @@ source("Ballard/03_set_pars.R")
 
 threshold_val_list <- seq(-10, 0, 2)
 
-Escape <- data_frame(threshold_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(threshold_val = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(threshold_val_list)){
   threshold_val <- threshold_val_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(threshold_val = threshold_val, salmon_escapement)
+  Escape[i,] <- data.frame(threshold_val = threshold_val, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = threshold_val)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -396,6 +405,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = threshold_val)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Threshold", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -410,15 +420,15 @@ source("Ballard/03_set_pars.R")
 
 steepness_x_specialist_list <- seq(0, 3, 0.5)
 
-Escape <- data_frame(steepness_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(steepness_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(steepness_x_specialist_list)){
   steepness_x_specialist <- steepness_x_specialist_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(steepness_x_specialist = steepness_x_specialist, salmon_escapement)
+  Escape[i,] <- data.frame(steepness_x_specialist = steepness_x_specialist, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness_x_specialist)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -430,6 +440,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness_x_specialis
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Steepness", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -444,15 +455,15 @@ source("Ballard/03_set_pars.R")
 
 threshold_x_specialist_list <- seq(0, 10, 2)
 
-Escape <- data_frame(threshold_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(threshold_x_specialist = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(threshold_x_specialist_list)){
   threshold_x_specialist <- threshold_x_specialist_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(threshold_x_specialist = threshold_x_specialist, salmon_escapement)
+  Escape[i,] <- data.frame(threshold_x_specialist = threshold_x_specialist, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = threshold_x_specialist)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -464,6 +475,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = threshold_x_specialis
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Threshold", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -480,15 +492,15 @@ source("Ballard/03_set_pars.R")
 
 step_list <- seq(0, 2, 0.5)
 
-Escape <- data_frame(step = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(step = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(step_list)){
   step <- step_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(step = step, salmon_escapement)
+  Escape[i,] <- data.frame(step = step, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = step)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -500,6 +512,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = step)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Step", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -516,15 +529,15 @@ source("Ballard/03_set_pars.R")
 
 decay_list <- seq(0, 2, 0.25)
 
-Escape <- data_frame(decay = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(decay = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(decay_list)){
   decay <- decay_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(decay = decay, salmon_escapement)
+  Escape[i,] <- data.frame(decay = decay, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = decay)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -536,6 +549,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = decay)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Decay", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -550,15 +564,15 @@ source("Ballard/03_set_pars.R")
 
 num_seals_2_copy_list <- seq(0, num_seals, 15)
 
-Escape <- data_frame(num_seals_2_copy = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(num_seals_2_copy = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(num_seals_2_copy_list)){
   num_seals_2_copy <- num_seals_2_copy_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(num_seals_2_copy = num_seals_2_copy, salmon_escapement)
+  Escape[i,] <- data.frame(num_seals_2_copy = num_seals_2_copy, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = num_seals_2_copy)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -570,6 +584,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = num_seals_2_copy)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Seals", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -586,15 +601,15 @@ source("Ballard/03_set_pars.R")
 
 beta_list <- seq(0, 50, 10)
 
-Escape <- data_frame(beta = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(beta = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(beta_list)){
   beta <- beta_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(beta = beta, salmon_escapement)
+  Escape[i,] <- data.frame(beta = beta, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = beta)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -606,6 +621,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = beta)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Beta", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -622,15 +638,15 @@ source("Ballard/03_set_pars.R")
 
 sockeye_escape_rate_list <- seq(0, 0.5, 0.01)
 
-Escape <- data_frame(sockeye_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(sockeye_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(sockeye_escape_rate_list)){
   sockeye_escape_rate <- sockeye_escape_rate_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(sockeye_escape_rate = sockeye_escape_rate, salmon_escapement)
+  Escape[i,] <- data.frame(sockeye_escape_rate = sockeye_escape_rate, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = sockeye_escape_rate)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -642,6 +658,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = sockeye_escape_rate))
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Rate", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -656,15 +673,15 @@ source("Ballard/03_set_pars.R")
 
 chinook_escape_rate_list <- seq(0, 0.3, 0.05)
 
-Escape <- data_frame(chinook_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(chinook_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(chinook_escape_rate_list)){
   chinook_escape_rate <- chinook_escape_rate_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(chinook_escape_rate = chinook_escape_rate, salmon_escapement)
+  Escape[i,] <- data.frame(chinook_escape_rate = chinook_escape_rate, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = chinook_escape_rate)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -676,6 +693,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = chinook_escape_rate))
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Rate", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -690,15 +708,15 @@ source("Ballard/03_set_pars.R")
 
 coho_escape_rate_list <- seq(0, 0.5, 0.1)
 
-Escape <- data_frame(coho_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(coho_escape_rate = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(coho_escape_rate_list)){
   coho_escape_rate <- coho_escape_rate_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(coho_escape_rate = coho_escape_rate, salmon_escapement)
+  Escape[i,] <- data.frame(coho_escape_rate = coho_escape_rate, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = coho_escape_rate)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -710,6 +728,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = coho_escape_rate)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Rate", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -724,15 +743,15 @@ source("Ballard/03_set_pars.R")
 
 natural_mort_list <- seq(0, 0.001, 0.00025)
 
-Escape <- data_frame(natural_mort = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(natural_mort = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(natural_mort_list)){
   natural_mort <- natural_mort_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(natural_mort = natural_mort, salmon_escapement)
+  Escape[i,] <- data.frame(natural_mort = natural_mort, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = natural_mort)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -744,6 +763,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = natural_mort)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Rate", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -758,15 +778,15 @@ source("Ballard/03_set_pars.R")
 
 steepness_H_list <- seq(0, 200, 50)
 
-Escape <- data_frame(steepness_H = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(steepness_H = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(steepness_H_list)){
   steepness_H <- steepness_H_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(steepness_H = steepness_H, salmon_escapement)
+  Escape[i,] <- data.frame(steepness_H = steepness_H, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness_H)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -778,6 +798,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = steepness_H)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Steepness", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -794,15 +815,15 @@ source("Ballard/03_set_pars.R")
 
 efficiency_list <- seq(0, 0.5, 0.1)
 
-Escape <- data_frame(efficiency = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+Escape <- data.frame(efficiency = 0, Sockeye = NA, Chinook = NA, Coho = NA)
 for(i in 1:length(efficiency_list)){
   efficiency <- efficiency_list[i]
   source("Ballard/04_initialize_variables.R")
   source("Ballard/assembleLegosBallard.R")
-  Escape[i,] <- data_frame(efficiency = efficiency, salmon_escapement)
+  Escape[i,] <- data.frame(efficiency = efficiency, salmon_escapement)
 }
 
-Escape <- data_frame(Escape)
+Escape <- data.frame(Escape)
 
 plot_escape_manipulations <- ggplot(data = Escape, aes(x = efficiency)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
@@ -814,6 +835,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = efficiency)) +
 plot_escape_manipulations
 
 escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("Efficiency", ~ "Run")
 escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
