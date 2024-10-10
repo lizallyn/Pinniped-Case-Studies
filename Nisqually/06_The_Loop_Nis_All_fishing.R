@@ -82,7 +82,7 @@ for(t in 1:(days - 1)) {
                                   alpha_SSL = alpha, gamma_SSL = gamma, Cmax_CSL = Cmax_zc, 
                                   alpha_CSL = alpha, gamma_CSL = gamma,
                                   F_catch = c(chum_catch_rate[t], gr_catch_rate[t], ln_catch_rate[t]), 
-                                  M = natural_mort, E = c(gr_escape_rate, ln_escape_rate), 
+                                  M = natural_mort, E = c(chum_escape_rate, gr_escape_rate, ln_escape_rate), 
                                   deltat = deltat_val)
   
   # assign escape and gauntlet updates
