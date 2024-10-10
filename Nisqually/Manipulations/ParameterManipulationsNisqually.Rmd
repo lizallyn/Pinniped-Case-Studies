@@ -245,9 +245,9 @@ result[[2]]
 
 ```
 
-## steepness (y --> Py)
+## steepness_y
 
-```{r steepness (y --> Py), message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+```{r steepness_y, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
 
 source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 source("Nisqually/03_Nis_set_pars_All.R")
@@ -269,9 +269,9 @@ result[[2]]
 
 ```
 
-## threshold_val (y --> Py)
+## threshold_val_y
 
-```{r threshold_val (y --> Py), message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+```{r threshold_val_y, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
 
 source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 source("Nisqually/03_Nis_set_pars_All.R")
