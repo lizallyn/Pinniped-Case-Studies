@@ -42,7 +42,7 @@ source("Nisqually/04_Nis_initialize_variables_All.R")
 
 source("Nisqually/Manipulations/assembleLegosNis.R")
 
-(plot_seals + theme_classic()) / (eaten_sp_plot+ theme_classic())
+(plot_seals + theme_classic()) / (eaten_sp_plot + theme_classic())
 
 base_salmon_escapement <- data.frame(Run = "Base", salmon_escapement)
 kable(salmon_escapement, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
@@ -54,9 +54,9 @@ kable(salmon_escapement, caption = "Escaped Salmon") %>% kable_styling(full_widt
 
 source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 source("Nisqually/03_Nis_set_pars_All.R")
-num_seals_list <- seq(from = 1, to = 200, by = 50)
-num_ej_list <- seq(from = 1, to = 200, by = 50)
-num_zc_list <- seq(from = 1, to = 200, by = 50)
+num_seals_list <- seq(from = 1, to = 200, by = 99)
+num_ej_list <- seq(from = 1, to = 200, by = 99)
+num_zc_list <- seq(from = 1, to = 200, by = 99)
 
 Escape <- data.frame(Seals = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
 
@@ -69,9 +69,491 @@ for(i in 1:length(num_seals_list)){
   Escape[i,] <- data_frame(Seals = num_seals, salmon_escapement)
 }
 
-showManipulations(output = Escape, parameter = "num_seals", 150)[1]
-showManipulations(output = Escape, parameter = "num_seals", 150)[[2]]
+result <- showManipulations(output = Escape, 150)
+result[[1]]
+result[[2]]
 
 ```
 
+## prop_specialists
+
+```{r prop_specialists, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+prop_specialists_list <- seq(0, 1, 0.5)
+
+Escape <- data.frame(specialist_prop = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(prop_specialists_list)){
+  prop_specialists <- prop_specialists_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(specialist_prop = prop_specialists, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.1)
+result[[1]]
+result[[2]]
+
+```
+
+## alpha (search and capture)
+
+```{r alpha, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+alpha_list <- seq(0, 0.6, 0.2)
+
+Escape <- data.frame(Alpha = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(alpha_list)){
+  alpha <- alpha_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(Alpha = alpha, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.05)
+result[[1]]
+result[[2]]
+
+```
+
+## gamma (predator dependence)
+
+```{r gamma, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+gamma_list <- seq(-1, 0, 0.2)
+
+Escape <- data.frame(Gamma = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(gamma_list)){
+  gamma <- gamma_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(Gamma = gamma, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, -1)
+result[[1]]
+result[[2]]
+
+```
+
+## Cmax
+
+```{r Cmax, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+Cmax_list <- seq(from = 1, to = 21, by = 10)
+
+Escape <- data.frame(Cmax_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(Cmax_list)){
+  Cmax <- Cmax_list[i]
+  Cmax_ej <- Cmax_list[i]
+  Cmax_zc <- Cmax_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(Cmax_val = Cmax, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 5)
+result[[1]]
+result[[2]]
+
+```
+
+## specialist_prob
+
+```{r specialist_prob, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+specialist_prob_list <- seq(from = 0, to = 1, by = 0.5)
+
+Escape <- data.frame(specialist_prob_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(specialist_prob_list)){
+  specialist_prob <- specialist_prob_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(specialist_prob_val = specialist_prob, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.5)
+result[[1]]
+result[[2]]
+
+```
+
+## w (relative goodness of the Gauntlet)
+
+```{r w, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+w_list <- seq(from = 0, to = 1, by = 0.5)
+
+Escape <- data.frame(w_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(w_list)){
+  w <- w_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(w_val = w, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.5)
+result[[1]]
+result[[2]]
+
+```
+
+## intercept_x_val
+
+```{r intercept_x_val, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+intercept_x_val_list <- seq(from = 0, to = 0.06, by = 0.02)
+
+Escape <- data.frame(intercept_x_val_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(intercept_x_val_list)){
+  intercept_x_val <- intercept_x_val_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(intercept_x_val_val = intercept_x_val, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.01)
+result[[1]]
+result[[2]]
+
+```
+
+## steepness (y --> Py)
+
+```{r steepness (y --> Py), message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+steepness_list <- seq(from = 0, to = 3, by = 1)
+
+Escape <- data.frame(steepness_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(steepness_list)){
+  steepness <- steepness_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(steepness_val = steepness, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 1)
+result[[1]]
+result[[2]]
+
+```
+
+## threshold_val (y --> Py)
+
+```{r threshold_val (y --> Py), message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+threshold_val_list <- seq(from = -10, to = 0, by = 5)
+
+Escape <- data.frame(threshold_val_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(threshold_val_list)){
+  threshold_val <- threshold_val_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(threshold_val_val = threshold_val, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, -5)
+result[[1]]
+result[[2]]
+
+```
+
+## threshold_x_specialist
+
+```{r threshold_x_specialist, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+threshold_x_specialist_list <- seq(from = -10, to = 0, by = 2)
+
+Escape <- data.frame(threshold_x_specialist_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(threshold_x_specialist_list)){
+  threshold_x_specialist <- threshold_x_specialist_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(threshold_x_specialist_val = threshold_x_specialist, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, -10)
+result[[1]]
+result[[2]]
+
+```
+
+## step
+
+```{r step, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+step_list <- seq(from = 0, to = 5, by = 1)
+
+Escape <- data.frame(step_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(step_list)){
+  step <- step_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(step_val = step, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.5)
+result[[1]]
+result[[2]]
+
+```
+
+## decay
+
+```{r decay, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+decay_list <- seq(from = 0, to = 5, by = 1)
+
+Escape <- data.frame(decay_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(decay_list)){
+  decay <- decay_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(decay_val = decay, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.5)
+result[[1]]
+result[[2]]
+
+```
+
+## num_seals_2_copy
+
+```{r num_seals_2_copy, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+num_seals_2_copy_list <- seq(from = 0, to = num_seals, by = num_seals/3)
+
+Escape <- data.frame(num_seals_2_copy_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(num_seals_2_copy_list)){
+  num_seals_2_copy <- num_seals_2_copy_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(num_seals_2_copy_val = num_seals_2_copy, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 25)
+result[[1]]
+result[[2]]
+
+```
+
+## beta
+
+```{r beta, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+beta_list <- seq(from = 0, to = 20, by = 5)
+
+Escape <- data.frame(beta_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(beta_list)){
+  beta <- beta_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(beta_val = beta, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 15)
+result[[1]]
+result[[2]]
+
+```
+
+## steepness_H
+
+```{r steepness_H, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+steepness_H_list <- seq(from = 0, to = 300, by = 100)
+
+Escape <- data.frame(steepness_H_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(steepness_H_list)){
+  steepness_H <- steepness_H_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(steepness_H_val = steepness_H, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 200)
+result[[1]]
+result[[2]]
+
+```
+
+## efficiency (hunt)
+
+```{r efficiency_H, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+efficiency_list <- seq(from = 0, to = 0.5, by = 0.1)
+
+Escape <- data.frame(efficiency_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(efficiency_list)){
+  efficiency <- efficiency_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(efficiency_val = efficiency, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.075)
+result[[1]]
+result[[2]]
+
+```
+
+## salmon natural mortality
+
+```{r natural_mort, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+natural_mort_list <- seq(from = 0, to = 0.001, by = 0.00025)
+
+Escape <- data.frame(natural_mort_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(natural_mort_list)){
+  natural_mort <- natural_mort_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(natural_mort_val = natural_mort, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.0005)
+result[[1]]
+result[[2]]
+
+```
+
+## chum_escape_rate
+
+```{r chum_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+chum_escape_rate_list <- seq(from = 0, to = 0.1, by = 0.02)
+
+Escape <- data.frame(chum_escape_rate_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(chum_escape_rate_list)){
+  chum_escape_rate <- chum_escape_rate_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(chum_escape_rate_val = chum_escape_rate, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.048)
+result[[1]]
+result[[2]]
+
+```
+
+## gr_escape_rate
+
+```{r gr_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+gr_escape_rate_list <- seq(from = 0, to = 0.1, by = 0.02)
+
+Escape <- data.frame(gr_escape_rate_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(gr_escape_rate_list)){
+  gr_escape_rate <- gr_escape_rate_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(gr_escape_rate_val = gr_escape_rate, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.07)
+result[[1]]
+result[[2]]
+
+```
+
+## ln_escape_rate
+
+```{r ln_escape_rate, message = FALSE, echo = FALSE, warning = FALSE, fig.height = fig.height, fig.width = fig.width}
+
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+source("Nisqually/03_Nis_set_pars_All.R")
+
+ln_escape_rate_list <- seq(from = 0, to = 0.2, by = 0.05)
+
+Escape <- data.frame(ln_escape_rate_val = 0, Chum = 0, Chinook_GR = 0, Chinook_LN = 0)
+
+for(i in 1:length(ln_escape_rate_list)){
+  ln_escape_rate <- ln_escape_rate_list[i]
+  source("Nisqually/04_Nis_initialize_variables_All.R")
+  source("Nisqually/Manipulations/assembleLegosNis.R")
+  Escape[i,] <- data_frame(ln_escape_rate_val = ln_escape_rate, salmon_escapement)
+}
+
+result <- showManipulations(output = Escape, 0.07)
+result[[1]]
+result[[2]]
+
+```
 
