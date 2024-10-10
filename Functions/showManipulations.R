@@ -22,5 +22,3 @@ showManipulations <- function(output, base_val) {
   return(returnables)
 }
 
-test <- showManipulations(Escape, 150)
-test[[1]]
