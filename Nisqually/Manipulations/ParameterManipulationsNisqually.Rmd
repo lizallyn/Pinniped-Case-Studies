@@ -13,6 +13,9 @@ fig.height <- 3
 fig.width <- 6
 font_size <- 12
 
+salmon_colors <- c(Chum = "salmon4", GR = "darkseagreen4", LN = "lightblue3",
+                   Chinook = "goldenrod", Coho = "lightblue4", Sockeye = "salmon3")
+
 source("Functions/01_predictFish.R")
 source("Functions/makeArray.R")
 source("Functions/createHarvestPlan.R")
@@ -69,7 +72,7 @@ for(i in 1:length(num_seals_list)){
   Escape[i,] <- data_frame(Seals = num_seals, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 150)
+result <- showManipulations(loc = "Nisqually", output = Escape, 150)
 result[[1]]
 result[[2]]
 
@@ -93,7 +96,7 @@ for(i in 1:length(prop_specialists_list)){
   Escape[i,] <- data_frame(specialist_prop = prop_specialists, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.1)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.1)
 result[[1]]
 result[[2]]
 
@@ -117,7 +120,7 @@ for(i in 1:length(alpha_list)){
   Escape[i,] <- data_frame(Alpha = alpha, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.05)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.05)
 result[[1]]
 result[[2]]
 
@@ -141,7 +144,7 @@ for(i in 1:length(gamma_list)){
   Escape[i,] <- data_frame(Gamma = gamma, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, -1)
+result <- showManipulations(loc = "Nisqually", output = Escape, -1)
 result[[1]]
 result[[2]]
 
@@ -167,7 +170,7 @@ for(i in 1:length(Cmax_list)){
   Escape[i,] <- data_frame(Cmax_val = Cmax, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 5)
+result <- showManipulations(loc = "Nisqually", output = Escape, 5)
 result[[1]]
 result[[2]]
 
@@ -191,7 +194,7 @@ for(i in 1:length(specialist_prob_list)){
   Escape[i,] <- data_frame(specialist_prob_val = specialist_prob, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.5)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.5)
 result[[1]]
 result[[2]]
 
@@ -215,7 +218,7 @@ for(i in 1:length(w_list)){
   Escape[i,] <- data_frame(w_val = w, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.5)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.5)
 result[[1]]
 result[[2]]
 
@@ -239,7 +242,7 @@ for(i in 1:length(intercept_x_val_list)){
   Escape[i,] <- data_frame(intercept_x_val_val = intercept_x_val, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.01)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.01)
 result[[1]]
 result[[2]]
 
@@ -263,7 +266,7 @@ for(i in 1:length(steepness_list)){
   Escape[i,] <- data_frame(steepness_val = steepness, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 1)
+result <- showManipulations(loc = "Nisqually", output = Escape, 1)
 result[[1]]
 result[[2]]
 
@@ -287,7 +290,7 @@ for(i in 1:length(threshold_val_list)){
   Escape[i,] <- data_frame(threshold_val_val = threshold_val, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, -5)
+result <- showManipulations(loc = "Nisqually", output = Escape, -5)
 result[[1]]
 result[[2]]
 
@@ -311,7 +314,7 @@ for(i in 1:length(threshold_x_specialist_list)){
   Escape[i,] <- data_frame(threshold_x_specialist_val = threshold_x_specialist, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, -10)
+result <- showManipulations(loc = "Nisqually", output = Escape, -10)
 result[[1]]
 result[[2]]
 
@@ -335,7 +338,7 @@ for(i in 1:length(step_list)){
   Escape[i,] <- data_frame(step_val = step, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.5)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.5)
 result[[1]]
 result[[2]]
 
@@ -359,7 +362,7 @@ for(i in 1:length(decay_list)){
   Escape[i,] <- data_frame(decay_val = decay, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.5)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.5)
 result[[1]]
 result[[2]]
 
@@ -383,7 +386,7 @@ for(i in 1:length(num_seals_2_copy_list)){
   Escape[i,] <- data_frame(num_seals_2_copy_val = num_seals_2_copy, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 25)
+result <- showManipulations(loc = "Nisqually", output = Escape, 25)
 result[[1]]
 result[[2]]
 
@@ -407,7 +410,7 @@ for(i in 1:length(beta_list)){
   Escape[i,] <- data_frame(beta_val = beta, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 15)
+result <- showManipulations(loc = "Nisqually", output = Escape, 15)
 result[[1]]
 result[[2]]
 
@@ -431,7 +434,7 @@ for(i in 1:length(steepness_H_list)){
   Escape[i,] <- data_frame(steepness_H_val = steepness_H, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 200)
+result <- showManipulations(loc = "Nisqually", output = Escape, 200)
 result[[1]]
 result[[2]]
 
@@ -455,7 +458,7 @@ for(i in 1:length(efficiency_list)){
   Escape[i,] <- data_frame(efficiency_val = efficiency, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.075)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.075)
 result[[1]]
 result[[2]]
 
@@ -479,7 +482,7 @@ for(i in 1:length(natural_mort_list)){
   Escape[i,] <- data_frame(natural_mort_val = natural_mort, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.0005)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.0005)
 result[[1]]
 result[[2]]
 
@@ -503,7 +506,7 @@ for(i in 1:length(chum_escape_rate_list)){
   Escape[i,] <- data_frame(chum_escape_rate_val = chum_escape_rate, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.048)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.048)
 result[[1]]
 result[[2]]
 
@@ -527,7 +530,7 @@ for(i in 1:length(gr_escape_rate_list)){
   Escape[i,] <- data_frame(gr_escape_rate_val = gr_escape_rate, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.07)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.07)
 result[[1]]
 result[[2]]
 
@@ -551,7 +554,7 @@ for(i in 1:length(ln_escape_rate_list)){
   Escape[i,] <- data_frame(ln_escape_rate_val = ln_escape_rate, salmon_escapement)
 }
 
-result <- showManipulations(output = Escape, 0.07)
+result <- showManipulations(loc = "Nisqually", output = Escape, 0.07)
 result[[1]]
 result[[2]]
 
