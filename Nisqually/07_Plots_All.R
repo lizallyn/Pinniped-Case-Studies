@@ -18,7 +18,7 @@ harvested <- data.frame(Seals = sum(H), Stellers = sum(H_ej), Californias = sum(
 
 # Plots of Salmon Species data
 
-salmon.colors <- c("dodgerblue", "seagreen2", "seagreen4")
+salmon.colors <- c(Chum = "salmon4", GR = "darkseagreen4", LN = "lightblue3")
 salmon.names <- c("Chum", "Chinook_GR", "Chinook_LN")
 names(salmon.colors) <- salmon.names
 
