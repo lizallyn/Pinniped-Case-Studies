@@ -36,7 +36,7 @@ source("Ballard/03_set_pars.R")
 
 # adjust parameters for management scenario
 steepness_H <- 5 # how quick does it saturate (higher = slower)
-efficiency <- 0.1 # what prop of seals are they capable of taking
+efficiency <- 0.125 # what prop of seals are they capable of taking
 
 ```
 
@@ -72,7 +72,7 @@ source("Functions/Plots_responses.R")
 This scenario is focused on the effects of a different management strategy that changes the quantity of seal harvest. Removals occur on days when the coho fishery is open in the gauntlet. The harvest strategy is still boat-based like incidental harvest but it is more aggressive as it is focused on seal removal directly not incidentally as in the base run.
 
 Removals occur from day `r harvest_open` - `r harvest_close`.
-When there are `r num_seals` in the source pool, pinniped presence at the Gauntlet is as follows:
+When there are `r num_seals` in the Pv, `r num_zc` Californias, and `r num_ej` Stellers in the source pool, pinniped presence at the Gauntlet is as follows:
 
 ```{r gauntlet pinnipeds plot, echo = FALSE}
 plot_seals + plot_ej + plot_zc
@@ -80,11 +80,11 @@ plot_seals + plot_ej + plot_zc
 ```
 
 
-...and removals are a type 2 function as follows:
+...and when there are 40 individual pinnipeds at the Gauntlet, removals are a type 2 function as follows:
 
 ```{r harvest response plot, echo = FALSE}
 fishers <- 0:max_fishers
-plot(fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:num_seals, 
+plot(fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:40, 
                            num_fishers = fishers, steepness = steepness_H, 
                            efficiency = efficiency, round = F), ylab = "Harvested Pinnipeds")
 ```
@@ -98,17 +98,23 @@ kable(parameters) %>% kable_styling(full_width = F)
 
 ### Things to Note
 
-The harvest efficiency is set at `r efficiency`, which represents both the proportion of pinnipeds in the gauntlet that are available to harvesters multiplied by the proportion of pinnipeds that harvesters are able to kill of the ones they attempt. In the Locks, fishers are only operating above the Locks in the ship canal, so the only pinnipeds that are available to them are the ones that go above the Locks in pursuit of fish (est. 10% of seals, no sea lions). I then assume that fishers kill 50% of the pinnipeds they shoot at. This results in a `r efficiency` harvest efficiency for boat-based effort by Muckleshoot fishers.
+The harvest efficiency is set at `r efficiency`, which represents both the proportion of pinnipeds in the gauntlet that are available to harvesters multiplied by the proportion of pinnipeds that harvesters are able to kill of the ones they attempt. In the Locks, fishers are only operating above the Locks in the ship canal, so the only pinnipeds that are available to them are the ones that go above the Locks in pursuit of fish (est. 25% of seals, no sea lions). I then assume that fishers kill 50% of the pinnipeds they shoot at. This results in a `r efficiency` harvest efficiency for boat-based effort by Muckleshoot fishers.
 
 ```{r pinniped harvest plot, echo = FALSE}
 plot_H + plot_H_ej + plot_H_zc
 ```
 
+The total harvested pinnipeds are as follows under this parameterization:
 
-The total escaped sockeye, Chinook, and Coho are as follows under this parameterization:
+```{r harvest table, echo = FALSE}
+kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc))) %>% kable_styling(full_width = F)
+```
+
+
+The fate of the sockeye, Chinook, and coho are as follows under this parameterization:
 
 ```{r salmon escapement, echo = FALSE}
-salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
-                                Coho = escape_coho[days])
-kable(salmon_escapement) %>% kable_styling(full_width = F)
+salmon_fates <- rbind(salmon_escapement, salmon_catch, salmon_eaten)
+salmon_fates$O <- c("Escape", "Catch", "Predated")
+kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
