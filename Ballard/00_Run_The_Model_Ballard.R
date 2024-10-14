@@ -15,6 +15,9 @@ source("Ballard/02_Prep_Ballard_salmon_data.R")
 # 03 Set Pars
 source("Ballard/03_set_pars.R")
 
+steepness_H <- 5 # how quick does it saturate (higher = slower)
+efficiency <- 0.1 # what prop of seals are they capable of taking
+
 # 04 Initialize Variables
 source("Ballard/04_initialize_variables.R")
 
@@ -47,4 +50,4 @@ eaten_sp_plot
 plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
 fished_plot
 plot_seals + plot_ej + plot_zc
-
+plot_H + plot_H_ej + plot_H_zc
