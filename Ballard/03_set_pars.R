@@ -13,8 +13,8 @@ num_seals <- 150
 prop_specialists <- 0.1
 
 # sea lions
-num_zc <- 100
-num_ej <- 50
+num_zc <- 5
+num_ej <- 1
 
 # seal consumption parameters
 deltat_val <- 1/24
