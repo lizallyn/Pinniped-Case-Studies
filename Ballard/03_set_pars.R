@@ -73,8 +73,6 @@ fishery_close <- yday(as.Date("2023-11-17"))
 zone_efficiency <- NA
 steepness_H <- 10 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
-min_harvesters <- min_fishers
-max_harvesters <- max_fishers
 harvest_open <- yday(as.Date("2023-09-10"))
 harvest_close <- yday(as.Date("2023-11-17"))
 scenario <- "Boat"
