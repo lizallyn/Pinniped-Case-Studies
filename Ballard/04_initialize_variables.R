@@ -2,9 +2,10 @@
 
 ### Parameters that are derived from other parameters----
 
-harvest_days_pv <- harvest_open:harvest_close
-harvest_days_ej <- harvest_open:harvest_close
-harvest_days_zc <- harvest_open:harvest_close
+# convert to loop t from dayofyear
+
+min_harvesters <- min_fishers
+max_harvesters <- max_fishers
 
 num_specialists <- round(num_seals * prop_specialists)
 
@@ -99,6 +100,11 @@ kill_list_zc <- list()
 kill_list_ej <- list()
 
 # harvest
+
+harvest_days_pv <- (harvest_open:harvest_close) - (start_loop - 1)
+harvest_days_ej <- harvest_open:harvest_close - (start_loop - 1)
+harvest_days_zc <- harvest_open:harvest_close - (start_loop - 1)
+
 fishery_range <- fishery_open:fishery_close
 # convert to loop t from dayofyear
 fishery_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop - 1)
