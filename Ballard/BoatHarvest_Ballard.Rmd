@@ -1,0 +1,93 @@
+---
+title: "Experiment: Boat Harvest Implementation"
+subtitle: "Describing the model run when boat-based harvest is amplified above incidental levels"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where managers open harvest of seals in the gauntlet by fishing vessels during the Coho fishery. This is modeled similarly to incidental fishery take but at a higher exploitation rate. 
+
+### Run the Model
+
+```{r, setup, include = FALSE}
+rm(list=ls())
+library(knitr)
+library(flextable)
+library(kableExtra)
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r, message = FALSE, warning = FALSE}
+
+source("Functions/01_predictFish.R")
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+
+## Load Data Files and Setup Functions 
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+
+## Set Parameters and Create Variables
+source("Ballard/03_set_pars.R")
+
+steepness_H <- 5 # how quick does it saturate (higher = slower)
+efficiency <- 0.05 # what prop of seals are they capable of taking
+
+source("Ballard/04_initialize_variables.R")
+
+## Load Function Files
+source("Ballard/05_salmonSpeciesUpdate.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta_3.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
+
+## Run the Loop
+source("Ballard/06_The_Loop.R")
+
+## Plots
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
+source("Functions/Plots_salmon.R")
+source("Functions/Plots_responses.R")
+```
+
+### Parameter Table
+
+This scenario is focused on the effects of a different management strategy that changes the quantity of seal harvest. Removals occur on days when the coho fishery is open in the gauntlet. The harvest strategy is still boat-based like incidental harvest but it is more aggressive as it is focused on seal removal directly not incidentally as in the base run.
+
+Removals occur from day `r salmon_days[1]` - `r salmon_days[length(salmon_days)]`.  
+Removals are a type 2 function as follows:
+
+```{r}
+fishers <- 0:max_fishers
+plot(fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:num_seals, 
+                           num_fishers = fishers, steepness = steepness_H, 
+                           efficiency = efficiency, round = F), ylab = "Harvested Seals")
+```
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(days, num_seals, zone_efficiency, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
+
+### Things to Note
+
+The harvest efficiency is set at `r efficiency`, which represents both the proportion of pinnipeds in the gauntlet that are available to harvesters multiplied by the proportion of pinnipeds that harvesters are able to kill of the ones they attempt. In the Locks, fishers are only operating above the Locks in the ship canal, so the only pinnipeds that are available to them are the ones that go above the Locks in pursuit of fish (est. 10% of seals, no sea lions). I then assume that fishers kill 50% of the pinnipeds they shoot at. This results in a 0.05 harvest efficiency for boat-based effort by Muckleshoot fishers.
+
+The total escaped sockeye, Chinook, and Coho are as follows under this parameterization:
+
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
