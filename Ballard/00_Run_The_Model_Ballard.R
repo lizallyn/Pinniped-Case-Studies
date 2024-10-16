@@ -41,7 +41,7 @@ source("Functions/makePlots.R")
 source("Functions/Plots_Pv.R")
 source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
-source("Functions/Plots_salmon.R")
+source("Ballard/07_Plots_salmon.R")
 source("Functions/Plots_responses.R")
 
 # Look at the Results
