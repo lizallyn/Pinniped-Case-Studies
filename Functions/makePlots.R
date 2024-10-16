@@ -62,9 +62,6 @@ makePlot_2 <- function(x, x.name, y, y.name, color, legend.inc = F){
 }
 
 # Plotting Function - salmon species data 3D
-salmon.colors <- c("seagreen", "salmon", "goldenrod")
-salmon.names <- c("Chinook", "Sockeye", "Coho")
-names(salmon.colors) <- salmon.names
 
 makePlot_3 <- function(x, data, col.names, variable.name, value.name, colors, legend.inc = F){
   data_for_melt <- data.frame(cbind(x, data))
