@@ -1,6 +1,6 @@
 ---
-title: "The Base Run Realm"
-subtitle: "Describing the Base Run"
+title: "The Base Run Realm - Ballard"
+subtitle: "Describing the Base Run Model at the Ballard Locks"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
@@ -64,13 +64,13 @@ The model runs for `r days` days starting `r as.Date(data_start, origin = "2024-
 gauntlet_plot
 ```
 
-Salmon experience mortality via multiple pathways: consumption by seals, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates. In the Base Run Realm, the only fishery that exists within the Gauntlet targets Coho for a short window in September - November. 
+Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates. In the Base Run Realm, the only fishery that exists within the Gauntlet targets Coho for a short window in September - November in the ship canal (the area beyond the Locks). 
 
 ```{r salmon plots, plot2, echo = FALSE, fig.height = 7}
 fished_plot / eaten_sp_plot / escape_plot + plot_layout(guides = "collect", axes = "collect")
 ```
 
-In the Base Run Realm seals learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information between them. Seals decide whether to go to the Gauntlet each day using a combination of their own experience (P_G) and the experience of other seals (P_social).  
+In the Base Run Realm pinnipeds learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information with other members of their species and haulout group. Pinnipeds decide whether to go to the Gauntlet each day using a combination of their own experience (P_G) and the experience of other individuals (P_social).
 
 ```{r pinniped plots, plot3, echo = FALSE, fig.height = 3, warning = FALSE}
 plot_seals + plot_zc + plot_ej
