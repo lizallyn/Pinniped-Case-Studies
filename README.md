@@ -1,6 +1,8 @@
 # Pinniped-Case-Studies
 Thesis work part 1: pinniped specialists and salmon case study models for Ballard Locks and Nisqually River.
 
+(Description out of date below)
+
 Site address is slightly hidden, use: https://lizallyn.github.io/Pinniped-Case-Studies/docs/index.html
 
 Folder descriptions:
