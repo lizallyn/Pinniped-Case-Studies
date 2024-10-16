@@ -9,8 +9,8 @@ max_harvesters <- max_fishers
 
 num_specialists <- round(num_seals * prop_specialists)
 
-num_seals_2_copy <- num_seals
-num_zc_2_copy <- num_zc
+num_seals_2_copy <- num_seals/2 #distributed @ 2 main haulout locations
+num_zc_2_copy <- num_zc #all at Shilshole breakwater
 num_ej_2_copy <- num_ej
 
 slope_x_val <- (1 - intercept_x_val)/(xmax - baseline_x_val)
