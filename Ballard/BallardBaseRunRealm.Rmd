@@ -120,13 +120,15 @@ receptivity_plot
 
 ```
 
+#### Response
+
 The total escaped, fished, and predated Sockeye, Chinook, and Coho are as follows under this parameterization:
 
 ```{r salmon tables, echo = FALSE}
 
-kable(salmon_escapement) %>% kable_styling(full_width = F)
-kable(salmon_catch) %>% kable_styling(full_width = F)
-kable(salmon_eaten) %>% kable_styling(full_width = F)
+kable(salmon_escapement, caption = "Escaped") %>% kable_styling(full_width = F)
+kable(salmon_catch, caption = "Fished") %>% kable_styling(full_width = F)
+kable(salmon_eaten, caption = "Eaten") %>% kable_styling(full_width = F, )
 
 ```
 
@@ -135,8 +137,8 @@ kable(salmon_eaten) %>% kable_styling(full_width = F)
 Here's a quick (not exhaustive) table of parameter values:
 
 ```{r par table, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+parameters <- data.frame(rbind(days, num_seals, num_ej, num_zc, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, Cmax, Cmax_ej, Cmax_zc, alpha))
 colnames(parameters) <- c("Value")
-kable(parameters) %>% kable_styling(full_width = F)
+kable(parameters, caption = "Parameters", digits = 2) %>% kable_styling(full_width = F)
 ```
 
