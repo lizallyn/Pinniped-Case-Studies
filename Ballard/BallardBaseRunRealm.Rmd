@@ -6,14 +6,14 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 
 
-```{r, setup, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
 library(knitr)
 library(flextable)
 library(kableExtra)
 ```
 
-```{r, include = FALSE, message = FALSE, warning = FALSE}
+```{r run model, include = FALSE, message = FALSE, warning = FALSE}
 # 01 Set-Up Functions
 source("Functions/01_predictFish.R", local = knitr::knit_global())
 source("Functions/makeArray.R", local = knitr::knit_global())
@@ -61,49 +61,49 @@ Once upon a time in the Base Run Realm there lived `r num_seals` seals. In the B
 
 The model runs for `r days` days starting `r as.Date(data_start, origin = "2024-01-01")`. Some number of salmon arrive at the Gauntlet each day according to their run timing - Sockeye arrive earliest in the summer, followed by Chinook and then Coho in the fall. 
 
-```{r, plot1, echo = FALSE, fig.height = 3}
+```{r gauntlet plot, plot1, echo = FALSE, fig.height = 3}
 gauntlet_plot
 ```
 
 Salmon experience mortality via multiple pathways: consumption by seals, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates. In the Base Run Realm, the only fishery that exists within the Gauntlet targets Coho for a short window in September - November. 
 
-```{r, plot2, echo = FALSE, fig.height = 7}
+```{r salmon plots, plot2, echo = FALSE, fig.height = 7}
 fished_plot / eaten_sp_plot / escape_plot + plot_layout(guides = "collect", axes = "collect")
 ```
 
 In the Base Run Realm seals learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information between them. Seals decide whether to go to the Gauntlet each day using a combination of their own experience (P_G) and the experience of other seals (P_social).  
 
-```{r, plot3, echo = FALSE, fig.height = 3, warning = FALSE}
-plot_seals
+```{r pinniped plots, plot3, echo = FALSE, fig.height = 3, warning = FALSE}
+plot_seals + plot_zc + plot_ej
 ```
 
 Each seal's individual probability of going to the Gauntlet updates daily according to their cumulative experiences with foraging opportunities and hunting risk at the Gauntlet. The number of salmon that are calculated to be consumed that day are divided evenly between the seals that went to the Gauntlet. For each seal, an adjusted consumption term "C" is calculated to account for the foraging opportunities they missed by going to the Gauntlet instead of somewhere else. For every day that a seal goes to the Gauntlet, the measure of their foraging knowledge "x" either increases due to foraging success (a positive C) or decreases due to unsuccessful foraging (a negative C). If a seal does not go to the Gauntlet, we assume they begin to forget and gain uncertainty in their knowledge of foraging opportunities at the Gauntlet, which causes their opinion of the Gauntlet to decay back to a neutral opinion. The measure of their experience "x" is then used to calculate a probability of going to the Gauntlet based on foraging knowledge alone "P_x".
 
-``` {r, plot4, echo = FALSE, fig.height = 8, warning = FALSE}
+``` {r x plots, plot4, echo = FALSE, fig.height = 8, warning = FALSE}
 plot_eaten/plot_x/plot_Px + plot_layout(guides = "collect", axes = "collect")
 ```
 
 A seal's cumulative experience with hunting also updates daily. Seals are only harvested through incidental take associated with salmon fisheries in the Base Run Realm. Boat-based harvest occurs during the Coho fishery, which is modeled to occur between September and November. During this time, take of seals is a type 2 functional response on the number of fishers on the water. Seals that go to the Gauntlet on a day when a take occurs gain negative experience with the Gauntlet that causes their "y" to decrease. If no hunting occurs, their "y" increases. If a seal does not go to the Gauntlet, they also begin to gain uncertainty about their knowledge and their "y" decays toward a neutral value. Each seal's "y" is then used to calculate their probability of going to the Gauntlet based on their cumulative experience with hunting "P_y".  
 The following seals were killed during this run:
 
-``` {r, plot5, echo = FALSE, fig.height = 6, warning = FALSE}
+``` {r y plots, plot5, echo = FALSE, fig.height = 6, warning = FALSE}
 kable(kill_list)
 plot_H/plot_y/plot_Py + plot_layout(guides = "collect", axes = "collect")
 ```
 
 For each seal, P_x and P_y are combined into a single probability of going to the Gauntlet (P_G). A coin flip (random uniform draw) is used to determine whether each seal goes to the Gauntlet that day based on their P_G. 
 
-``` {r, plot6, echo = FALSE, fig.height = 6, warning = FALSE}
+``` {r probs plots, plot6, echo = FALSE, fig.height = 6, warning = FALSE}
 plot_Px/plot_Py/plot_probs + plot_layout(guides = "collect")
 ```
 
 Seals then incorporate social information from `r num_seals_2_copy` randomly chosen seals and their final foraging destination for the day is decided with another coin flip. Their receptivity to social information is informed by the strength of their existing knowledge. A P_G closer to 0.5 indicates ambivalence and means the seal is more receptive to social influence. A P_G closer to 0 or 1 indicates a strong opinion that will not allow the incorporation of social information. In the plots below, Prob_Gauntlet represents each seal's own cumulative experience while P_social represents their opinion after social information sharing, which is what their final decision is based on. 
 
-``` {r, plot7, echo = FALSE, fig.height = 6, warning = FALSE}
+``` {r Psoc, plot7, echo = FALSE, fig.height = 6, warning = FALSE}
 plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")
 ```
 
-``` {r, plot8, echo = FALSE, fig.height = 2, warning = FALSE}
+``` {r receptivity, plot8, echo = FALSE, fig.height = 2, warning = FALSE}
 prob_gauntlet_of_seal <- seq(0, 1, 0.01)
 
 alpha <- (-beta*mean)/(mean-1)
@@ -120,19 +120,21 @@ receptivity_plot
 
 ```
 
-The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+The total escaped, fished, and predated Sockeye, Chinook, and Coho are as follows under this parameterization:
 
-```{r, echo = FALSE}
-salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
-                                Coho = escape_coho[days])
+```{r salmon tables, echo = FALSE}
+
 kable(salmon_escapement) %>% kable_styling(full_width = F)
+kable(salmon_catch) %>% kable_styling(full_width = F)
+kable(salmon_eaten) %>% kable_styling(full_width = F)
+
 ```
 
 #### Parameter Table
 
 Here's a quick (not exhaustive) table of parameter values:
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r par table, echo = FALSE, message = FALSE, warning = FALSE}
 parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)

@@ -136,6 +136,11 @@ H <- oneDzeroes
 H_zc <- oneDzeroes
 H_ej <- oneDzeroes
 
+eaten_chinook <- oneDzeroes
+eaten_sockeye <- oneDzeroes
+eaten_coho <- oneDzeroes
+consumed_total <- oneDzeroes
+
 ### Variable Rates ----
 coho_catch_rate <- oneDzeroes
 coho_catch_rate[fishery_days] <- coho_fish_rate
@@ -145,17 +150,12 @@ sockeye_catch_rate <- oneDzeroes
 sockeye_catch_rate[fishery_days] <- sockeye_fish_rate
 
 
-
 ### Troubleshooting & BS ----
 # for that one plot
 gauntlet_salmon <- oneDzeroes
 # troubleshooting ghost salmons
 screwy <- c(species = NA, day = NA, gauntlet_t = NA, Ns = NA, C = NA, Catch = NA, E = NA)
 
-# If you're using these it means you didn't clear out variables between runs!!!
-eaten_chinook <- oneDzeroes
-eaten_sockeye <- oneDzeroes
-eaten_coho <- oneDzeroes
-consumed_total <- oneDzeroes
+
 
 

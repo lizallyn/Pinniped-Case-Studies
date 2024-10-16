@@ -60,8 +60,8 @@ chinook_escape_rate <- 0.015
 coho_escape_rate <- 0.1
 natural_mort <- 0.0005
 
-coho_fish_rate <- 0.1 # see "estFishingRate.R"
-chinook_fish_rate <- 0.1
+coho_fish_rate <- 0.05 # see "estFishingRate.R"
+chinook_fish_rate <- 0.05
 sockeye_fish_rate <- 0
 salmon_days <- which(Daily_fish$total > 0)
 

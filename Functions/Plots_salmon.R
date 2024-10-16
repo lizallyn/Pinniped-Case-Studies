@@ -2,10 +2,10 @@
 
 salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
                                 Coho = escape_coho[days])
-salmon_catch <- data.frame(Sockeye = fished_sockeye[days], Chinook = fished_chinook[days],
-                           Coho = fished_coho[days])
-salmon_eaten <- data.frame(Sockeye = eaten_sockeye[days], Chinook = eaten_chinook[days],
-                           Coho = eaten_coho[days])
+salmon_catch <- data.frame(Sockeye = sum(fished_sockeye), Chinook = sum(fished_chinook),
+                           Coho = sum(fished_coho))
+salmon_eaten <- data.frame(Sockeye = sum(eaten_sockeye), Chinook = sum(eaten_chinook),
+                           Coho = sum(eaten_coho))
 
 plot_consumed <- makePlot_2(x = 1:days, x.name = "Day", y = consumed_total, y.name = "Daily Salmon Consumed", 
                             color = "dodgerblue")

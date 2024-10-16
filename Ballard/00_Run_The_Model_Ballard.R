@@ -51,3 +51,5 @@ plot_eaten + plot_eaten_ej + plot_eaten_zc  + plot_layout(guides = "collect")
 fished_plot
 plot_seals + plot_ej + plot_zc
 plot_H + plot_H_ej + plot_H_zc
+salmon_catch
+eaten_coho
