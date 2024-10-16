@@ -54,8 +54,7 @@ source("Functions/Plots_responses.R", local = knitr::knit_global())
 
 ### The Base Run Realm
 
-This page is currently a place where I am developing the base run and describing the world it exists in. This part sounds really dumb but I need a quick way to describe the world and differentiate it from the experimental runs.  
-Once upon a time in the Base Run Realm there lived `r num_seals` seals. In the Base Run Realm in the State of Ballard there is a river valley called the Gauntlet. Every summer, salmon of many species flood the Gauntlet and the seals move to their summer camp at Shilshole to gorge themselves until they are fat and happy. The people of Ballard also harvest salmon, and occasionally kill seals incidentally while they are fishing. There is no designated harvest of seals in the Base Run Realm.
+This page is currently a place where I am developing the base run and describing the world it exists in. This base run simulates the dynamics at the Ballard Locks. There are three runs of salmon here: Sockeye, Chinook, and coho. There are also three species of pinnipeds: harbor seals, California sea lions, and Steller sea lions. Harbor seals are a frequent year-round presence at the Locks - in the fish ladder, in the water before the Locks, and in the water above the Locks. The closest harbor seal haulouts are at Shilshole marina and Elliot Bay marina. The sea lions mainly use the breakwater for Shilshole marina. Total numbers and seasonality of each pinniped species are informed by local knowledge from Muckleshoot biologists and from count data collected by Scott Veirs (and interns) at Shilshole marina. Salmon movement and count data are from observers in the Locks fish ladder and hatchery data. Fishery catch data provided by Mike Mahovlich and Muckleshoot fisheries management. 
 
 #### The Daily Flow
 
