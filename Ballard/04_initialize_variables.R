@@ -112,10 +112,10 @@ fishery_days <- fishery_range[which(fishery_range %in% day_range)] - (start_loop
 harvest_plan_pv <- createHarvestPlan(scenario = scenario, 
                                   harvest_days = harvest_days_pv,
                                   empty.array = oneDzeroes)
-harvest_plan_ej <- createHarvestPlan(scenario = scenario, 
+harvest_plan_ej <- createHarvestPlan(scenario = scenario_sealion, 
                                      harvest_days = harvest_days_ej,
                                      empty.array = oneDzeroes)
-harvest_plan_zc <- createHarvestPlan(scenario = scenario, 
+harvest_plan_zc <- createHarvestPlan(scenario = scenario_sealion, 
                                      harvest_days = harvest_days_zc,
                                      empty.array = oneDzeroes)
 
