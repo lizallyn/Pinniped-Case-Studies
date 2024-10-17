@@ -24,6 +24,8 @@ data_end <- which(Daily_fish$total > 0)[length(which(Daily_fish$total > 0))] + d
 Chosen_fish <- Daily_fish[data_start:data_end,]
 Chosen_fish_int <- round(Chosen_fish)
 
+salmon_days <- which(Daily_fish$total > 0)
+
 #fit a curve to the data
 
 params <- c(69000, 36, 12.48)
