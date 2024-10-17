@@ -76,9 +76,7 @@ When there are `r num_seals` in the Pv, `r num_zc` Californias, and `r num_ej` S
 
 ```{r gauntlet pinnipeds plot, echo = FALSE}
 plot_seals + plot_ej + plot_zc
-
 ```
-
 
 ...and when there are 40 individual pinnipeds at the Gauntlet, removals are a type 2 function as follows:
 
