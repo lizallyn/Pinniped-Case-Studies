@@ -26,7 +26,7 @@ source("Nisqually/00_Run_The_Model_Nis_All.R", local = knitr::knit_global())
 
 ```
 
-Three run of salmon are included in the Nisqually model: Green River Chinook, LocNis (local natural) Chinook, and winter Chum. Due to the timing of these three salmon runs, the model runs from `r as.Date(fish_start, origin = "2024-01-01")` until `r as.Date(fish_end, origin = "2024-01-01")` the following year. Data was provided from the Nisqually Indian Tribe to estimate daily arriving salmon from each run and daily catch of each run. Chinook are caught both in a directed fishery on the Green River run and as bycatch in the coho fishery. Chum are caught in the directed chum fishery only. In recent years the chum fishery has not been active, so there is a second base run with no chum fishery - see other file (coming soon). The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model. Plots of daily catch are also shown with the derived catch rates side-by-side. Catch rates come from dividing the catch data by the number of each run modeled to be in the gauntlet on each day.
+Three run of salmon are included in the Nisqually model: Green River Chinook, LocNis (local natural) Chinook, and winter Chum. Due to the timing of these three salmon runs, the model runs from `r as.Date(fish_start, origin = "2024-01-01")` until `r as.Date(fish_end, origin = "2024-01-01")` the following year. Data was provided from the Nisqually Indian Tribe to estimate daily arriving salmon from each run and daily catch of each run. Chinook are caught both in a directed fishery on the Green River run and as bycatch in the coho fishery. Chum are caught in the directed chum fishery only. The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model. Plots of daily catch are also shown with the derived catch rates side-by-side. Catch rates come from dividing the catch data by the number of each run modeled to be in the gauntlet on each day.
 
 ```{r plot salmon data, message = FALSE, echo = FALSE, warning = FALSE}
 raw_arrival_plot + catch_rate_plot
@@ -35,7 +35,7 @@ raw_arrival_plot + catch_rate_plot
 Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. The escape rate is simply 1/residence time. For Chum, they also might spawn in the gauntlet, so their "escape" rate also encompasses successful spawning, and their residence time includes potential spawning activities and behaviors.
 
 ```{r table salmon data, message = FALSE, echo = FALSE, warning = FALSE}
-kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locnis_residence)) %>% kable_styling(full_width = F)
+kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locnis_residence), caption = "Residence Time (Days)") %>% kable_styling(full_width = F)
 
 gauntlet_plot + fished_plot + eaten_sp_plot
 
@@ -45,7 +45,9 @@ kable(salmon_escapement)
 
 ### Pinniped Inputs
 
-Three species of pinnipeds are included: Harbor seals, California sea lions, and Steller sea lions. The number of each species of pinniped in the source pool (Count in table below) is informed by observations from managers and biologists in the system. Each pinniped has a maximum consumption (Cmax) parameter that is set high so it doesn't unnecessarily limit them from gorging behavior. The below table also lists the number of other individuals that each pinniped is learning from during social contagion of information. For harbor seals, we think they use relatively small and dispersed haulouts, which might limit information spread. For sea lions, they generally use the same large haulout so the size of their social circle (Copy) includes all other individuals of their species. 
+Three species of pinnipeds are included: Harbor seals, California sea lions, and Steller sea lions. The number of each species of pinniped in the source pool (Count in table below) is informed by observations from managers and biologists in the system. Harbor seals are present in the system year-round while sea lions only show up for the Chum run (+ `r sealion_arrival_buffer` days early in anticipations of the run on the `r sealion_arrival_date`th day of the year).
+
+Each pinniped has a maximum consumption (Cmax) parameter that is set high so it doesn't unnecessarily limit them from gorging behavior. The below table also lists the number of other individuals that each pinniped is learning from during social contagion of information. For harbor seals, we think they use relatively small and dispersed haulouts, which might limit information spread. For sea lions, they generally use the same large haulout so the size of their social circle (Copy) includes all other individuals of their species. 
 
 ```{r pinniped par table, message = FALSE, echo = FALSE, warning = FALSE}
 
