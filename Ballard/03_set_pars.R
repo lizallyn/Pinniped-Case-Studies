@@ -64,7 +64,6 @@ natural_mort <- 0.0005
 coho_fish_rate <- 0.05 # see "estFishingRate.R"
 chinook_fish_rate <- 0.025
 sockeye_fish_rate <- 0
-salmon_days <- which(Daily_fish$total > 0)
 
 # hunting parameters (same as fishery opening in base run realm)
 min_fishers <- 13
