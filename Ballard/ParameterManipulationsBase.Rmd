@@ -328,7 +328,7 @@ plot_escape_manipulations <- ggplot(data = Escape, aes(x = w)) +
   geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
   geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
   geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
-  geom_vline(xintercept = 0.5, lwd = 2, color = "gray", linetype = 2) +
+  geom_vline(xintercept = 1, lwd = 2, color = "gray", linetype = 2) +
   labs(y = "Salmon Escaped", x = "w") +
   theme_classic()
 plot_escape_manipulations
@@ -341,6 +341,41 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 ```
 
 This also has a very small impact, pretty much level.
+
+## w (sea lions)
+
+```{r w sealion, message = FALSE, echo = FALSE, warning = FALSE, fig.height=fig.height, fig.width = fig.width}
+
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+source("Ballard/03_set_pars.R")
+
+w_sealion_list <- seq(0, 30, 6)
+
+Escape <- data.frame(w_sealion = 0, Sockeye = NA, Chinook = NA, Coho = NA)
+for(i in 1:length(w_sealion_list)){
+  w_sealion <- w_sealion_list[i]
+  source("Ballard/04_initialize_variables.R")
+  source("Ballard/assembleLegosBallard.R")
+  Escape[i,] <- data.frame(w_sealion = w_sealion, salmon_escapement)
+}
+
+Escape <- data.frame(Escape)
+
+plot_escape_manipulations <- ggplot(data = Escape, aes(x = w_sealion)) +
+  geom_line(aes(y = Chinook), color = "seagreen", lwd = 1.2) + 
+  geom_line(aes(y = Coho), color = "goldenrod", lwd = 1.2) + 
+  geom_line(aes(y = Sockeye), color = "salmon", lwd = 1.2) +
+  geom_vline(xintercept = 20, lwd = 2, color = "gray", linetype = 2) +
+  labs(y = "Salmon Escaped", x = "w sealion") +
+  theme_classic()
+plot_escape_manipulations
+
+escape_4_tab <- rbind(Escape[1,], Escape[nrow(Escape),])
+escape_4_tab <- escape_4_tab %>% rename_at("w_sealion", ~ "Run")
+escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
+
+kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
+```
 
 ## intercept_x_val
 
