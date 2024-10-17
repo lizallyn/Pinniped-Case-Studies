@@ -1,0 +1,101 @@
+---
+title: "Experiment: Exclusion Zone Implementation @ Ballard"
+subtitle: "Describing the model run when an exclusion zone management strategy is implemented at Ballard"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where managers in the Gauntlet enact an "Exclusion Zone" management strategy. In this strategy, all seals that cross into the Gauntlet area when salmon are present in the Gauntlet are targeted for removal. We assume that managers are able to effectively remove a percentage of seals in the area that is described by a type II functional response.
+
+### Run the Model
+
+```{r, setup, include = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r setup the model, include = FALSE, message = FALSE, warning = FALSE}
+
+# 01 Set-Up Functions
+source("Functions/01_predictFish.R")
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+
+# 02 Prep Data
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+
+# 03 Set Pars
+source("Ballard/03_set_pars.R")
+```
+
+```{r set pars, message = FALSE, warning = FALSE}
+zone_efficiency <- 0.8
+zone_steepness <- 5
+scenario <- "Zone"
+scenario_sealion <- "Zone"
+```
+
+```{r run the loop, include = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
+# 04 Initialize Variables
+source("Ballard/04_initialize_variables.R")
+
+# 05 Loop Functions
+source("Ballard/05_salmonSpeciesUpdate.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta_3.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
+
+# 06 Run The Loop
+source("Ballard/06_The_Loop.R")
+
+# 07 Plots
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
+source("Ballard/07_Plots_salmon.R")
+source("Functions/Plots_responses.R")
+```
+
+### Description of Parameterization
+
+This scenario is focused on the effects of implementing an Exclusion Zone management strategy in the Ballard Locks. Under this strategy, both seals and 
+
+### Things to Note
+
+The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
+
+This model run has a drastic impact on seal behavior, presence at the Gauntlet, and survival. 
+Colors are independent seals.
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+plot_seals/plot_C/plot_probs/plot_H + plot_layout(guides = "collect", axes = "collect")
+```
+
+### Parameter Table
+
+This scenario is focused on the effects of a different management strategy that changes the timing and quantity of seal harvest. Removals occur on all days that salmon are present in the Gauntlet instead of just during days when fishers are active in the area. The harvest strategy is also more aggressive as it is focused on seal removal directly not incidentally as in the base run.
+
+Removals occur from day `r salmon_days[1]` - `r salmon_days[length(salmon_days)]`.  
+Removal efficiency is assumed to be `r zone_efficiency * 100`%.
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(days, num_seals, zone_efficiency, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
