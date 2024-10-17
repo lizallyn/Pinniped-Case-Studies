@@ -33,11 +33,11 @@ source("Ballard/03_set_pars.R")
 
 ```{r set pars, message = FALSE, warning = FALSE}
 zone_efficiency <- 0.8
-zone_steepness <- 5
+zone_steepness <- 10
 scenario <- "Zone"
 scenario_sealion <- "Zone"
-harvest_open <- salmon_days[1]
-harvest_close <- salmon_days[length(salmon_days)]
+harvest_open <- start_loop
+harvest_close <- end_loop
 ```
 
 ```{r run the loop, include = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
@@ -70,7 +70,7 @@ source("Functions/Plots_responses.R")
 
 ### Description of Parameterization
 
-This scenario is focused on the effects of implementing an Exclusion Zone management strategy in the Ballard Locks. Under this strategy, both seals and sea lions are removed from the Gauntlet by managers. The proportion of pinnipeds that are removed is governed by an efficiency term which describes the asymptote of the type II response between the number of pinnipeds at the Gauntlet and the proportion of individuals removed. That response is shown below:
+This scenario is focused on the effects of implementing an Exclusion Zone management strategy in the Ballard Locks. Under this strategy, both seals and sea lions are removed from the Gauntlet by managers throughout all days of the model run. The proportion of pinnipeds that are removed is governed by an efficiency term which describes the asymptote of the type II response between the number of pinnipeds at the Gauntlet and the proportion of individuals removed. That response is shown below:
 
 ```{r efficiency plot, echo = FALSE, warning = FALSE, message = FALSE}
 num_pinns <- 0:sum(num_seals, num_ej, num_zc)
@@ -93,10 +93,10 @@ Because of the increased removals, this scenario has an impact on pinniped behav
 plot_seals + plot_zc + plot_ej + plot_layout(guides = "collect", axes = "collect")
 ```
 
-In the below plots, you can see the impact of removals on 
+In the below plots, you can see the impact of removals on the learning process of individual harbor seals in the decline of the Gauntlet Probabilities.
 
 ```{r eaten to probs plots, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
-plot_eaten/plot_y/plot_probs + plot_layout(guides = "collect", axes = "collect")
+plot_H/plot_y/plot_probs + plot_layout(guides = "collect", axes = "collect")
 ```
 
 ### Things to Note
@@ -104,27 +104,13 @@ plot_eaten/plot_y/plot_probs + plot_layout(guides = "collect", axes = "collect")
 The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
 
 ```{r, echo = FALSE}
-salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
-                                Coho = escape_coho[days])
 kable(salmon_escapement) %>% kable_styling(full_width = F)
-```
-
-This model run has a drastic impact on seal behavior, presence at the Gauntlet, and survival. 
-Colors are independent seals.
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
-plot_seals/plot_C/plot_probs/plot_H + plot_layout(guides = "collect", axes = "collect")
 ```
 
 ### Parameter Table
 
-This scenario is focused on the effects of a different management strategy that changes the timing and quantity of seal harvest. Removals occur on all days that salmon are present in the Gauntlet instead of just during days when fishers are active in the area. The harvest strategy is also more aggressive as it is focused on seal removal directly not incidentally as in the base run.
-
-Removals occur from day `r salmon_days[1]` - `r salmon_days[length(salmon_days)]`.  
-Removal efficiency is assumed to be `r zone_efficiency * 100`%.
-
-Here's the (kinda) full parameter list:
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(days, num_seals, zone_efficiency, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+parameters <- data.frame(rbind(days, num_seals, num_zc, num_ej, zone_efficiency, zone_steepness, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, Cmax, Cmax_zc, Cmax_ej, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
