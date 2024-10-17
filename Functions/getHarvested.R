@@ -1,10 +1,10 @@
 # harvest according to a harvest plan matrix (?)
 
-getHarvested <- function(day_plan = 0, list_gauntlet_seals, zone_efficiency = NA, 
+getHarvested <- function(day_plan = 0, list_gauntlet_seals, zone_efficiency = NA, zone_steepness = NA,
                          num_fishers = NA, steepness = NA, efficiency = NA, round = "floor"){
   num_gauntlet_seals <- length(list_gauntlet_seals)
   if(day_plan == "Zone"){
-    harvested <- num_gauntlet_seals * zone_efficiency
+    harvested <- num_gauntlet_seals * (zone_efficiency * num_gauntlet_seals/(zone_steepness + num_gauntlet_seals))
   } else if(day_plan == "Boat"){
     harvested <- efficiency * num_fishers * num_gauntlet_seals/(steepness + num_fishers)
   } else if(day_plan == 0){
@@ -23,7 +23,12 @@ getHarvested <- function(day_plan = 0, list_gauntlet_seals, zone_efficiency = NA
 # steepness <- seq(0, 1000, 1)
 # num_fishers <- 0:25
 # plot(num_fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:150, zone_efficiency = 0.8,
-#                                num_fishers = num_fishers, efficiency = 0.075, steepness = 200, round = F))
+#                                num_fishers = 15, efficiency = 0.8, steepness = 5, round = F))
+# 
+# zone_efficiency <- 0.85
+# num_gauntlet_seals <- 1:150
+# steepness <- 5
+# plot(num_gauntlet_seals, zone_efficiency * num_gauntlet_seals/(steepness + num_gauntlet_seals))
 
 # getHarvested <- function(day_plan, num_gauntlet_seals, zone_efficiency, Hmax, processing, min_fishers, max_fishers, gamma, Y) {
 #   num_fishers <- sample(min_fishers:max_fishers, 1)
