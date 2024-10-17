@@ -172,7 +172,7 @@ for(t in 1:(days - 1)) {
   
   for(ssl in 1:num_ej){
     
-    update_output <- updateLearning(salmon_consumed = salmon_consumed_ej[ssl, t], w = w, hunting = H_ej[t],
+    update_output <- updateLearning(salmon_consumed = salmon_consumed_ej[ssl, t], w = w_sealion, hunting = H_ej[t],
                                     x_t = x_ej[ssl, t], y_t = y_ej[ssl, t],
                                     forage_loc = ej_forage_loc[ssl, t], bundle_dx_pars = bundle_dx_pars,
                                     bundle_dy_pars = bundle_dy_pars, dead = ssl %in% kill_list_ej,
@@ -201,7 +201,7 @@ for(t in 1:(days - 1)) {
   
   for(csl in 1:num_zc){
     
-    update_output <- updateLearning(salmon_consumed = salmon_consumed_zc[csl, t], w = w, hunting = H_zc[t],
+    update_output <- updateLearning(salmon_consumed = salmon_consumed_zc[csl, t], w = w_sealion, hunting = H_zc[t],
                                     x_t = x_zc[csl, t], y_t = y_zc[csl, t],
                                     forage_loc = zc_forage_loc[csl, t], bundle_dx_pars = bundle_dx_pars,
                                     bundle_dy_pars = bundle_dy_pars, dead = csl %in% kill_list_zc,
