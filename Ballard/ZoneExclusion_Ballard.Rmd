@@ -6,7 +6,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 ### The Narrative
 
-This Model Run is for a scenario where managers in the Gauntlet enact an "Exclusion Zone" management strategy. In this strategy, all seals that cross into the Gauntlet area when salmon are present in the Gauntlet are targeted for removal. We assume that managers are able to effectively remove a percentage of seals in the area that is described by a type II functional response.
+This Model Run is for a scenario where managers in the Gauntlet enact an "Exclusion Zone" management strategy. In this strategy, all pinnipeds that cross into the Gauntlet area when salmon are present in the Gauntlet are targeted for removal. We assume that managers are able to effectively remove a percentage of pinnipeds in the area that is dependent on the total density of pinnipeds.
 
 ### Run the Model
 
@@ -36,6 +36,8 @@ zone_efficiency <- 0.8
 zone_steepness <- 5
 scenario <- "Zone"
 scenario_sealion <- "Zone"
+harvest_open <- salmon_days[1]
+harvest_close <- salmon_days[length(salmon_days)]
 ```
 
 ```{r run the loop, include = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
@@ -68,7 +70,34 @@ source("Functions/Plots_responses.R")
 
 ### Description of Parameterization
 
-This scenario is focused on the effects of implementing an Exclusion Zone management strategy in the Ballard Locks. Under this strategy, both seals and 
+This scenario is focused on the effects of implementing an Exclusion Zone management strategy in the Ballard Locks. Under this strategy, both seals and sea lions are removed from the Gauntlet by managers. The proportion of pinnipeds that are removed is governed by an efficiency term which describes the asymptote of the type II response between the number of pinnipeds at the Gauntlet and the proportion of individuals removed. That response is shown below:
+
+```{r efficiency plot, echo = FALSE, warning = FALSE, message = FALSE}
+num_pinns <- 0:sum(num_seals, num_ej, num_zc)
+plot(num_pinns, zone_efficiency * num_pinns/(steepness + num_pinns), ylab = "Proportion of Pinnipeds Harvested", xlab = "Num Pinnipeds @ Gauntlet")
+```
+
+In this parameterization, many more pinnipeds are removed from the system than under incidental or boat-based take only. 
+
+```{r harvest table, echo = FALSE}
+kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Pinnipeds Removed") %>% kable_styling(full_width = F)
+```
+
+```{r pinniped harvest plot, echo = FALSE}
+plot_H + plot_H_ej + plot_H_zc
+```
+
+Because of the increased removals, this scenario has an impact on pinniped behavior, presence at the Gauntlet, and survival. 
+
+```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+plot_seals + plot_zc + plot_ej + plot_layout(guides = "collect", axes = "collect")
+```
+
+In the below plots, you can see the impact of removals on 
+
+```{r eaten to probs plots, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+plot_eaten/plot_y/plot_probs + plot_layout(guides = "collect", axes = "collect")
+```
 
 ### Things to Note
 
