@@ -78,7 +78,7 @@ efficiency <- 0.05 # what prop of seals are they capable of taking
 harvest_open <- yday(as.Date("2023-09-10"))
 harvest_close <- yday(as.Date("2023-11-17"))
 scenario <- "Boat"
-scenario_sealion <- "None"
+scenario_sealion <- 0
 
 
 
