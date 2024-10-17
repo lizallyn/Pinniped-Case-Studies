@@ -65,15 +65,22 @@ source("Functions/Plots_responses.R")
 
 ### Description of Parameterization
 
+In this scenario the source pool of harbor seals is decreased (to `r num_seals`) to simulate removals or disturbance on the main marina haulouts that they use to access the Locks. Seal presence at the Locks is reduced, and so is predation:
 
+```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+plot_seals / eaten_sp_plot + plot_layout(guides = "collect", axes = "collect")
+```
+
+The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
 
 ### Parameter Table
 
-This scenario is focused on deviated values of:  
-
-* num_seals (`r num_seals`)
-
-Here's the (kinda) full parameter list:
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(knitr)
 library(flextable)
@@ -85,20 +92,3 @@ kable(parameters) %>% kable_styling(full_width = F)
 
 ### Things to Note
 
-The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
-
-```{r, echo = FALSE}
-salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
-                                Coho = escape_coho[days])
-kable(salmon_escapement) %>% kable_styling(full_width = F)
-```
-
-In this model run, there are many more seals at the Gauntlet at the peak of salmon presence. In fact, all the seals eventually end up at the Gauntlet when there have been salmon present for long enough for them all to learn about it.
-
-```{r, plot3, echo = FALSE, fig.height = 3, warning = FALSE}
-plot_seals
-```
-
-[describe more things that are cool/important about this parameterization here]
-
-END
