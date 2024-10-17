@@ -1,0 +1,104 @@
+---
+title: "Haulout Reduction @ Ballard"
+subtitle: "Describing a model run where the total pool of pinnipeds is reduced through removals on the haulouts"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This Model Run is for a scenario where some kind of removals or harvest or displacement has happened on the haulouts that make up the source pool for harbor seals at the Locks (Shilshole and Elliot Bay marinas mainly).
+
+### Run the Model
+
+```{r, setup, include = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r setup the model, include = FALSE, message = FALSE, warning = FALSE}
+
+# 01 Set-Up Functions
+source("Functions/01_predictFish.R")
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+
+# 02 Prep Data
+source("Ballard/02_Prep_Ballard_salmon_data.R")
+
+# 03 Set Pars
+source("Ballard/03_set_pars.R")
+```
+
+```{r set pars, message = FALSE, warning = FALSE}
+num_seals <- 50
+```
+
+```{r run the loop, include = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
+# 04 Initialize Variables
+source("Ballard/04_initialize_variables.R")
+
+# 05 Loop Functions
+source("Ballard/05_salmonSpeciesUpdate.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta_3.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
+
+# 06 Run The Loop
+source("Ballard/06_The_Loop.R")
+
+# 07 Plots
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
+source("Ballard/07_Plots_salmon.R")
+source("Functions/Plots_responses.R")
+```
+
+### Description of Parameterization
+
+
+
+### Parameter Table
+
+This scenario is focused on deviated values of:  
+
+* num_seals (`r num_seals`)
+
+Here's the (kinda) full parameter list:
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
+
+### Things to Note
+
+The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+
+```{r, echo = FALSE}
+salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
+                                Coho = escape_coho[days])
+kable(salmon_escapement) %>% kable_styling(full_width = F)
+```
+
+In this model run, there are many more seals at the Gauntlet at the peak of salmon presence. In fact, all the seals eventually end up at the Gauntlet when there have been salmon present for long enough for them all to learn about it.
+
+```{r, plot3, echo = FALSE, fig.height = 3, warning = FALSE}
+plot_seals
+```
+
+[describe more things that are cool/important about this parameterization here]
+
+END
