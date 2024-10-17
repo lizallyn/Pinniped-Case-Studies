@@ -32,7 +32,8 @@ specialist_prob <- 0.5
 baseline_x_val <- 0
 baseline_y_val <- 0
 specialist_baseline_y <- 0
-w <- 0.5
+w <- 1
+w_sealion <- 20
 ymin <- -10
 ymax <- 0
 intercept_x_val <- 0.01
@@ -76,6 +77,7 @@ efficiency <- 0.075 # what prop of seals are they capable of taking
 harvest_open <- yday(as.Date("2023-09-10"))
 harvest_close <- yday(as.Date("2023-11-17"))
 scenario <- "Boat"
+scenario_sealion <- "None"
 
 
 
