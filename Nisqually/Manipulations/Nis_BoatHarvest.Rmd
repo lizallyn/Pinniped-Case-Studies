@@ -10,7 +10,7 @@ This Model Run is for a scenario where managers open harvest of seals in the gau
 
 ### Run the Model
 
-Parameters listed below are altered from the base run parameterization to simulate the management scenario.
+Parameters listed below are altered from the base run parameterization to simulate the management scenario. For this scenario we're altering the shape of the relationship between the number of fishers in the system and the magnitude of harvest that occurs.
 
 ```{r, setup, include = FALSE}
 rm(list=ls())
@@ -94,20 +94,33 @@ I also increase the proportion of fishers who are engaging in harvest activity b
 The number of boats participating in harvest is an average for the Chinook and Coho fisheries from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the Chum fishery it does a random sample of 1:25 to determine the number of harvesters active that day.
 The total harvested pinnipeds are as follows under this parameterization:
 
-```{r pinniped harvest plot, echo = FALSE}
-plot_H + plot_H_ej + plot_H_zc
-```
-
-
 ```{r harvest table, echo = FALSE}
 kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Harvested Pinnipeds") %>% kable_styling(full_width = F)
 ```
 
+```{r pinniped harvest plot, echo = FALSE}
+plot_H + plot_H_ej + plot_H_zc
+```
+
+This level of harvest impacts the fear response of the pinnipeds that are exposed to harvest and causes fewer of them to go to the Gauntlet than in the base run. The below plots show the impact of harvest on fear conditioning of California sea lions as an example. 
+
+```{r y plots, echo = FALSE, warning = FALSE}
+plot_zc / plot_H_zc / plot_y_zc / plot_probs_zc
+```
+
+CSLs arrive at the Gauntlet only for the Chum run, and so are only exposed to harvest during the Chum fishery. Harbor seals, in contrast, are exposed to harvest during all Nisqually Tribal fisheries (chinook, Coho, and Chum) and their behavior is impacted accordingly as seen below.
+
+```{r y plots seals, echo = FALSE, warning = FALSE}
+plot_seals / plot_H / plot_y / plot_probs
+```
+
+### Salmon Response
+
 The fate of the sockeye, Chinook, and coho are as follows under this parameterization:
 
 ```{r salmon escapement, echo = FALSE}
-salmon_fates <- rbind(salmon_escapement, salmon_catch, salmon_consumed)
-salmon_fates$O <- c("Escape", "Catch", "Predated")
+salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
 kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
 
