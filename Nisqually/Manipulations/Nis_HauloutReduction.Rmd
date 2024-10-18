@@ -1,0 +1,105 @@
+---
+title: "Experiment: Haulout Reduction @ Nisqually"
+subtitle: "Describing the model run when the number of pinnipeds in the source pool are reduced at Nisqually"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### The Narrative
+
+This model run is a scenario where managers or harvesters (or both) implement removals or intensive disturbance at nearby haulouts (the "source pool") which reduces the number of pinnipeds which can access the Gauntlet daily. This scenario would also likely have population-level effects which we are not describing here.
+
+### Run the Model
+
+Parameters listed below are altered from the base run parameterization to simulate the management scenario. For this scenario we're altering the number of pinnipeds in the source pool.
+
+```{r, setup, include = FALSE}
+rm(list=ls())
+library(knitr)
+library(flextable)
+library(kableExtra)
+knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
+```
+
+```{r, set pars, include = FALSE}
+source("Functions/01_predictFish.R")
+source("Functions/makeArray.R")
+source("Functions/createHarvestPlan.R")
+
+# 02 Prep Data
+source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
+
+# 03 Set Model Parameters
+source("Nisqually/03_Nis_set_pars_All.R")
+```
+
+```{r set scenario pars, message = FALSE, warning = FALSE}
+
+# source pool reduction factor:
+reduction <- 0.5
+
+# adjust parameters for management scenario
+num_seals <- num_seals * reduction
+num_ej <- num_ej * reduction
+num_zc <- num_zc * reduction
+```
+
+```{r, run loop, include = FALSE}
+# 04 Initialize Variables
+source("Nisqually/04_Nis_initialize_variables_All.R")
+
+# 05 Loop Functions
+source("Nisqually/05_salmonSpeciesUpdate_All.R")
+source("Functions/decideForagingDestination.R")
+source("Functions/collusion.R")
+source("Functions/rungeKutta_3.R")
+source("Functions/getHarvested.R")
+source("Functions/learnX.R")
+source("Functions/learnY.R")
+source("Functions/type3FuncRes.R")
+source("Functions/linearFuncRes.R")
+source("Functions/updateLearning.R")
+
+# 06 Run The Loop
+source("Nisqually/06_The_Loop_Nis_All_fishing.R")
+
+# 07 Plots
+source("Functions/makePlots.R")
+source("Functions/Plots_Pv.R")
+source("Functions/Plots_Ej.R")
+source("Functions/Plots_Zc.R")
+source("Nisqually/07_Plots_All.R")
+source("Functions/Plots_responses.R")
+```
+
+### Description of Parameterization
+
+This parameterization focuses on a scenario where the source pool of pinnipeds (of all three species) has been reduced by `r reduction * 100`% through some action external to the Gauntlet itself - harvest, lethal removals by management, or abandonment caused by intense disturbance. Under this scenario, pinniped presence at the Gauntlet is reduced as seen below.
+
+```{r gauntlet pinnipeds plot, echo = FALSE}
+plot_seals + plot_ej + plot_zc
+```
+
+### Things to Note
+
+Under this scenario, there are still baseline levels of incidental take, which in the Nisqually system is very low or non-existent.
+
+```{r harvest table, echo = FALSE}
+kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Harvested Pinnipeds") %>% kable_styling(full_width = F)
+```
+
+Because pinniped presence at the Gauntlet is lower under this parameterization, salmon consumption is also lower.
+
+```{r salmon escapement, echo = FALSE}
+salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
+kable(salmon_fates) %>% kable_styling(full_width = F)
+```
+
+```{r salmon consumed, echo = FALSE, warning = FALSe}
+eaten_sp_plot
+```
+
+
+
+
+
