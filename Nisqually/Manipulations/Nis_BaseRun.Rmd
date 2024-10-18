@@ -36,10 +36,16 @@ Salmon experience mortality via multiple pathways: consumption by pinnipeds, fis
 
 ```{r table salmon data, message = FALSE, echo = FALSE, warning = FALSE}
 kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locnis_residence), caption = "Residence Time (Days)") %>% kable_styling(full_width = F)
+```
 
+The below plots describe how salmon move through the model under this parameterization, including how many are fished, predated on by pinnipeds, or escape beyond the Gauntlet.
+
+```{r salmon fates, echo = FALSE, warning = FALSE}
 gauntlet_plot + fished_plot + eaten_sp_plot
 
-kable(salmon_escapement)
+salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
+kable(salmon_fates) %>% kable_styling(full_width = F)
 
 ```
 
