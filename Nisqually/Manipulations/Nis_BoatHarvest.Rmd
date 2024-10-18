@@ -105,13 +105,19 @@ plot_H + plot_H_ej + plot_H_zc
 This level of harvest impacts the fear response of the pinnipeds that are exposed to harvest and causes fewer of them to go to the Gauntlet than in the base run. The below plots show the impact of harvest on fear conditioning of California sea lions as an example. 
 
 ```{r y plots, echo = FALSE, warning = FALSE}
-plot_zc / plot_H_zc / plot_y_zc / plot_probs_zc
+plot_zc / plot_H_zc
+```
+```{r y plots 2, echo = FALSE, warning = FALSE}
+plot_y_zc / plot_probs_zc
 ```
 
 CSLs arrive at the Gauntlet only for the Chum run, and so are only exposed to harvest during the Chum fishery. Harbor seals, in contrast, are exposed to harvest during all Nisqually Tribal fisheries (chinook, Coho, and Chum) and their behavior is impacted accordingly as seen below.
 
 ```{r y plots seals, echo = FALSE, warning = FALSE}
-plot_seals / plot_H / plot_y / plot_probs
+plot_seals / plot_H
+```
+```{r y plots seals 2, echo = FALSE, warning = FALSE}
+plot_y / plot_probs
 ```
 
 ### Salmon Response
