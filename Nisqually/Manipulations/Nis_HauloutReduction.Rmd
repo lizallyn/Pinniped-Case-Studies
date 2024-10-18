@@ -95,10 +95,17 @@ rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
 kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
 
-```{r salmon consumed, echo = FALSE, warning = FALSe}
+```{r salmon consumed, echo = FALSE, warning = FALSE}
 eaten_sp_plot
 ```
 
+### Parameter Table
+
+```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, num_seals_2_copy, Cmax, Cmax_ej, Cmax_zc, alpha, chum_escape_rate, gr_escape_rate, ln_escape_rate, chin_boats, min_chum_boats, max_chum_boats))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
 
 
 

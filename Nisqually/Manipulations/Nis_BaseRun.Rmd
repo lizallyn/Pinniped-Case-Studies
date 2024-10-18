@@ -68,4 +68,12 @@ plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")
 
 The baseline harvest scenario involves a very low level of boat-based bycatch during fishing activity. This comes from the ~3 removals that were reported via NWIFC in south Puget Sound in 2021. In this scenario, harvest effort is occurring on all days when catch was recorded. The number of boats participating in harvest is an average for the Chinook and Coho fisheries from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the model it does a random sample of 1:25 to determine the number of harvesters active that day. In the base run, the harvest is 0 pretty much all the time, so no results to show for that.
 
-### 
+### Parameter Table
+
+Here's a parameter list:
+```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, num_seals_2_copy, Cmax, Cmax_ej, Cmax_zc, alpha, chum_escape_rate, gr_escape_rate, ln_escape_rate, chin_boats, min_chum_boats, max_chum_boats))
+colnames(parameters) <- c("Value")
+kable(parameters) %>% kable_styling(full_width = F)
+```
+
