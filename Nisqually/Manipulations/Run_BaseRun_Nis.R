@@ -44,9 +44,8 @@ source("Functions/Plots_responses.R")
 ## save relevant variables and responses
 
 # salmon
-base_salmon_escapement <- salmon_escapement
-base_salmon_catch <- salmon_catch
-base_salmon_predation <- salmon_consumed
+base_salmon <- rbind(salmon_escapement, salmon_consumed, salmon_catch)
+rownames(base_salmon) <- c("Escapement", "Eaten", "Catch")
 
 # pinnipeds
 base_pinniped_vars <- data.frame("Day" = 1:days, 
