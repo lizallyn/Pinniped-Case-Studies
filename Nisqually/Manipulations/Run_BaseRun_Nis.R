@@ -47,6 +47,20 @@ source("Functions/Plots_responses.R")
 base_salmon <- rbind(salmon_escapement, salmon_consumed, salmon_catch)
 rownames(base_salmon) <- c("Escapement", "Eaten", "Catch")
 
+base_salmon_vars <- data.frame("Day" = 1:days,
+                               "Gauntlet_Chum" = gauntlet_chum,
+                               "Gauntlet_GR" = gauntlet_gr,
+                               "Gauntlet_LN" = gauntlet_ln,
+                               "Escape_Chum" = escape_chum,
+                               "Escape_GR" = escape_gr,
+                               "Escape_LN" = escape_ln,
+                               "Eaten_Chum" = eaten_chum,
+                               "Eaten_GR" = eaten_gr,
+                               "Eaten_LN" = eaten_ln,
+                               "Fished_Chum" = fished_chum,
+                               "Fished_GR" = fished_gr,
+                               "Fished_LN" = fished_ln)
+
 # pinnipeds
 base_pinniped_vars <- data.frame("Day" = 1:days, 
                                  "Gauntlet_Pv" = colSums(seal_forage_loc, na.rm = T),
