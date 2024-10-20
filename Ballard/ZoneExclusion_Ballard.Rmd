@@ -33,7 +33,7 @@ source("Ballard/03_set_pars.R")
 
 ```{r set pars, message = FALSE, warning = FALSE}
 zone_efficiency <- 0.8
-zone_steepness <- 10
+zone_steepness <- 5
 scenario <- "Zone"
 scenario_sealion <- "Zone"
 harvest_open <- start_loop
@@ -74,7 +74,7 @@ This scenario is focused on the effects of implementing an Exclusion Zone manage
 
 ```{r efficiency plot, echo = FALSE, warning = FALSE, message = FALSE}
 num_pinns <- 0:sum(num_seals, num_ej, num_zc)
-plot(num_pinns, zone_efficiency * num_pinns/(steepness + num_pinns), ylab = "Proportion of Pinnipeds Harvested", xlab = "Num Pinnipeds @ Gauntlet")
+plot(num_pinns, zone_efficiency * num_pinns/(zone_steepness + num_pinns), ylab = "Proportion of Pinnipeds Harvested", xlab = "Num Pinnipeds @ Gauntlet")
 ```
 
 In this parameterization, many more pinnipeds are removed from the system than under incidental or boat-based take only. 
@@ -90,7 +90,7 @@ plot_H + plot_H_ej + plot_H_zc
 Because of the increased removals, this scenario has an impact on pinniped behavior, presence at the Gauntlet, and survival. 
 
 ```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
-plot_seals + plot_zc + plot_ej + plot_layout(guides = "collect", axes = "collect")
+plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect", axes = "collect")
 ```
 
 In the below plots, you can see the impact of removals on the learning process of individual harbor seals in the decline of the Gauntlet Probabilities.
@@ -99,12 +99,14 @@ In the below plots, you can see the impact of removals on the learning process o
 plot_H/plot_y/plot_probs + plot_layout(guides = "collect", axes = "collect")
 ```
 
-### Things to Note
+### Salmon Response
 
-The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+The salmon response under this parameterization is as follows:
 
 ```{r, echo = FALSE}
-kable(salmon_escapement) %>% kable_styling(full_width = F)
+salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
+kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
 
 ### Parameter Table
