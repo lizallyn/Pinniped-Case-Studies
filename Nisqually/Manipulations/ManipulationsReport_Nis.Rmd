@@ -1,0 +1,9 @@
+---
+title: "Comparing Management Scenario Model Runs"
+subtitle: "Nisqually River Case Study"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+### Purpose
+
+The purpose of this document is to create figures that enable direct comparison between management scenario model runs, explanation of differences, and interpretation of what that means for the system. 
