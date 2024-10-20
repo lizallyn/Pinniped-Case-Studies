@@ -57,9 +57,12 @@ kable(compare_eaten, caption = "Predated by Pinnipeds")
 
 ## Pinniped Presence
 
+The following plots describe pinniped presence at the Gauntlet under all four scenarios for each pinniped species separately. You can see that the magnitude of presence differs greatly between scenarios. In the base scenario and haulout reduction scenario, removals aren't happening in the Gauntlet so pinniped presence closely tracks the timing of each salmon run. In the zone management scenario, pinniped presence is low throughout the model run due to the constant fear conditioning from daily removal activity. In the boat-based harvest scenario, you can see that harbor seal presence closely mirrors the presence of fishers in the Gauntlet, only increasing when fishers are not active.
+
 ```{r pinniped plot theme, include = FALSE}
 # colors credit to https://github.com/jakelawlor/PNWColors
 scenario.colors <- pnw_palette("Sailboat", 6)[c(1,2,3,5)]
+
 pinniped_theme <- theme_classic()
 ```
 
@@ -78,6 +81,11 @@ ggplot(data = long_gauntlet_pv) +
   geom_line(aes(x = Day, y = Gauntlet_Pv, color = Scenario), lwd = 1) + 
   labs(x = "Day of the Year", y = "Harbor Seals at the Gauntlet") +
   scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+
+ggplot(data = Daily_Fish) + 
+  geom_point(aes(x = DayofYear, y = harvesters)) + 
+  labs(x = "Day of the Year", y = "Number of Fishers in the Gauntlet") +
   pinniped_theme
 
 ```
