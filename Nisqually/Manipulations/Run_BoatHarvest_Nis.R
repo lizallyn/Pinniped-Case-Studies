@@ -1,7 +1,7 @@
 # Run the boat harvest scenario and save relevant outputs
 
 # clear environment
-rm(list=ls())
+# rm(list=ls())
 # setwd("/Users/lizallyn/Documents/GitHub/Pinniped-Case-Studies")
 
 # 01 Set-Up Functions
@@ -44,3 +44,36 @@ source("Functions/Plots_Ej.R")
 source("Functions/Plots_Zc.R")
 source("Nisqually/07_Plots_All.R")
 source("Functions/Plots_responses.R")
+
+## Save relevant variables and responses
+
+# salmon
+boat_salmon <- rbind(salmon_escapement, salmon_consumed, salmon_catch)
+rownames(boat_salmon) <- c("Escapement", "Eaten", "Catch")
+
+boat_salmon_vars <- data.frame("Day" = 1:days,
+                               "Gauntlet_Chum" = gauntlet_chum,
+                               "Gauntlet_GR" = gauntlet_gr,
+                               "Gauntlet_LN" = gauntlet_ln,
+                               "Escape_Chum" = escape_chum,
+                               "Escape_GR" = escape_gr,
+                               "Escape_LN" = escape_ln,
+                               "Eaten_Chum" = eaten_chum,
+                               "Eaten_GR" = eaten_gr,
+                               "Eaten_LN" = eaten_ln,
+                               "Fished_Chum" = fished_chum,
+                               "Fished_GR" = fished_gr,
+                               "Fished_LN" = fished_ln)
+
+# pinnipeds
+boat_pinniped_vars <- data.frame("Day" = 1:days, 
+                                 "Gauntlet_Pv" = colSums(seal_forage_loc, na.rm = T),
+                                 "Gauntlet_Ej" = colSums(ej_forage_loc, na.rm = T),
+                                 "Gauntlet_Zc" = colSums(zc_forage_loc, na.rm = T),
+                                 "H_Pv" = H,
+                                 "H_Ej" = H_ej,
+                                 "H_Zc" = H_zc,
+                                 "Eaten_Pv" = colSums(salmon_consumed_pv, na.rm = T),
+                                 "Eaten_Ej" = colSums(salmon_consumed_ej, na.rm = T),
+                                 "Eaten_Zc" = colSums(salmon_consumed_zc, na.rm = T))
+
