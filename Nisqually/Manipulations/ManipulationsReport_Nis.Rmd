@@ -4,6 +4,11 @@ subtitle: "Nisqually River Case Study"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
+```{r setup, include = FALSE}
+
+```
+
+
 ### Purpose
 
 The purpose of this document is to create figures that enable direct comparison between management scenario model runs, explanation of differences, and interpretation of what that means for the system. 
@@ -39,7 +44,7 @@ rownames(compare_escape) <- c("Base", "Boat", "Zone", "Haulout")
 kable(compare_escape, caption = "Escapement")
 ```
 
-Overall, the boat-based harvest had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs.
+Overall, the boat-based harvest had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs. This mirrors the differences in predation between scenario runs:
 
 ```{r consumed salmon table, echo = FALSE}
 compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eaten",],
@@ -47,3 +52,33 @@ compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eate
 rownames(compare_eaten) <- c("Base", "Boat", "Zone", "Haulout")
 kable(compare_eaten, caption = "Predated by Pinnipeds")
 ```
+
+### Pinniped Response
+
+## Pinniped Presence
+
+```{r pinniped plot theme, include = FALSE}
+# colors credit to https://github.com/jakelawlor/PNWColors
+scenario.colors <- pnw_palette("Sailboat", 6)[c(1,2,3,5)]
+pinniped_theme <- theme_classic()
+```
+
+
+```{r gauntlet pinnipeds plots, echo = FALSE, warning = FALSE, message = FALSE}
+gauntlet_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"Gauntlet_Pv"],
+                          Boat = boat_pinniped_vars[,"Gauntlet_Pv"],
+                          Zone = zone_pinniped_vars[,"Gauntlet_Pv"], 
+                          Haulout = haulout_pinniped_vars[,"Gauntlet_Pv"])
+
+long_gauntlet_pv <- pivot_longer(gauntlet_pv, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "Gauntlet_Pv")
+
+ggplot(data = long_gauntlet_pv) +
+  geom_line(aes(x = Day, y = Gauntlet_Pv, color = Scenario), lwd = 1) + 
+  labs(x = "Day of the Year", y = "Harbor Seals at the Gauntlet") +
+  scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+
+```
+
