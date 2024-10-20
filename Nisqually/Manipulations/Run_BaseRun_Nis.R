@@ -1,7 +1,7 @@
 # Run the Base Run and save relevant outcomes
 
 # clear environment
-rm(list=ls())
+# rm(list=ls())
 # setwd("/Users/lizallyn/Documents/GitHub/Pinniped-Case-Studies")
 
 # 01 Set-Up Functions
