@@ -7,3 +7,43 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 ### Purpose
 
 The purpose of this document is to create figures that enable direct comparison between management scenario model runs, explanation of differences, and interpretation of what that means for the system. 
+
+### Description of the Management Scenarios
+
+In the Nisqually River case study we ran four scenarios:  
+*Base Run*  
+Simulates current dynamics in the Gauntlet.  
+*Boat Harvest*  
+Simulates amplified harvest by fishers during fishing operations and normal fishing seasons. Alters values for the steepness and efficiency parameters that describe the relationship between the number of fishers and the number of pinnipeds that are harvested.  
+*Zone Exclusion*  
+Simulates removals by managers to attempt to exclude all pinnipeds from the Gauntlet. Assumes that no fisher harvest is occuring simulataneously. Alters the process of removals from boat-based to a "zone" scenario that is governed by an efficiency which describes how many of the pinnipeds at that Gauntlet managers can effectively remove (despite aiming for 100% removal).  
+*Haulout Reduction*  
+Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter.  
+
+```{r load scenarios, include = FALSE}
+source("Nisqually/Manipulations/Run_BaseRun_Nis.R")
+source("Nisqually/Manipulations/Run_BoatHarvest_Nis.R")
+source("Nisqually/Manipulations/Run_Zone_Nis.R")
+source("Nisqually/Manipulations/Run_Haulout_Nis.R")
+```
+
+
+### Salmon Response
+
+The following table describes the escapement for each run under each scenario.
+
+```{r escapement table, echo = FALSE}
+compare_escape <- data.frame(round(rbind(base_salmon["Escape",], boat_salmon["Escape",],
+                                   zone_salmon["Escape",], haulout_salmon["Escape",])))
+rownames(compare_escape) <- c("Base", "Boat", "Zone", "Haulout")
+kable(compare_escape, caption = "Escapement")
+```
+
+Overall, the boat-based harvest had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs.
+
+```{r consumed salmon table, echo = FALSE}
+compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eaten",],
+                                   zone_salmon["Eaten",], haulout_salmon["Eaten",])))
+rownames(compare_eaten) <- c("Base", "Boat", "Zone", "Haulout")
+kable(compare_eaten, caption = "Predated by Pinnipeds")
+```
