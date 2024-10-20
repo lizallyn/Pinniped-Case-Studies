@@ -38,7 +38,7 @@ source("Nisqually/03_Nis_set_pars_All.R")
 
 ```{r set scenario pars, message = FALSE, warning = FALSE}
 zone_efficiency <- 0.5
-zone_steepness <- 20
+zone_steepness <- 10
 scenario <- "Zone"
 harvest_open <- start_loop
 harvest_close <- end_loop
@@ -77,8 +77,8 @@ source("Functions/Plots_responses.R")
 This scenario is focused on the effects of implementing an Exclusion Zone management strategy in the Nisqually River. Under this strategy, both seals and sea lions are removed from the Gauntlet by managers throughout all days of the model run. The proportion of pinnipeds that are removed is governed by an efficiency term which describes the asymptote of the type II response between the number of pinnipeds at the Gauntlet and the proportion of individuals removed. That response is shown below:
 
 ```{r efficiency plot, echo = FALSE, warning = FALSE, message = FALSE}
-num_pinns <- 0:sum(num_seals, num_ej, num_zc)
-plot(num_pinns, zone_efficiency * num_pinns/(steepness + num_pinns), ylab = "Proportion of Pinnipeds Harvested", xlab = "Num Pinnipeds @ Gauntlet")
+num_pinns <- 0:num_seals
+plot(num_pinns, zone_efficiency * num_pinns/(zone_steepness + num_pinns), ylab = "Proportion of Pinnipeds Harvested", xlab = "Num Pinnipeds @ Gauntlet")
 ```
 
 This management scenario is less feasible at Nisqually than at the Locks, so the efficiency parameter is much lower. The steepness parameter on the relationship between number of pinnipeds and efficiency of removals is also lower to represent the larger and more complex physical area for the pinnipeds to spread out in and be cryptic.
@@ -89,13 +89,13 @@ kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Pinnip
 ```
 
 ```{r pinniped harvest plot, echo = FALSE}
-plot_H + plot_H_ej + plot_H_zc
+plot_H / plot_H_ej / plot_H_zc
 ```
 
 Because of the increased removals, this scenario has an impact on pinniped behavior, presence at the Gauntlet, and survival. 
 
 ```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
-plot_seals + plot_zc + plot_ej + plot_layout(guides = "collect", axes = "collect")
+plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect", axes = "collect")
 ```
 
 In the below plots, you can see the impact of removals on the learning process of individual harbor seals in the decline of the Gauntlet Probabilities.
@@ -104,18 +104,20 @@ In the below plots, you can see the impact of removals on the learning process o
 plot_H/plot_y/plot_probs + plot_layout(guides = "collect", axes = "collect")
 ```
 
-### Things to Note
+### Salmon Response
 
-The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+The salmon response under this parameterization is as follows:
 
 ```{r, echo = FALSE}
-kable(salmon_escapement) %>% kable_styling(full_width = F)
+salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
+kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
 
 ### Parameter Table
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(days, num_seals, num_zc, num_ej, zone_efficiency, zone_steepness, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, Cmax, Cmax_zc, Cmax_ej, alpha))
+```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
+parameters <- data.frame(rbind(days, num_seals, num_zc, num_ej, zone_efficiency, zone_steepness, num_seals_2_copy, chum_escape_rate, gr_escape_rate, ln_escape_rate, Cmax, Cmax_zc, Cmax_ej, alpha))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
