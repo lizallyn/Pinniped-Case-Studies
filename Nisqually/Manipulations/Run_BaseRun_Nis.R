@@ -82,3 +82,4 @@ base_pinniped_vars <- data.frame("Day" = 1:days,
                                  "Eaten_Zc" = colSums(salmon_consumed_zc, na.rm = T))
 base_pinniped_vars$H_sl <- base_pinniped_vars$H_Ej + base_pinniped_vars$H_Pv
 base_pinniped_vars <- base_pinniped_vars %>% mutate(cum_H_sl = cumsum(H_sl))
+base_pinniped_vars <- base_pinniped_vars %>% mutate(cum_H_Pv = cumsum(H_Pv))

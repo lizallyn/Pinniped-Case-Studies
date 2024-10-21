@@ -149,19 +149,35 @@ ggplot(data = Daily_Fish) +
 the following plot shows the number of each species that are removed from the Gauntlet daily under the boat-based and zone management scenarios.
 
 ```{r H plots, echo = FALSE, warning = FALSE, message = FALSE}
-# harbor seal presence
-H_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
-                          Base = base_pinniped_vars[,"H_Pv"],
-                          Boat = boat_pinniped_vars[,"H_Pv"],
-                          Zone = zone_pinniped_vars[,"H_Pv"], 
-                          Haulout = haulout_pinniped_vars[,"H_Pv"])
+# harbor seal harvest
+cum_H_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"cum_H_Pv"],
+                          Boat = boat_pinniped_vars[,"cum_H_Pv"],
+                          Zone = zone_pinniped_vars[,"cum_H_Pv"], 
+                          Haulout = haulout_pinniped_vars[,"cum_H_Pv"])
 
-long_H_pv <- pivot_longer(H_pv, cols = "Base":"Haulout",
-                                 names_to = "Scenario", values_to = "H_Pv")
+long_cum_H_pv <- pivot_longer(cum_H_pv, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "cum_H_Pv")
 set.seed(5)
-ggplot(data = long_H_pv) +
-  geom_point(aes(x = Day, y = H_Pv, color = Scenario), size = 2, position = position_jitter()) + 
-  labs(x = "Day of the Year", y = "Harbor Seals Harvested per Day") +
+ggplot(data = long_cum_H_pv) +
+  geom_point(aes(x = Day, y = cum_H_Pv, color = Scenario), size = 2) + 
+  labs(x = "Day of the Year", y = "Cumulative Harbor Seals Harvested") +
+  scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+
+# sea lion harvest
+cum_H_sl <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"cum_H_sl"],
+                          Boat = boat_pinniped_vars[,"cum_H_sl"],
+                          Zone = zone_pinniped_vars[,"cum_H_sl"], 
+                          Haulout = haulout_pinniped_vars[,"cum_H_sl"])
+
+long_cum_H_sl <- pivot_longer(cum_H_sl, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "cum_H_sl")
+set.seed(5)
+ggplot(data = long_cum_H_sl) +
+  geom_point(aes(x = Day, y = cum_H_sl, color = Scenario), size = 2)+ 
+  labs(x = "Day of the Year", y = "Cumulative Sea Lions Harvested") +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
 ```
