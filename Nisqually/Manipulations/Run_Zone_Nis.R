@@ -50,6 +50,11 @@ source("Functions/Plots_responses.R")
 
 ## Save relevant variables and responses
 
+# parameters
+zone_parameters <- data.frame(rbind(start_loop, end_loop, num_seals, num_zc, 
+                               num_ej, chin_boats, min_chum_boats, max_chum_boats,
+                               zone_efficiency, zone_steepness, steepness_H, efficiency, scenario))
+
 # salmon
 zone_salmon <- rbind(salmon_escapement, salmon_consumed, salmon_catch)
 rownames(zone_salmon) <- c("Escapement", "Eaten", "Catch")
@@ -67,9 +72,9 @@ zone_salmon_vars <- data.frame("Day" = 1:days,
                                "Fished_Chum" = fished_chum,
                                "Fished_GR" = fished_gr,
                                "Fished_LN" = fished_ln,
-                               "Gauntlet_salmon" = sum(c(gauntlet_chum, gauntlet_gr, gauntlet_ln)),
-                               "Escape_salmon" = sum(c(escape_chum, escape_gr, escape_ln)),
-                               "Eaten_salmon" = sum(c(eaten_chum, eaten_gr, eaten_ln)))
+                               "Gauntlet_salmon" = gauntlet_salmon)
+zone_salmon_vars$Eaten_salmon <- zone_salmon_vars$Eaten_Chum + zone_salmon_vars$Eaten_GR + 
+  zone_salmon_vars$Eaten_LN
 
 # pinnipeds
 zone_pinniped_vars <- data.frame("Day" = 1:days, 
