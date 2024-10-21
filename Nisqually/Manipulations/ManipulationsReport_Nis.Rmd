@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 ```{r setup, include = FALSE}
-
+library(PNWColors)
 ```
 
 
