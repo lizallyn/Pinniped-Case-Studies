@@ -158,9 +158,9 @@ H_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 
 long_H_pv <- pivot_longer(H_pv, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "H_Pv")
-
+set.seed(5)
 ggplot(data = long_H_pv) +
-  geom_line(aes(x = Day, y = H_Pv, color = Scenario), lwd = 1) + 
+  geom_point(aes(x = Day, y = H_Pv, color = Scenario), size = 2, position = position_jitter()) + 
   labs(x = "Day of the Year", y = "Harbor Seals Harvested per Day") +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
