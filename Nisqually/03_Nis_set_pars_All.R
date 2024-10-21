@@ -61,6 +61,7 @@ sealion_arrival_buffer <- 10 # days arrival before chum arrive
 # hunting parameters (same as fishery opening in base run realm)
 
 zone_efficiency <- NA
+zone_steepness <- NA
 steepness_H <- 200 # how quick does it saturate (higher = slower)
 efficiency <- 0.075 # what prop of seals are they capable of taking
 
