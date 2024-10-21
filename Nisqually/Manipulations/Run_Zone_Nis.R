@@ -66,7 +66,10 @@ zone_salmon_vars <- data.frame("Day" = 1:days,
                                "Eaten_LN" = eaten_ln,
                                "Fished_Chum" = fished_chum,
                                "Fished_GR" = fished_gr,
-                               "Fished_LN" = fished_ln)
+                               "Fished_LN" = fished_ln,
+                               "Gauntlet_salmon" = sum(c(gauntlet_chum, gauntlet_gr, gauntlet_ln)),
+                               "Escape_salmon" = sum(c(escape_chum, escape_gr, escape_ln)),
+                               "Eaten_salmon" = sum(c(eaten_chum, eaten_gr, eaten_ln)))
 
 # pinnipeds
 zone_pinniped_vars <- data.frame("Day" = 1:days, 
