@@ -137,8 +137,18 @@ The following plots describe pinniped presence at the Gauntlet under all four sc
 pinniped_theme <- theme_classic()
 ```
 
+```{r harvesters plot, echo = FALSE, warning = FALSE, message = FALSE}
 
-```{r gauntlet pinnipeds plots, echo = FALSE, warning = FALSE, message = FALSE}
+ggplot(data = Daily_Fish) + 
+  geom_point(aes(x = DayofYear, y = harvesters)) + 
+  labs(x = "Day of the Year", y = "Number of Fishers in the Gauntlet") +
+  pinniped_theme
+
+```
+
+During the Chinook and Coho fisheries, we model a set number of fishers as an average since participation seems to be pretty consistent. For the Chum fishery, participation is much less consistent (not all days of the fishery have active fishing effort, and days that do have active fishing effort have a wide range of the number of fishers participating) so we model the number of fishers using a random draw, which results in a much wider spread of participation. When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take. Harbor seals particularly respond to this by increasing their presence and predation impact.
+
+```{r gauntlet seals plots, echo = FALSE, warning = FALSE, message = FALSE}
 # harbor seal presence
 gauntlet_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
                           Base = base_pinniped_vars[,"Gauntlet_Pv"],
@@ -154,7 +164,11 @@ ggplot(data = long_gauntlet_pv) +
   labs(x = "Day of the Year", y = "Harbor Seals at the Gauntlet") +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
+```
 
+Sea lions arrive at Nisqually on the `r sealion_arrival_date`th day of the year.Their presence is heavily impacted by the management actions, with much smaller presence under the boat-based harvest or zone management scenarios, and moderate reductions under the haulout scenario. Because sea lions are assumed to be more responsive to the resource availability (Chum salmon), they all act like specialists and are likely to choose the Gauntlet every day unless deterrent actions are taken. 
+
+```{r gauntlet sea lions plots, echo = FALSE, warning = FALSE, message = FALSE}
 # california presence
 gauntlet_zc <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
                           Base = base_pinniped_vars[,"Gauntlet_Zc"],
@@ -187,10 +201,6 @@ ggplot(data = long_gauntlet_ej) +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
 
-ggplot(data = Daily_Fish) + 
-  geom_point(aes(x = DayofYear, y = harvesters)) + 
-  labs(x = "Day of the Year", y = "Number of Fishers in the Gauntlet") +
-  pinniped_theme
 
 ```
 
