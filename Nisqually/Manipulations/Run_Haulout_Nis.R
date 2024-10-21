@@ -89,3 +89,4 @@ haulout_pinniped_vars <- data.frame("Day" = 1:days,
                                  "Eaten_Ej" = colSums(salmon_consumed_ej, na.rm = T),
                                  "Eaten_Zc" = colSums(salmon_consumed_zc, na.rm = T))
 haulout_pinniped_vars$H_sl <- haulout_pinniped_vars$H_Ej + haulout_pinniped_vars$H_Pv
+haulout_pinniped_vars <- haulout_pinniped_vars %>% mutate(cum_H_sl = cumsum(H_sl))
