@@ -5,7 +5,10 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 ```{r setup, include = FALSE}
+
+# colors credit to https://github.com/jakelawlor/PNWColors
 library(PNWColors)
+scenario.colors <- pnw_palette("Sailboat", 6)[c(1,2,3,5)]
 ```
 
 
@@ -32,7 +35,6 @@ source("Nisqually/Manipulations/Run_Zone_Nis.R")
 source("Nisqually/Manipulations/Run_Haulout_Nis.R")
 ```
 
-
 ### Salmon Response
 
 The following table describes the escapement for each run under each scenario.
@@ -52,6 +54,48 @@ compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eate
 rownames(compare_eaten) <- c("Base", "Boat", "Zone", "Haulout")
 kable(compare_eaten, caption = "Predated by Pinnipeds")
 ```
+
+
+```{r gauntlet salmon plot, echo = FALSE, warning = FALSE}
+
+#salmon at gauntlet by species
+gauntlet_salmon_sp <- data.frame(Day = (base_salmon_vars[,"Day"] + (start_loop-1)),
+                          Base_chum = base_salmon_vars[,"Gauntlet_Chum"],
+                          Boat_chum = boat_salmon_vars[,"Gauntlet_Chum"],
+                          Zone_chum = zone_salmon_vars[,"Gauntlet_Chum"], 
+                          Haulout_chum = haulout_salmon_vars[,"Gauntlet_Chum"],
+                          Base_GR = base_salmon_vars[,"Gauntlet_GR"],
+                          Boat_GR = boat_salmon_vars[,"Gauntlet_GR"],
+                          Zone_GR = zone_salmon_vars[,"Gauntlet_GR"], 
+                          Haulout_GR = haulout_salmon_vars[,"Gauntlet_GR"],
+                          Base_LN = base_salmon_vars[,"Gauntlet_LN"],
+                          Boat_LN = boat_salmon_vars[,"Gauntlet_LN"],
+                          Zone_LN = zone_salmon_vars[,"Gauntlet_LN"], 
+                          Haulout_LN = haulout_salmon_vars[,"Gauntlet_LN"])
+
+long_gauntlet_salmon_sp <- pivot_longer(round(gauntlet_salmon), cols = "Base_chum":"Haulout_LN",
+                                 names_to = "Scenario_temp", values_to = "Gauntlet_salmon")
+long_gauntlet_salmon_sp$Species <- rep(rep(c("Chum", "Chinook_GR", "Chinook_LN"), each = 4), times = days)
+long_gauntlet_salmon_sp$Scenario <- rep(c("Base", "Boat", "Zone", "Haulout"), times = days*3)
+
+# total salmon at gauntlet
+gauntlet_salmon <- data.frame(Day = (base_salmon_vars[,"Day"] + (start_loop-1)),
+                          Base = base_salmon_vars[,"Gauntlet_salmon"],
+                          Boat = boat_salmon_vars[,"Gauntlet_salmon"],
+                          Zone = zone_salmon_vars[,"Gauntlet_salmon"], 
+                          Haulout = haulout_salmon_vars[,"Gauntlet_salmon"])
+
+long_gauntlet_salmon_sp <- pivot_longer(round(gauntlet_salmon), cols = "Base":"Haulout",
+                                 names_to = "Scenario_temp", values_to = "Gauntlet_salmon")
+long_gauntlet_salmon_sp$Species <- rep(rep(c("Chum", "Chinook_GR", "Chinook_LN"), each = 4), times = days)
+long_gauntlet_salmon_sp$Scenario <- rep(c("Base", "Boat", "Zone", "Haulout"), times = days*3)
+
+ggplot(data = long_gauntlet_salmon_sp) +
+  geom_point(aes(x = Day, y = Gauntlet_salmon, color = Scenario)) + 
+  labs(x = "Day of the Year", y = "Salmon at the Gauntlet") +
+  scale_color_manual(values = scenario.colors)
+```
+
 
 ### Pinniped Response
 
