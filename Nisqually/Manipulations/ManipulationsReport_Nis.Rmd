@@ -42,7 +42,7 @@ Simulates removals by managers to attempt to exclude all pinnipeds from the Gaun
 
 Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. 
 
-#### Parameter Table
+### Parameter Table
 
 The following table summarizes the parameters that were altered to simulate the different management scenarios, or ones that are particularly relevant to specific scenarios.
 
