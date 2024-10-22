@@ -25,24 +25,24 @@ names(salmon.colors) <- salmon.names
 
 arrival_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = Daily_Fish[,c("Chum", "GR_Chinook", "LN_Chinook")], 
                            col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 
-                           value.name = "Daily Arriving Salmon (Fitted)", colors = salmon.colors)
+                           value.name = "Daily Arriving Salmon (Fitted)", colors = salmon.colors, legend.inc = T)
 raw.arrival <- makePlot_3(x = 1:days + (start_loop - 1), data = fish.wide[1:days, c("Chum", "GR", "LocNis")],
                           col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species",
-                          value.name = "Daily Arriving Salmon (Data)", colors = salmon.colors)
+                          value.name = "Daily Arriving Salmon (Data)", colors = salmon.colors, legend.inc = T)
 raw_arrival_plot <- arrival_plot + 
   geom_point(aes(x = raw.arrival$data[,1], y = raw.arrival$data[,3], color = raw.arrival$data[,2]), shape = 1)
 escape_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(escape_chum, escape_gr, escape_ln),
                           col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 
-                          value.name = "Cumulative Escaped Salmon", colors = salmon.colors)
+                          value.name = "Cumulative Escaped Salmon", colors = salmon.colors, legend.inc = T)
 eaten_sp_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(eaten_chum, eaten_gr, eaten_ln),
                             col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 
-                            value.name = "Daily Salmon Eaten", colors = salmon.colors)
+                            value.name = "Daily Salmon Eaten", colors = salmon.colors, legend.inc = T)
 gauntlet_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(gauntlet_chum, gauntlet_gr, gauntlet_ln),
                             col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species", 
-                            value.name = "Daily Salmon at Gauntlet", colors = salmon.colors)
+                            value.name = "Daily Salmon at Gauntlet", colors = salmon.colors, legend.inc = T)
 fished_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(fished_chum, fished_gr, fished_ln), 
                           col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species",
-                          value.name = "Daily Salmon Fished", colors = salmon.colors)
+                          value.name = "Daily Salmon Fished", colors = salmon.colors, legend.inc = T)
 catch_rate_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(chum_catch_rate, gr_catch_rate, ln_catch_rate), 
                           col.names = c("Day", "Chum", "Chinook_GR", "Chinook_LN"), variable.name = "Species",
-                          value.name = "Daily Salmon Catch Rate", colors = salmon.colors)
+                          value.name = "Daily Salmon Catch Rate", colors = salmon.colors, legend.inc = T)
