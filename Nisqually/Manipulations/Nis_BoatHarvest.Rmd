@@ -1,5 +1,5 @@
 ---
-title: "Experiment: Boat Harvest Implementation @ Nisqually"
+title: "Scenario: Boat Harvest Implementation @ Nisqually"
 subtitle: "Describing the model run when boat-based harvest is amplified above incidental levels at Nisqually"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
@@ -70,12 +70,12 @@ source("Functions/Plots_responses.R")
 
 ### Description of Parameterization
 
-This scenario is focused on the effects of a management strategy that changes the quantity of seal harvest. Removals occur on days when fishers are active in the gauntlet. The harvest strategy is still boat-based like incidental harvest but it is more aggressive as it is focused on seal removal directly not incidentally as in the base run. Removals occur when fishers are active in the system during all three fisheries.
+This scenario is focused on the effects of a management strategy that changes the quantity of seal harvest. Removals occur on days when fishers are active in the gauntlet. The harvest strategy is still boat-based like incidental harvest but it is more aggressive as it is focused on seal removal directly not incidentally as in the base run.
 
-When there are `r num_seals` in the Pv, `r num_zc` Californias, and `r num_ej` Stellers in the source pool, pinniped presence at the Gauntlet is as follows:
+When there are `r num_seals` harbor seals, `r num_zc` California sea lions, and `r num_ej` Steller sea lions in the source pool, daily pinniped presence at the Gauntlet is as follows:
 
 ```{r gauntlet pinnipeds plot, echo = FALSE}
-plot_seals + plot_ej + plot_zc
+plot_seals / plot_ej / plot_zc
 ```
 
 ...and when there are 30 individual pinnipeds at the Gauntlet, removals are a type 2 function as follows:
@@ -84,14 +84,16 @@ plot_seals + plot_ej + plot_zc
 fishers <- 0:max_chum_boats
 plot(fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:30, 
                            num_fishers = fishers, steepness = steepness_H, 
-                           efficiency = efficiency, round = F), ylab = "Harvested Pinnipeds")
+                           efficiency = efficiency, round = F), ylab = "Daily Harvested Pinnipeds",
+     xlab = "Number of Active Fishers")
 ```
 
-### Things to Note
-
 The harvest efficiency is set at `r efficiency`, which represents both the proportion of pinnipeds in the gauntlet that are available to harvesters multiplied by the proportion of pinnipeds that harvesters are able to kill of the ones they attempt. In the Nisqually, I assume that fishers encounter 50% of seals while fishing in the main channel. I then assume that fishers kill 50% of the pinnipeds they encounter. This results in a `r efficiency` harvest efficiency for boat-based effort by Nisqually fishers.
-I also increase the proportion of fishers who are engaging in harvest activity by increasing the rate at which the type II functional response that defines harvest per fisher reaches saturation. So in practice it takes fewer fishers to be on the water in a given day for the max seals to be harvested.
-The number of boats participating in harvest is an average for the Chinook and Coho fisheries from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the Chum fishery it does a random sample of 1:25 to determine the number of harvesters active that day.
+
+I also increase the proportion of fishers who are engaging in harvest activity by increasing the rate at which the type II functional response that defines harvest per fisher reaches saturation. So in practice it takes fewer fishers on the water in a given day for the max seals to be harvested.
+
+The number of boats participating in harvest is an average for the Chinook and Coho fisheries from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig Smith and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the Chum fishery it does a random sample of 1:25 to determine the number of harvesters active that day.
+
 The total harvested pinnipeds are as follows under this parameterization:
 
 ```{r harvest table, echo = FALSE}
@@ -99,7 +101,7 @@ kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Harves
 ```
 
 ```{r pinniped harvest plot, echo = FALSE}
-plot_H + plot_H_ej + plot_H_zc
+plot_H / plot_H_ej / plot_H_zc
 ```
 
 This level of harvest impacts the fear response of the pinnipeds that are exposed to harvest and causes fewer of them to go to the Gauntlet than in the base run. The below plots show the impact of harvest on fear conditioning of California sea lions as an example. 
@@ -111,7 +113,7 @@ plot_zc / plot_H_zc
 plot_y_zc / plot_probs_zc
 ```
 
-CSLs arrive at the Gauntlet only for the Chum run, and so are only exposed to harvest during the Chum fishery. Harbor seals, in contrast, are exposed to harvest during all Nisqually Tribal fisheries (chinook, Coho, and Chum) and their behavior is impacted accordingly as seen below.
+California Sea Lions arrive at the Gauntlet only for the Chum run, and so are mostly exposed to harvest during the Chum fishery. Harbor seals, in contrast, are exposed to harvest during all Nisqually Tribal fisheries (Chinook, Coho, and Chum) and their behavior is impacted accordingly as seen below.
 
 ```{r y plots seals, echo = FALSE, warning = FALSE}
 plot_seals / plot_H
@@ -125,7 +127,7 @@ plot_y / plot_probs
 The fate of the sockeye, Chinook, and coho are as follows under this parameterization:
 
 ```{r salmon escapement, echo = FALSE}
-salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+salmon_fates <- data.frame(round(rbind(salmon_escapement, salmon_catch, salmon_consumed)))
 rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
 kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
@@ -134,7 +136,7 @@ kable(salmon_fates) %>% kable_styling(full_width = F)
 
 Here's a parameter list:
 ```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, num_seals_2_copy, Cmax, Cmax_ej, Cmax_zc, alpha, chum_escape_rate, gr_escape_rate, ln_escape_rate, chin_boats, min_chum_boats, max_chum_boats))
+parameters <- data.frame(rbind(days, num_seals, num_zc, num_ej, chum_residence, gr_residence, locnis_residence, chin_boats, min_chum_boats, max_chum_boats, steepness_H, efficiency))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```

@@ -78,7 +78,7 @@ The baseline harvest scenario involves a very low level of boat-based bycatch du
 
 Here's a parameter list:
 ```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, chum_residence, gr_residence, ln_residence, chin_boats, min_chum_boats, max_chum_boats))
+parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, chum_residence, gr_residence, locnis_residence, chin_boats, min_chum_boats, max_chum_boats))
 colnames(parameters) <- c("Value")
 kable(parameters, digits = 0) %>% kable_styling(full_width = F)
 ```

@@ -1,12 +1,12 @@
 ---
-title: "Experiment: Haulout Reduction @ Nisqually"
-subtitle: "Describing the model run when the number of pinnipeds in the source pool are reduced at Nisqually"
+title: "Scenario: Haulout Reduction @ Nisqually"
+subtitle: "Describing the model run when the number of pinnipeds in the source pool is reduced at Nisqually"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 ### The Narrative
 
-This model run is a scenario where managers or harvesters (or both) implement removals or intensive disturbance at nearby haulouts (the "source pool") which reduces the number of pinnipeds which can access the Gauntlet daily. This scenario would also likely have population-level effects which we are not describing here.
+This model run is a scenario where managers or harvesters (or both) implement removals or intensive disturbance at nearby haulouts (the "source pool") which reduces the number of pinnipeds which can access the Gauntlet daily. This scenario would also likely have multi-year population-level effects which we are not describing here.
 
 ### Run the Model
 
@@ -76,7 +76,7 @@ source("Functions/Plots_responses.R")
 This parameterization focuses on a scenario where the source pool of pinnipeds (of all three species) has been reduced by `r reduction * 100`% through some action external to the Gauntlet itself - harvest, lethal removals by management, or abandonment caused by intense disturbance. Under this scenario, pinniped presence at the Gauntlet is reduced as seen below.
 
 ```{r gauntlet pinnipeds plot, echo = FALSE}
-plot_seals + plot_ej + plot_zc
+plot_seals / plot_ej / plot_zc
 ```
 
 ### Things to Note
