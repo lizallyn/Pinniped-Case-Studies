@@ -18,6 +18,9 @@ source("Nisqually/03_Nis_set_pars_All.R")
 # ~~ adjust parameters for management scenario
 steepness_H <- 5 # how quick does it saturate (higher = slower)
 efficiency <- 0.25 # what prop of seals are they capable of taking
+harvest_days_pv <- which(Daily_Fish$harvesters > 0)
+harvest_days_ej <- which(Daily_Fish$harvesters > 0)
+harvest_days_zc <- which(Daily_Fish$harvesters > 0)
 
 # 04 Initialize Variables
 source("Nisqually/04_Nis_initialize_variables_All.R")
