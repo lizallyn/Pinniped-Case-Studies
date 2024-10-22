@@ -20,20 +20,28 @@ source("Nisqually/Manipulations/Run_Haulout_Nis.R")
 
 ## Purpose
 
-The purpose of this document is to create figures that enable direct comparison between management scenario model runs, explanation of differences, and interpretation of what that means for the system. 
+The purpose of this document is to create figures that enable direct comparison between management scenario model runs, explanation of differences, and interpretation of what that means for the system. These four management scenarios are just preliminary options to help in the process of developing more realistic management scenarios for each case study.
 
 ## Description of the Management Scenarios
 
-In the Nisqually River case study we ran four scenarios:  
-#### *Base Run*  
+In the Nisqually River case study we ran four preliminary scenarios:  
+#### Base Run 
+
 Simulates current dynamics in the Gauntlet.  
-#### *Boat Harvest*  
+
+#### Boat Harvest  
+
 Simulates amplified harvest by fishers during fishing operations and normal fishing seasons. Alters values for the steepness and efficiency parameters that describe the relationship between the number of fishers and the number of pinnipeds that are harvested.  
-#### *Zone Exclusion*  
+
+#### Zone Exclusion  
+
 Simulates removals by managers to attempt to exclude all pinnipeds from the Gauntlet. Assumes that no fisher harvest is occuring simulataneously. Alters the process of removals from boat-based to a "zone" scenario that is governed by an efficiency which describes how many of the pinnipeds at that Gauntlet managers can effectively remove (despite aiming for 100% removal).  
-#### *Haulout Reduction*  
+
+#### Haulout Reduction  
+
 Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. 
 
+The following table summarizes the parameters that were altered to simulate the different management scenarios, or ones that are particularly relevant to specific scenarios.
 
 ```{r parameter table, echo = FALSE}
 parameter_table <- data.frame(Base = base_parameters, Boat = boat_parameters, Zone = zone_parameters, Haulout = haulout_parameters)
@@ -91,6 +99,8 @@ ggplot(data = long_gauntlet_salmon) +
   salmon_theme
 ```
 
+#### Escape
+
 The number of salmon that escape the Gauntlet is dependent on their survival from fishing and predation pressures. The following table describes the escapement for each run under each scenario.
 
 ```{r escapement table, echo = FALSE}
@@ -100,7 +110,11 @@ rownames(compare_escape) <- c("Base", "Boat", "Zone", "Haulout")
 kable(compare_escape, caption = "Escapement") %>% kable_styling(full_width = F)
 ```
 
-Overall, the boat-based harvest and zone management scenarios had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs. This mirrors the differences in predation between scenario runs.
+Overall, the boat-based harvest and zone management scenarios had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs. 
+
+#### Predation
+
+The differences in predation between scenarios also show the largest reduction under the boat-based harvest and zone management scenarios. Predation also noticeably spikes as soon as sea lions arrive in the system on the `r sealion_arrival_date`th day of the year, heightening the differences between scenarios and emphasizing the impact of California sea lions specifically.
 
 ```{r consumed salmon table, echo = FALSE}
 compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eaten",],
@@ -125,10 +139,20 @@ ggplot(data = long_eaten_salmon_total) +
   salmon_theme
 ```
 
+#### Fishery Catch
+
+Fisheries catch is pretty consistent between scenarios. This is built into the structure of the model, so catch rates currently do not respond significantly to fish abundance. This assumes no in-season management decisions, changes in fishing opportunities, or changes in escapement goals or quotas. This is not realistic, but meets the goals of the model at this preliminary stage. The total escaped salmon can be used to infer about different management decisions that might be made in the event that the additional "escaped" salmon biomass was detected in the system within season and could be utilized. 
+
+```{r fished salmon table, echo = FALSE}
+compare_fished <- data.frame(round(rbind(base_salmon["Catch",], boat_salmon["Catch",],
+                                   zone_salmon["Catch",], haulout_salmon["Catch",])))
+rownames(compare_fished) <- c("Base", "Boat", "Zone", "Haulout")
+kable(compare_fished, caption = "Fishery Catch") %>% kable_styling(full_width = F)
+```
 
 ## Pinniped Response
 
-### Pinniped Presence
+#### Harvest Summary
 
 During the Chinook and Coho fisheries, we model a set number of fishers as an average since participation seems to be pretty consistent. For the Chum fishery, participation is much less consistent (not all days of the fishery have active fishing effort, and days that do have active fishing effort have a wide range of the number of fishers participating) so we model the number of fishers using a random draw, which results in a much wider spread of participation. When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take. Harbor seals particularly respond to this by increasing their presence and predation impact.
 
@@ -146,7 +170,7 @@ ggplot(data = Daily_Fish) +
 
 ```
 
-the following plot shows the number of each species that are removed from the Gauntlet daily under the boat-based and zone management scenarios.
+The following plot shows the cumulative number of seals and sea lions that are removed from the Gauntlet over time under each management scenario. In the base and haulout scenarios, no removals happen during the model run within the Gauntlet.
 
 ```{r H plots, echo = FALSE, warning = FALSE, message = FALSE}
 # harbor seal harvest
@@ -180,17 +204,21 @@ ggplot(data = long_cum_H_sl) +
   pinniped_theme
 ```
 
+In the boat-based harvest and zone management scenarios, essentially all of the sea lions are removed in a very short period of days, excluding the ones that learn to avoid the Gauntlet fast enough. This may or may not be realistic depending on how efficient fishers and managers are at removing individuals.
+
+#### Pinniped ACtivity
+
 The following plots describe pinniped presence at the Gauntlet under all four scenarios for each pinniped species separately. You can see that the magnitude of presence differs greatly between scenarios. In the base scenario and haulout reduction scenario, removals aren't happening in the Gauntlet so pinniped presence closely tracks the timing of each salmon run. In the zone management scenario, pinniped presence is low throughout the model run due to the constant fear conditioning from daily removal activity. In the boat-based harvest scenario, you can see that harbor seal presence closely mirrors the presence of fishers in the Gauntlet, only increasing when fishers are not active.
 
 ```{r gauntlet seals plots, echo = FALSE, warning = FALSE, message = FALSE}
 # harbor seal presence
-gauntlet_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+sum_gauntlet_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
                           Base = base_pinniped_vars[,"Gauntlet_Pv"],
                           Boat = boat_pinniped_vars[,"Gauntlet_Pv"],
                           Zone = zone_pinniped_vars[,"Gauntlet_Pv"], 
                           Haulout = haulout_pinniped_vars[,"Gauntlet_Pv"])
 
-long_gauntlet_pv <- pivot_longer(gauntlet_pv, cols = "Base":"Haulout",
+long_gauntlet_pv <- pivot_longer(sum_gauntlet_pv, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "Gauntlet_Pv")
 
 ggplot(data = long_gauntlet_pv) +
@@ -244,3 +272,4 @@ Overall it seems like a boat-based harvest would make a lot of sense and possibl
 
 ## Questions
 
+- How to adjust fishing effort in the scenarios. How much in-season management happens? Should they be capped at a quota that is informed by the base run?
