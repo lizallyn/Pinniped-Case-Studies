@@ -42,6 +42,8 @@ Simulates removals by managers to attempt to exclude all pinnipeds from the Gaun
 
 Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. 
 
+#### Parameter Table
+
 The following table summarizes the parameters that were altered to simulate the different management scenarios, or ones that are particularly relevant to specific scenarios.
 
 ```{r parameter table, echo = FALSE}
@@ -52,7 +54,7 @@ kable(parameter_table, caption = "Parameter Table") %>% kable_styling(full_width
 
 ## Salmon Response
 
-The total daily salmon presence at the Gauntlet follows two main peaks for the Chinook run and the Chum run. 
+The total daily salmon presence at the Gauntlet follows two main peaks for the Chinook run and the Chum run. Management scenarios have a significant impact on the total number of salmon at the Gauntlet on each day, though the impact is more noticeable for Chum than Chinook. 
 
 ```{r gauntlet salmon plot, echo = FALSE, warning = FALSE}
 
@@ -108,20 +110,22 @@ The number of salmon that escape the Gauntlet is dependent on their survival fro
 compare_escape <- data.frame(round(rbind(base_salmon["Escape",], boat_salmon["Escape",],
                                    zone_salmon["Escape",], haulout_salmon["Escape",])))
 rownames(compare_escape) <- c("Base", "Boat", "Zone", "Haulout")
-kable(compare_escape, caption = "Escapement") %>% kable_styling(full_width = F)
+
+kable(compare_escape[order(compare_escape$Chum, decreasing = TRUE),], 
+      caption = "Escapement") %>% kable_styling(full_width = F)
 ```
 
-Overall, the boat-based harvest and zone management scenarios had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs. 
+Overall, the boat-based harvest and zone management scenarios had the largest improvement in escapement for Chum, but the differences were less pronounced for the two Chinook runs. This result is also highly dependent on the expected efficiency of the zone removal scenario. Currently, this scenario assumes that managers could feasible remove `r zone_efficiency * 100`% of pinnipeds present at the Gauntlet each day. This is likely optimistic. 
 
 #### Predation
 
-The differences in predation between scenarios also show the largest reduction under the boat-based harvest and zone management scenarios. Predation also noticeably spikes as soon as sea lions arrive in the system on the `r sealion_arrival_date`th day of the year, heightening the differences between scenarios and emphasizing the impact of California sea lions specifically.
+The differences in predation between scenarios also show the largest reduction under the boat-based harvest and zone management scenarios. Predation noticeably spikes as soon as sea lions arrive in the system on the `r sealion_arrival_date`th day of the year, heightening the differences between scenarios and emphasizing the impact of California sea lions specifically.
 
 ```{r consumed salmon table, echo = FALSE}
 compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eaten",],
                                    zone_salmon["Eaten",], haulout_salmon["Eaten",])))
 rownames(compare_eaten) <- c("Base", "Boat", "Zone", "Haulout")
-kable(compare_eaten, caption = "Predated by Pinnipeds") %>% kable_styling(full_width = F)
+kable(compare_eaten[order(compare_eaten$Chum, decreasing = FALSE),], caption = "Predated by Pinnipeds") %>% kable_styling(full_width = F)
 ```
 
 ```{r consumed salmon plot, echo = FALSE}
@@ -142,24 +146,31 @@ ggplot(data = long_eaten_salmon_total) +
 
 #### Fishery Catch
 
-Fisheries catch is pretty consistent between scenarios. This is built into the structure of the model, so catch rates currently do not respond significantly to fish abundance. This assumes no in-season management decisions, changes in fishing opportunities, or changes in escapement goals or quotas. This is not realistic, but meets the goals of the model at this preliminary stage. The total escaped salmon can be used to infer about different management decisions that might be made in the event that the additional "escaped" salmon biomass was detected in the system within season and could be utilized. 
+Fisheries catch is pretty consistent between scenarios. This is built into the structure of the model - catch rates currently do not respond significantly to fish abundance. This assumes no in-season management decisions, changes in fishing opportunities, or changes in escapement goals or quotas. This is not realistic, but meets the goals of the model at this preliminary stage. The total escaped salmon can be used to infer about different management decisions that might be made in the event that the additional "escaped" salmon biomass was detected in the system within season and could be utilized. 
 
 ```{r fished salmon table, echo = FALSE}
 compare_fished <- data.frame(round(rbind(base_salmon["Catch",], boat_salmon["Catch",],
                                    zone_salmon["Catch",], haulout_salmon["Catch",])))
 rownames(compare_fished) <- c("Base", "Boat", "Zone", "Haulout")
-kable(compare_fished, caption = "Fishery Catch") %>% kable_styling(full_width = F)
+kable(compare_fished[order(compare_fished$Chum, decreasing = TRUE),], caption = "Fishery Catch") %>% kable_styling(full_width = F)
 ```
 
 ## Pinniped Response
 
 #### Harvest Summary
 
-During the Chinook and Coho fisheries, we model a set number of fishers as an average since participation seems to be pretty consistent. For the Chum fishery, participation is much less consistent (not all days of the fishery have active fishing effort, and days that do have active fishing effort have a wide range of the number of fishers participating) so we model the number of fishers using a random draw, which results in a much wider spread of participation. When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take. Harbor seals particularly respond to this by increasing their presence and predation impact.
+During the Chinook and Coho fisheries, we model a set number of active fishers when fisheries are open since participation seems to be pretty consistent. For the Chum fishery, participation is much less consistent (not all days of the fishery have active fishing effort, and days that do have active fishing effort have a wide range of the number of fishers participating) so we model the number of fishers using a random draw, which results in a much wider spread of participation. When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take. Harbor seals particularly respond to this by increasing their presence and predation impact.
 
 ```{r pinniped plot theme, include = FALSE}
 
 pinniped_theme <- theme_classic()
+```
+
+```{r harvest table, echo = FALSE}
+compare_harvested <- data.frame(rbind(base_pinniped_harvest, boat_pinniped_harvest,
+                                      haulout_pinniped_harvest, zone_pinniped_harvest))
+rownames(compare_harvested) <- c("Base", "Boat", "Haulout", "Zone")
+kable(compare_harvested[order(compare_harvested$Pv, decreasing = TRUE),], caption = "Harvested Pinnipeds") %>% kable_styling(full_width = F)
 ```
 
 ```{r harvesters plot, echo = FALSE, warning = FALSE, message = FALSE}
@@ -183,7 +194,7 @@ cum_H_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 
 long_cum_H_pv <- pivot_longer(cum_H_pv, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "cum_H_Pv")
-ggplot(data = long_cum_H_pv) +
+plot_cum_pv <- ggplot(data = long_cum_H_pv) +
   geom_point(aes(x = Day, y = cum_H_Pv, color = Scenario), size = 2) + 
   labs(x = "Day of the Year", y = "Cumulative Harbor Seals Harvested") +
   scale_color_manual(values = scenario.colors) + 
@@ -198,11 +209,13 @@ cum_H_sl <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 
 long_cum_H_sl <- pivot_longer(cum_H_sl, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "cum_H_sl")
-ggplot(data = long_cum_H_sl) +
+plot_cum_sl <- ggplot(data = long_cum_H_sl) +
   geom_point(aes(x = Day, y = cum_H_sl, color = Scenario), size = 2)+ 
   labs(x = "Day of the Year", y = "Cumulative Sea Lions Harvested") +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
+
+plot_cum_pv / plot_cum_sl
 ```
 
 In the boat-based harvest and zone management scenarios, essentially all of the sea lions are removed in a very short period of days, excluding the ones that learn to avoid the Gauntlet fast enough. This may or may not be realistic depending on how efficient fishers and managers are at removing individuals.
@@ -229,7 +242,7 @@ ggplot(data = long_gauntlet_pv) +
   pinniped_theme
 ```
 
-Sea lions arrive at Nisqually on the `r sealion_arrival_date`th day of the year. Their presence at the Gauntlet is initially high when they first arrive at the tail end of the Chinook runs, then stays low until the Chum run begins to pick up. Their presence is heavily impacted by the management actions, with much smaller presence under the boat-based harvest or zone management scenarios, and moderate reductions under the haulout scenario. Because sea lions are assumed to be more responsive to the resource availability (Chum salmon), they all act like specialists and are all likely to choose the Gauntlet every day unless deterrent actions are taken.
+Sea lions arrive at Nisqually on the `r sealion_arrival_date`th day of the year. Their presence at the Gauntlet is initially high when they first arrive at the tail end of the Chinook runs, then stays low until the Chum run begins to pick up. Their presence is heavily impacted by the management actions, with much smaller presence under the boat-based harvest or zone management scenarios, and moderate reductions under the haulout scenario. Because sea lions are assumed to be more responsive to the resource availability (Chum salmon), they all act like specialists and are all likely to choose the Gauntlet every day unless deterrent actions are taken or there are insufficient salmon to feed them. 
 
 ```{r gauntlet sea lions plots, echo = FALSE, warning = FALSE, message = FALSE}
 # california presence
@@ -242,7 +255,7 @@ gauntlet_zc <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 long_gauntlet_zc <- pivot_longer(gauntlet_zc, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "Gauntlet_Zc")
 
-ggplot(data = long_gauntlet_zc) +
+zc_plot <- ggplot(data = long_gauntlet_zc) +
   geom_line(aes(x = Day, y = Gauntlet_Zc, color = Scenario), lwd = 1) + 
   labs(x = "Day of the Year", y = "California Sea Lions at the Gauntlet") +
   scale_color_manual(values = scenario.colors) + 
@@ -258,19 +271,17 @@ gauntlet_ej <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 long_gauntlet_ej <- pivot_longer(gauntlet_ej, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "Gauntlet_Ej")
 
-ggplot(data = long_gauntlet_ej) +
+ej_plot <- ggplot(data = long_gauntlet_ej) +
   geom_line(aes(x = Day, y = Gauntlet_Ej, color = Scenario), lwd = 1) + 
   labs(x = "Day of the Year", y = "Steller Sea Lions at the Gauntlet") +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
 
+zc_plot / ej_plot
 
 ```
 
-## Discussion
+## Conclusion (for now)
 
-Overall it seems like a boat-based harvest would make a lot of sense and possibly have a good positive impact on adult salmon survival and spawning in this system.
+Overall it seems like a boat-based harvest would make a lot of sense and possibly have a good positive impact on adult salmon survival and spawning in this system. However, this depends greatly on the parameterization of the scenario, especially our assumptions about the efficiency of pinniped removals by fishers or managers. 
 
-## Questions
-
-- How to adjust fishing effort in the scenarios. How much in-season management happens? Should they be capped at a quota that is informed by the base run?
