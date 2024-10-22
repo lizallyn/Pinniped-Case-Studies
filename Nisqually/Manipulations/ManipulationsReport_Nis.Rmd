@@ -25,13 +25,13 @@ The purpose of this document is to create figures that enable direct comparison 
 ## Description of the Management Scenarios
 
 In the Nisqually River case study we ran four scenarios:  
-####*Base Run*  
+#### *Base Run*  
 Simulates current dynamics in the Gauntlet.  
-####*Boat Harvest*  
+#### *Boat Harvest*  
 Simulates amplified harvest by fishers during fishing operations and normal fishing seasons. Alters values for the steepness and efficiency parameters that describe the relationship between the number of fishers and the number of pinnipeds that are harvested.  
-####*Zone Exclusion*  
+#### *Zone Exclusion*  
 Simulates removals by managers to attempt to exclude all pinnipeds from the Gauntlet. Assumes that no fisher harvest is occuring simulataneously. Alters the process of removals from boat-based to a "zone" scenario that is governed by an efficiency which describes how many of the pinnipeds at that Gauntlet managers can effectively remove (despite aiming for 100% removal).  
-####*Haulout Reduction*  
+#### *Haulout Reduction*  
 Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. 
 
 
@@ -158,7 +158,6 @@ cum_H_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 
 long_cum_H_pv <- pivot_longer(cum_H_pv, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "cum_H_Pv")
-set.seed(5)
 ggplot(data = long_cum_H_pv) +
   geom_point(aes(x = Day, y = cum_H_Pv, color = Scenario), size = 2) + 
   labs(x = "Day of the Year", y = "Cumulative Harbor Seals Harvested") +
@@ -174,7 +173,6 @@ cum_H_sl <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
 
 long_cum_H_sl <- pivot_longer(cum_H_sl, cols = "Base":"Haulout",
                                  names_to = "Scenario", values_to = "cum_H_sl")
-set.seed(5)
 ggplot(data = long_cum_H_sl) +
   geom_point(aes(x = Day, y = cum_H_sl, color = Scenario), size = 2)+ 
   labs(x = "Day of the Year", y = "Cumulative Sea Lions Harvested") +
