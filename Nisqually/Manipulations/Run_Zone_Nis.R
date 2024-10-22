@@ -19,8 +19,10 @@ source("Nisqually/03_Nis_set_pars_All.R")
 zone_efficiency <- 0.25
 zone_steepness <- 10
 scenario <- "Zone"
-harvest_open <- start_loop
-harvest_close <- end_loop
+harvest_days_pv <- start_loop:end_loop
+harvest_days_ej <- start_loop:end_loop
+harvest_days_zc <- start_loop:end_loop
+num_harvesters <- NA
 
 # 04 Initialize Variables
 source("Nisqually/04_Nis_initialize_variables_All.R")

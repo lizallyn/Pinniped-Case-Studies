@@ -60,6 +60,10 @@ sealion_arrival_buffer <- 10 # days arrival before chum arrive
 
 # hunting parameters (same as fishery opening in base run realm)
 
+harvest_days_pv <- which(Daily_Fish$harvesters > 0)
+harvest_days_ej <- which(Daily_Fish$harvesters > 0)
+harvest_days_zc <- which(Daily_Fish$harvesters > 0)
+
 zone_efficiency <- NA
 zone_steepness <- NA
 steepness_H <- 200 # how quick does it saturate (higher = slower)

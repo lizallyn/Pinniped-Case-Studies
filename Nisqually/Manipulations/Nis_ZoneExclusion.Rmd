@@ -37,11 +37,13 @@ source("Nisqually/03_Nis_set_pars_All.R")
 ```
 
 ```{r set scenario pars, message = FALSE, warning = FALSE}
-zone_efficiency <- 0.5
+zone_efficiency <- 0.25
 zone_steepness <- 10
 scenario <- "Zone"
-harvest_open <- start_loop
-harvest_close <- end_loop
+harvest_days_pv <- start_loop:end_loop
+harvest_days_ej <- start_loop:end_loop
+harvest_days_zc <- start_loop:end_loop
+num_harvesters <- NA
 ```
 
 ```{r, run loop, include = FALSE}
