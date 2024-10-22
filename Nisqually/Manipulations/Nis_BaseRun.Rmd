@@ -26,13 +26,13 @@ source("Nisqually/00_Run_The_Model_Nis_All.R", local = knitr::knit_global())
 
 ```
 
-Three run of salmon are included in the Nisqually model: Green River Chinook, LocNis (local natural) Chinook, and winter Chum. Due to the timing of these three salmon runs, the model runs from `r as.Date(fish_start, origin = "2024-01-01")` until `r as.Date(fish_end, origin = "2024-01-01")` the following year. Data was provided from the Nisqually Indian Tribe to estimate daily arriving salmon from each run and daily catch of each run. Chinook are caught both in a directed fishery on the Green River run and as bycatch in the coho fishery. Chum are caught in the directed chum fishery only. The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model. Plots of daily catch are also shown with the derived catch rates side-by-side. Catch rates come from dividing the catch data by the number of each run modeled to be in the gauntlet on each day.
+Three runs of salmon are included in the Nisqually model: Green River Chinook, LocNis (wild) Chinook, and winter Chum. Due to the timing of these three salmon runs, the model runs from `r as.Date(fish_start, origin = "2024-01-01")` until `r as.Date(fish_end, origin = "2024-01-01")` the following year. Data was provided from the Nisqually Indian Tribe to estimate daily arriving salmon from each run and daily catch of each run. Chinook are caught both in a directed fishery on the Green River run and as bycatch in the coho fishery. Chum are caught in the directed chum fishery only. The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model. Catch rates come from dividing the catch data by the number of each run modeled to be in the gauntlet on each day.
 
 ```{r plot salmon data, message = FALSE, echo = FALSE, warning = FALSE}
-raw_arrival_plot + catch_rate_plot
+raw_arrival_plot / catch_rate_plot
 ```
 
-Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. The escape rate is simply 1/residence time. For Chum, they also might spawn in the gauntlet, so their "escape" rate also encompasses successful spawning, and their residence time includes potential spawning activities and behaviors.
+Salmon experience mortality in the model via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. The escape rate is simply 1/residence time. For Chum, they also might spawn in the gauntlet, so their "escape" rate also encompasses successful spawning, and their residence time includes potential spawning activities and behaviors.
 
 ```{r table salmon data, message = FALSE, echo = FALSE, warning = FALSE}
 kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locnis_residence), caption = "Residence Time (Days)") %>% kable_styling(full_width = F)
@@ -41,17 +41,17 @@ kable(data.frame(Chum = chum_residence, GreenRiver = gr_residence, LocNis = locn
 The below plots describe how salmon move through the model under this parameterization, including how many are fished, predated on by pinnipeds, or escape beyond the Gauntlet.
 
 ```{r salmon fates, echo = FALSE, warning = FALSE}
-gauntlet_plot + fished_plot + eaten_sp_plot
+gauntlet_plot / fished_plot / eaten_sp_plot
 
 salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
 rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
-kable(salmon_fates) %>% kable_styling(full_width = F)
+kable(salmon_fates, caption = "Salmon Destination Totals") %>% kable_styling(full_width = F)
 
 ```
 
 ### Pinniped Inputs
 
-Three species of pinnipeds are included: Harbor seals, California sea lions, and Steller sea lions. The number of each species of pinniped in the source pool (Count in table below) is informed by observations from managers and biologists in the system. Harbor seals are present in the system year-round while sea lions only show up for the Chum run (+ `r sealion_arrival_buffer` days early in anticipations of the run on the `r sealion_arrival_date`th day of the year).
+Three species of pinniped are included in the model: Harbor seals, California sea lions, and Steller sea lions. The number of each species of pinniped in the source pool (Count in table below) is informed by observations from managers and biologists in the system. Harbor seals are present in the system year-round while sea lions only show up for the Chum run (+ `r sealion_arrival_buffer` days early in anticipations of the run on the `r sealion_arrival_date`th day of the year).
 
 Each pinniped has a maximum consumption (Cmax) parameter that is set high so it doesn't unnecessarily limit them from gorging behavior. The below table also lists the number of other individuals that each pinniped is learning from during social contagion of information. For harbor seals, we think they use relatively small and dispersed haulouts, which might limit information spread. For sea lions, they generally use the same large haulout so the size of their social circle (Copy) includes all other individuals of their species. 
 
@@ -64,22 +64,22 @@ kable(data.frame(rbind(Count, Cmax_, Copy), row.names = c("Count", "Cmax", "Copy
 
 ```
 
-In this model we assume that `r prop_specialists * 100`% of seals are specialists and all sea lions are specialists. This designation means that they are given higher baseline probabilities of going to the gauntlet to forage and have a higher resilience to harvest exposure.
+In this model we assume that `r prop_specialists * 100`% of seals are specialists and all sea lions are specialists. This designation means that they are given higher baseline probabilities of going to the gauntlet to forage and have a higher resilience to harvest exposure. Below are plots of daily pinniped presence at the Gauntlet for each species.
 
 ```{r pinniped plots, message = FALSE, echo = FALSE, warning = FALSE}
-plot_seals + plot_ej + plot_zc + plot_layout(guides = "collect")
+plot_seals / plot_ej / plot_zc / plot_layout(guides = "collect")
 ```
 
 ### Harvest Scenario
 
-The baseline harvest scenario involves a very low level of boat-based bycatch during fishing activity. This comes from the ~3 removals that were reported via NWIFC in south Puget Sound in 2021. In this scenario, harvest effort is occurring on all days when catch was recorded. The number of boats participating in harvest is an average for the Chinook and Coho fisheries from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the model it does a random sample of 1:25 to determine the number of harvesters active that day. In the base run, the harvest is 0 pretty much all the time, so no results to show for that.
+The baseline harvest scenario involves a very low level of boat-based bycatch during fishing activity. This comes from the ~3 removals that were reported by the NWIFC in south Puget Sound in 2021. In this scenario, harvest effort is occurring on all days when catch was recorded. The number of boats participating in harvest is different during each fishery. During the Chinook and coho fisheries, the model uses an average of the number of boats active each day from 2017-2023 which comes out to `r chin_boats` boats per day. For Chum, I have catch data from Craig Smith and the number of boats per day from 2014-2019 ranges from `r min_chum_boats`-`r max_chum_boats`, so each day of the model it does a random sample of 1:25 to determine the number of harvesters active that day. In the base run, the harvest is 0 pretty much all the time, so no results to show for that.
 
 ### Parameter Table
 
 Here's a parameter list:
 ```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, num_seals_2_copy, Cmax, Cmax_ej, Cmax_zc, alpha, chum_escape_rate, gr_escape_rate, ln_escape_rate, chin_boats, min_chum_boats, max_chum_boats))
+parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, chum_residence, gr_residence, ln_residence, chin_boats, min_chum_boats, max_chum_boats))
 colnames(parameters) <- c("Value")
-kable(parameters) %>% kable_styling(full_width = F)
+kable(parameters, digits = 0) %>% kable_styling(full_width = F)
 ```
 
