@@ -16,7 +16,7 @@ source("Nisqually/02_Prep_Nisqually_Salmon_Data.R")
 source("Nisqually/03_Nis_set_pars_All.R")
 
 # ~~ adjust parameters for management scenario
-zone_efficiency <- 0.5
+zone_efficiency <- 0.25
 zone_steepness <- 10
 scenario <- "Zone"
 harvest_open <- start_loop
