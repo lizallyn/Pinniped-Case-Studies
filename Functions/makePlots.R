@@ -9,10 +9,11 @@ library(kableExtra)
 # plot_x_range <- start_loop:end_loop
 
 prepForPlots <- function(df, key.col = "Seal", 
-                         other.cols = "Day", value.col){
+                         other.cols = "Day", value.col, offset = (start_loop - 1)){
   melted <- melt(data = df, key.col)
   colnames(melted) <- c(key.col, other.cols, value.col)
   melted[,key.col] <- as.factor(melted[,key.col])
+  melted$Day <- melted$Day  + offset
   return(melted)
 }
 
