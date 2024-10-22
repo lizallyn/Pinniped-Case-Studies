@@ -24,7 +24,8 @@ The purpose of this document is to create figures that enable direct comparison 
 
 ## Description of the Management Scenarios
 
-In the Nisqually River case study we ran four preliminary scenarios:  
+In the Nisqually River case study we ran four preliminary scenarios: 
+
 #### Base Run 
 
 Simulates current dynamics in the Gauntlet.  
@@ -206,7 +207,7 @@ ggplot(data = long_cum_H_sl) +
 
 In the boat-based harvest and zone management scenarios, essentially all of the sea lions are removed in a very short period of days, excluding the ones that learn to avoid the Gauntlet fast enough. This may or may not be realistic depending on how efficient fishers and managers are at removing individuals.
 
-#### Pinniped ACtivity
+#### Pinniped Activity
 
 The following plots describe pinniped presence at the Gauntlet under all four scenarios for each pinniped species separately. You can see that the magnitude of presence differs greatly between scenarios. In the base scenario and haulout reduction scenario, removals aren't happening in the Gauntlet so pinniped presence closely tracks the timing of each salmon run. In the zone management scenario, pinniped presence is low throughout the model run due to the constant fear conditioning from daily removal activity. In the boat-based harvest scenario, you can see that harbor seal presence closely mirrors the presence of fishers in the Gauntlet, only increasing when fishers are not active.
 
