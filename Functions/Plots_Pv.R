@@ -11,6 +11,6 @@ plot_Psoc <- makePlot_1(P_social, "P_social", colors)
 
 # Plots of Aggregated 1D data
 plot_seals <- makePlot_2(x = 1:days + (start_loop - 1), x.name = "Day", y = colSums(seal_forage_loc, na.rm = T), 
-                         y.name = "Num Seals at Gauntlet", color = "turquoise3")
+                         y.name = "Seals at Gauntlet", color = "turquoise3")
 plot_H <- makePlot_2(x = 1:days + (start_loop - 1), x.name = "Day", y = H, y.name = "Seals Harvested", color = "orchid")
 

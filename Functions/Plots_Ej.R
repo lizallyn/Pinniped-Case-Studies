@@ -12,6 +12,6 @@ plot_Psoc_ej <- makePlot_1(P_social_ej, "P_social SSL", colors)
 
 # Plots of Aggregated 1D data
 plot_ej <- makePlot_2(x = 1:days + (start_loop - 1), x.name = "Day", y = colSums(ej_forage_loc, na.rm = T), 
-                         y.name = "Num Steller Sea Lions at Gauntlet", color = "turquoise3")
-plot_H_ej <- makePlot_2(x = 1:days + (start_loop - 1), x.name = "Day", y = H_ej, y.name = "SSL Harvested", color = "orchid")
+                         y.name = "Stellers at Gauntlet", color = "turquoise3")
+plot_H_ej <- makePlot_2(x = 1:days + (start_loop - 1), x.name = "Day", y = H_ej, y.name = "Stellers Harvested", color = "orchid")
 
