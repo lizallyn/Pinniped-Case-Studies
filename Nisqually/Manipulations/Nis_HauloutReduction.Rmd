@@ -79,18 +79,16 @@ This parameterization focuses on a scenario where the source pool of pinnipeds (
 plot_seals / plot_ej / plot_zc
 ```
 
-### Things to Note
-
 Under this scenario, there are still baseline levels of incidental take, which in the Nisqually system is very low or non-existent.
 
 ```{r harvest table, echo = FALSE}
 kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Harvested Pinnipeds") %>% kable_styling(full_width = F)
 ```
 
-Because pinniped presence at the Gauntlet is lower under this parameterization, salmon consumption is also lower.
+Because pinniped presence at the Gauntlet is lower than the base run under this parameterization, salmon consumption is lower and salmon escape is higher.
 
 ```{r salmon escapement, echo = FALSE}
-salmon_fates <- data.frame(rbind(salmon_escapement, salmon_catch, salmon_consumed))
+salmon_fates <- data.frame(round(rbind(salmon_escapement, salmon_catch, salmon_consumed)))
 rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
 kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
@@ -102,7 +100,7 @@ eaten_sp_plot
 ### Parameter Table
 
 ```{r parameter table, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(start_loop, end_loop, days, num_seals, num_zc, num_ej, num_seals_2_copy, Cmax, Cmax_ej, Cmax_zc, alpha, chum_escape_rate, gr_escape_rate, ln_escape_rate, chin_boats, min_chum_boats, max_chum_boats))
+parameters <- data.frame(rbind(num_seals, num_zc, num_ej, chum_residence, gr_residence, locnis_residence, chin_boats, min_chum_boats, max_chum_boats, reduction))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
