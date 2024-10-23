@@ -183,3 +183,54 @@ plot_cum_sl <- ggplot(data = long_cum_H_sl) +
 plot_cum_pv / plot_cum_sl
 ```
 
+At the Locks, the zone management scenario clearly results in the largest number of removals, but requires a ton of effort to accomplish that. Boat-based harvest still removes a decent number of animals, but without access to the area below the Locks it is unable to remove a large proportion of animals and as a result is not a huge improvement on the base run scenario.
+
+#### Pinniped Activity
+
+The following plots describe pinniped presence at the Gauntlet under all four scenarios for each pinniped species separately. You can see that the magnitude of presence differs greatly between scenarios. In the base scenario few removals are happening in the Gauntlet so pinniped presence closely tracks the timing and magnitude of each salmon run. In the boat-based harvest scenario, pinniped presence follows the Sockeye run, but cuts off sharply as soon as fishers become active in the Gauntlet. In the zone management scenario, pinniped presence is low throughout the model run due to the constant fear conditioning from daily removal activity. In the haulout reduction scenario, pinniped presence is reduced but still impacted by low-level incidental take during the fishery.
+
+From this evidence, either the zone management or haulout reduction scenario would noticeably reduce harbor seal presence at the Locks.
+
+```{r gauntlet seals plots, echo = FALSE, warning = FALSE, message = FALSE}
+# harbor seal presence
+sum_gauntlet_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"Gauntlet_Pv"],
+                          Boat = boat_pinniped_vars[,"Gauntlet_Pv"],
+                          Zone = zone_pinniped_vars[,"Gauntlet_Pv"], 
+                          Haulout = haulout_pinniped_vars[,"Gauntlet_Pv"])
+
+long_gauntlet_pv <- pivot_longer(sum_gauntlet_pv, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "Gauntlet_Pv")
+
+ggplot(data = long_gauntlet_pv) +
+  geom_line(aes(x = Day, y = Gauntlet_Pv, color = Scenario), lwd = 1) + 
+  labs(x = "Day of the Year", y = "Harbor Seals at the Gauntlet") +
+  scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+```
+
+There are very few sea lions in this model, so their presence is very noisy and there doesn't seem to be clear differences between scenarios.
+
+```{r gauntlet seal lion plot, echo = FALSE, warning = FALSE, message = FALSE}
+# harbor seal presence
+sum_gauntlet_sl <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"Gauntlet_sl"],
+                          Boat = boat_pinniped_vars[,"Gauntlet_sl"],
+                          Zone = zone_pinniped_vars[,"Gauntlet_sl"], 
+                          Haulout = haulout_pinniped_vars[,"Gauntlet_sl"])
+
+long_gauntlet_sl <- pivot_longer(sum_gauntlet_sl, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "Gauntlet_sl")
+
+ggplot(data = long_gauntlet_sl) +
+  geom_line(aes(x = Day, y = Gauntlet_sl, color = Scenario), lwd = 1) + 
+  labs(x = "Day of the Year", y = "Sea Lions at the Gauntlet") +
+  scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+```
+
+## Conclusion (for now)
+
+Overall it looks like the zone exclusion management scenario would be the most effective at increasing salmon survival through the Gauntlet and decreasing predation by pinnipeds. However, this scenario assumes a high level of effort to remove large portions of the animals at the Gauntlet daily, which may not be feasible. 
+
+The haulout reduction strategy seems to have a smaller positive effect on Sockeye survival, but very little impact on Chinook or Coho. The boat-based harvest scenario is not very effective in this system because of the geographic limitations on where the fishery happens and how many pinnipeds are available to fishers above the Locks. 
