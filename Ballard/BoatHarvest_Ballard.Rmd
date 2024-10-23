@@ -1,12 +1,12 @@
 ---
-title: "Experiment: Boat Harvest Implementation @ Ballard"
+title: "Scenario: Boat Harvest Implementation @ Ballard"
 subtitle: "Describing the model run when boat-based harvest is amplified above incidental levels at Ballard"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 ### The Narrative
 
-This Model Run is for a scenario where managers open harvest of seals in the gauntlet by fishing vessels during the Coho fishery. This is modeled similarly to incidental fishery take but at a higher exploitation rate. 
+This Model Run is for a scenario where managers open harvest of seals in the gauntlet by fishing vessels during the Coho fishery. This is modeled similarly to incidental fishery take in the base run but at a higher exploitation rate. 
 
 ### Run the Model
 
@@ -71,16 +71,16 @@ source("Functions/Plots_responses.R")
 
 This scenario is focused on the effects of a management strategy that changes the quantity of seal harvest. Removals occur on days when the coho fishery is open in the gauntlet. The harvest strategy is still boat-based like incidental harvest but it is more aggressive as it is focused on seal removal directly not incidentally as in the base run.
 
-Removals occur from day `r harvest_open` - `r harvest_close`.
-When there are `r num_seals` in the Pv, `r num_zc` Californias, and `r num_ej` Stellers in the source pool, pinniped presence at the Gauntlet is as follows:
+Removals occur from day `r harvest_open` - `r harvest_close` of the year.
+When there are `r num_seals` harbor seals, `r num_zc` California sea lions, and `r num_ej` Steller sea lions in the source pool, pinniped presence at the Gauntlet is as follows:
 
-```{r gauntlet pinnipeds plot, echo = FALSE}
-plot_seals + plot_ej + plot_zc
+```{r gauntlet pinnipeds plot, echo = FALSE, fig.height = 6}
+(plot_seals + pinniped_theme) / (plot_ej + pinniped_theme) / (plot_zc + pinniped_theme) + plot_layout(guides = "collect", axis_titles = "collect")
 ```
 
 ...and when there are 40 individual pinnipeds at the Gauntlet, removals are a type 2 function as follows:
 
-```{r harvest response plot, echo = FALSE}
+```{r harvest response plot, echo = FALSE, fig.height = 3}
 fishers <- 0:max_fishers
 plot(fishers, getHarvested(day_plan = "Boat", list_gauntlet_seals = 1:40, 
                            num_fishers = fishers, steepness = steepness_H, 

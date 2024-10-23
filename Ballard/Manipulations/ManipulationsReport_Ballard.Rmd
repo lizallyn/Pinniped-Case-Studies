@@ -180,7 +180,7 @@ plot_cum_sl <- ggplot(data = long_cum_H_sl) +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
 
-plot_cum_pv / plot_cum_sl + plot_layout(guides = "collect", axes = "collect")
+plot_cum_pv / plot_cum_sl + plot_layout(guides = "collect", axis_titles = "collect")
 ```
 
 At the Locks, the zone management scenario clearly results in the largest number of removals, but requires a ton of effort to accomplish that. Boat-based harvest still removes a decent number of animals, but without access to the area below the Locks it is unable to remove a large proportion of animals and as a result is not a huge improvement on the base run scenario.
