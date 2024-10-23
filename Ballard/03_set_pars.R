@@ -65,15 +65,19 @@ coho_fish_rate <- 0.05 # see "estFishingRate.R"
 chinook_fish_rate <- 0.025
 sockeye_fish_rate <- 0
 
-# hunting parameters (same as fishery opening in base run realm)
+# hunting parameters
 min_fishers <- 13
 max_fishers <- 25
 fishery_open <- yday(as.Date("2023-09-10"))
 fishery_close <- yday(as.Date("2023-11-17"))
+
 zone_efficiency <- NA
 zone_steepness <- NA
 steepness_H <- 20 # how quick does it saturate (higher = slower)
-efficiency <- 0.05 # what prop of seals are they capable of taking
+availability <- 0.1 # prop of seals spatially overlapping with fishers
+accuracy <- 0.5 # prop harvested of encountered
+efficiency <- availability * accuracy # what prop of seals are they actually
+
 harvest_open <- yday(as.Date("2023-09-10"))
 harvest_close <- yday(as.Date("2023-11-17"))
 scenario <- "Boat"
