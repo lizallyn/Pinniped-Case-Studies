@@ -40,6 +40,7 @@ makePlot_1 <- function(data, value.col, colors, legend.inc = F){
                                            y = data_for_plot[,3], color = data_for_plot[,1])) + 
     geom_point() +
     scale_color_manual(values = colors) +
+    theme_classic() + 
     theme(legend.position = "none") +
     labs(y = names(data_for_plot)[3], x = names(data_for_plot)[2], color = names(data_for_plot)[1])
   if(legend.inc == T){

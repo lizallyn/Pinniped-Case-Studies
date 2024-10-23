@@ -116,10 +116,7 @@ plot_y_zc / plot_probs_zc
 California Sea Lions arrive at the Gauntlet only for the Chum run, and so are mostly exposed to harvest during the Chum fishery. Harbor seals, in contrast, are exposed to harvest during all Nisqually Tribal fisheries (Chinook, Coho, and Chum) and their behavior is impacted accordingly as seen below.
 
 ```{r y plots seals, echo = FALSE, warning = FALSE}
-plot_seals / plot_H
-```
-```{r y plots seals 2, echo = FALSE, warning = FALSE}
-plot_y / plot_probs
+(plot_H + pinniped_theme) / plot_y / plot_probs / (plot_seals + pinniped_theme) + plot_layout(axis_titles = "collect")
 ```
 
 ### Salmon Response
