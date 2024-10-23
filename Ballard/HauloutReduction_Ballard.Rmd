@@ -1,12 +1,12 @@
 ---
-title: "Haulout Reduction @ Ballard"
-subtitle: "Describing a model run where the total pool of pinnipeds is reduced through removals on the haulouts"
+title: "Scenario: Haulout Reduction @ Ballard"
+subtitle: "Describing the model run where the total pool of pinnipeds is reduced through removals on the haulouts"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 ### The Narrative
 
-This Model Run is for a scenario where some kind of removals or harvest or displacement has happened on the haulouts that make up the source pool for harbor seals at the Locks (Shilshole and Elliot Bay marinas mainly).
+This Model Run is for a scenario where some kind of removals or harvest or displacement has happened on the haulouts that make up the source pool for harbor seals at the Locks (Shilshole and Elliot Bay marinas mainly). This action decreases the overall abundance of harbor seals in the system.
 
 ### Run the Model
 
@@ -66,30 +66,38 @@ source("Functions/Plots_responses.R")
 
 ### Description of Parameterization
 
-In this scenario the source pool of harbor seals is decreased (to `r num_seals`) to simulate removals or disturbance on the main marina haulouts that they use to access the Locks. Seal presence at the Locks is reduced, and so is predation:
+In this scenario the source pool of harbor seals is decreased to `r num_seals` to simulate removals or disturbance on the main marina haulouts that they use to access the Locks. This is a `r reduction * 100`% decrease in harbor seals in the source population. As a result, seal presence at the Locks is reduced compared to the base run.
 
 ```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
-plot_seals / eaten_sp_plot + plot_layout(guides = "collect", axes = "collect")
+(plot_seals + pinniped_theme)
 ```
+
+In this scenario, incidental take related to the Coho fishery still occurs and results in a low level of harbor seal take, which impacts their behavior and presence at the Gauntlet at the end of the model run.
+
+```{r table pinns at gauntlet, echo = FALSE, warning = FALSE, message = FALSE}
+kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc))) %>% kable_styling(full_width = F)
+```
+
+As a result, overall salmon consumption is lower under this model scenario because of reduced seal presence.
+
+```{r eatend plot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 4}
+eaten_sp_plot + salmon_theme
+```
+
+### Salmon Response
 
 The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
 
-```{r, echo = FALSE}
-salmon_escapement <- data.frame(Sockeye = escape_sockeye[days], Chinook = escape_chinook[days],
-                                Coho = escape_coho[days])
-kable(salmon_escapement) %>% kable_styling(full_width = F)
+```{r salmon escapement, echo = FALSE}
+salmon_fates <- round(rbind(salmon_escapement, salmon_catch, salmon_eaten))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
+kable(salmon_fates) %>% kable_styling(full_width = F)
 ```
 
 ### Parameter Table
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-library(knitr)
-library(flextable)
-library(kableExtra)
-parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, natural_mort, Cmax, alpha))
+parameters <- data.frame(rbind(days, num_seals, reduction, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
-
-### Things to Note
-
