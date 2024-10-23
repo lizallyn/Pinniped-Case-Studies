@@ -103,6 +103,12 @@ This level of harvest impacts the fear response of the pinnipeds that are expose
 (plot_H + pinniped_theme) / plot_y / plot_probs / (plot_seals + pinniped_theme) + plot_layout(axis_titles = "collect")
 ```
 
+In this scenario, pinnipeds still have a noticeable predation impact on all three salmon runs.
+
+```{r eatend plot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+eaten_sp_plot + salmon_theme
+```
+
 ### Salmon Response
 
 The fate of the sockeye, Chinook, and coho are as follows under this parameterization:
