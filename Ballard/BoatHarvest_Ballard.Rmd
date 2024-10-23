@@ -103,9 +103,9 @@ This level of harvest impacts the fear response of the pinnipeds that are expose
 (plot_H + pinniped_theme) / plot_y / plot_probs / (plot_seals + pinniped_theme) + plot_layout(axis_titles = "collect")
 ```
 
-In this scenario, pinnipeds still have a noticeable predation impact on all three salmon runs.
+In this scenario, pinnipeds still have a noticeable predation impact on all three salmon runs. However, this impact is lessened on the Coho run, which is when the boat-based harvest is occurring, reinforcing the fear conditioning and causing a reduced seal predation impact.
 
-```{r eatend plot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+```{r eatend plot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 4}
 eaten_sp_plot + salmon_theme
 ```
 
