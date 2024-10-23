@@ -16,15 +16,17 @@ salmon.colors <- c("goldenrod", "salmon3", "lightblue3")
 salmon.names <- c("Chinook", "Sockeye", "Coho")
 names(salmon.colors) <- salmon.names
 
+salmon_theme <- theme_classic()
+
 escape_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(escape_chinook, escape_sockeye, escape_coho),
                           col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
                           value.name = "Cumulative Escaped Salmon", colors = salmon.colors)
 eaten_sp_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(eaten_chinook, eaten_sockeye, eaten_coho),
                             col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
-                            value.name = "Daily Salmon Eaten", colors = salmon.colors)
+                            value.name = "Salmon Eaten", colors = salmon.colors)
 gauntlet_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(gauntlet_chinook, gauntlet_sockeye, gauntlet_coho),
                             col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species", 
-                            value.name = "Daily Salmon at Gauntlet", colors = salmon.colors)
+                            value.name = "Salmon at Gauntlet", colors = salmon.colors)
 fished_plot <- makePlot_3(x = 1:days + (start_loop - 1), data = cbind(fished_chinook, fished_sockeye, fished_coho), 
                           col.names = c("Day", "Chinook", "Sockeye", "Coho"), variable.name = "Species",
-                          value.name = "Daily Salmon Fished", colors = salmon.colors)
+                          value.name = "Salmon Fished", colors = salmon.colors)

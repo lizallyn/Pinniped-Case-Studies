@@ -1,8 +1,9 @@
 # Seal Plots
+pinniped_theme <- theme_classic()
 
 # Plots of Individual Seals
 plot_probs <- makePlot_1(seal_prob_gauntlet, "Gauntlet Probabilities", colors)
-plot_eaten <- makePlot_1(salmon_consumed_pv, "Salmon Eaten per Seal", colors)
+plot_eaten <- makePlot_1(salmon_consumed_pv, "Salmon Eaten per Seal", colors, legend.inc = F)
 plot_x <- makePlot_1(x, "x (foraging opinion)", colors)
 plot_Px <- makePlot_1(P_x, "P_x", colors)
 plot_y <- makePlot_1(y, "y (harvest risk opinion)", colors)
