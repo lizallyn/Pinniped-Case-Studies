@@ -51,6 +51,7 @@ base_parameters <- data.frame(rbind(start_loop, end_loop, num_seals,
                                     fishery_close, sockeye_residence, 
                                     chinook_residence, coho_residence,
                                     zone_efficiency, zone_steepness, steepness_H, 
+                                    availability, accuracy,
                                     efficiency, scenario, scenario_sealion))
 
 # salmon
@@ -92,3 +93,8 @@ base_pinniped_vars <- base_pinniped_vars %>% mutate(cum_H_sl = cumsum(H_sl))
 base_pinniped_vars <- base_pinniped_vars %>% mutate(cum_H_Pv = cumsum(H_Pv))
 
 base_pinniped_vars$Gauntlet_sl <- base_pinniped_vars$Gauntlet_Ej + base_pinniped_vars$Gauntlet_Zc
+
+base_availability <- availability
+base_accuracy <- accuracy
+base_efficiency <- efficiency
+base_steepness_H <- steepness_H

@@ -24,7 +24,8 @@ scenario_sealion <- "Zone"
 harvest_open <- start_loop
 harvest_close <- end_loop
 steepness_H <- NA
-efficiency <- NA
+accuracy <- NA
+efficiency <- availability * accuracy # what prop of seals are they actually
 
 # 04 Initialize Variables
 source("Ballard/04_initialize_variables.R")
@@ -61,6 +62,7 @@ zone_parameters <- data.frame(rbind(start_loop, end_loop, num_seals,
                                     fishery_close, sockeye_residence, 
                                     chinook_residence, coho_residence,
                                     zone_efficiency, zone_steepness, steepness_H, 
+                                    availability, accuracy,
                                     efficiency, scenario, scenario_sealion))
 
 # salmon
@@ -102,3 +104,4 @@ zone_pinniped_vars <- zone_pinniped_vars %>% mutate(cum_H_sl = cumsum(H_sl))
 zone_pinniped_vars <- zone_pinniped_vars %>% mutate(cum_H_Pv = cumsum(H_Pv))
 
 zone_pinniped_vars$Gauntlet_sl <- zone_pinniped_vars$Gauntlet_Ej + zone_pinniped_vars$Gauntlet_Zc
+zone_zone_efficiency <- zone_efficiency

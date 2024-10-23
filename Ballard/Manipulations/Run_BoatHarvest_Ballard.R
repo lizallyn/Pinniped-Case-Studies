@@ -18,7 +18,9 @@ source("Ballard/03_set_pars.R")
 
 # adjust parameters for management scenario
 steepness_H <- 5 # how quick does it saturate (higher = slower)
-efficiency <- 0.125 # what prop of seals are they capable of taking
+availability <- 0.1 # prop of seals spatially overlapping with fishers
+accuracy <- 0.9 # prop harvested of encountered
+efficiency <- availability * accuracy # what prop of seals are they actually
 
 # 04 Initialize Variables
 source("Ballard/04_initialize_variables.R")
@@ -55,6 +57,7 @@ boat_parameters <- data.frame(rbind(start_loop, end_loop, num_seals,
                                     fishery_close, sockeye_residence, 
                                     chinook_residence, coho_residence,
                                     zone_efficiency, zone_steepness, steepness_H, 
+                                    availability, accuracy,
                                     efficiency, scenario, scenario_sealion))
 
 # salmon
@@ -96,3 +99,8 @@ boat_pinniped_vars <- boat_pinniped_vars %>% mutate(cum_H_sl = cumsum(H_sl))
 boat_pinniped_vars <- boat_pinniped_vars %>% mutate(cum_H_Pv = cumsum(H_Pv))
 
 boat_pinniped_vars$Gauntlet_sl <- boat_pinniped_vars$Gauntlet_Ej + boat_pinniped_vars$Gauntlet_Zc
+
+boat_availability <- availability
+boat_accuracy <- accuracy
+boat_efficiency <- efficiency
+boat_steepness_H <- steepness_H

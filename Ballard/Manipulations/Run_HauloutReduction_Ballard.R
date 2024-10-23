@@ -50,12 +50,13 @@ source("Functions/Plots_responses.R")
 
 # parameters
 haulout_parameters <- data.frame(rbind(start_loop, end_loop, num_seals, 
-                                    prop_specialists, num_zc, 
-                                    num_ej, min_fishers, max_fishers, fishery_open, 
-                                    fishery_close, sockeye_residence, 
-                                    chinook_residence, coho_residence,
-                                    zone_efficiency, zone_steepness, steepness_H, 
-                                    efficiency, scenario, scenario_sealion))
+                                       prop_specialists, num_zc, 
+                                       num_ej, min_fishers, max_fishers, fishery_open, 
+                                       fishery_close, sockeye_residence, 
+                                       chinook_residence, coho_residence,
+                                       zone_efficiency, zone_steepness, steepness_H, 
+                                       availability, accuracy,
+                                       efficiency, scenario, scenario_sealion))
 
 # salmon
 haulout_salmon <- rbind(salmon_escapement, salmon_eaten, salmon_catch)
