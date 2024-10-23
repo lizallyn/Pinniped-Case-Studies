@@ -1,0 +1,28 @@
+Pinnipeds then incorporate social information from other individuals in their haulout group. For harbor seals, they learn from `r num_seals_2_copy` randomly chosen seals because the total seals in the source pool (`r num_seals`) are generally divided between 2 major haulouts. For sea lions, they learn from all other individuals of their species because they all use the breakwater at Shilshole as a main haulout.
+
+Their receptivity to social information is informed by the strength of their existing knowledge. A P_G closer to 0.5 indicates ambivalence and means the seal is more receptive to social influence. A P_G closer to 0 or 1 indicates a strong opinion that will not allow the incorporation of social information. Each individual incorporates the information from the randomly drawn individuals in their haulout group and then their final foraging destination for the day is decided with another coin flip.
+
+In the plots below, Prob_Gauntlet represents each seal's own cumulative experience while P_social represents their opinion after social information sharing, which is what their final decision is based on. 
+
+``` {r Psoc, echo = FALSE, fig.height = 6, warning = FALSE}
+plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")
+```
+
+Below is the receptivity curve that determines how/if social information is incorporated by individual pinnipeds depending on the strength of their existing opinion.
+
+``` {r receptivity, echo = FALSE, fig.height = 2, warning = FALSE}
+prob_gauntlet_of_seal <- seq(0, 1, 0.01)
+
+alpha <- (-beta*mean)/(mean-1)
+receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
+max <- dbeta(x = mean, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
+min <- 0
+scaled_rec <- (receptivity - min)/(max - min)
+rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
+
+receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
+  geom_line(lwd = 2, color = "black") +
+  labs(y = "Receptivity", x = "P_G")
+receptivity_plot
+
+```

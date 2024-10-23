@@ -1,10 +1,10 @@
 ---
-title: "The Base Run Realm - Ballard"
-subtitle: "Describing the Base Run Model at the Ballard Locks"
+title: "Describing the Base Run"
+subtitle: "Ballard Locks"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
-
+The purpose of this document is to describe the base run for the Ballard Locks case study so it can easily be compared to further manipulations. 
 
 ```{r setup, include = FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/PinnipedCaseStudies')
@@ -52,104 +52,89 @@ source("Ballard/07_Plots_salmon.R", local = knitr::knit_global())
 source("Functions/Plots_responses.R", local = knitr::knit_global())
 ```
 
-### The Base Run Realm
+### Overview of the Base Run
 
-This page is currently a place where I am developing the base run and describing the world it exists in. This base run simulates the dynamics at the Ballard Locks. There are three runs of salmon here: Sockeye, Chinook, and coho. There are also three species of pinnipeds: harbor seals, California sea lions, and Steller sea lions. Harbor seals are a frequent year-round presence at the Locks - in the fish ladder, in the water before the Locks, and in the water above the Locks. The closest harbor seal haulouts are at Shilshole marina and Elliot Bay marina. The sea lions mainly use the breakwater for Shilshole marina. Total numbers and seasonality of each pinniped species are informed by local knowledge from Muckleshoot biologists and from count data collected by Scott Veirs (and interns) at Shilshole marina. Salmon movement and count data are from observers in the Locks fish ladder and hatchery data. Fishery catch data provided by Mike Mahovlich and Muckleshoot fisheries management. 
+The base run simulates the current baseline dynamics at the Ballard Locks. There are three runs of salmon here: Sockeye, Chinook, and Coho. There are also three species of pinnipeds: harbor seals, California sea lions, and Steller sea lions. Harbor seals are a frequent year-round presence at the Locks - in the fish ladder, in the salt water below the Locks, and in the fresh water above the Locks. The closest harbor seal haulouts are at Shilshole marina and Elliot Bay marina. The sea lions mainly haulout on the breakwater at Shilshole marina. Total numbers and seasonality of each pinniped species are informed by local knowledge from Muckleshoot biologists and from count data collected by Scott Veirs (and interns) at Shilshole marina. Salmon movement and count data are from observers in the Locks fish ladder and hatchery data. Fishery catch data provided by Mike Mahovlich and Muckleshoot fisheries management. 
 
 #### The Daily Flow
 
-The model runs for `r days` days starting `r as.Date(data_start, origin = "2024-01-01")`. Some number of salmon arrive at the Gauntlet each day according to their run timing - Sockeye arrive earliest in the summer, followed by Chinook and then Coho in the fall. 
+The model runs for `r days` days starting `r as.Date(data_start, origin = "2024-01-01")`. Salmon arrive at the Gauntlet each day according to their run timing - Sockeye arrive earliest in the summer, followed by Chinook and then Coho in the fall. Data on salmon presence at the Gauntlet was provided by the Muckleshoot Tribe. The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model.
 
 ```{r gauntlet plot, echo = FALSE, fig.height = 3}
-gauntlet_plot
+gauntlet_plot + salmon_theme
 ```
 
-Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates. In the Base Run Realm, the only fishery that exists within the Gauntlet targets Coho for a short window in September - November in the ship canal (the area beyond the Locks). 
+Salmon experience mortality via multiple pathways: consumption by pinnipeds, fishery catch, and natural mortality. Salmon that are not killed are able to leave the Gauntlet and become part of the "Escape" crew. The speed at which they move through the Gauntlet is informed by residence time estimates, which are expressed as days spent in the gauntlet before migrating upriver. The escape rate is simply 1/residence time. Their residence time includes multiple passages through the Locks and fish ladder as they physiologically adjust to fresh water before continuing up the ship canal.
+
+```{r residence table, echo = FALSE, warning = FALSE, message = FALSE}
+residence_table <- data.frame(c(Sockeye = sockeye_residence, Chinook = chinook_residence, Coho = coho_residence))
+colnames(residence_table) <- "Days"
+kable(residence_table, caption = "Residence Time")  %>% kable_styling(full_width = F)
+```
+
+In the Base Run Realm, the only fishery that exists within the Gauntlet targets Coho for a short window in September - November in the ship canal (the area beyond the Locks). Sockeye are not affected by this fishery, but Chinook are caught incidentally.
+
+The below plots describe how salmon move through the model under this parameterization, including how many are fished, predated on by pinnipeds, or escape beyond the Gauntlet.
+
+```{r salmon fates table, echo = FALSE, warning = FALSE}
+
+salmon_fates <- data.frame(round(rbind(salmon_escapement, salmon_catch, salmon_eaten)))
+rownames(salmon_fates) <- c("Escape", "Catch", "Predated")
+kable(salmon_fates, caption = "Salmon Destination Totals") %>% kable_styling(full_width = F)
+
+```
 
 ```{r salmon plots, echo = FALSE, fig.height = 7}
-fished_plot / eaten_sp_plot / escape_plot + plot_layout(guides = "collect", axes = "collect")
+(fished_plot + salmon_theme) / (eaten_sp_plot + salmon_theme) / (escape_plot + salmon_theme) + plot_layout(guides = "collect", axis_titles = "collect")
 ```
 
-In the Base Run Realm pinnipeds learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information with other members of their species and haulout group. Pinnipeds decide whether to go to the Gauntlet each day using a combination of their own experience (P_G) and the experience of other individuals (P_social).
+### Pinniped Inputs
 
-```{r pinniped plots, echo = FALSE, fig.height = 3, warning = FALSE}
-plot_seals + plot_zc + plot_ej
+Three species of pinniped are included in the model: Harbor seals, California sea lions, and Steller sea lions. The number of each species of pinniped in the source pool (Count in table below) is informed by observations from managers and biologists in the system. Harbor seals are present in the system year-round while sea lions are present in the greatest abundance in the winter and spring, which is outside of our modeling period.
+
+Each pinniped has a maximum consumption (Cmax) parameter that is set high so it doesn't unnecessarily limit them from gorging behavior. The below table also lists the number of other individuals that each pinniped is learning from during social contagion of information. For harbor seals, we think they use two main haulouts, which might slow information spread slightly. For sea lions, they generally use the same large haulout (breakwater) so the size of their social circle (Copy) includes all other individuals of their species. 
+
+```{r pinniped par table, message = FALSE, echo = FALSE, warning = FALSE}
+
+Count <- data.frame(HarborSeal = num_seals, California = num_zc, Steller = num_ej)
+Cmax_ <- data.frame(HarborSeal = Cmax, California = Cmax_zc, Steller = Cmax_ej)
+Copy <- data.frame(HarborSeal = num_seals_2_copy, California = num_zc_2_copy, Steller = num_ej_2_copy)
+kable(data.frame(rbind(Count, Cmax_, Copy), row.names = c("Count", "Cmax", "Copy"))) %>% kable_styling(full_width = F)
+
 ```
 
-Each pinniped's individual probability of going to the Gauntlet updates daily according to their cumulative experiences with foraging opportunities and hunting risk at the Gauntlet. The number of salmon that are calculated to be consumed by each pinniped species that day are divided evenly between the individuals of that species that went to the Gauntlet. For each individual, an adjusted consumption term "C" is calculated to account for the foraging opportunities they missed by going to the Gauntlet instead of somewhere else (quantified as "w"). For every day that a pinniped goes to the Gauntlet, the measure of their foraging knowledge "x" either increases due to foraging success (a positive C) or decreases due to sub-par foraging (a negative C). If an individual does not go to the Gauntlet, we assume they begin to forget and gain uncertainty in their knowledge of foraging opportunities at the Gauntlet, which causes their opinion of the Gauntlet to decay back to a neutral opinion. The measure of their experience "x" is then used to calculate a probability of going to the Gauntlet based on foraging knowledge alone "P_x".
+In this model we assume that `r prop_specialists * 100`% of seals are specialists and all sea lions are specialists. This designation means that they are given higher baseline probabilities of going to the gauntlet to forage and have a higher resilience to harvest exposure.
 
-``` {r x plots, echo = FALSE, fig.height = 8, warning = FALSE}
-plot_eaten/plot_x/plot_Px + plot_layout(guides = "collect", axes = "collect")
+### Pinniped Response
+
+In the Base Run Realm pinnipeds learn to balance the risk of being killed by fishers with the rewards of eating salmon. They learn through their own experiences and share information with other members of their species and haulout group. Pinnipeds decide whether to go to the Gauntlet each day using a combination of their own experience and the experience of their social group.
+
+Each pinniped's individual probability of going to the Gauntlet updates daily according to their cumulative experiences with foraging opportunities and hunting risk at the Gauntlet. The number of salmon that are calculated to be consumed by each pinniped species that day are divided evenly between the individuals of that species that went to the Gauntlet. If an individual does not go to the Gauntlet, we assume they begin to forget and gain uncertainty in their knowledge of foraging opportunities at the Gauntlet, which causes their opinion of the Gauntlet to decay back to a neutral opinion.
+
+```{r pinniped plots, echo = FALSE, fig.height = 6, warning = FALSE}
+pinniped_theme <- theme_classic()
+
+(plot_seals + pinniped_theme) / (plot_zc + pinniped_theme) / (plot_ej + pinniped_theme) + plot_layout(guides = "collect", axis_titles = "collect")
 ```
 
-An individual's cumulative experience with hunting also updates daily. Seals are only harvested through incidental take associated with salmon fisheries in the Base Run Realm. Sea lions are assumed to not be frequent visitors above the Locks and therefore not subject to incidental fishery take. Boat-based harvest occurs during the Coho fishery, which is modeled to occur between September and November in the Ship Canal. During this time, take of seals is a type 2 functional response on the number of fishers on the water. 
+An individual's cumulative experience with hunting also updates daily. Seals are only harvested through incidental take associated with the Coho fishery in the Base Run, which is modeled to occur between September and November in the Ship Canal. Sea lions are assumed to not be frequent visitors above the Locks and therefore not subject to incidental fishery take. During this time, take of seals is a type 2 functional response on the number of fishers on the water. 
+
 The following seals were harvested during this run:
 
 ```{r kill lists, echo = FALSE}
 kable(kill_list, caption = "Seals harvested")
 ```
 
-Individual pinnipeds that go to the Gauntlet on a day when a take occurs gain negative experience with the Gauntlet that causes their "y" to decrease. If no hunting occurs, their "y" increases. If a seal does not go to the Gauntlet, they also begin to gain uncertainty about their knowledge and their "y" decays toward a neutral value. Each seal's "y" is then used to calculate their probability of going to the Gauntlet based on their cumulative experience with hunting "P_y". The following plots show an example of this learning process for harbor seals:
+Individual pinnipeds that go to the Gauntlet on a day when a take occurs gain negative experience with the Gauntlet. If no hunting occurs, their positive association with the Gauntlet increases. If a seal does not go to the Gauntlet, they also begin to gain uncertainty about their knowledge and their knowledge of the Gauntlet as a risky or safe place becomes more uncertain. The below plot shows the distribution of harbor seal harvest over the model run. 
 
-``` {r y plots, echo = FALSE, fig.height = 6, warning = FALSE}
-
-plot_H/plot_y/plot_Py + plot_layout(guides = "collect", axes = "collect")
-```
-
-For each individual pinniped, P_x and P_y are combined into a single probability of going to the Gauntlet (P_G). A coin flip (random uniform draw) is used to determine whether each individual goes to the Gauntlet that day based on their P_G. 
-
-``` {r probs plots, echo = FALSE, fig.height = 6, warning = FALSE}
-plot_Px/plot_Py/plot_probs + plot_layout(guides = "collect")
-```
-
-Pinnipeds then incorporate social information from other individuals in their haulout group. For harbor seals, they learn from `r num_seals_2_copy` randomly chosen seals because the total seals in the source pool (`r num_seals`) are generally divided between 2 major haulouts. For sea lions, they learn from all other individuals of their species because they all use the breakwater at Shilshole as a main haulout.
-
-Their receptivity to social information is informed by the strength of their existing knowledge. A P_G closer to 0.5 indicates ambivalence and means the seal is more receptive to social influence. A P_G closer to 0 or 1 indicates a strong opinion that will not allow the incorporation of social information. Each individual incorporates the information from the randomly drawn individuals in their haulout group and then their final foraging destination for the day is decided with another coin flip.
-
-In the plots below, Prob_Gauntlet represents each seal's own cumulative experience while P_social represents their opinion after social information sharing, which is what their final decision is based on. 
-
-``` {r Psoc, echo = FALSE, fig.height = 6, warning = FALSE}
-plot_probs/plot_Psoc + plot_layout(guides = "collect", axes = "collect")
-```
-
-Below is the receptivity curve that determines how/if social information is incorporated by individual pinnipeds depending on the strength of their existing opinion.
-
-``` {r receptivity, echo = FALSE, fig.height = 2, warning = FALSE}
-prob_gauntlet_of_seal <- seq(0, 1, 0.01)
-
-alpha <- (-beta*mean)/(mean-1)
-receptivity <- dbeta(x = prob_gauntlet_of_seal, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
-max <- dbeta(x = mean, shape1 = alpha + 1, shape2 = beta + 1, ncp = 0)
-min <- 0
-scaled_rec <- (receptivity - min)/(max - min)
-rec.data <- data.frame(cbind(prob_gauntlet_of_seal, scaled_rec))
-
-receptivity_plot <- ggplot(data = rec.data, aes(x = prob_gauntlet_of_seal, y = scaled_rec)) + 
-  geom_line(lwd = 2, color = "black") +
-  labs(y = "Receptivity", x = "P_G")
-receptivity_plot
-
-```
-
-#### Response
-
-The total escaped, fished, and predated Sockeye, Chinook, and Coho are as follows under this parameterization:
-
-```{r salmon tables, echo = FALSE}
-
-kable(salmon_escapement, caption = "Escaped") %>% kable_styling(full_width = F)
-kable(salmon_catch, caption = "Fished") %>% kable_styling(full_width = F)
-kable(salmon_eaten, caption = "Eaten") %>% kable_styling(full_width = F, )
-
+``` {r y plots, echo = FALSE, fig.height = 3, warning = FALSE}
+plot_H + pinniped_theme
 ```
 
 #### Parameter Table
 
-Here's a (not exhaustive) table of parameter values:
-
 ```{r par table, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(days, num_seals, num_ej, num_zc, num_seals_2_copy,  sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate, Cmax, Cmax_ej, Cmax_zc, alpha))
+parameters <- data.frame(rbind(days, num_seals, num_seals_2_copy, num_ej, num_zc,   sockeye_residence, chinook_residence, coho_residence, min_fishers, max_fishers, fishery_open, fishery_close, sockeye_fish_rate, chinook_fish_rate, coho_fish_rate))
 colnames(parameters) <- c("Value")
 kable(parameters, caption = "Parameters", digits = 2) %>% kable_styling(full_width = F)
 ```
-
