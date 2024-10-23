@@ -32,13 +32,13 @@ coho_residence <- 10
 
 #fit a curve to the data
 
-params <- c(69000, 36, 12.48)
+params <- c(69000, 56, 12.48)
 fish.fit.optim.sockeye <- fish.fit.optim(params = params, 
                                          fn = fit.to.fish, 
                                          data = Chosen_fish_int$AvgSockeye)
 sockeye_params <- fish.fit.optim.sockeye$par
 
-params <- c(9365.43, 99, 13.8)
+params <- c(9396.43, 99, 13.8)
 fish.fit.optim.chinook <- fish.fit.optim(par = params,
                         fn = fit.to.fish,
                         data = Chosen_fish_int$AvgChinook)
@@ -60,10 +60,10 @@ coho_params <- fish.fit.optim.coho$par
 # 
 # plot(Chosen_fish_int$DayofYear, Chosen_fish_int$AvgCoho)
 # lines(Chosen_fish_int$DayofYear, predictFish(coho_params, data_start:data_end, data_start))
-
-# plot(predict_new_fish(sockeye_params, 130:290, data_start))
-# lines(predict_new_fish(coho_params, 130:290, data_start))
-# lines(predict_new_fish(chinook_params, 130:290, data_start))
+# 
+# plot(predictFish(sockeye_params, 130:290, data_start))
+# lines(predictFish(coho_params, 130:290, data_start))
+# lines(predictFish(chinook_params, 130:290, data_start))
 
 ## call fishing data
 
