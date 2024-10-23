@@ -1,6 +1,6 @@
 ---
 title: "Comparing Management Scenario Model Runs"
-subtitle: "Nisqually River Case Study"
+subtitle: "Ballard Locks Case Study"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
@@ -133,7 +133,7 @@ kable(compare_fished[order(compare_fished$Chinook, decreasing = TRUE),], caption
 
 #### Harvest Summary
 
-During the Coho fishery, we model some number of active fishers randomly drawn from within the range of `r min_fishers`-`r max_fishers` fishers when the fishery is open. The fishery only operates above the Locks, so we assume that only `r efficiency * 200`% of harbor seals and 0 sea lions venture above the Locks. We also assume that fishers miss 50% of the pinnipeds they encounter, resulting in an overall boat-based take of `r efficiency *`%. 
+During the Coho fishery, we model some number of active fishers randomly drawn from within the range of `r min_fishers`-`r max_fishers` fishers when the fishery is open. The fishery only operates above the Locks, so we assume that only `r efficiency * 200`% of harbor seals and 0 sea lions venture above the Locks. We also assume that fishers miss 50% of the pinnipeds they encounter, resulting in an overall boat-based take of `r efficiency * 100`%. 
 
 When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take or incidental pinniped take. In the zone management scenario, it is assumed that removals are occuring daily at high levels, which results in more total pinnipeds removed. The following plot shows the cumulative number of seals and sea lions that are removed from the Gauntlet over time under each management scenario.
 
