@@ -32,7 +32,8 @@ source("Ballard/03_set_pars.R")
 ```
 
 ```{r set pars, message = FALSE, warning = FALSE}
-num_seals <- 50
+reduction <- 0.5
+num_seals <- num_seals * reduction
 ```
 
 ```{r run the loop, include = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
