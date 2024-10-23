@@ -68,17 +68,21 @@ source("Functions/Plots_responses.R")
 
 In this scenario the source pool of harbor seals is decreased to `r num_seals` to simulate removals or disturbance on the main marina haulouts that they use to access the Locks. This is a `r reduction * 100`% decrease in harbor seals in the source population. As a result, seal presence at the Locks is reduced compared to the base run.
 
-```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 9}
+```{r pinnipeds at gauntlet, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 4}
 (plot_seals + pinniped_theme)
 ```
 
 In this scenario, incidental take related to the Coho fishery still occurs and results in a low level of harbor seal take, which impacts their behavior and presence at the Gauntlet at the end of the model run.
 
-```{r table pinns at gauntlet, echo = FALSE, warning = FALSE, message = FALSE}
+```{r harvest table, echo = FALSE}
 kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc))) %>% kable_styling(full_width = F)
 ```
 
-As a result, overall salmon consumption is lower under this model scenario because of reduced seal presence.
+```{r y plots seals, echo = FALSE, warning = FALSE, fig.height = 3}
+plot_H + pinniped_theme
+```
+
+However, overall salmon consumption is not much lower than in the boat-based harvest scenario, even for the Sockeye run. This implies that inter-specific competition may be important, and seal presence may have to be dramatically reduced in order to see positive impacts for salmon.
 
 ```{r eatend plot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 4}
 eaten_sp_plot + salmon_theme
@@ -86,7 +90,7 @@ eaten_sp_plot + salmon_theme
 
 ### Salmon Response
 
-The total escaped Sockeye, Chinook, and Coho are as follows under this parameterization:
+The fate of the sockeye, Chinook, and coho are as follows under this parameterization:
 
 ```{r salmon escapement, echo = FALSE}
 salmon_fates <- round(rbind(salmon_escapement, salmon_catch, salmon_eaten))
@@ -97,7 +101,7 @@ kable(salmon_fates) %>% kable_styling(full_width = F)
 ### Parameter Table
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-parameters <- data.frame(rbind(days, num_seals, reduction, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close))
+parameters <- data.frame(rbind(num_seals, reduction, num_seals_2_copy, sockeye_escape_rate, chinook_escape_rate, coho_escape_rate, min_fishers, max_fishers, fishery_open, fishery_close))
 colnames(parameters) <- c("Value")
 kable(parameters) %>% kable_styling(full_width = F)
 ```
