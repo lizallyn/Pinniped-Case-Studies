@@ -75,7 +75,7 @@ This scenario is focused on the effects of a management strategy that changes th
 When there are `r num_seals` harbor seals, `r num_zc` California sea lions, and `r num_ej` Steller sea lions in the source pool, daily pinniped presence at the Gauntlet is as follows:
 
 ```{r gauntlet pinnipeds plot, echo = FALSE}
-plot_seals / plot_ej / plot_zc
+(plot_seals + pinniped_theme) / (plot_ej + pinniped_theme) / (plot_zc + pinniped_theme) + plot_layout(axis_titles = "collect")
 ```
 
 ...and when there are 30 individual pinnipeds at the Gauntlet, removals are a type 2 function as follows:
@@ -101,7 +101,7 @@ kable(data.frame(Pv = sum(H), Ej = sum(H_ej), Zc = sum(H_zc)), caption = "Harves
 ```
 
 ```{r pinniped harvest plot, echo = FALSE}
-plot_H / plot_H_ej / plot_H_zc
+(plot_H + pinniped_theme) / (plot_H_ej + pinniped_theme) / (plot_H_zc + pinniped_theme) + plot_layout(axis_titles = "collect")
 ```
 
 This level of harvest impacts the fear response of the pinnipeds that are exposed to harvest and causes fewer of them to go to the Gauntlet than in the base run. The below plots show the impact of harvest on fear conditioning of California sea lions as an example. 
