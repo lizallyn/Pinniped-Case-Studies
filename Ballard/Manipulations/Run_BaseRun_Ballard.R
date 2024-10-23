@@ -45,31 +45,34 @@ source("Functions/Plots_responses.R")
 ## save relevant variables and responses
 
 # parameters
-base_parameters <- data.frame(rbind(num_seals, num_zc, 
-                                    num_ej, min_fishers, max_fishers, min_chum_boats, max_chum_boats,
+base_parameters <- data.frame(rbind(start_loop, end_loop, num_seals, 
+                                    prop_specialists, num_zc, 
+                                    num_ej, min_fishers, max_fishers, fishery_open, 
+                                    fishery_close, sockeye_residence, 
+                                    chinook_residence, coho_residence,
                                     zone_efficiency, zone_steepness, steepness_H, 
                                     efficiency, scenario, scenario_sealion))
 
 # salmon
-base_salmon <- rbind(salmon_escapement, salmon_consumed, salmon_catch)
+base_salmon <- rbind(salmon_escapement, salmon_eaten, salmon_catch)
 rownames(base_salmon) <- c("Escapement", "Eaten", "Catch")
 
-base_salmon_vars <- data.frame("Day" = 1:days,
-                               "Gauntlet_Chum" = gauntlet_chum,
-                               "Gauntlet_GR" = gauntlet_gr,
-                               "Gauntlet_LN" = gauntlet_ln,
-                               "Escape_Chum" = escape_chum,
-                               "Escape_GR" = escape_gr,
-                               "Escape_LN" = escape_ln,
-                               "Eaten_Chum" = eaten_chum,
-                               "Eaten_GR" = eaten_gr,
-                               "Eaten_LN" = eaten_ln,
-                               "Fished_Chum" = fished_chum,
-                               "Fished_GR" = fished_gr,
-                               "Fished_LN" = fished_ln,
+base_salmon_vars <- data.frame("Day" = 1:days + (start_loop - 1),
+                               "Gauntlet_Sockeye" = gauntlet_sockeye,
+                               "Gauntlet_Chinook" = gauntlet_chinook,
+                               "Gauntlet_Coho" = gauntlet_coho,
+                               "Escape_Sockeye" = escape_sockeye,
+                               "Escape_Chinook" = escape_chinook,
+                               "Escape_Coho" = escape_coho,
+                               "Eaten_Sockeye" = eaten_sockeye,
+                               "Eaten_Chinook" = eaten_chinook,
+                               "Eaten_Coho" = eaten_coho,
+                               "Fished_Sockeye" = fished_sockeye,
+                               "Fished_Chinook" = fished_chinook,
+                               "Fished_Coho" = fished_coho,
                                "Gauntlet_salmon" = gauntlet_salmon)
-base_salmon_vars$Eaten_salmon <- base_salmon_vars$Eaten_Chum + base_salmon_vars$Eaten_GR + 
-  base_salmon_vars$Eaten_LN
+base_salmon_vars$Eaten_salmon <- base_salmon_vars$Eaten_Sockeye + base_salmon_vars$Eaten_Chinook + 
+  base_salmon_vars$Eaten_Coho
 
 # pinnipeds
 base_pinniped_harvest <- c(Pv = sum(H), Zc = sum(H_zc), Ej = sum(H_ej))
