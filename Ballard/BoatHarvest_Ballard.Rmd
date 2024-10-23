@@ -36,7 +36,9 @@ source("Ballard/03_set_pars.R")
 
 # adjust parameters for management scenario
 steepness_H <- 5 # how quick does it saturate (higher = slower)
-efficiency <- 0.125 # what prop of seals are they capable of taking
+availability <- 0.1 # prop of seals spatially overlapping with fishers
+accuracy <- 0.9 # prop harvested of encountered
+efficiency <- availability * accuracy # what prop of seals are they actually
 
 ```
 
