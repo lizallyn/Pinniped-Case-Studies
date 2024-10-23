@@ -100,3 +100,5 @@ zone_pinniped_vars <- data.frame("Day" = 1:days,
 zone_pinniped_vars$H_sl <- zone_pinniped_vars$H_Ej + zone_pinniped_vars$H_Zc
 zone_pinniped_vars <- zone_pinniped_vars %>% mutate(cum_H_sl = cumsum(H_sl))
 zone_pinniped_vars <- zone_pinniped_vars %>% mutate(cum_H_Pv = cumsum(H_Pv))
+
+zone_pinniped_vars$Gauntlet_sl <- zone_pinniped_vars$Gauntlet_Ej + zone_pinniped_vars$Gauntlet_Zc
