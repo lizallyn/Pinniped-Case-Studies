@@ -88,7 +88,6 @@ kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width
 
 ```
 
-Declines to a minimum value, likely governed by the predator dependence/competition level.
 
 
 ## prop_specialists
@@ -303,7 +302,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-This has pretty much no impact at all, so we could actually probably get rid of this feature completely if we want.
 
 ## w (relative goodness of the Gauntlet)
 
@@ -340,7 +338,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-This also has a very small impact, pretty much level.
 
 ## w (sea lions)
 
@@ -552,7 +549,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-Slight increase
 
 ## step
 
@@ -589,7 +585,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-Weird...needs some investigation...
 
 ## decay
 
@@ -661,7 +656,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-Surprisingly no effect.
 
 ## beta (receptivity spread)
 
@@ -698,7 +692,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-Contagion not super relevant here...
 
 ## sockeye_escape_rate
 
@@ -875,7 +868,6 @@ escapement_table <- rbind(base_salmon_escapement, escape_4_tab)
 kable(escapement_table, caption = "Escaped Salmon") %>% kable_styling(full_width = F, font_size = font_size)
 ```
 
-This makes sense that it won't have an effect when the total take is very little - need to evaluate at other levels of harvest.
 
 ## efficiency
 

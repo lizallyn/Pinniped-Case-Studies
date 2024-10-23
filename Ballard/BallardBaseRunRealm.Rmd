@@ -58,7 +58,7 @@ The base run simulates the current baseline dynamics at the Ballard Locks. There
 
 #### The Daily Flow
 
-The model runs for `r days` days starting `r as.Date(data_start, origin = "2024-01-01")`. Salmon arrive at the Gauntlet each day according to their run timing - Sockeye arrive earliest in the summer, followed by Chinook and then Coho in the fall. Data on salmon presence at the Gauntlet was provided by the Muckleshoot Tribe. The model then fits a normal curve to the daily salmon arrival data, and those are shown below. The fitted data is what is input into the model.
+The model runs for `r days` days starting `r as.Date(data_start, origin = "2024-01-01")`. Salmon arrive at the Gauntlet each day according to their run timing - Sockeye arrive earliest in the summer, followed by Chinook and then Coho in the fall. Data on salmon presence at the Gauntlet was provided by the Muckleshoot Tribe. The model then fits a normal curve to the daily salmon arrival data. The fitted data is what is input into the model. The below plot shows the total number of each salmon species presence in the Gauntlet each day of the model run.
 
 ```{r gauntlet plot, echo = FALSE, fig.height = 3}
 gauntlet_plot + salmon_theme

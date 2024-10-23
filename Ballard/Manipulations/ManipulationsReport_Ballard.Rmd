@@ -36,11 +36,11 @@ Simulates amplified harvest by fishers during normal fishing seasons. Alters val
 
 #### Zone Exclusion  
 
-Simulates removals by managers to attempt to exclude all pinnipeds from the Gauntlet. Assumes that no fisher harvest is occurring simultaneously. Alters the process of removals from boat-based to a "zone" scenario that is governed by an efficiency which describes how many of the pinnipeds at that Gauntlet managers can effectively remove (despite aiming for 100% removal).  
+Simulates removals by managers to attempt to exclude all pinnipeds from the Gauntlet. Assumes that incidental take during the coho fishery is not also occurring simultaneously. Alters the process of removals from boat-based to a "zone" scenario that is governed by an efficiency which describes how many of the pinnipeds at that Gauntlet managers can effectively remove (despite aiming for 100% removal).  
 
 #### Haulout Reduction  
 
-Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. 
+Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. Incidental take during the Coho fishery occurs during this scenario.
 
 ## Salmon Response
 
