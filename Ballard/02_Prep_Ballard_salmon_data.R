@@ -26,6 +26,10 @@ Chosen_fish_int <- round(Chosen_fish)
 
 salmon_days <- which(Daily_fish$total > 0)
 
+sockeye_residence <- 3
+chinook_residence <- 66
+coho_residence <- 10
+
 #fit a curve to the data
 
 params <- c(69000, 36, 12.48)

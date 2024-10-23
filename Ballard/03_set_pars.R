@@ -56,9 +56,9 @@ mean <- 0.5 # of the beta dist
 beta <- 15 # spread of the beta dist
 
 # salmon parameters
-sockeye_escape_rate <- 0.3
-chinook_escape_rate <- 0.015
-coho_escape_rate <- 0.1
+sockeye_escape_rate <- 1/sockeye_residence
+chinook_escape_rate <- 1/chinook_residence
+coho_escape_rate <- 1/coho_residence
 natural_mort <- 0.0005
 
 coho_fish_rate <- 0.05 # see "estFishingRate.R"
