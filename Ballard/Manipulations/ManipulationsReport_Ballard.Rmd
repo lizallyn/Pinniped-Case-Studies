@@ -1,0 +1,185 @@
+---
+title: "Comparing Management Scenario Model Runs"
+subtitle: "Nisqually River Case Study"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+```{r setup, include = FALSE}
+
+# colors credit to https://github.com/jakelawlor/PNWColors
+library(PNWColors)
+scenario.colors <- pnw_palette("Sailboat", 6)[c(1,2,3,5)]
+```
+
+```{r load scenarios, include = FALSE}
+source("Ballard/Manipulations/Run_BaseRun_Ballard.R")
+source("Ballard/Manipulations/Run_BoatHarvest_Ballard.R")
+source("Ballard/Manipulations/Run_ZoneExclusion_Ballard.R")
+source("Ballard/Manipulations/Run_HauloutReduction_Ballard.R")
+```
+
+## Purpose
+
+The purpose of this document is to create figures that enable direct comparison between management scenario model runs, explanation of differences, and interpretation of what that means for the system. These four management scenarios are just preliminary options to help in the process of developing more realistic management scenarios for each case study.
+
+## Description of the Management Scenarios
+
+In the Ballard Locks case study we ran four preliminary scenarios: 
+
+#### Base Run 
+
+Simulates current dynamics in the Gauntlet.  
+
+#### Boat Harvest  
+
+Simulates amplified harvest by fishers during normal fishing seasons. Alters values for the steepness and efficiency parameters that describe the relationship between the number of fishers and the number of pinnipeds that are harvested.  
+
+#### Zone Exclusion  
+
+Simulates removals by managers to attempt to exclude all pinnipeds from the Gauntlet. Assumes that no fisher harvest is occurring simultaneously. Alters the process of removals from boat-based to a "zone" scenario that is governed by an efficiency which describes how many of the pinnipeds at that Gauntlet managers can effectively remove (despite aiming for 100% removal).  
+
+#### Haulout Reduction  
+
+Simulates removals or disturbance by managers to reduce overall pinnipeds in the source pool. Reduces the total number of pinnipeds by a reduction parameter. 
+
+### Parameter Table
+
+The following table summarizes the parameters that were altered to simulate the different management scenarios, or ones that are particularly relevant to specific scenarios.
+
+```{r parameter table, echo = FALSE}
+parameter_table <- data.frame(Base = base_parameters, Boat = boat_parameters, Zone = zone_parameters, Haulout = haulout_parameters)
+colnames(parameter_table) <- c("Base", "Boat", "Zone", "Haulout")
+kable(parameter_table, caption = "Parameter Table") %>% kable_styling(full_width = F)
+```
+
+## Salmon Response
+
+The total daily salmon presence at the Gauntlet follows two main peaks for the Sockeye run and the Coho run. The zone management scenario causes the highest abundance of salmon at the Gauntlet, while the other scenarios result in lower abundance. The difference between management scenarios is much more pronounced during the later part of the year, during the Chinook and coho runs.
+
+```{r gauntlet salmon plot, echo = FALSE, warning = FALSE}
+
+salmon_theme <- theme_classic()
+
+# total salmon at gauntlet
+gauntlet_salmon_total <- data.frame(Day = (base_salmon_vars[,"Day"]),
+                          Base = base_salmon_vars[,"Gauntlet_salmon"],
+                          Boat = boat_salmon_vars[,"Gauntlet_salmon"],
+                          Zone = zone_salmon_vars[,"Gauntlet_salmon"], 
+                          Haulout = haulout_salmon_vars[,"Gauntlet_salmon"])
+long_gauntlet_salmon <- pivot_longer(round(gauntlet_salmon_total), cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "Gauntlet_salmon")
+
+ggplot(data = long_gauntlet_salmon) +
+  geom_point(aes(x = Day, y = Gauntlet_salmon, color = Scenario)) + 
+  labs(x = "Day of the Year", y = "Total Salmon at the Gauntlet") +
+  scale_color_manual(values = scenario.colors) + 
+  salmon_theme
+```
+
+#### Escape
+
+The number of salmon that escape the Gauntlet is dependent on their survival from fishing and predation pressures. The following table describes the number of salmon that escape from the Gauntlet for each species under each scenario.
+
+```{r escapement table, echo = FALSE}
+compare_escape <- data.frame(round(rbind(base_salmon["Escape",], boat_salmon["Escape",],
+                                   zone_salmon["Escape",], haulout_salmon["Escape",])))
+rownames(compare_escape) <- c("Base", "Boat", "Zone", "Haulout")
+
+kable(compare_escape[order(compare_escape$Sockeye, decreasing = TRUE),], 
+      caption = "Escaped Salmon") %>% kable_styling(full_width = F)
+```
+
+Overall, it appears that the zone exclusion management scenario could have a measurable positive impact on Sockeye abundance and survival beyond the Gauntlet. However, this result is highly dependent on the parameterization of this scenario, specifically the assumption that managers could feasibly remove `r zone_efficiency * 100`% of seals from the Gauntlet daily during the entire duration of the salmon runs. 
+
+#### Predation
+
+The zone management scenario again shows the best positive outcomes for salmon in the form of reduced predation compared to the other scenarios. This difference is again much more pronounced for the Coho run than the Sockeye run. The scenario that produces the second-lowest predation is the haulout reduction scenario, which seems to have better outcomes for Sockeye, but shows little improvement over the base run for Chinook and coho.
+
+```{r consumed salmon table, echo = FALSE}
+compare_eaten <- data.frame(round(rbind(base_salmon["Eaten",], boat_salmon["Eaten",],
+                                   zone_salmon["Eaten",], haulout_salmon["Eaten",])))
+rownames(compare_eaten) <- c("Base", "Boat", "Zone", "Haulout")
+kable(compare_eaten[order(compare_eaten$Sockeye, decreasing = FALSE),], caption = "Predated by Pinnipeds") %>% kable_styling(full_width = F)
+```
+
+```{r consumed salmon plot, echo = FALSE}
+eaten_salmon_total <- data.frame(Day = (base_salmon_vars[,"Day"] + (start_loop-1)),
+                          Base = base_salmon_vars[,"Eaten_salmon"],
+                          Boat = boat_salmon_vars[,"Eaten_salmon"],
+                          Zone = zone_salmon_vars[,"Eaten_salmon"], 
+                          Haulout = haulout_salmon_vars[,"Eaten_salmon"])
+long_eaten_salmon_total <- pivot_longer(round(eaten_salmon_total), cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "Eaten_salmon")
+
+ggplot(data = long_eaten_salmon_total) +
+  geom_point(aes(x = Day, y = Eaten_salmon, color = Scenario)) + 
+  labs(x = "Day of the Year", y = "Total Salmon Predation at the Gauntlet") +
+  scale_color_manual(values = scenario.colors) + 
+  salmon_theme
+```
+
+#### Fishery Catch
+
+In this model, fisheries catch are static rates that are enacted for the duration of the fishing season (which targets Coho but incidentally catches Chinook). Because of this approach, they are highly sensitive to increases in abundance and decreases in competition with predators. The zone management scenario produces the greatest increases in catch compared to all other scenarios for Chinook and coho.
+
+```{r fished salmon table, echo = FALSE}
+compare_fished <- data.frame(round(rbind(base_salmon["Catch",], boat_salmon["Catch",],
+                                   zone_salmon["Catch",], haulout_salmon["Catch",])))
+rownames(compare_fished) <- c("Base", "Boat", "Zone", "Haulout")
+kable(compare_fished[order(compare_fished$Chinook, decreasing = TRUE),], caption = "Fishery Catch") %>% kable_styling(full_width = F)
+```
+
+## Pinniped Response
+
+#### Harvest Summary
+
+During the Coho fishery, we model some number of active fishers randomly drawn from within the range of `r min_fishers`-`r max_fishers` fishers when the fishery is open. The fishery only operates above the Locks, so we assume that only `r efficiency * 200`% of harbor seals and 0 sea lions venture above the Locks. We also assume that fishers miss 50% of the pinnipeds they encounter, resulting in an overall boat-based take of `r efficiency *`%. 
+
+When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take or incidental pinniped take. In the zone management scenario, it is assumed that removals are occuring daily at high levels, which results in more total pinnipeds removed. The following plot shows the cumulative number of seals and sea lions that are removed from the Gauntlet over time under each management scenario.
+
+```{r pinniped plot theme, include = FALSE}
+
+pinniped_theme <- theme_classic()
+```
+
+```{r harvest table, echo = FALSE}
+compare_harvested <- data.frame(rbind(base_pinniped_harvest, boat_pinniped_harvest,
+                                      haulout_pinniped_harvest, zone_pinniped_harvest))
+rownames(compare_harvested) <- c("Base", "Boat", "Haulout", "Zone")
+kable(compare_harvested[order(compare_harvested$Pv, decreasing = TRUE),], caption = "Harvested Pinnipeds") %>% kable_styling(full_width = F)
+```
+
+```{r H plots, echo = FALSE, warning = FALSE, message = FALSE}
+# harbor seal harvest
+cum_H_pv <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"cum_H_Pv"],
+                          Boat = boat_pinniped_vars[,"cum_H_Pv"],
+                          Zone = zone_pinniped_vars[,"cum_H_Pv"], 
+                          Haulout = haulout_pinniped_vars[,"cum_H_Pv"])
+
+long_cum_H_pv <- pivot_longer(cum_H_pv, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "cum_H_Pv")
+plot_cum_pv <- ggplot(data = long_cum_H_pv) +
+  geom_point(aes(x = Day, y = cum_H_Pv, color = Scenario), size = 2) + 
+  labs(x = "Day of the Year", y = "Cumulative Harbor Seals Harvested") +
+  scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+
+# sea lion harvest
+cum_H_sl <- data.frame(Day = (base_pinniped_vars[,"Day"] + (start_loop-1)),
+                          Base = base_pinniped_vars[,"cum_H_sl"],
+                          Boat = boat_pinniped_vars[,"cum_H_sl"],
+                          Zone = zone_pinniped_vars[,"cum_H_sl"], 
+                          Haulout = haulout_pinniped_vars[,"cum_H_sl"])
+
+long_cum_H_sl <- pivot_longer(cum_H_sl, cols = "Base":"Haulout",
+                                 names_to = "Scenario", values_to = "cum_H_sl")
+plot_cum_sl <- ggplot(data = long_cum_H_sl) +
+  geom_point(aes(x = Day, y = cum_H_sl, color = Scenario), size = 2)+ 
+  labs(x = "Day of the Year", y = "Cumulative Sea Lions Harvested") +
+  scale_color_manual(values = scenario.colors) + 
+  pinniped_theme
+
+plot_cum_pv / plot_cum_sl
+```
+

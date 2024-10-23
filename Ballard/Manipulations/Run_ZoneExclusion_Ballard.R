@@ -23,6 +23,8 @@ scenario <- "Zone"
 scenario_sealion <- "Zone"
 harvest_open <- start_loop
 harvest_close <- end_loop
+steepness_H <- NA
+efficiency <- NA
 
 # 04 Initialize Variables
 source("Ballard/04_initialize_variables.R")
