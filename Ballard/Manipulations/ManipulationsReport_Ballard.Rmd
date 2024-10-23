@@ -78,7 +78,7 @@ ggplot(data = long_gauntlet_salmon) +
 
 #### Escape
 
-The number of salmon that escape the Gauntlet is dependent on their survival from fishing and predation pressures. The following table describes the number of salmon that escape from the Gauntlet for each species under each scenario.
+The number of salmon that escape the Gauntlet is dependent on their survival from fishing and predation pressures. The following table describes the number of salmon that escape from the Gauntlet for each species under each scenario. The haulout reduction management strategy has some positive benefit for Sockeye and Chinook, but none for Coho.
 
 ```{r escapement table, echo = FALSE}
 compare_escape <- data.frame(round(rbind(base_salmon["Escape",], boat_salmon["Escape",],
@@ -135,7 +135,7 @@ kable(compare_fished[order(compare_fished$Chinook, decreasing = TRUE),], caption
 
 During the Coho fishery, we model some number of active fishers randomly drawn from within the range of `r min_fishers`-`r max_fishers` fishers when the fishery is open. The fishery only operates above the Locks, so we assume that only `r efficiency * 200`% of harbor seals and 0 sea lions venture above the Locks. We also assume that fishers miss 50% of the pinnipeds they encounter, resulting in an overall boat-based take of `r efficiency * 100`%. 
 
-When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take or incidental pinniped take. In the zone management scenario, it is assumed that removals are occuring daily at high levels, which results in more total pinnipeds removed. The following plot shows the cumulative number of seals and sea lions that are removed from the Gauntlet over time under each management scenario.
+When fisheries are not open, there is no fishing activity in the Gauntlet, and therefore no boat-based take or incidental pinniped take. In the zone management scenario, it is assumed that removals are occuring daily at high levels, which results in more total pinnipeds removed. The following plot shows the cumulative number of seals and sea lions that are removed from the Gauntlet over time under each management scenario. All takes associated with the haulout reduction strategy occur outside the Gauntlet and outside of the model time frame and therefore are not accounted for below.
 
 ```{r pinniped plot theme, include = FALSE}
 
@@ -180,7 +180,7 @@ plot_cum_sl <- ggplot(data = long_cum_H_sl) +
   scale_color_manual(values = scenario.colors) + 
   pinniped_theme
 
-plot_cum_pv / plot_cum_sl
+plot_cum_pv / plot_cum_sl + plot_layout(guides = "collect", axes = "collect")
 ```
 
 At the Locks, the zone management scenario clearly results in the largest number of removals, but requires a ton of effort to accomplish that. Boat-based harvest still removes a decent number of animals, but without access to the area below the Locks it is unable to remove a large proportion of animals and as a result is not a huge improvement on the base run scenario.
